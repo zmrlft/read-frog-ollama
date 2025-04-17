@@ -8,7 +8,7 @@ function App() {
 
   return (
     <>
-      <div>
+      <div className="flex items-center justify-center">
         <a href="https://wxt.dev" target="_blank">
           <img src={wxtLogo} className="logo" alt="WXT logo" />
         </a>
