@@ -1,14 +1,56 @@
 import { useState, useEffect, useRef } from "react";
+import { storage } from "#imports";
 
 const MIN_SIDE_CONTENT_WIDTH = 200;
+const DEFAULT_SIDE_CONTENT_WIDTH = 256;
 
 export default function App() {
   const [isOpen, setIsOpen] = useState(false);
-  const [sideContentWidth, setSideContentWidth] = useState(256); // Default width: 16rem/256px
+  const [sideContentWidth, setSideContentWidth] = useState(
+    DEFAULT_SIDE_CONTENT_WIDTH
+  );
   const [isResizing, setIsResizing] = useState(false);
   const startXRef = useRef(0);
   const startWidthRef = useRef(0);
-  const sidebarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let unwatch: () => void;
+
+    const loadWidth = async () => {
+      const width = await storage.getItem<number>(
+        "local:readBuddy_sideContentWidth"
+      );
+      if (width) setSideContentWidth(width);
+
+      unwatch = await storage.watch<number>(
+        "local:readBuddy_sideContentWidth",
+        (newWidth, _oldWidth) => {
+          if (newWidth) setSideContentWidth(newWidth);
+        }
+      );
+    };
+    loadWidth();
+
+    return () => {
+      unwatch();
+    };
+  }, []);
+
+  useEffect(() => {
+    const saveWidth = async () => {
+      await storage.setItem<number>(
+        "local:readBuddy_sideContentWidth",
+        sideContentWidth
+      );
+
+      console.log(
+        "Width saved",
+        await storage.getItem<number>("local:readBuddy_sideContentWidth")
+      );
+    };
+
+    saveWidth();
+  }, [sideContentWidth]);
 
   // Setup resize handlers
   useEffect(() => {
@@ -96,7 +138,6 @@ export default function App() {
       </div>
 
       <div
-        ref={sidebarRef}
         className={cn(
           "fixed top-0 right-0 h-full bg-white shadow-xl z-[9999]",
           isOpen ? "translate-x-0" : "translate-x-full"

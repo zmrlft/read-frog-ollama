@@ -7,4 +7,7 @@ export default defineConfig({
   vite: () => ({
     plugins: [],
   }),
+  manifest: {
+    permissions: ["storage"],
+  },
 });
