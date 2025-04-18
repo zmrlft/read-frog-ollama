@@ -25,9 +25,10 @@ function App() {
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
-      <p className="read-the-docs translate-x-full">
+      <p className="read-the-docs border-2 border-red-500 border-solid bg-white text-red-500">
         Click on the WXT and React logos to learn more
       </p>
+      <input type="text" />
     </>
   );
 }
