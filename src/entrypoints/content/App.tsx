@@ -126,7 +126,8 @@ export default function App() {
     <>
       <div
         className={cn(
-          "fixed bottom-10 w-14 h-9 rounded-l-full flex items-center shadow-lg bg-amber-500 opacity-50 hover:opacity-100 hover:translate-x-0 translate-x-5 transition-transform duration-300 z-[2147483647]",
+          "fixed bottom-10 w-14 h-9 rounded-l-full flex items-center shadow-lg hover:translate-x-0 translate-x-5 transition-transform duration-300 z-[2147483647]",
+          "bg-gradient-to-br from-amber-200 to-amber-400 opacity-50 hover:opacity-100",
           isOpen && "opacity-100"
         )}
         style={{
@@ -134,7 +135,7 @@ export default function App() {
         }}
         onClick={() => setIsOpen((o) => !o)}
       >
-        <span className="ml-3">💬</span>
+        <span className="ml-2.5 text-xl">🤖</span>
       </div>
 
       <div
