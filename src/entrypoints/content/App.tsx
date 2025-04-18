@@ -123,10 +123,10 @@ export default function App() {
   };
 
   return (
-    <div>
+    <>
       <div
         className={cn(
-          "fixed bottom-10 w-14 h-9 rounded-l-full flex items-center shadow-lg bg-amber-500 opacity-50 hover:opacity-100 hover:translate-x-0 translate-x-5 transition-transform duration-300 z-[9990]",
+          "fixed bottom-10 w-14 h-9 rounded-l-full flex items-center shadow-lg bg-amber-500 opacity-50 hover:opacity-100 hover:translate-x-0 translate-x-5 transition-transform duration-300 z-[2147483647]",
           isOpen && "opacity-100"
         )}
         style={{
@@ -139,7 +139,7 @@ export default function App() {
 
       <div
         className={cn(
-          "fixed top-0 right-0 h-full bg-white shadow-xl z-[9999]",
+          "fixed top-0 right-0 h-full bg-white shadow-xl z-[2147483647]",
           isOpen ? "translate-x-0" : "translate-x-full"
         )}
         style={{
@@ -148,7 +148,7 @@ export default function App() {
       >
         {/* Resize handle */}
         <div
-          className="absolute left-0 top-0 w-2 h-full flex items-center justify-center hover:bg-blue-100 cursor-ew-resize z-10"
+          className="absolute left-0 top-0 w-2 h-full justify-center bg-transparent cursor-ew-resize z-10"
           onMouseDown={handleResizeStart}
         ></div>
 
@@ -160,7 +160,9 @@ export default function App() {
       </div>
 
       {/* Transparent overlay to prevent other events during resizing */}
-      {isResizing && <div className="fixed inset-0 bg-transparent z-[9999]" />}
-    </div>
+      {isResizing && (
+        <div className="fixed inset-0 bg-transparent z-[2147483647]" />
+      )}
+    </>
   );
 }
