@@ -2,7 +2,7 @@ import { sideContentWidthAtom } from "../../atoms";
 import { useAtom, useAtomValue } from "jotai";
 import { isSideOpenAtom } from "../../atoms";
 import { MIN_SIDE_CONTENT_WIDTH } from "../../constants";
-
+import Content from "./Content";
 export default function SideContent() {
   const isSideOpen = useAtomValue(isSideOpenAtom);
   const [sideContentWidth, setSideContentWidth] = useAtom(sideContentWidthAtom);
@@ -112,7 +112,7 @@ export default function SideContent() {
     <>
       <div
         className={cn(
-          "fixed top-0 right-0 h-full bg-white border-l border-gray-200 z-[2147483647]",
+          "fixed top-0 right-0 h-full overflow-y-auto bg-white border-l border-gray-200 z-[2147483647]",
           isSideOpen ? "translate-x-0" : "translate-x-full"
         )}
         style={{
@@ -126,10 +126,10 @@ export default function SideContent() {
         ></div>
 
         {/* Sidebar content */}
-        <div className="px-4 pt-4">
+        <div className="px-4 pt-4 h-full">
           <h2 className="text-lg font-semibold border-b pb-2">Side Chat</h2>
           {/* Here goes the chat content */}
-          <div className="mt-4 cursor-pointer">123</div>
+          <Content />
         </div>
       </div>
 

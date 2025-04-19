@@ -1,3 +1,4 @@
+import { Readability } from "@mozilla/readability";
 import FloatingButton from "./components/FloatingButton";
 import SideContent from "./components/SideContent";
 

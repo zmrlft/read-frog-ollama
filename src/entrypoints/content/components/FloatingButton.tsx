@@ -116,7 +116,7 @@ export default function FloatingButton() {
     <div
       className={cn(
         "fixed w-14 h-9 rounded-l-full flex items-center shadow-lg hover:translate-x-0 translate-x-5 transition-transform duration-300 z-[2147483647]",
-        "bg-gradient-to-br from-amber-200 to-amber-400 opacity-50 hover:opacity-100",
+        "bg-[linear-gradient(to_bottom_right,#fde68a,#fbbf24)] opacity-50 hover:opacity-100",
         isSideOpen && "opacity-100",
         isDraggingButton ? "cursor-move" : "cursor-pointer"
       )}
