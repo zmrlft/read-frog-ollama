@@ -32,6 +32,9 @@ importers:
       openai:
         specifier: ^4.95.1
         version: 4.95.1(ws@8.18.0)(zod@3.24.3)
+      radash:
+        specifier: ^12.1.0
+        version: 12.1.0
       react:
         specifier: ^19.1.0
         version: 19.1.0
@@ -44,6 +47,9 @@ importers:
       tw-animate-css:
         specifier: ^1.2.7
         version: 1.2.7
+      zod:
+        specifier: ^3.24.3
+        version: 3.24.3
     devDependencies:
       '@tailwindcss/postcss':
         specifier: ^4.1.4
@@ -2174,6 +2180,10 @@ packages:
   quick-lru@5.1.1:
     resolution: {integrity: sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==}
     engines: {node: '>=10'}
+
+  radash@12.1.0:
+    resolution: {integrity: sha512-b0Zcf09AhqKS83btmUeYBS8tFK7XL2e3RvLmZcm0sTdF1/UUlHSsjXdCcWNxe7yfmAlPve5ym0DmKGtTzP6kVQ==}
+    engines: {node: '>=14.18.0'}
 
   rc9@2.1.2:
     resolution: {integrity: sha512-btXCnMmRIBINM2LDZoEmOogIZU7Qe7zn4BpomSKZ/ykbLObuBdvG+mFq11DL6fjH1DRwHhrlgtYWG96bJiC7Cg==}
@@ -4674,6 +4684,8 @@ snapshots:
   queue-microtask@1.2.3: {}
 
   quick-lru@5.1.1: {}
+
+  radash@12.1.0: {}
 
   rc9@2.1.2:
     dependencies:

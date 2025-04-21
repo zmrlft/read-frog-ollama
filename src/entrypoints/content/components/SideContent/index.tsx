@@ -143,12 +143,11 @@ export default function SideContent() {
               Config API Key
             </Button>
           </div>
-          <ScrollArea className="flex-1">
-            <Button>Analyze</Button>
+          <ScrollArea className="flex-1 relative p-2">
             {/* <h2 className="text-lg font-semibold border-b pb-2">Side Chat</h2>
             <div className="p-2">123</div> */}
             {/* Here goes the chat content */}
-            {/* <Content /> */}
+            <Content />
           </ScrollArea>
         </div>
       </div>
