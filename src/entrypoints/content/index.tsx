@@ -1,8 +1,7 @@
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import "@/assets/tailwind.css";
-import { isProbablyReaderable, Readability } from "@mozilla/readability";
-import { flattenToParagraphs } from "./utils/article";
+import "@/assets/tailwind/theme.css";
+import "@/assets/tailwind/text-small.css";
 
 export default defineContentScript({
   matches: ["*://*/*"],

@@ -3,6 +3,9 @@ import { useAtom, useAtomValue } from "jotai";
 import { isSideOpenAtom } from "../../atoms";
 import { MIN_SIDE_CONTENT_WIDTH } from "../../constants";
 import Content from "./Content";
+import { ScrollArea } from "@/components/ui/ScrollArea";
+import { Button } from "@/components/ui/Button";
+
 export default function SideContent() {
   const isSideOpen = useAtomValue(isSideOpenAtom);
   const [sideContentWidth, setSideContentWidth] = useAtom(sideContentWidthAtom);
@@ -112,7 +115,7 @@ export default function SideContent() {
     <>
       <div
         className={cn(
-          "fixed top-0 right-0 h-full overflow-y-auto bg-white border-l border-gray-200 z-[2147483647]",
+          "fixed top-0 right-0 p-2 bg-background h-full z-[2147483647]",
           isSideOpen ? "translate-x-0" : "translate-x-full"
         )}
         style={{
@@ -121,15 +124,32 @@ export default function SideContent() {
       >
         {/* Resize handle */}
         <div
-          className="absolute left-0 top-0 w-2 h-full justify-center bg-transparent cursor-ew-resize z-10"
+          className="absolute left-0 top-0 h-full justify-center bg-transparent cursor-ew-resize z-10"
           onMouseDown={handleResizeStart}
         ></div>
 
+        <div className="absolute top-0 left-2 h-full border-r border-border border-dashed" />
+        <div className="absolute top-0 right-2 h-full border-r border-border border-dashed" />
+        <div className="absolute top-2 left-0 w-full border-b border-border border-dashed" />
+        <div className="absolute bottom-2 left-0 w-full border-b border-border border-dashed" />
+
         {/* Sidebar content */}
-        <div className="px-4 pt-4 h-full">
-          <h2 className="text-lg font-semibold border-b pb-2">Side Chat</h2>
-          {/* Here goes the chat content */}
-          <Content />
+        <div className="h-full border flex flex-col border-border">
+          <div className="border-b border-border flex justify-end">
+            <Button
+              variant="outline"
+              className="border-l border-r-0 border-t-0 border-b-0"
+            >
+              Config API Key
+            </Button>
+          </div>
+          <ScrollArea className="flex-1">
+            <Button>Analyze</Button>
+            {/* <h2 className="text-lg font-semibold border-b pb-2">Side Chat</h2>
+            <div className="p-2">123</div> */}
+            {/* Here goes the chat content */}
+            {/* <Content /> */}
+          </ScrollArea>
         </div>
       </div>
 

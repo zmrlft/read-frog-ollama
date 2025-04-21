@@ -7,6 +7,8 @@ style:
 # Source
 
 https://archive.ph/RjJt7
+https://archive.ph/VFtgq Elon Musk
+https://archive.ph/rM6In Main page
 
 # Improvements
 
