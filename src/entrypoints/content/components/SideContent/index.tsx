@@ -115,7 +115,7 @@ export default function SideContent() {
     <>
       <div
         className={cn(
-          "fixed top-0 right-0 p-2 bg-background h-full z-[2147483647]",
+          "fixed top-0 right-0 p-2 bg-background h-full z-[2147483647] shadow-xl",
           isSideOpen ? "translate-x-0" : "translate-x-full"
         )}
         style={{
@@ -124,7 +124,7 @@ export default function SideContent() {
       >
         {/* Resize handle */}
         <div
-          className="absolute left-0 top-0 h-full justify-center bg-transparent cursor-ew-resize z-10"
+          className="absolute left-0 top-0 w-2 h-full justify-center bg-transparent cursor-ew-resize z-10"
           onMouseDown={handleResizeStart}
         ></div>
 
