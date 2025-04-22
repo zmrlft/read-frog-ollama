@@ -1,38 +1,55 @@
 import { Readability } from "@mozilla/readability";
 import { flattenToParagraphs } from "../../utils/article";
 import OpenAI from "openai";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Button } from "@/components/ui/Button";
 import { summarySchema } from "../../types/content";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { franc } from "franc-min";
+import { ScrollArea } from "@/components/ui/ScrollArea";
+
 const client = new OpenAI({
   apiKey: import.meta.env.WXT_OPENAI_API_KEY,
   // TODO: remove this
   dangerouslyAllowBrowser: true,
 });
 
-const summaryPrompt = `# Identity
+const getSummaryPrompt = (
+  originalLang: string,
+  targetLang: string
+) => `# Identity
 
-You are an {{English}} teacher who explains things vividly. Your student speaks {{Chinese}}
+You are an ${originalLang} teacher who explains things vividly. Your student speaks ${targetLang}
 
 # Instruction
 
-You will be given a long text. Then you should:
+You will be given json object. 
 
-1. Determine if the text is a article or part of an long article or book (true or false). If the content is inconsistent and not like from one article or book, then false.
+{
+  "original_title": string | undefined | null,
+  "content": string,
+}
+
+Then you should:
+
+1. Determine if the content is a article or part of an long article or book (true or false). If the content is inconsistent and not like from one article or book, then false.
 2. If the answer is yes for step 1, do the following:
    i) Find the main point of the article and exclude some irrelevant content that may mistakenly be included in the article.
    ii) Summarize the relevant text into a short summary.
-   iii) The introduction before you start to explain specific parts of the content. This may include necessary background information and very short summary of the text, or anything that makes students feel interested and easily understand the article.
-   iv) The specialized terminology involved in the content.
+   iii) If the original_title is not null and in ${originalLang}, keep it. Otherwise, generate a title for the article in ${targetLang}.
+   iv) Translate the title you generated in step iii to ${targetLang} as "translated_title".
+   v) The introduction before you start to explain specific parts of the content. This may include necessary background information and very short summary of the text, or anything that makes students feel interested and easily understand the article.
+   vi) The specialized terminology involved in the content.
 3. If the answer is no for step 1, then only return the empty text "" for the corresponding fields.
 
 Your response should following the JSON format:
 
 {
   "is_article": boolean,
-  "summary": string, // use language {{English}}
-  "introduction": string, // use language {{Chinese}}
-  "terms": string[] // use language {{English}}
+  "original_title": string, // use language ${originalLang}
+  "translated_title": string, // use language ${targetLang}
+  "summary": string, // use language ${originalLang}
+  "introduction": string, // use language ${targetLang}
+  "terms": string[] // use language ${originalLang}
 }
 
 
@@ -40,11 +57,16 @@ Here is an example of the expected format:
 
 <example>
 Input:
-This newspaper believes in the liberal principle that people should have the right to choose the manner of their own death. So do two-thirds of Britons, who for decades have been in favour of assisted dying for those enduring unbearable suffering. And so do the citizens of many other democracies—18 jurisdictions have passed laws in the past decade.
-Despite this, Westminster MPs look as if they could vote down a bill on November 29th that would introduce assisted dying into England and Wales. They would be squandering a rare chance to enrich people's fundamental liberties.
+{
+  "original_title": "Why British MPs should vote for assisted dying",
+  "content": "This newspaper believes in the liberal principle that people should have the right to choose the manner of their own death. So do two-thirds of Britons, who for decades have been in favour of assisted dying for those enduring unbearable suffering. And so do the citizens of many other democracies—18 jurisdictions have passed laws in the past decade.
+Despite this, Westminster MPs look as if they could vote down a bill on November 29th that would introduce assisted dying into England and Wales. They would be squandering a rare chance to enrich people's fundamental liberties.",
+}
 Output:
 {
   "is_article": true,
+  "original_title": "Why British MPs should vote for assisted dying",
+  "translated_title": "为什么英国议员应该投票支持协助死亡",
   "summary": "The piece contends that although a large majority of Britons—and many other democracies—support assisted dying, Members of Parliament in Westminster appear ready to reject a November 29th bill that would legalise it in England and Wales, thereby forfeiting an opportunity to broaden personal liberties.",
   "introduction": "这段文字摘自一篇讨论"协助死亡"（assisted dying）立法的社论。英国公众长期支持这种做法，并指出全球已有多地通过相关法律；随后英国议会让英格兰和威尔士合法化协助死亡的提案。我们一起来通过这篇文章了解——个人自主权与立法进程之间的张力吧。",
   "terms": [
@@ -61,97 +83,117 @@ Output:
 Please return the response as JSON format directly.
 `;
 
-const instruction = `
-# Identity
-
-You are a humorous and interesting English teacher.
-
-# Instructions
-
-* When defining variables, use snake case names (e.g. my_variable) 
-  instead of camel case names (e.g. myVariable).
-* To support old browsers, declare variables using the older 
-  "var" keyword.
-* Do not give responses with Markdown formatting, just return 
-  the code as requested.
-
-# Examples
-
-<user_query>
-How do I declare a string variable for a first name?
-</user_query>
-
-<assistant_response>
-var first_name = "Anna";
-</assistant_response>
-`;
-
 export default function Content() {
-  const [paragraphs, setParagraphs] = useState<string[]>([]);
-  const [response, setResponse] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    const generateResponse = async () => {
+  // Use React Query to fetch and parse the article content
+  const { data: content } = useQuery({
+    queryKey: ["articleContent"],
+    queryFn: async () => {
       const documentClone = document.cloneNode(true);
       const article = new Readability(documentClone as Document, {
         serializer: (el) => el,
       }).parse();
+      const paragraphs = article?.content
+        ? flattenToParagraphs(article.content)
+        : [];
 
-      if (article?.content) {
-        const paragraphs = flattenToParagraphs(article.content);
-        setParagraphs(paragraphs);
+      return {
+        article: {
+          ...article,
+          lang: article?.textContent
+            ? franc(article?.textContent)
+            : article?.lang,
+        },
+        paragraphs,
+      };
+    },
+    staleTime: Infinity, // Only run once per page load
+  });
 
-        // const response = await client.responses.create({
-        //   model: "gpt-4.1-mini",
-        //   instructions: summaryPrompt,
-        //   input: paragraphs.join("\n"),
-        // });
-        // console.log("response", response.output_text);
-        // setResponse(response.output_text);
+  // Use React Query mutation for OpenAI API call
+  const {
+    mutate: generateSummary,
+    isPending: isGeneratingSummary,
+    data: summary,
+  } = useMutation({
+    mutationFn: async () => {
+      if (!content || !content.paragraphs.length) {
+        throw new Error("No content available for summary generation");
       }
-    };
-    generateResponse();
-  }, []);
 
-  const handleReadForMe = async () => {
+      const response = await client.responses.create({
+        model: "gpt-4.1-mini",
+        instructions: getSummaryPrompt(
+          // TODO: default to user's selected language
+          content.article.lang ?? "English",
+          "Chinese"
+        ),
+        input: JSON.stringify({
+          original_title: content.article.title,
+          content: content.paragraphs.join("\n"),
+        }),
+      });
+      return summarySchema.parse(JSON.parse(response.output_text));
+    },
+    onSuccess: (data) => {
+      console.log("summary", data);
+      if (data.isArticle) {
+        generateExplanation();
+      }
+    },
+    onError: (error) => {
+      console.error("Failed to generate summary:", error);
+    },
+  });
+
+  const {
+    mutate: generateExplanation,
+    isPending: isGeneratingExplanation,
+    data: explanation,
+  } = useMutation({
+    mutationFn: async () => {
+      return "explanation";
+    },
+  });
+
+  const handleReadForMe = () => {
     console.log("start to read for me");
-    setIsLoading(true);
-    const response = await client.responses.create({
-      model: "gpt-4.1-mini",
-      instructions: summaryPrompt,
-      input: paragraphs.join("\n"),
-    });
-
-    const summary = summarySchema.parse(JSON.parse(response.output_text));
-    console.log("summary", summary);
-    setIsLoading(false);
+    // TODO: pop up library
+    if (!content) {
+      console.error("Cannot generate summary: content is not available");
+      return;
+    }
+    generateSummary();
   };
 
   return (
-    <div>
-      {paragraphs.length > 0 ? (
-        paragraphs.map((paragraph: string, index: number) => (
-          <p key={index} className="text-sm mb-2">
-            {paragraph}
-            <Button
-              className="ring-1 ring-offset-2 ring-primary"
-              onClick={handleReadForMe}
-            >
+    <>
+      {explanation ? (
+        <ScrollArea className="flex-1 h-full p-2">
+          {content?.paragraphs.map((paragraph: string, index: number) => (
+            <p key={index} className="text-sm mb-2">
+              {paragraph}
+              <Button onClick={handleReadForMe} disabled={isGeneratingSummary}>
+                {isGeneratingSummary ? "Generating..." : "Read For Me"}
+              </Button>
+            </p>
+          ))}
+        </ScrollArea>
+      ) : (
+        <div className="flex-1 flex h-full w-full justify-center items-center">
+          {isGeneratingSummary || isGeneratingExplanation ? (
+            <div>{isGeneratingSummary ? "Analyzing..." : "Generating..."}</div>
+          ) : !summary ? (
+            <Button onClick={handleReadForMe} disabled={isGeneratingSummary}>
               Read For Me
             </Button>
-          </p>
-        ))
-      ) : (
-        <div className="flex h-full w-full justify-center items-center">
-          <Button
-            className="ring-1 ring-offset-2 ring-primary"
-            onClick={handleReadForMe}
-          >
-            Read For Me
-          </Button>
+          ) : (
+            <div>
+              Are you sure to continue?
+              <Button onClick={() => generateExplanation()}>Continue</Button>
+            </div>
+          )}
         </div>
       )}
-    </div>
+    </>
   );
 }

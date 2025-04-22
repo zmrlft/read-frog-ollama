@@ -3,7 +3,6 @@ import { useAtom, useAtomValue } from "jotai";
 import { isSideOpenAtom } from "../../atoms";
 import { MIN_SIDE_CONTENT_WIDTH } from "../../constants";
 import Content from "./Content";
-import { ScrollArea } from "@/components/ui/ScrollArea";
 import { Button } from "@/components/ui/Button";
 
 export default function SideContent() {
@@ -143,12 +142,7 @@ export default function SideContent() {
               Config API Key
             </Button>
           </div>
-          <ScrollArea className="flex-1 relative p-2">
-            {/* <h2 className="text-lg font-semibold border-b pb-2">Side Chat</h2>
-            <div className="p-2">123</div> */}
-            {/* Here goes the chat content */}
-            <Content />
-          </ScrollArea>
+          <Content />
         </div>
       </div>
 

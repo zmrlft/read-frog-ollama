@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "@/assets/tailwind/theme.css";
 import "@/assets/tailwind/text-small.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export default defineContentScript({
   matches: ["*://*/*"],
@@ -17,7 +18,13 @@ export default defineContentScript({
         container.appendChild(wrapper);
 
         const root = ReactDOM.createRoot(wrapper);
-        root.render(<App />);
+
+        const queryClient = new QueryClient();
+        root.render(
+          <QueryClientProvider client={queryClient}>
+            <App />
+          </QueryClientProvider>
+        );
         return { root, wrapper };
       },
       onRemove: (elements) => {

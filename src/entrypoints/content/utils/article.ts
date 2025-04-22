@@ -118,7 +118,7 @@ export function flattenToParagraphs(root: Node) {
         }
       } else {
         // 继续遍历子节点
-        for (let child of element.childNodes) {
+        for (const child of element.childNodes) {
           walk(child);
         }
       }
@@ -139,7 +139,7 @@ export function flattenToParagraphs(root: Node) {
   return paragraphs;
 }
 
-function extractSeoInfo(doc: Document) {
+export function extractSeoInfo(doc: Document) {
   const seoInfo = {
     title: doc.title || "",
     metaDescription:
@@ -175,6 +175,7 @@ function extractSeoInfo(doc: Document) {
       try {
         return JSON.parse(script.textContent || "{}");
       } catch (e) {
+        console.error("Error parsing structured data:", e);
         return {};
       }
     }),

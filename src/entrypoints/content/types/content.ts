@@ -4,6 +4,8 @@ import { camelCaseSchemaDef } from "@/utils/zod";
 export const summarySchema = camelCaseSchemaDef(
   z.object({
     isArticle: z.boolean(),
+    originalTitle: z.string(),
+    translatedTitle: z.string(),
     summary: z.string(),
     introduction: z.string(),
     terms: z.array(z.string()),
