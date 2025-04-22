@@ -6,6 +6,7 @@ import { summarySchema } from "../../types/content";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { franc } from "franc-min";
 import { ScrollArea } from "@/components/ui/ScrollArea";
+import { toast } from "sonner";
 
 const client = new OpenAI({
   apiKey: import.meta.env.WXT_OPENAI_API_KEY,
@@ -96,6 +97,9 @@ export default function Content() {
         ? flattenToParagraphs(article.content)
         : [];
 
+      // await 10 seconds
+      await new Promise((resolve) => setTimeout(resolve, 1000000));
+
       return {
         article: {
           ...article,
@@ -106,7 +110,7 @@ export default function Content() {
         paragraphs,
       };
     },
-    staleTime: Infinity, // Only run once per page load
+    // staleTime: Infinity, // Only run once per page load
   });
 
   // Use React Query mutation for OpenAI API call
@@ -120,19 +124,36 @@ export default function Content() {
         throw new Error("No content available for summary generation");
       }
 
-      const response = await client.responses.create({
-        model: "gpt-4.1-mini",
-        instructions: getSummaryPrompt(
-          // TODO: default to user's selected language
-          content.article.lang ?? "English",
-          "Chinese"
-        ),
-        input: JSON.stringify({
-          original_title: content.article.title,
-          content: content.paragraphs.join("\n"),
-        }),
-      });
-      return summarySchema.parse(JSON.parse(response.output_text));
+      let attempts = 0;
+      const maxAttempts = 3;
+      let lastError;
+
+      while (attempts < maxAttempts) {
+        try {
+          const response = await client.responses.create({
+            model: "gpt-4.1-mini",
+            instructions: getSummaryPrompt(
+              // TODO: default to user's selected language
+              content.article.lang ?? "English",
+              "Chinese"
+            ),
+            input: JSON.stringify({
+              original_title: content.article.title,
+              content: content.paragraphs.join("\n").trim(),
+            }),
+          });
+          return summarySchema.parse(JSON.parse(response.output_text));
+        } catch (error) {
+          lastError = error;
+          console.warn(
+            `Summary generation attempt ${attempts + 1} failed:`,
+            error
+          );
+          attempts++;
+        }
+      }
+
+      throw lastError;
     },
     onSuccess: (data) => {
       console.log("summary", data);
@@ -141,7 +162,8 @@ export default function Content() {
       }
     },
     onError: (error) => {
-      console.error("Failed to generate summary:", error);
+      toast.error("Failed to analyze the content");
+      console.error("Failed to analyze the content:", error);
     },
   });
 
@@ -157,9 +179,8 @@ export default function Content() {
 
   const handleReadForMe = () => {
     console.log("start to read for me");
-    // TODO: pop up library
-    if (!content) {
-      console.error("Cannot generate summary: content is not available");
+    if (!content?.paragraphs.join("\n").trim()) {
+      toast.error("Cannot read the content: content is not available");
       return;
     }
     generateSummary();

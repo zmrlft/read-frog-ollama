@@ -13,11 +13,22 @@ export default defineContentScript({
       position: "overlay",
       anchor: "body",
       append: "last",
-      onMount: (container) => {
+      onMount: (container, shadow) => {
         const wrapper = document.createElement("div");
         container.appendChild(wrapper);
 
         const root = ReactDOM.createRoot(wrapper);
+        document.head.querySelectorAll("style").forEach((styleEl) => {
+          if (styleEl.textContent?.includes("[data-sonner-toaster]")) {
+            const shadowHead = shadow.querySelector("head");
+            if (shadowHead) {
+              shadowHead.append(styleEl);
+            } else {
+              shadow.append(styleEl);
+            }
+            console.log("styleEl.textContent", styleEl);
+          }
+        });
 
         const queryClient = new QueryClient();
         root.render(
