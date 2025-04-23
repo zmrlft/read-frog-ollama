@@ -1,4 +1,6 @@
-export const testExplanation = [
+import { ArticleExplanation } from "@/types/content";
+
+export const testExplanation: ArticleExplanation["paragraphs"] = [
   [
     {
       originalSentence:

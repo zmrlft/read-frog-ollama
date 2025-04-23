@@ -6,6 +6,7 @@ import { useExtractContent } from "@/hooks/read/extract";
 import { useAnalyzeContent } from "@/hooks/read/analyze";
 import { useAtom } from "jotai";
 import { explainAtom, requestContinueAtom } from "../../atoms";
+import { testExplanation } from "../../test";
 
 export default function Content() {
   const [requestContinue, setRequestContinue] = useAtom(requestContinueAtom);
@@ -47,8 +48,10 @@ export default function Content() {
   return (
     <>
       {articleExplanation ? (
-        <ScrollArea className="flex-1 h-full p-2">
-          <Explanation articleExplanation={articleExplanation} />
+        <ScrollArea className="flex-1 h-full">
+          <Explanation
+            articleExplanation={articleExplanation ?? testExplanation}
+          />
         </ScrollArea>
       ) : (
         <div className="flex-1 flex h-full w-full justify-center items-center">

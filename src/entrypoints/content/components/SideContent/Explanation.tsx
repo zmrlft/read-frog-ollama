@@ -1,40 +1,94 @@
 import { type ArticleExplanation } from "../../../../types/content";
 
+const createCumulativeIndexMap = (
+  articleExplanation: ArticleExplanation["paragraphs"]
+): number[] => {
+  const cumulativeIndexes: number[] = [];
+  let total = 0;
+
+  for (const paragraph of articleExplanation) {
+    cumulativeIndexes.push(total);
+    total += paragraph.length;
+  }
+
+  return cumulativeIndexes;
+};
+
+const getGlobalIndex = (
+  pIndex: number,
+  sIndex: number,
+  cumulativeIndexes: number[]
+): number => {
+  return cumulativeIndexes[pIndex] + sIndex;
+};
+
 export default function Explanation({
-  articleExplanation: explanation,
+  articleExplanation,
 }: {
   articleExplanation: ArticleExplanation["paragraphs"];
 }) {
-  // flatten the paragraphs
-  const flattenedSentences = explanation.flat();
+  const cumulativeIndexes = createCumulativeIndexMap(articleExplanation);
+
   return (
-    <div>
-      <div>
-        {flattenedSentences.map((sentence, pIndex) => (
-          <div key={pIndex} className="mb-6">
-            <div className="text-base mb-2">{sentence.originalSentence}</div>
-            <div className="text-base mb-2 text-muted-foreground">
-              {sentence.translatedSentence}
-            </div>
-            {sentence.words.length > 0 && (
-              <div className="bg-muted p-3 rounded-md mb-3">
-                <h4 className="text-sm font-medium mb-2">重点词汇</h4>
-                <ul className="space-y-2">
-                  {sentence.words.map((word, wIndex) => (
-                    <li key={wIndex} className="text-sm">
-                      <span className="font-semibold">{word.word}</span> (
-                      {word.partOfSpeech}): {word.explanation}
-                    </li>
-                  ))}
-                </ul>
+    <>
+      {articleExplanation.map((paragraph, pIndex) => (
+        <div key={pIndex} className="border-b">
+          {paragraph.map((sentence, sIndex) => {
+            const globalIndex = getGlobalIndex(
+              pIndex,
+              sIndex,
+              cumulativeIndexes
+            );
+            return (
+              <div
+                key={`${pIndex}-${sIndex}`}
+                className={cn(
+                  "p-2",
+                  globalIndex % 2 === 0
+                    ? "bg-background"
+                    : "bg-neutral-100 dark:bg-neutral-900"
+                )}
+              >
+                <div className="py-0.5 px-1 text-sm bg-amber-400 dark:bg-amber-600 inline-block mb-2">
+                  Sentence {globalIndex}
+                </div>
+                <div className="text-base mb-1 font-semibold">
+                  {sentence.originalSentence}
+                </div>
+                <div className="text-base mb-2 text-muted-foreground">
+                  {sentence.translatedSentence}
+                </div>
+                <div className="text-sm font-medium mb-2 text-blue-500 flex items-center">
+                  <div className="h-4 w-1 bg-blue-500"></div>
+                  <span className="ml-2">Key Words</span>
+                </div>
+                {sentence.words.length > 0 && (
+                  <ul className="space-y-2 mb-2">
+                    {sentence.words.map((word, wIndex) => (
+                      <li key={wIndex} className="text-sm">
+                        <div className="flex items-center gap-x-2 flex-wrap mb-1">
+                          <span className="font-semibold">
+                            {wIndex + 1}. {word.word}
+                          </span>
+                          <span className="text-muted-foreground">
+                            {word.partOfSpeech}
+                          </span>
+                        </div>
+                        {word.explanation}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <div className="text-sm font-medium mb-2 text-blue-500 flex items-center">
+                  <div className="h-4 w-1 bg-blue-500"></div>
+                  <span className="ml-2">Explanation</span>
+                </div>
+                <div className="text-sm">{sentence.explanation}</div>
               </div>
-            )}
-            <div className="text-sm text-muted-foreground">
-              {sentence.explanation}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+            );
+          })}
+        </div>
+      ))}
+    </>
   );
 }
