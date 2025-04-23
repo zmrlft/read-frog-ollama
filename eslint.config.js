@@ -8,7 +8,7 @@ import { defineConfig } from "eslint/config";
 import pluginQuery from "@tanstack/eslint-plugin-query";
 
 export default defineConfig([
-  ...pluginQuery.configs['flat/recommended'],
+  ...pluginQuery.configs["flat/recommended"],
   {
     files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
     plugins: { js },
@@ -28,6 +28,7 @@ export default defineConfig([
           varsIgnorePattern: "^_",
         },
       ],
+      "no-console": "warn",
     },
   },
   {

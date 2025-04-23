@@ -18,6 +18,7 @@ export default defineContentScript({
         container.appendChild(wrapper);
 
         const root = ReactDOM.createRoot(wrapper);
+
         document.head.querySelectorAll("style").forEach((styleEl) => {
           if (styleEl.textContent?.includes("[data-sonner-toaster]")) {
             const shadowHead = shadow.querySelector("head");
@@ -26,7 +27,6 @@ export default defineContentScript({
             } else {
               shadow.append(styleEl);
             }
-            console.log("styleEl.textContent", styleEl);
           }
         });
 
