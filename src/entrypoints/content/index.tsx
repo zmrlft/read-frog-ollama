@@ -7,6 +7,7 @@ import { useHydrateAtoms } from "jotai/react/utils";
 import { queryClientAtom } from "jotai-tanstack-query";
 import { Provider as JotaiProvider } from "jotai/react";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { store } from "./atoms";
 
 const addStyleToShadow = (shadow: ShadowRoot) => {
   document.head.querySelectorAll("style").forEach((styleEl) => {
@@ -67,7 +68,7 @@ export default defineContentScript({
         };
         root.render(
           <QueryClientProvider client={queryClient}>
-            <JotaiProvider>
+            <JotaiProvider store={store}>
               <HydrateAtoms>
                 <App />
               </HydrateAtoms>

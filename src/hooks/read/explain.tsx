@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { openai } from "@/utils/openai";
 import { zodTextFormat } from "openai/helpers/zod.mjs";
+import { progressAtom, store } from "@/entrypoints/content/atoms";
 
 type ExplainArticleParams = {
   extractedContent: ExtractedContent;
@@ -15,7 +16,7 @@ type ExplainArticleParams = {
 };
 
 const MAX_ATTEMPTS = 3;
-
+const MAX_CHARACTERS = 2000;
 const getExplainPrompt = (
   originalLang: string,
   targetLang: string
@@ -160,7 +161,12 @@ const explainBatch = async (
 
       const parsedResponse = JSON.parse(response.output_text);
       console.log("parsedResponse", parsedResponse);
-      return articleExplanationSchema.parse(parsedResponse);
+      const articleExplanation = articleExplanationSchema.parse(parsedResponse);
+      store.set(progressAtom, (prev) => ({
+        ...prev,
+        completed: prev.completed + 1,
+      }));
+      return articleExplanation;
     } catch (error) {
       lastError = error;
       console.warn(
@@ -184,13 +190,36 @@ export const mutationFn = async (params: ExplainArticleParams) => {
 
   // Process paragraphs in batches of 3
   const paragraphs = extractedContent.paragraphs;
-  // TODO: max 4 paragraphs or max 1200 characters
-  const batchSize = 4;
   const batches = [];
 
-  for (let i = 0; i < paragraphs.length; i += batchSize) {
-    batches.push(paragraphs.slice(i, i + batchSize));
+  // if cur > 1200 or prev + cur > 1200, then push prev to batches, clear prev
+  // if cur > 1200, push the cur to batches
+  // else push cur to prev
+  // last push prev to batches
+
+  let prevParagraphs: string[] = [];
+  let prevParagraphsLength = 0;
+  for (let i = 0; i < paragraphs.length; i++) {
+    if (prevParagraphsLength + paragraphs[i].length > MAX_CHARACTERS) {
+      batches.push(prevParagraphs);
+      prevParagraphs = [];
+      prevParagraphsLength = 0;
+    }
+    if (paragraphs[i].length > MAX_CHARACTERS) {
+      batches.push([paragraphs[i]]);
+    } else {
+      prevParagraphs.push(paragraphs[i]);
+      prevParagraphsLength += paragraphs[i].length;
+    }
   }
+  if (prevParagraphs.length > 0) {
+    batches.push(prevParagraphs);
+  }
+
+  store.set(progressAtom, {
+    completed: 0,
+    total: batches.length,
+  });
 
   console.log("batches length", batches.length);
   console.log("batches", batches);

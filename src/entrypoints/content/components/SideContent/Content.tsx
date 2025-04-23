@@ -4,12 +4,15 @@ import { toast } from "sonner";
 import Explanation from "./Explanation";
 import { useExtractContent } from "@/hooks/read/extract";
 import { useAnalyzeContent } from "@/hooks/read/analyze";
-import { useAtom } from "jotai";
-import { explainAtom, requestContinueAtom } from "../../atoms";
+import { useAtom, useAtomValue } from "jotai";
+import { explainAtom, progressAtom, requestContinueAtom } from "../../atoms";
 import { testExplanation } from "../../test";
+import LoadingDots from "@/components/LoadingDots";
+import { Progress } from "@/components/ui/Progress";
 
 export default function Content() {
   const [requestContinue, setRequestContinue] = useAtom(requestContinueAtom);
+  const progress = useAtomValue(progressAtom);
   const { data: extractedContent } = useExtractContent();
   const {
     mutate: analyzeContent,
@@ -54,20 +57,44 @@ export default function Content() {
           />
         </ScrollArea>
       ) : (
-        <div className="flex-1 flex h-full w-full justify-center items-center">
+        <div className="flex-1 flex h-full w-full justify-center items-center p-4">
           {(() => {
             if (isGeneratingAnalysis || isGeneratingExplanation) {
               return (
-                <div>
-                  {isGeneratingAnalysis ? "Analyzing..." : "Generating..."}
-                </div>
+                <>
+                  {isGeneratingAnalysis ? (
+                    <div className="flex items-center gap-2">
+                      <LoadingDots />
+                      Analyzing...
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-6">
+                      <div className="flex items-center gap-2">
+                        <LoadingDots />
+                        Generating...
+                      </div>
+                      <Progress
+                        value={
+                          progress.total !== 0
+                            ? (progress.completed / progress.total) * 100
+                            : 0
+                        }
+                      />
+                    </div>
+                  )}
+                </>
               );
             }
             if (requestContinue) {
               return (
-                <div>
-                  Are you sure to continue?
-                  <Button onClick={handleContinue}>Continue</Button>
+                <div className="flex flex-col gap-6">
+                  <p>
+                    The content does not appear to be an article or book. Are
+                    you sure you want to proceed?
+                  </p>
+                  <Button className="mx-auto" onClick={handleContinue}>
+                    Continue
+                  </Button>
                 </div>
               );
             }
