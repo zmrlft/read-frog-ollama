@@ -6,7 +6,9 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { openai } from "@/utils/openai";
-import { useExplainArticle } from "./explain";
+import { useAtom, useSetAtom } from "jotai";
+import { explainAtom, requestContinueAtom } from "@/entrypoints/content/atoms";
+import { zodTextFormat } from "openai/helpers/zod";
 
 const getAnalyzePrompt = (
   originalLang: string,
@@ -24,7 +26,7 @@ You will be given json object.
   "content": string,
 }
 
-Then you should:
+Then you should analyze the content:
 
 1. Determine if the content is a article or part of an long article or book (true or false). If the content is inconsistent and not like from one article or book, then false.
 2. If the answer is yes for step 1, do the following:
@@ -79,7 +81,9 @@ Please return the response as JSON format directly.
 `;
 
 export function useAnalyzeContent() {
-  const { mutate: generateExplanation } = useExplainArticle();
+  // const { mutate: generateExplanation } = useExplainArticle();
+  const [{ mutate: generateExplanation }] = useAtom(explainAtom);
+  const setRequestContinue = useSetAtom(requestContinueAtom);
 
   return useMutation<ArticleAnalysis, Error, ExtractedContent>({
     mutationFn: async (extractedContent: ExtractedContent) => {
@@ -93,7 +97,8 @@ export function useAnalyzeContent() {
 
       while (attempts < maxAttempts) {
         try {
-          const response = await openai.responses.create({
+          console.log("extractedContent", extractedContent);
+          const response = await openai.responses.parse({
             model: "gpt-4.1-mini",
             instructions: getAnalyzePrompt(
               // TODO: default to user's selected language
@@ -104,6 +109,9 @@ export function useAnalyzeContent() {
               originalTitle: extractedContent.article.title,
               content: extractedContent.paragraphs.join("\n").trim(),
             }),
+            text: {
+              format: zodTextFormat(articleAnalysisSchema, "articleAnalysis"),
+            },
           });
           return articleAnalysisSchema.parse(JSON.parse(response.output_text));
         } catch (error) {
@@ -125,6 +133,9 @@ export function useAnalyzeContent() {
           extractedContent: variables,
           articleAnalysis: data,
         });
+        console.log("after calling generateExplanation");
+      } else {
+        setRequestContinue(true);
       }
     },
     onError: () => {

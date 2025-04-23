@@ -4,20 +4,24 @@ import { toast } from "sonner";
 import Explanation from "./Explanation";
 import { useExtractContent } from "@/hooks/read/extract";
 import { useAnalyzeContent } from "@/hooks/read/analyze";
-import { useExplainArticle } from "@/hooks/read/explain";
+import { useAtom } from "jotai";
+import { explainAtom, requestContinueAtom } from "../../atoms";
 
 export default function Content() {
+  const [requestContinue, setRequestContinue] = useAtom(requestContinueAtom);
   const { data: extractedContent } = useExtractContent();
   const {
     mutate: analyzeContent,
     isPending: isGeneratingAnalysis,
     data: articleAnalysis,
   } = useAnalyzeContent();
-  const {
-    mutate: explainArticle,
-    isPending: isGeneratingExplanation,
-    data: articleExplanation,
-  } = useExplainArticle();
+  const [
+    {
+      mutate: explainArticle,
+      isPending: isGeneratingExplanation,
+      data: articleExplanation,
+    },
+  ] = useAtom(explainAtom);
 
   const handleReadForMe = () => {
     console.log("start to read for me");
@@ -29,6 +33,7 @@ export default function Content() {
   };
 
   const handleContinue = () => {
+    setRequestContinue(false);
     if (articleAnalysis && extractedContent) {
       explainArticle({
         extractedContent,
@@ -47,18 +52,28 @@ export default function Content() {
         </ScrollArea>
       ) : (
         <div className="flex-1 flex h-full w-full justify-center items-center">
-          {isGeneratingAnalysis || isGeneratingExplanation ? (
-            <div>{isGeneratingAnalysis ? "Analyzing..." : "Generating..."}</div>
-          ) : !articleAnalysis ? (
-            <Button onClick={handleReadForMe} disabled={isGeneratingAnalysis}>
-              Read For Me
-            </Button>
-          ) : (
-            <div>
-              Are you sure to continue?
-              <Button onClick={handleContinue}>Continue</Button>
-            </div>
-          )}
+          {(() => {
+            if (isGeneratingAnalysis || isGeneratingExplanation) {
+              return (
+                <div>
+                  {isGeneratingAnalysis ? "Analyzing..." : "Generating..."}
+                </div>
+              );
+            }
+            if (requestContinue) {
+              return (
+                <div>
+                  Are you sure to continue?
+                  <Button onClick={handleContinue}>Continue</Button>
+                </div>
+              );
+            }
+            return (
+              <Button onClick={handleReadForMe} disabled={isGeneratingAnalysis}>
+                Read For Me
+              </Button>
+            );
+          })()}
         </div>
       )}
     </>

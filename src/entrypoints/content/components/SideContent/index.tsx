@@ -114,7 +114,7 @@ export default function SideContent() {
     <>
       <div
         className={cn(
-          "fixed top-0 right-0 p-2 bg-background h-full shadow-xl",
+          "fixed top-0 right-0 p-2 bg-background h-full shadow-xl z-[2147483647]",
           isSideOpen ? "translate-x-0" : "translate-x-full"
         )}
         style={{

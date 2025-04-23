@@ -24,6 +24,20 @@ export const articleAnalysisSchema = z.object({
   terms: z.array(z.string()),
 });
 
+export const PartOfSpeechAbbr = z.enum([
+  "n.", // noun
+  "pron.", // pronoun
+  "v.", // verb
+  "adj.", // adjective
+  "adv.", // adverb
+  "prep.", // preposition
+  "conj.", // conjunction
+  "interj.", // interjection
+  "det.", // determiner
+  "num.", // numeral
+  "part.", // particle
+]);
+
 export const articleExplanationSchema = z.object({
   paragraphs: z.array(
     z.array(
@@ -33,7 +47,7 @@ export const articleExplanationSchema = z.object({
         words: z.array(
           z.object({
             word: z.string(),
-            partOfSpeech: z.string(),
+            partOfSpeech: PartOfSpeechAbbr,
             explanation: z.string(),
           })
         ),
