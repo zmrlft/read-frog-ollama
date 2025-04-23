@@ -46,11 +46,11 @@ export default function Explanation({
                   "p-2",
                   globalIndex % 2 === 0
                     ? "bg-background"
-                    : "bg-neutral-100 dark:bg-neutral-900"
+                    : "bg-neutral-100 dark:bg-neutral-800" // TODO: move this to variable
                 )}
               >
                 <div className="py-0.5 px-1 text-sm bg-amber-400 dark:bg-amber-600 inline-block mb-2">
-                  Sentence {globalIndex}
+                  Sentence {globalIndex + 1}
                 </div>
                 <div className="text-base mb-1 font-semibold">
                   {sentence.originalSentence}
