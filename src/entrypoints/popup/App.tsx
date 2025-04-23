@@ -7,7 +7,7 @@ function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <>
+    <div>
       <div className="flex items-center justify-center">
         <a href="https://wxt.dev" target="_blank" rel="noreferrer">
           <img src={wxtLogo} className="logo" alt="WXT logo" />
@@ -25,11 +25,11 @@ function App() {
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
-      <p className="read-the-docs border-2 border-red-500 border-solid bg-white text-red-500">
+      <p className="read-the-docs border-2 border-red-500 dark:border-yellow-500 border-solid bg-white text-red-500">
         Click on the WXT and React logos to learn more
       </p>
       <input type="text" />
-    </>
+    </div>
   );
 }
 
