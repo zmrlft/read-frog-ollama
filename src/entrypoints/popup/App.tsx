@@ -34,8 +34,33 @@ function App() {
             </select>
           </div>
         </div>
-        <div className="text-[13px] font-medium">翻译服务</div>
-        <div className="text-[13px] font-medium">你的目标语言水平</div>
+        <div className="flex items-center gap-2 justify-between">
+          <span className="font-medium text-[13px]">翻译服务</span>
+          <div className="flex items-center gap-1 pr-1.5 pl-2.5 py-1 rounded-sm text-sm bg-input/50 hover:bg-input">
+            <select className="outline-none appearance-none cursor-pointer">
+              <option value="openai">OpenAI</option>
+              <option value="deepseek">DeepSeek</option>
+            </select>
+            <ChevronDown
+              className="text-neutral-400 dark:text-neutral-600 w-4 h-4"
+              strokeWidth={1.5}
+            />
+          </div>
+        </div>
+        <div className="flex items-center gap-2 justify-between">
+          <span className="font-medium text-[13px]">你的目标语言水平</span>
+          <div className="flex items-center gap-1 pr-1.5 pl-2.5 py-1 rounded-sm text-sm bg-input/50 hover:bg-input">
+            <select className="outline-none appearance-none cursor-pointer">
+              <option value="beginner">初级</option>
+              <option value="intermediate">中级</option>
+              <option value="advanced">高级</option>
+            </select>
+            <ChevronDown
+              className="text-neutral-400 dark:text-neutral-600 w-4 h-4"
+              strokeWidth={1.5}
+            />
+          </div>
+        </div>
         <Button>开始翻译</Button>
         <div className="flex items-center justify-between gap-2">
           <span className="font-medium text-[13px]">开启悬浮按钮</span>
