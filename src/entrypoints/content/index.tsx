@@ -8,41 +8,7 @@ import { queryClientAtom } from "jotai-tanstack-query";
 import { Provider as JotaiProvider } from "jotai/react";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { store } from "./atoms";
-
-const addStyleToShadow = (shadow: ShadowRoot) => {
-  document.head.querySelectorAll("style").forEach((styleEl) => {
-    if (styleEl.textContent?.includes("[data-sonner-toaster]")) {
-      const shadowHead = shadow.querySelector("head");
-      if (shadowHead) {
-        shadowHead.append(styleEl);
-      } else {
-        shadow.append(styleEl);
-      }
-    }
-  });
-
-  // TODO: if development mode, then add devtool
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      mutation.addedNodes.forEach((node) => {
-        if (node instanceof HTMLStyleElement && node.id === "_goober") {
-          const shadowHead = shadow.querySelector("head");
-          if (shadowHead) {
-            shadowHead.append(node);
-          } else {
-            shadow.append(node);
-          }
-          observer.disconnect();
-        }
-      });
-    });
-  });
-
-  observer.observe(document.head, {
-    childList: true,
-    subtree: true,
-  });
-};
+import { mirrorDynamicStyle, addStyleToShadow } from "./utils/styles";
 
 export default defineContentScript({
   matches: ["*://*/*"],
@@ -60,6 +26,7 @@ export default defineContentScript({
         const root = ReactDOM.createRoot(wrapper);
 
         addStyleToShadow(shadow);
+        mirrorDynamicStyle("#_goober", shadow);
 
         const queryClient = new QueryClient();
         const HydrateAtoms = ({ children }: { children: React.ReactNode }) => {

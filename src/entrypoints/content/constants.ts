@@ -1,3 +1,3 @@
 export const DEFAULT_BUTTON_POSITION = 66;
-export const MIN_SIDE_CONTENT_WIDTH = 300;
+export const MIN_SIDE_CONTENT_WIDTH = 360;
 export const DEFAULT_SIDE_CONTENT_WIDTH = 400;

@@ -1,35 +1,57 @@
-import { useState } from "react";
-import reactLogo from "@/assets/react.svg";
-import wxtLogo from "/wxt.svg";
-import "./App.css";
+import { Button } from "@/components/ui/Button";
+import { Switch } from "@/components/ui/Switch";
+import { ArrowRight, ChevronDown, Settings } from "lucide-react";
+// import { browser } from "wxt/browser";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <div>
-      <div className="flex items-center justify-center">
-        <a href="https://wxt.dev" target="_blank" rel="noreferrer">
-          <img src={wxtLogo} className="logo" alt="WXT logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <>
+      <div className="pt-5 px-6 pb-4 flex flex-col gap-4 bg-background">
+        <div className="flex items-center gap-2">
+          <div className="relative inline-flex items-center w-32 h-13 justify-between bg-input/50 hover:bg-input rounded-lg">
+            <span className="text-sm text-neutral-500 pt-5 pl-4">自动检测</span>
+            <ChevronDown
+              className="absolute right-2 text-neutral-400 dark:text-neutral-600 w-5 h-5"
+              strokeWidth={1.5}
+            />
+            <select className="absolute insect-0 pb-4 pl-4 pr-8 w-32 text-base outline-none appearance-none truncate font-medium bg-transparent cursor-pointer">
+              <option value="light">Longword This</option>
+              <option value="dark">Dark</option>
+              <option value="system">System</option>
+            </select>
+          </div>
+          <ArrowRight className="w-4 h-4 text-neutral-500" strokeWidth={2} />
+          <div className="relative inline-flex items-center w-32 h-13 justify-between bg-input/50 hover:bg-input rounded-lg">
+            <span className="text-sm text-neutral-500 pt-5 pl-4">目标语言</span>
+            <ChevronDown
+              className="absolute right-2 text-neutral-400 dark:text-neutral-600 w-5 h-5"
+              strokeWidth={1.5}
+            />
+            <select className="absolute insect-0 pb-4 pl-4 pr-8 w-32 text-base outline-none appearance-none truncate font-medium bg-transparent cursor-pointer">
+              <option value="light">Longword This</option>
+              <option value="dark">Dark</option>
+              <option value="system">System</option>
+            </select>
+          </div>
+        </div>
+        <div className="text-[13px] font-medium">翻译服务</div>
+        <div className="text-[13px] font-medium">你的目标语言水平</div>
+        <Button>开始翻译</Button>
+        <div className="flex items-center justify-between gap-2">
+          <span className="font-medium text-[13px]">开启悬浮按钮</span>
+          <Switch />
+        </div>
       </div>
-      <h1>WXT + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}!
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div
+        className="p-2 flex items-center justify-center gap-1.5 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 cursor-pointer"
+        onClick={() => {
+          browser.runtime.openOptionsPage();
+        }}
+      >
+        <Settings className="w-4 h-4" strokeWidth={1.5} />
+        <span className=" font-medium">设置</span>
       </div>
-      <p className="read-the-docs border-2 border-red-500 dark:border-yellow-500 border-solid bg-white text-red-500">
-        Click on the WXT and React logos to learn more
-      </p>
-      <input type="text" />
-    </div>
+    </>
   );
 }
 

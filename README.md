@@ -14,6 +14,8 @@ https://archive.ph/rM6In Main page
 
 ## Features
 
+- [ ] 多语言
+
 ### Popup
 
 - [ ] 语言检测和设置
@@ -51,3 +53,5 @@ https://archive.ph/rM6In Main page
 - [ ] OpenAI Cached Input? 有会员机制后再说
 
 # Bug
+
+- [ ] Don't include text in dom where display is None https://onboarding.immersivetranslate.com/en/instruct/step-3/, 这个网页中有很多 display none 的英文 dom，不应该取到
