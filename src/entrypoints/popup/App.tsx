@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { Switch } from "@/components/ui/Switch";
 import { ArrowRight, ChevronDown, Settings } from "lucide-react";
-// import { browser } from "wxt/browser";
 
 function App() {
   return (
