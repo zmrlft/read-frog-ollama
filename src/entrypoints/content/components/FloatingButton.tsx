@@ -1,6 +1,7 @@
 import { useAtom, useAtomValue } from "jotai";
 import { isSideOpenAtom, sideContentWidthAtom } from "../atoms";
 import { DEFAULT_BUTTON_POSITION } from "../constants";
+import readBuddyLogo from "@/assets/read-buddy.png";
 
 export default function FloatingButton() {
   const [isSideOpen, setIsSideOpen] = useAtom(isSideOpenAtom);
@@ -122,7 +123,7 @@ export default function FloatingButton() {
       <div
         className={cn(
           "fixed w-14 h-9 rounded-l-full flex items-center shadow-lg hover:translate-x-0 translate-x-5 transition-transform duration-300 z-[2147483647]",
-          "bg-[linear-gradient(to_bottom_right,#fde68a,#fbbf24)] opacity-50 hover:opacity-100",
+          "dark:bg-neutral-900 border-border bg-neutral-100 border border-r-0 opacity-80 hover:opacity-100",
           isSideOpen && "opacity-100",
           isDraggingButton ? "cursor-move" : "cursor-pointer"
         )}
@@ -132,8 +133,12 @@ export default function FloatingButton() {
         }}
         onMouseDown={handleButtonDragStart}
       >
-        <span className="ml-2.5 text-xl">🤖</span>
-        <div className="absolute inset-0 opacity-0" title="拖动改变位置"></div>
+        <img
+          src={readBuddyLogo}
+          alt="Read Buddy"
+          className="ml-[5px] w-7 h-7"
+        />
+        <div className="absolute inset-0 opacity-0"></div>
       </div>
     )
   );
