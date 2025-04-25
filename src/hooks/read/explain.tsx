@@ -61,7 +61,7 @@ Your response should following the JSON format:
   }[][], // 1-dimensional means paragraph, 2-dimensional means sentence
 }
 
-Here is an example of the expected format when English teacher teach a Chinese student:
+Here is an example of the expected format when English teacher teach a Chinese student, but your translated input is not necessary Chinese, you should consider the student's language and use ${targetLang}
 
 <example>
 Input:
@@ -145,16 +145,26 @@ const explainBatch = async (
   const targetLangCode = await storage.getItem<LangCodeISO6393>(
     "local:readBuddy_targetLangCode"
   );
-  const sourceLangCode = await storage.getItem<LangCodeISO6393>(
+  const sourceLangCode = await storage.getItem<LangCodeISO6393 | "auto">(
+    "local:readBuddy_sourceLangCode"
+  );
+
+  const detectedLangCode = await storage.getItem<LangCodeISO6393>(
     "local:readBuddy_detectedLangCode"
   );
 
-  if (!targetLangCode || !sourceLangCode) {
+  if (!targetLangCode || !sourceLangCode || !detectedLangCode) {
     throw new Error("No target language or source language selected");
   }
 
   const targetLang = langCodeToEnglishName[targetLangCode];
-  const sourceLang = langCodeToEnglishName[sourceLangCode];
+  const sourceLang =
+    langCodeToEnglishName[
+      sourceLangCode === "auto" ? detectedLangCode : sourceLangCode
+    ];
+
+  console.log("sourceLang for explainBatch", sourceLang);
+  console.log("targetLang for explainBatch", targetLang);
 
   while (attempts < MAX_ATTEMPTS) {
     try {

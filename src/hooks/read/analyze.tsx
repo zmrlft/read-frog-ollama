@@ -52,7 +52,7 @@ Your response should following the JSON format:
 ISO 639-3 language code subset:
 ${JSON.stringify(langCodeISO6393)}
 
-Here is an example of the expected format when English teacher teach a Chinese student:
+Here is an example of the expected format when English teacher teach a Chinese student,  but your translated input is not necessary Chinese, you should consider the student's language and use ${targetLang}
 
 <example>
 Input:
