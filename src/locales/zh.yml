@@ -1,0 +1,13 @@
+popup:
+  autoLang: "自动检测"
+  sourceLang: "来源语言"
+  targetLang: "目标语言"
+  translateService: "翻译服务"
+  languageLevel: "你的目标语言水平"
+  languageLevels:
+    beginner: "初级"
+    intermediate: "中级"
+    advanced: "高级"
+  readForMe: "为我阅读"
+  showFloatingButton: "开启悬浮按钮"
+  setting: "设置"

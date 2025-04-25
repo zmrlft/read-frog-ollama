@@ -1,0 +1,13 @@
+popup:
+  autoLang: "Auto"
+  sourceLang: "Source"
+  targetLang: "Target"
+  readForMe: "Read For Me"
+  showFloatingButton: "Show Floating Button"
+  setting: "Setting"
+translateService: "Translate Service"
+languageLevel: "Your Target Lang Level"
+languageLevels:
+  beginner: "Beginner"
+  intermediate: "Intermediate"
+  advanced: "Advanced"

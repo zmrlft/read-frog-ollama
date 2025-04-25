@@ -33,6 +33,7 @@ export default defineContentScript({
           useHydrateAtoms([[queryClientAtom, queryClient]]);
           return children;
         };
+
         root.render(
           <QueryClientProvider client={queryClient}>
             <JotaiProvider store={store}>

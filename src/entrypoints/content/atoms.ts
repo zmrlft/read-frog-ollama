@@ -1,5 +1,5 @@
 import { atom, createStore } from "jotai";
-import { DEFAULT_SIDE_CONTENT_WIDTH } from "./constants";
+import { DEFAULT_SIDE_CONTENT_WIDTH } from "../../utils/constants/side";
 import { atomWithMutation } from "jotai-tanstack-query";
 import { mutationFn } from "@/hooks/read/explain";
 import { toast } from "sonner";

@@ -47,7 +47,6 @@ export default function Content() {
       toast.error("Cannot generate the explanation: content is not available");
     }
   };
-
   return (
     <>
       {articleExplanation ? (

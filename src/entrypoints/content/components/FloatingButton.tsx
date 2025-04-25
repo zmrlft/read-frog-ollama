@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue } from "jotai";
 import { isSideOpenAtom, sideContentWidthAtom } from "../atoms";
-import { DEFAULT_BUTTON_POSITION } from "../constants";
+import { DEFAULT_BUTTON_POSITION } from "../../../utils/constants/side";
 import readBuddyLogo from "@/assets/read-buddy.png";
 
 export default function FloatingButton() {
@@ -13,12 +13,12 @@ export default function FloatingButton() {
     let unwatch: () => void;
 
     const loadWidth = async () => {
-      const width = await storage.getItem<number>(
+      const position = await storage.getItem<number>(
         "local:readBuddy_buttonPosition"
       );
 
-      if (width) {
-        setButtonPosition(width);
+      if (position) {
+        setButtonPosition(position);
       } else {
         setButtonPosition(DEFAULT_BUTTON_POSITION);
       }

@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { openai } from "@/utils/openai";
 import { zodTextFormat } from "openai/helpers/zod.mjs";
 import { progressAtom, store } from "@/entrypoints/content/atoms";
+import { LangCodeISO6393, langCodeToEnglishName } from "@/types/languages";
 
 type ExplainArticleParams = {
   extractedContent: ExtractedContent;
@@ -141,14 +142,28 @@ const explainBatch = async (
   let attempts = 0;
   let lastError;
 
+  const targetLangCode = await storage.getItem<LangCodeISO6393>(
+    "local:readBuddy_targetLangCode"
+  );
+  const sourceLangCode = await storage.getItem<LangCodeISO6393>(
+    "local:readBuddy_detectedLangCode"
+  );
+
+  if (!targetLangCode || !sourceLangCode) {
+    throw new Error("No target language or source language selected");
+  }
+
+  const targetLang = langCodeToEnglishName[targetLangCode];
+  const sourceLang = langCodeToEnglishName[sourceLangCode];
+
   while (attempts < MAX_ATTEMPTS) {
     try {
       const response = await openai.responses.parse({
         model: "gpt-4.1-mini",
         instructions: getExplainPrompt(
           // TODO: default to user's selected language
-          extractedContent.article.lang ?? "English",
-          "Chinese"
+          sourceLang,
+          targetLang
         ),
         input: JSON.stringify({
           overallSummary: articleAnalysis.summary,

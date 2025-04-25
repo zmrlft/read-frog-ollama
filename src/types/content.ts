@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { langCodeISO6393 } from "./languages";
 
 export type ExtractedContent = {
   article: {
@@ -17,8 +18,7 @@ export type ExtractedContent = {
 
 export const articleAnalysisSchema = z.object({
   isArticle: z.boolean(),
-  originalTitle: z.string(),
-  translatedTitle: z.string(),
+  detectedLang: langCodeISO6393.or(z.literal("und")),
   summary: z.string(),
   introduction: z.string(),
   terms: z.array(z.string()),

@@ -1,9 +1,10 @@
 import { sideContentWidthAtom } from "../../atoms";
 import { useAtom, useAtomValue } from "jotai";
 import { isSideOpenAtom } from "../../atoms";
-import { MIN_SIDE_CONTENT_WIDTH } from "../../constants";
+import { MIN_SIDE_CONTENT_WIDTH } from "../../../../utils/constants/side";
 import Content from "./Content";
 import { Button } from "@/components/ui/Button";
+import { Toaster } from "sonner";
 
 export default function SideContent() {
   const isSideOpen = useAtomValue(isSideOpenAtom);
@@ -144,6 +145,7 @@ export default function SideContent() {
           </div>
           <Content />
         </div>
+        <Toaster richColors className="z-[2147483647]" />
       </div>
 
       {/* Transparent overlay to prevent other events during resizing */}
