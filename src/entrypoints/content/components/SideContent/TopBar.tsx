@@ -1,7 +1,7 @@
 // import { onMessage } from "@/utils/message";
 import { LangCodeISO6393, langCodeToEnglishName } from "@/types/languages";
 import { useSetAtom } from "jotai";
-import { X } from "lucide-react";
+import { ArrowRight, RotateCcw, X } from "lucide-react";
 import { isSideOpenAtom } from "../../atoms";
 
 export const TopBar = () => {
@@ -56,27 +56,36 @@ export const TopBar = () => {
       <div className="flex text-sm">
         <div className="flex items-center gap-2 px-2 py-1 border-r border-border">
           <div className="w-1 h-1 rounded-full bg-blue-500"></div>
-          <span className="font-medium">Source:</span>
-          <span className="max-w-20 truncate">
+          <span className="max-w-16 truncate">
             {sourceLangCode === "auto"
               ? "Auto"
               : langCodeToEnglishName[sourceLangCode as LangCodeISO6393]}
           </span>
-        </div>
-        <div className="flex items-center gap-2 px-2 py-1 border-r border-border">
-          <div className="w-1 h-1 rounded-full bg-green-500"></div>
-          <span className="font-medium">Target:</span>
-          <span className="max-w-20 truncate">
+          <ArrowRight size={12} strokeWidth={1} className="-mx-1" />
+          <span className="max-w-16 truncate">
             {targetLangCode && langCodeToEnglishName[targetLangCode]}
           </span>
         </div>
+        <div className="flex items-center gap-2 px-2 py-1 border-r border-border">
+          <div className="w-1 h-1 rounded-full bg-green-500"></div>
+          <span className="font-medium">Level:</span>
+          <span className="">Intermediate</span>
+        </div>
       </div>
-      <button
-        className="h-full border-l p-1 hover:bg-border"
-        onClick={() => setIsSideOpen(false)}
-      >
-        <X size={20} strokeWidth={1} />
-      </button>
+      <div className="flex">
+        <button
+          className="h-full border-l flex items-center justify-center hover:bg-border w-7"
+          onClick={() => setIsSideOpen(false)}
+        >
+          <RotateCcw size={16} strokeWidth={1} />
+        </button>
+        <button
+          className="h-full border-l flex items-center justify-center hover:bg-border w-7"
+          onClick={() => setIsSideOpen(false)}
+        >
+          <X size={20} strokeWidth={1} />
+        </button>
+      </div>
     </div>
   );
 };

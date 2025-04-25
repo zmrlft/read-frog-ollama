@@ -18,7 +18,7 @@ https://archive.ph/rM6In Main page
 
 ### Popup
 
-- [ ] 语言检测和设置
+- [x] 语言检测和设置
 - [ ] 翻译服务：OpenAI，DeepSeek（前期仅 OpenAI）
 - [ ] 英语等级
 - [ ] 开始翻译按钮
