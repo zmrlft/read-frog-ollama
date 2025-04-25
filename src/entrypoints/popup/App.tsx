@@ -18,12 +18,12 @@ function App() {
     let unwatch: () => void;
 
     const loadLang = async () => {
-      const lang = await storage.getItem<LangCodeISO6393>(
+      const lang = await storage.getItem<LangCodeISO6393 | "auto">(
         "local:readBuddy_sourceLangCode"
       );
       if (lang) setSourceLang(lang);
 
-      unwatch = await storage.watch<LangCodeISO6393>(
+      unwatch = await storage.watch<LangCodeISO6393 | "auto">(
         "local:readBuddy_sourceLangCode",
         (newLang, _oldLang) => {
           if (newLang) setSourceLang(newLang);

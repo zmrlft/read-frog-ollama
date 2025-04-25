@@ -3,8 +3,8 @@ import { useAtom, useAtomValue } from "jotai";
 import { isSideOpenAtom } from "../../atoms";
 import { MIN_SIDE_CONTENT_WIDTH } from "../../../../utils/constants/side";
 import Content from "./Content";
-import { Button } from "@/components/ui/Button";
 import { Toaster } from "sonner";
+import { TopBar } from "./TopBar";
 
 export default function SideContent() {
   const isSideOpen = useAtomValue(isSideOpenAtom);
@@ -135,14 +135,7 @@ export default function SideContent() {
 
         {/* Sidebar content */}
         <div className="h-full border flex flex-col border-border">
-          <div className="border-b border-border flex justify-end">
-            <Button
-              variant="outline"
-              className="border-l border-r-0 border-t-0 border-b-0"
-            >
-              Config API Key
-            </Button>
-          </div>
+          <TopBar />
           <Content />
         </div>
         <Toaster richColors className="z-[2147483647]" />

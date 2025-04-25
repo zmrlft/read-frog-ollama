@@ -5,7 +5,6 @@ export const langCodeISO6393 = z.enum([
   "cmn",
   "cmn-Hant",
   "yue",
-  "lzh",
   "spa",
   "rus",
   "arb",
@@ -89,7 +88,6 @@ export const langCodeToEnglishName: Record<LangCodeISO6393, string> = {
   cmn: "Simplified Mandarin Chinese",
   "cmn-Hant": "Traditional Mandarin Chinese",
   yue: "Cantonese", // not supported by franc-min
-  lzh: "Literary Chinese", // not supported by franc-min
   spa: "Spanish",
   rus: "Russian",
   arb: "Standard Arabic",

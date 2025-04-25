@@ -34,6 +34,10 @@ export default defineContentScript({
           return children;
         };
 
+        onMessage("invalidateLangCode", () => {
+          console.log("invalidateLangCode!!! content");
+        });
+
         root.render(
           <QueryClientProvider client={queryClient}>
             <JotaiProvider store={store}>
