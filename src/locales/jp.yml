@@ -1,0 +1,13 @@
+popup:
+  autoLang: 自動検出
+  sourceLang: ソース言語
+  targetLang: 対象言語
+  readForMe: 読み上げる
+  showFloatingButton: フローティングボタンを表示
+  setting: 設定
+translateService: 翻訳サービス
+languageLevel: 対象言語のレベル
+languageLevels:
+  beginner: 初級
+  intermediate: 中級
+  advanced: 上級
