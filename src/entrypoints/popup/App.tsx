@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/Button";
-import { Switch } from "@/components/ui/Switch";
 import { ChevronDown, Settings } from "lucide-react";
 import { LanguageOptions } from "./components/LanguageOptions";
 import { LanguageLevel } from "./components/LanguageLevel";
+import { ShowFloatingButton } from "./components/ShowFloatingButton";
 
 function App() {
   return (
@@ -26,12 +26,7 @@ function App() {
         </div>
         <LanguageLevel />
         <Button>{i18n.t("popup.readForMe")}</Button>
-        <div className="flex items-center justify-between gap-2">
-          <span className="font-medium text-[13px]">
-            {i18n.t("popup.showFloatingButton")}
-          </span>
-          <Switch />
-        </div>
+        <ShowFloatingButton />
       </div>
       <div
         className="p-2 flex items-center justify-center gap-1.5 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 cursor-pointer"

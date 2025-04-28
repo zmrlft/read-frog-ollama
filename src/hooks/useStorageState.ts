@@ -24,7 +24,7 @@ export function useStorageState<T>(
 
       // Watch for changes
       unwatch = await storage.watch<T>(`local:${prefix}_${key}`, (newValue) => {
-        if (newValue) setValue(newValue);
+        if (newValue !== null) setValue(newValue);
       });
     };
 

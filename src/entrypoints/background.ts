@@ -45,5 +45,16 @@ export default defineBackground(() => {
         "intermediate"
       );
     }
+
+    const showFloatingButton = await storage.getItem<boolean>(
+      "local:readBuddy_showFloatingButton"
+    );
+
+    if (!showFloatingButton) {
+      await storage.setItem<boolean>(
+        "local:readBuddy_showFloatingButton",
+        true
+      );
+    }
   }
 });

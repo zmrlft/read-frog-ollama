@@ -9,7 +9,11 @@ import { toast } from "sonner";
 import { openai } from "@/utils/openai";
 import { zodTextFormat } from "openai/helpers/zod.mjs";
 import { progressAtom, store } from "@/entrypoints/content/atoms";
-import { LangCodeISO6393, langCodeToEnglishName } from "@/types/languages";
+import {
+  LangCodeISO6393,
+  langCodeToEnglishName,
+  LangLevel,
+} from "@/types/languages";
 
 type ExplainArticleParams = {
   extractedContent: ExtractedContent;
@@ -20,7 +24,8 @@ const MAX_ATTEMPTS = 3;
 const MAX_CHARACTERS = 2000;
 const getExplainPrompt = (
   originalLang: string,
-  targetLang: string
+  targetLang: string,
+  langLevel: LangLevel
 ) => `# Identity
 
 You are an ${originalLang} teacher who explains things vividly. Your student speaks ${targetLang}
@@ -42,12 +47,16 @@ For each paragraph, you should:
    ii) For each sentence, do the following:
       a) If there is orthographic or typographical error in the original sentence, please fix it.
       b) Translate the sentence to ${targetLang}.
-      c) If there are wonderful or interesting words, phrases, or technical terms in the sentence, please explain their part of speech and how to understand them in context.
-      d) Explain the sentence to your student. First, you need to translate the sentence, then explain the words, phrases and whole sentences you obtained above in a vivid and coherent manner. If necessary, you can incorporate context, give examples, or reference classical texts to engage students' interest and aid understanding.
+      c) Selected difficult or interesting words, phrases, or technical terms in the sentence for your students language level (${langLevel}), please explain their part of speech and how to understand them in context.
+      d) Explain the sentence to your student based on their language level (${langLevel}). First, you need to translate the sentence, then explain the words, phrases and whole sentences you obtained above in a vivid and coherent manner. If necessary, you can incorporate context, give examples, or reference classical texts to engage students' interest and aid understanding.
 3. If the answer is no for step 1, then don't include the paragraph in your response.
 
-Your response should following the JSON format:
+For higher language level, you should not select too basic words.
+For lower language level, you should explain more words and the details of the sentence.
 
+Your student's language level is ${langLevel}.
+
+Your response should following the JSON format:
 {
   "paragraphs": {
     "originalSentence": string, // fixed version of the original sentence
@@ -148,9 +157,12 @@ const explainBatch = async (
   const sourceLangCode = await storage.getItem<LangCodeISO6393 | "auto">(
     "local:readBuddy_sourceLangCode"
   );
-
   const detectedLangCode = await storage.getItem<LangCodeISO6393>(
     "local:readBuddy_detectedLangCode"
+  );
+
+  const langLevel = await storage.getItem<LangLevel>(
+    "local:readBuddy_langLevel"
   );
 
   if (!targetLangCode || !sourceLangCode || !detectedLangCode) {
@@ -173,7 +185,8 @@ const explainBatch = async (
         instructions: getExplainPrompt(
           // TODO: default to user's selected language
           sourceLang,
-          targetLang
+          targetLang,
+          langLevel ?? "intermediate"
         ),
         input: JSON.stringify({
           overallSummary: articleAnalysis.summary,

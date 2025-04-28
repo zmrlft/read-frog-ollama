@@ -4,6 +4,10 @@ import { DEFAULT_BUTTON_POSITION } from "../../../utils/constants/side";
 import readBuddyLogo from "@/assets/read-buddy.png";
 
 export default function FloatingButton() {
+  const [showFloatingButton, _setShowFloatingButton] = useStorageState<boolean>(
+    "showFloatingButton",
+    false
+  );
   const [isSideOpen, setIsSideOpen] = useAtom(isSideOpenAtom);
   const sideContentWidth = useAtomValue(sideContentWidthAtom);
   const [isDraggingButton, setIsDraggingButton] = useState(false);
@@ -119,6 +123,7 @@ export default function FloatingButton() {
   };
 
   return (
+    showFloatingButton &&
     buttonPosition && (
       <div
         className={cn(
