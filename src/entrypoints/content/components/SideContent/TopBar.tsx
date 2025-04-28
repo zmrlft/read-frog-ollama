@@ -45,12 +45,12 @@ export const TopBar = () => {
         </div>
       </div>
       <div className="flex">
-        <button
+        {/* <button
           className="h-full border-l flex items-center justify-center hover:bg-border w-7"
           onClick={() => setIsSideOpen(false)}
         >
           <RotateCcw size={16} strokeWidth={1} />
-        </button>
+        </button> */}
         <button
           className="h-full border-l flex items-center justify-center hover:bg-border w-7"
           onClick={() => setIsSideOpen(false)}

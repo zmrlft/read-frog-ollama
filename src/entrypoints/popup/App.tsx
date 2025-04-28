@@ -25,7 +25,7 @@ function App() {
           </div>
         </div>
         <LanguageLevel />
-        <Button>{i18n.t("popup.readForMe")}</Button>
+        {/* <Button>{i18n.t("popup.readForMe")}</Button> */}
         <ShowFloatingButton />
       </div>
       <div
