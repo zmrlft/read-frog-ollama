@@ -56,5 +56,16 @@ export default defineBackground(() => {
         true
       );
     }
+
+    const openaiModel = await storage.getItem<string>(
+      "local:readBuddy_openaiModel"
+    );
+
+    if (!openaiModel) {
+      await storage.setItem<string>(
+        "local:readBuddy_openaiModel",
+        "gpt-4.1-mini"
+      );
+    }
   }
 });
