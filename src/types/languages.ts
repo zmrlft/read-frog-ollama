@@ -163,3 +163,7 @@ export const langCodeToEnglishName: Record<LangCodeISO6393, string> = {
   ilo: "Iloko",
   kaz: "Kazakh",
 };
+
+export const langLevel = z.enum(["beginner", "intermediate", "advanced"]);
+
+export type LangLevel = z.infer<typeof langLevel>;

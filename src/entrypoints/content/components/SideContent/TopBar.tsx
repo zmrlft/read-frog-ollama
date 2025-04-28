@@ -1,55 +1,27 @@
 // import { onMessage } from "@/utils/message";
-import { LangCodeISO6393, langCodeToEnglishName } from "@/types/languages";
+import {
+  LangCodeISO6393,
+  langCodeToEnglishName,
+  LangLevel,
+} from "@/types/languages";
 import { useSetAtom } from "jotai";
 import { ArrowRight, RotateCcw, X } from "lucide-react";
 import { isSideOpenAtom } from "../../atoms";
-
+import { useStorageStateValue } from "@/hooks/useStorageState";
 export const TopBar = () => {
-  const [sourceLangCode, setSourceLangCode] = useState<
+  const langLevel = useStorageStateValue<LangLevel>(
+    "langLevel",
+    "intermediate"
+  );
+  const sourceLangCode = useStorageStateValue<
     LangCodeISO6393 | "auto" | undefined
-  >(undefined);
-  const [targetLangCode, setTargetLangCode] = useState<
-    LangCodeISO6393 | undefined
-  >(undefined);
+  >("sourceLangCode", undefined);
+  const targetLangCode = useStorageStateValue<LangCodeISO6393 | undefined>(
+    "targetLangCode",
+    undefined
+  );
 
   const setIsSideOpen = useSetAtom(isSideOpenAtom);
-
-  useEffect(() => {
-    let unwatchSourceLangCode: () => void;
-    let unwatchTargetLangCode: () => void;
-
-    const loadLang = async () => {
-      const sourceLangCode = await storage.getItem<LangCodeISO6393 | "auto">(
-        "local:readBuddy_sourceLangCode"
-      );
-      if (sourceLangCode) setSourceLangCode(sourceLangCode);
-
-      unwatchSourceLangCode = await storage.watch<LangCodeISO6393 | "auto">(
-        "local:readBuddy_sourceLangCode",
-        (newLang, _oldLang) => {
-          if (newLang) setSourceLangCode(newLang);
-        }
-      );
-
-      const targetLangCode = await storage.getItem<LangCodeISO6393>(
-        "local:readBuddy_targetLangCode"
-      );
-      if (targetLangCode) setTargetLangCode(targetLangCode);
-
-      unwatchTargetLangCode = await storage.watch<LangCodeISO6393>(
-        "local:readBuddy_targetLangCode",
-        (newLang, _oldLang) => {
-          if (newLang) setTargetLangCode(newLang);
-        }
-      );
-    };
-    loadLang();
-
-    return () => {
-      unwatchSourceLangCode?.();
-      unwatchTargetLangCode?.();
-    };
-  }, []);
 
   return (
     <div className="border-b border-border flex justify-between">
@@ -69,7 +41,7 @@ export const TopBar = () => {
         <div className="flex items-center gap-2 px-2 py-1 border-r border-border">
           <div className="w-1 h-1 rounded-full bg-green-500"></div>
           <span className="font-medium">Level:</span>
-          <span className="">Intermediate</span>
+          <span className="">{i18n.t(`languageLevels.${langLevel}`)}</span>
         </div>
       </div>
       <div className="flex">
