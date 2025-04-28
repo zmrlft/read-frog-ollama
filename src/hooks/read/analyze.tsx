@@ -5,7 +5,6 @@ import {
 } from "@/types/content";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { openai } from "@/utils/openai";
 import { useAtom, useSetAtom } from "jotai";
 import { explainAtom, requestContinueAtom } from "@/entrypoints/content/atoms";
 import { zodTextFormat } from "openai/helpers/zod";
@@ -99,19 +98,23 @@ export function useAnalyzeContent() {
       const targetLangCode = await storage.getItem<LangCodeISO6393>(
         "local:readBuddy_targetLangCode"
       );
+      const openaiModel = await storage.getItem<string>(
+        "local:readBuddy_openaiModel"
+      );
 
-      if (!targetLangCode) {
-        throw new Error("No target language selected");
+      if (!targetLangCode || !openaiModel) {
+        throw new Error("No target language or OpenAI model selected");
       }
 
       const targetLang = langCodeToEnglishName[targetLangCode];
 
       console.log("targetLang", targetLang);
+      const openaiClient = await getOpenAIClient();
 
       while (attempts < maxAttempts) {
         try {
-          const response = await openai.responses.parse({
-            model: "gpt-4.1-mini",
+          const response = await openaiClient.responses.parse({
+            model: openaiModel,
             instructions: getAnalyzePrompt(targetLang),
             input: JSON.stringify({
               originalTitle: extractedContent.article.title,
@@ -157,9 +160,8 @@ export function useAnalyzeContent() {
         setRequestContinue(true);
       }
     },
-    onError: () => {
-      console.log("failed to analyze the content");
-      toast.error("Failed to analyze the content");
+    onError: (error) => {
+      toast.error(`Failed to analyze the content: ${error}`);
     },
   });
 }

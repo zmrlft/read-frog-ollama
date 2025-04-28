@@ -6,7 +6,6 @@ import {
 } from "@/types/content";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { openai } from "@/utils/openai";
 import { zodTextFormat } from "openai/helpers/zod.mjs";
 import { progressAtom, store } from "@/entrypoints/content/atoms";
 import {
@@ -145,7 +144,6 @@ Please return the response as JSON format directly.
 
 const explainBatch = async (
   batch: string[],
-  extractedContent: ExtractedContent,
   articleAnalysis: ArticleAnalysis
 ) => {
   let attempts = 0;
@@ -160,13 +158,15 @@ const explainBatch = async (
   const detectedLangCode = await storage.getItem<LangCodeISO6393>(
     "local:readBuddy_detectedLangCode"
   );
-
   const langLevel = await storage.getItem<LangLevel>(
     "local:readBuddy_langLevel"
   );
+  const openaiModel = await storage.getItem<string>(
+    "local:readBuddy_openaiModel"
+  );
 
-  if (!targetLangCode || !sourceLangCode || !detectedLangCode) {
-    throw new Error("No target language or source language selected");
+  if (!targetLangCode || !sourceLangCode || !detectedLangCode || !openaiModel) {
+    throw new Error("Incomplete language settings or OpenAI model");
   }
 
   const targetLang = langCodeToEnglishName[targetLangCode];
@@ -178,10 +178,11 @@ const explainBatch = async (
   console.log("sourceLang for explainBatch", sourceLang);
   console.log("targetLang for explainBatch", targetLang);
 
+  const openaiClient = await getOpenAIClient();
   while (attempts < MAX_ATTEMPTS) {
     try {
-      const response = await openai.responses.parse({
-        model: "gpt-4.1-mini",
+      const response = await openaiClient.responses.parse({
+        model: openaiModel,
         instructions: getExplainPrompt(
           // TODO: default to user's selected language
           sourceLang,
@@ -263,9 +264,7 @@ export const mutationFn = async (params: ExplainArticleParams) => {
   console.log("batches", batches);
 
   const allParagraphExplanations = await sendInBatchesWithFixedDelay(
-    batches.map((batch) =>
-      explainBatch(batch, extractedContent, articleAnalysis)
-    )
+    batches.map((batch) => explainBatch(batch, articleAnalysis))
   );
 
   const flattenedParagraphExplanations = allParagraphExplanations
@@ -307,9 +306,7 @@ export function useExplainArticle() {
       console.log("batches", batches);
 
       const allParagraphExplanations = await sendInBatchesWithFixedDelay(
-        batches.map((batch) =>
-          explainBatch(batch, extractedContent, articleAnalysis)
-        )
+        batches.map((batch) => explainBatch(batch, articleAnalysis))
       );
 
       const flattenedParagraphExplanations = allParagraphExplanations
@@ -327,8 +324,7 @@ export function useExplainArticle() {
       console.log("explanation", data);
     },
     onError: (error) => {
-      toast.error("Failed to generate the explanation");
-      console.error("Failed to generate the explanation:", error);
+      toast.error(`Failed to generate the explanation: ${error}`);
     },
   });
 }

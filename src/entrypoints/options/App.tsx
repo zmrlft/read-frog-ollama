@@ -86,9 +86,10 @@ function App() {
         <Checkbox
           id="isCustomOpenAIModel"
           checked={isCustomOpenAIModel}
-          onCheckedChange={(checked) =>
-            setIsCustomOpenAIModel(checked === true)
-          }
+          onCheckedChange={(checked) => {
+            if (checked === false) setOpenAIModel("gpt-4.1-mini");
+            setIsCustomOpenAIModel(checked === true);
+          }}
         />
         <label
           htmlFor="isCustomOpenAIModel"
