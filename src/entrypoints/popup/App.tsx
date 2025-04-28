@@ -16,7 +16,7 @@ function App() {
           <div className="flex items-center gap-1 pr-1.5 pl-2.5 py-1 rounded-sm text-sm bg-input/50 hover:bg-input">
             <select className="outline-none appearance-none cursor-pointer">
               <option value="openai">OpenAI</option>
-              <option value="deepseek">DeepSeek</option>
+              {/* <option value="deepseek">DeepSeek</option> */}
             </select>
             <ChevronDown
               className="text-neutral-400 dark:text-neutral-600 w-4 h-4"

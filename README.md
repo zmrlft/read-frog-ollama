@@ -20,9 +20,9 @@ https://archive.ph/rM6In Main page
 
 - [x] 语言检测和设置
 - [ ] 翻译服务：OpenAI，DeepSeek（前期仅 OpenAI）
-- [ ] 英语等级
+- [x] 英语等级
 - [ ] 开始翻译按钮
-- [ ] 开启关闭悬浮按钮
+- [x] 开启关闭悬浮按钮
 - [x] 设置按钮
 
 ### Setting Page
@@ -34,7 +34,8 @@ https://archive.ph/rM6In Main page
 ### Side Content
 
 - [ ] 难度分析，判断是否超过难度，超过的话，弹出 continue？界面（延后）
-- [ ] 难度设置，影响 openai api 解析
+- [x] 难度设置，影响 openai api 解析
+- [ ] 重新翻译
 - [ ] 关闭悬浮按钮 (延后)
 - [ ] 打开设置页面 (延后)
 
