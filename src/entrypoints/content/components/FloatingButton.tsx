@@ -126,7 +126,7 @@ export default function FloatingButton() {
           <div className="absolute inset-0 opacity-0"></div>
         </div>
         <div
-          className="text-neutral-600 mr-2 border border-border rounded-full bg-white dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer p-1.5 group-hover:opacity-100 opacity-0 transition-opacity duration-300"
+          className="text-neutral-600 mr-2 border border-border rounded-full bg-white dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer p-1.5 group-hover:translate-x-0 translate-x-12 transition-transform duration-300"
           onClick={() => {
             browser.runtime.sendMessage({ action: "openOptionsPage" });
           }}
