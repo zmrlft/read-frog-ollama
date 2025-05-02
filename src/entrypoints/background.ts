@@ -1,71 +1,41 @@
 import { LangCodeISO6393, LangLevel } from "@/types/languages";
+import { APP_PREFIX } from "@/utils/constants/app";
+
+type InitialValues = {
+  sourceLangCode: LangCodeISO6393 | "auto";
+  targetLangCode: LangCodeISO6393;
+  langLevel: LangLevel;
+  showFloatingButton: boolean;
+  openaiModel: string;
+};
+
+const initialValues: InitialValues = {
+  sourceLangCode: "auto",
+  targetLangCode: "cmn",
+  langLevel: "intermediate",
+  showFloatingButton: true,
+  openaiModel: "gpt-4.1-mini",
+};
 
 export default defineBackground(() => {
   console.log("Hello background!", { id: browser.runtime.id });
 
-  browser.runtime.onStartup.addListener(async () => {
-    console.log("onStartup");
-    await initializeLanguageSettings();
-  });
+  // browser.runtime.onStartup.addListener(async () => {
+  //   await initializeLanguageSettings();
+  // });
 
   browser.runtime.onInstalled.addListener(async () => {
-    console.log("onInstalled");
     await initializeLanguageSettings();
   });
-
-  async function initializeLanguageSettings() {
-    const sourceLangCode = await storage.getItem<LangCodeISO6393 | "auto">(
-      "local:readBuddy_sourceLangCode"
-    );
-    const targetLangCode = await storage.getItem<LangCodeISO6393>(
-      "local:readBuddy_targetLangCode"
-    );
-
-    if (!sourceLangCode) {
-      await storage.setItem<LangCodeISO6393 | "auto">(
-        "local:readBuddy_sourceLangCode",
-        "auto"
-      );
-    }
-
-    if (!targetLangCode) {
-      await storage.setItem<LangCodeISO6393>(
-        "local:readBuddy_targetLangCode",
-        "eng"
-      );
-    }
-
-    const langLevel = await storage.getItem<LangLevel>(
-      "local:readBuddy_langLevel"
-    );
-
-    if (!langLevel) {
-      await storage.setItem<LangLevel>(
-        "local:readBuddy_langLevel",
-        "intermediate"
-      );
-    }
-
-    const showFloatingButton = await storage.getItem<boolean>(
-      "local:readBuddy_showFloatingButton"
-    );
-
-    if (!showFloatingButton) {
-      await storage.setItem<boolean>(
-        "local:readBuddy_showFloatingButton",
-        true
-      );
-    }
-
-    const openaiModel = await storage.getItem<string>(
-      "local:readBuddy_openaiModel"
-    );
-
-    if (!openaiModel) {
-      await storage.setItem<string>(
-        "local:readBuddy_openaiModel",
-        "gpt-4.1-mini"
-      );
-    }
-  }
 });
+
+async function initializeLanguageSettings() {
+  await Promise.all(
+    Object.entries(initialValues).map(async ([key, value]) => {
+      const storedValue = await storage.getItem(`local:${APP_PREFIX}_${key}`);
+      if (!storedValue) {
+        await storage.setItem(`local:${APP_PREFIX}_${key}`, value);
+      }
+    })
+  );
+}

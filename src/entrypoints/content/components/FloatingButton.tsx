@@ -1,70 +1,40 @@
 import { useAtom, useAtomValue } from "jotai";
 import { isSideOpenAtom, sideContentWidthAtom } from "../atoms";
 import { DEFAULT_BUTTON_POSITION } from "../../../utils/constants/side";
-import readFrogLogo from "@/assets/read-frog-fill-small.png";
+import readFrogLogo from "@/assets/icon/read-frog-fill-small-256.png";
+import { X } from "lucide-react";
+import { APP_NAME } from "@/utils/constants/app";
 
 export default function FloatingButton() {
-  const [showFloatingButton, _setShowFloatingButton] = useStorageState<boolean>(
+  const [showFloatingButton, setShowFloatingButton] = useStorageState<boolean>(
     "showFloatingButton",
     false
+  );
+  // top of the whole component
+  const [buttonPosition, setButtonPosition] = useStorageState<number | null>(
+    "buttonPosition",
+    DEFAULT_BUTTON_POSITION
   );
   const [isSideOpen, setIsSideOpen] = useAtom(isSideOpenAtom);
   const sideContentWidth = useAtomValue(sideContentWidthAtom);
   const [isDraggingButton, setIsDraggingButton] = useState(false);
-  const [buttonPosition, setButtonPosition] = useState<number | null>(null);
-
-  useEffect(() => {
-    let unwatch: () => void;
-
-    const loadWidth = async () => {
-      const position = await storage.getItem<number>(
-        "local:readBuddy_buttonPosition"
-      );
-
-      if (position) {
-        setButtonPosition(position);
-      } else {
-        setButtonPosition(DEFAULT_BUTTON_POSITION);
-      }
-
-      unwatch = await storage.watch<number>(
-        "local:readBuddy_buttonPosition",
-        (newPosition, _oldPosition) => {
-          if (newPosition) setButtonPosition(newPosition);
-        }
-      );
-    };
-    loadWidth();
-
-    return () => {
-      unwatch?.();
-    };
-  }, []);
-
-  useEffect(() => {
-    const saveWidth = async () => {
-      await storage.setItem<number>(
-        "local:readBuddy_buttonPosition",
-        buttonPosition
-      );
-    };
-
-    saveWidth();
-  }, [buttonPosition]);
+  // clientY is the top of the icon button
+  const [initialClientY, setInitialClientY] = useState<number | null>(null);
 
   // 按钮拖动处理
   useEffect(() => {
-    if (!isDraggingButton) return;
+    if (!isDraggingButton || !initialClientY || !buttonPosition) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isDraggingButton) return;
-
-      // 计算新位置 (百分比)
-      const windowHeight = window.innerHeight;
-      const clampedY = Math.max(30, Math.min(windowHeight - 100, e.clientY));
-      const newPosition = (clampedY / windowHeight) * 100;
-      // 限制在5%到95%之间
-
+      const initialY = buttonPosition * window.innerHeight;
+      const newY = Math.max(
+        30,
+        Math.min(
+          window.innerHeight - 100,
+          initialY + e.clientY - initialClientY
+        )
+      );
+      const newPosition = newY / window.innerHeight;
       setButtonPosition(newPosition);
     };
 
@@ -82,11 +52,11 @@ export default function FloatingButton() {
       document.removeEventListener("mouseup", handleMouseUp);
       document.body.style.userSelect = "";
     };
-  }, [isDraggingButton]);
+  }, [isDraggingButton, initialClientY]);
 
   const handleButtonDragStart = (e: React.MouseEvent) => {
     // 记录初始位置，用于后续判断是点击还是拖动
-    const initialY = e.clientY;
+    setInitialClientY(e.clientY);
     let hasMoved = false; // 标记是否发生了移动
 
     e.preventDefault();
@@ -94,7 +64,7 @@ export default function FloatingButton() {
 
     // 创建一个监听器检测移动
     const handleMouseMove = (moveEvent: MouseEvent) => {
-      const moveDistance = Math.abs(moveEvent.clientY - initialY);
+      const moveDistance = Math.abs(moveEvent.clientY - e.clientY);
       // 如果移动距离大于阈值，标记为已移动
       if (moveDistance > 5) {
         hasMoved = true;
@@ -126,24 +96,35 @@ export default function FloatingButton() {
     showFloatingButton &&
     buttonPosition && (
       <div
-        className={cn(
-          "fixed w-15 h-10 rounded-l-full shadow-lg flex items-center hover:translate-x-0 translate-x-5 transition-transform duration-300 z-[2147483647]",
-          "dark:bg-neutral-900 border-border bg-white border border-r-0 opacity-80 hover:opacity-100",
-          isSideOpen && "opacity-100",
-          isDraggingButton ? "cursor-move" : "cursor-pointer"
-        )}
+        className="fixed z-[2147483647] flex flex-col items-end group"
         style={{
           right: isSideOpen ? `${sideContentWidth}px` : "0",
-          top: `${buttonPosition}vh`,
+          top: `${buttonPosition * 100}vh`,
         }}
-        onMouseDown={handleButtonDragStart}
       >
-        <img
-          src={readFrogLogo}
-          alt="Read Buddy"
-          className="ml-[5px] w-7 h-7 rounded-full"
-        />
-        <div className="absolute inset-0 opacity-0"></div>
+        <div
+          title="Close floating button"
+          className="cursor-pointer rounded-full dark:bg-neutral-900 bg-neutral-100 p-0.5 mb-2 mr-1 group-hover:translate-x-0 translate-x-6 transition-transform duration-300"
+          onClick={() => setShowFloatingButton(false)}
+        >
+          <X className="w-3 h-3 dark:text-neutral-600 text-neutral-400" />
+        </div>
+        <div
+          className={cn(
+            "w-15 h-10 rounded-l-full shadow-lg flex items-center dark:bg-neutral-900 border-border bg-white border border-r-0 opacity-80 group-hover:opacity-100",
+            "group-hover:translate-x-0 translate-x-5 transition-transform duration-300",
+            isSideOpen && "opacity-100",
+            isDraggingButton ? "cursor-move" : "cursor-pointer"
+          )}
+          onMouseDown={handleButtonDragStart}
+        >
+          <img
+            src={readFrogLogo}
+            alt={APP_NAME}
+            className="ml-[5px] w-7 h-7 rounded-full"
+          />
+          <div className="absolute inset-0 opacity-0"></div>
+        </div>
       </div>
     )
   );

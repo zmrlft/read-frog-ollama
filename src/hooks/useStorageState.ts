@@ -1,3 +1,4 @@
+import { APP_PREFIX } from "@/utils/constants/app";
 import { useState, useEffect } from "react";
 
 /**
@@ -9,7 +10,7 @@ import { useState, useEffect } from "react";
 export function useStorageState<T>(
   key: string,
   initialValue: T,
-  prefix = "readBuddy"
+  prefix = APP_PREFIX
 ) {
   const [value, setValue] = useState<T>(initialValue);
 
@@ -53,7 +54,7 @@ export function useStorageState<T>(
 export function useStorageStateValue<T>(
   key: string,
   initialValue: T,
-  prefix = "readBuddy"
+  prefix = APP_PREFIX
 ) {
   const [value] = useStorageState<T>(key, initialValue, prefix);
   return value;
@@ -68,7 +69,7 @@ export function useStorageStateValue<T>(
 export function useSetStorageState<T>(
   key: string,
   initialValue: T,
-  prefix = "readBuddy"
+  prefix = APP_PREFIX
 ) {
   const [, setValue] = useStorageState<T>(key, initialValue, prefix);
   return setValue;
