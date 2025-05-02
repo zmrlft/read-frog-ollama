@@ -27,6 +27,12 @@ export default defineBackground(() => {
   browser.runtime.onInstalled.addListener(async () => {
     await initializeLanguageSettings();
   });
+
+  browser.runtime.onMessage.addListener((message) => {
+    if (message.action === "openOptionsPage") {
+      browser.runtime.openOptionsPage();
+    }
+  });
 });
 
 async function initializeLanguageSettings() {

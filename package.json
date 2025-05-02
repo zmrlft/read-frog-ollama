@@ -2,7 +2,7 @@
   "name": "read-frog",
   "description": "Help users translate and understand articles on the web",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "wxt",

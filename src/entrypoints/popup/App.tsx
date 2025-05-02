@@ -1,5 +1,4 @@
-import { Button } from "@/components/ui/Button";
-import { ChevronDown, Settings } from "lucide-react";
+import { Bolt, ChevronDown } from "lucide-react";
 import { LanguageOptions } from "./components/LanguageOptions";
 import { LanguageLevel } from "./components/LanguageLevel";
 import { ShowFloatingButton } from "./components/ShowFloatingButton";
@@ -30,11 +29,9 @@ function App() {
       </div>
       <div
         className="p-2 flex items-center justify-center gap-1.5 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 cursor-pointer"
-        onClick={() => {
-          browser.runtime.openOptionsPage();
-        }}
+        onClick={() => browser.runtime.openOptionsPage()}
       >
-        <Settings className="w-4 h-4" strokeWidth={1.5} />
+        <Bolt className="w-4 h-4" strokeWidth={1.6} />
         <span className=" font-medium">{i18n.t("popup.setting")}</span>
       </div>
     </>

@@ -2,7 +2,7 @@ import { useAtom, useAtomValue } from "jotai";
 import { isSideOpenAtom, sideContentWidthAtom } from "../atoms";
 import { DEFAULT_BUTTON_POSITION } from "../../../utils/constants/side";
 import readFrogLogo from "@/assets/icon/read-frog-fill-small-256.png";
-import { X } from "lucide-react";
+import { Bolt, X } from "lucide-react";
 import { APP_NAME } from "@/utils/constants/app";
 
 export default function FloatingButton() {
@@ -96,7 +96,7 @@ export default function FloatingButton() {
     showFloatingButton &&
     buttonPosition && (
       <div
-        className="fixed z-[2147483647] flex flex-col items-end group"
+        className="fixed z-[2147483647] flex flex-col items-end group gap-2"
         style={{
           right: isSideOpen ? `${sideContentWidth}px` : "0",
           top: `${buttonPosition * 100}vh`,
@@ -104,14 +104,14 @@ export default function FloatingButton() {
       >
         <div
           title="Close floating button"
-          className="cursor-pointer rounded-full dark:bg-neutral-900 bg-neutral-100 p-0.5 mb-2 mr-1 group-hover:translate-x-0 translate-x-6 transition-transform duration-300"
+          className="cursor-pointer rounded-full dark:bg-neutral-900 bg-neutral-100 p-0.5 mr-1 group-hover:translate-x-0 translate-x-6 transition-transform duration-300"
           onClick={() => setShowFloatingButton(false)}
         >
           <X className="w-3 h-3 dark:text-neutral-600 text-neutral-400" />
         </div>
         <div
           className={cn(
-            "w-15 h-10 rounded-l-full shadow-lg flex items-center dark:bg-neutral-900 border-border bg-white border border-r-0 opacity-80 group-hover:opacity-100",
+            "w-15 h-10 rounded-l-full shadow-lg flex items-center dark:bg-neutral-900 border-border bg-white border border-r-0 opacity-60 group-hover:opacity-100",
             "group-hover:translate-x-0 translate-x-5 transition-transform duration-300",
             isSideOpen && "opacity-100",
             isDraggingButton ? "cursor-move" : "cursor-pointer"
@@ -124,6 +124,14 @@ export default function FloatingButton() {
             className="ml-[5px] w-7 h-7 rounded-full"
           />
           <div className="absolute inset-0 opacity-0"></div>
+        </div>
+        <div
+          className="text-neutral-600 mr-2 border border-border rounded-full bg-white dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer p-1.5 group-hover:opacity-100 opacity-0 transition-opacity duration-300"
+          onClick={() => {
+            browser.runtime.sendMessage({ action: "openOptionsPage" });
+          }}
+        >
+          <Bolt className="w-5 h-5" strokeWidth={1.8} />
         </div>
       </div>
     )
