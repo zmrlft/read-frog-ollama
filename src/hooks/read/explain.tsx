@@ -13,7 +13,6 @@ import {
   langCodeToEnglishName,
   LangLevel,
 } from "@/types/languages";
-import { APP_PREFIX } from "@/utils/constants/app";
 
 type ExplainArticleParams = {
   extractedContent: ExtractedContent;
@@ -151,20 +150,16 @@ const explainBatch = async (
   let lastError;
 
   const targetLangCode = await storage.getItem<LangCodeISO6393>(
-    `local:${APP_PREFIX}_targetLangCode`
+    "local:targetLangCode"
   );
   const sourceLangCode = await storage.getItem<LangCodeISO6393 | "auto">(
-    `local:${APP_PREFIX}_sourceLangCode`
+    "local:sourceLangCode"
   );
   const detectedLangCode = await storage.getItem<LangCodeISO6393>(
-    `local:${APP_PREFIX}_detectedLangCode`
+    "local:detectedLangCode"
   );
-  const langLevel = await storage.getItem<LangLevel>(
-    `local:${APP_PREFIX}_langLevel`
-  );
-  const openaiModel = await storage.getItem<string>(
-    `local:${APP_PREFIX}_openaiModel`
-  );
+  const langLevel = await storage.getItem<LangLevel>("local:langLevel");
+  const openaiModel = await storage.getItem<string>("local:openaiModel");
 
   if (!targetLangCode || !sourceLangCode || !detectedLangCode || !openaiModel) {
     throw new Error("Incomplete language settings or OpenAI model");

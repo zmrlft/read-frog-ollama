@@ -1,4 +1,3 @@
-import { APP_PREFIX } from "@/utils/constants/app";
 import { useState, useEffect } from "react";
 
 /**
@@ -9,8 +8,7 @@ import { useState, useEffect } from "react";
  */
 export function useStorageState<T>(
   key: string,
-  initialValue: T,
-  prefix = APP_PREFIX
+  initialValue: T
 ) {
   const [value, setValue] = useState<T>(initialValue);
 
@@ -20,11 +18,11 @@ export function useStorageState<T>(
 
     const loadAndWatch = async () => {
       // Load initial value
-      const storedValue = await storage.getItem<T>(`local:${prefix}_${key}`);
+      const storedValue = await storage.getItem<T>(`local:${key}`);
       if (storedValue) setValue(storedValue);
 
       // Watch for changes
-      unwatch = await storage.watch<T>(`local:${prefix}_${key}`, (newValue) => {
+      unwatch = await storage.watch<T>(`local:${key}`, (newValue) => {
         if (newValue !== null) setValue(newValue);
       });
     };
@@ -39,7 +37,7 @@ export function useStorageState<T>(
 
   // Function to update value in state and storage
   const updateValue = async (newValue: T) => {
-    await storage.setItem<T>(`local:${prefix}_${key}`, newValue);
+    await storage.setItem<T>(`local:${key}`, newValue);
   };
 
   return [value, updateValue] as const;
@@ -54,9 +52,8 @@ export function useStorageState<T>(
 export function useStorageStateValue<T>(
   key: string,
   initialValue: T,
-  prefix = APP_PREFIX
 ) {
-  const [value] = useStorageState<T>(key, initialValue, prefix);
+  const [value] = useStorageState<T>(key, initialValue);
   return value;
 }
 
@@ -69,8 +66,7 @@ export function useStorageStateValue<T>(
 export function useSetStorageState<T>(
   key: string,
   initialValue: T,
-  prefix = APP_PREFIX
 ) {
-  const [, setValue] = useStorageState<T>(key, initialValue, prefix);
+  const [, setValue] = useStorageState<T>(key, initialValue);
   return setValue;
 }

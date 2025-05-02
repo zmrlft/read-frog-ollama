@@ -1,5 +1,4 @@
 import { LangCodeISO6393, LangLevel } from "@/types/languages";
-import { APP_PREFIX } from "@/utils/constants/app";
 
 type InitialValues = {
   sourceLangCode: LangCodeISO6393 | "auto";
@@ -38,16 +37,16 @@ export default defineBackground(() => {
 async function initializeLanguageSettings() {
   await Promise.all(
     Object.entries(initialValues).map(async ([key, value]) => {
-      const storedValue = await storage.getItem(`local:${APP_PREFIX}_${key}`);
+      const storedValue = await storage.getItem(`local:${key}`);
       if (!storedValue) {
-        await storage.setItem(`local:${APP_PREFIX}_${key}`, value);
+        await storage.setItem(`local:${key}`, value);
       }
     })
   );
 
   if (import.meta.env.DEV) {
     await storage.setItem<string>(
-      `local:${APP_PREFIX}_openaiApiKey`,
+      "local:openaiApiKey",
       import.meta.env.WXT_OPENAI_API_KEY
     );
   }

@@ -13,7 +13,6 @@ import {
   LangCodeISO6393,
   langCodeToEnglishName,
 } from "@/types/languages";
-import { APP_PREFIX } from "@/utils/constants/app";
 
 const getAnalyzePrompt = (targetLang: string) => `# Identity
 
@@ -97,11 +96,9 @@ export function useAnalyzeContent() {
       let lastError;
 
       const targetLangCode = await storage.getItem<LangCodeISO6393>(
-        `local:${APP_PREFIX}_targetLangCode`
+        "local:targetLangCode"
       );
-      const openaiModel = await storage.getItem<string>(
-        `local:${APP_PREFIX}_openaiModel`
-      );
+      const openaiModel = await storage.getItem<string>("local:openaiModel");
 
       if (!targetLangCode || !openaiModel) {
         console.log("targetLangCode", targetLangCode);
@@ -132,7 +129,7 @@ export function useAnalyzeContent() {
           );
 
           storage.setItem(
-            `local:${APP_PREFIX}_detectedLangCode`,
+            "local:detectedLangCode",
             articleAnalysis.detectedLang === "und"
               ? "cmn"
               : articleAnalysis.detectedLang

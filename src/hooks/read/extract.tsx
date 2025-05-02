@@ -4,7 +4,6 @@ import { franc } from "franc-min";
 import { flattenToParagraphs } from "@/entrypoints/content/utils/article";
 import { ExtractedContent } from "@/types/content";
 import { LangCodeISO6393 } from "@/types/languages";
-import { APP_PREFIX } from "@/utils/constants/app";
 
 export function useExtractContent() {
   return useQuery<ExtractedContent>({
@@ -22,7 +21,7 @@ export function useExtractContent() {
       const lang = article?.textContent ? franc(article.textContent) : "und";
 
       await storage.setItem<LangCodeISO6393>(
-        `local:${APP_PREFIX}_detectedLangCode`,
+        "local:detectedLangCode",
         lang === "und" ? "eng" : (lang as LangCodeISO6393)
       );
 
