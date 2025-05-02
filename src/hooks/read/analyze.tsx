@@ -13,6 +13,7 @@ import {
   LangCodeISO6393,
   langCodeToEnglishName,
 } from "@/types/languages";
+import { APP_PREFIX } from "@/utils/constants/app";
 
 const getAnalyzePrompt = (targetLang: string) => `# Identity
 
@@ -96,13 +97,15 @@ export function useAnalyzeContent() {
       let lastError;
 
       const targetLangCode = await storage.getItem<LangCodeISO6393>(
-        "local:readBuddy_targetLangCode"
+        `local:${APP_PREFIX}_targetLangCode`
       );
       const openaiModel = await storage.getItem<string>(
-        "local:readBuddy_openaiModel"
+        `local:${APP_PREFIX}_openaiModel`
       );
 
       if (!targetLangCode || !openaiModel) {
+        console.log("targetLangCode", targetLangCode);
+        console.log("openaiModel", openaiModel);
         throw new Error("No target language or OpenAI model selected");
       }
 
@@ -129,7 +132,7 @@ export function useAnalyzeContent() {
           );
 
           storage.setItem(
-            "local:readBuddy_detectedLangCode",
+            `local:${APP_PREFIX}_detectedLangCode`,
             articleAnalysis.detectedLang === "und"
               ? "cmn"
               : articleAnalysis.detectedLang

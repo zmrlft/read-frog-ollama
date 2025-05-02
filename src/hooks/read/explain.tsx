@@ -13,6 +13,7 @@ import {
   langCodeToEnglishName,
   LangLevel,
 } from "@/types/languages";
+import { APP_PREFIX } from "@/utils/constants/app";
 
 type ExplainArticleParams = {
   extractedContent: ExtractedContent;
@@ -150,19 +151,19 @@ const explainBatch = async (
   let lastError;
 
   const targetLangCode = await storage.getItem<LangCodeISO6393>(
-    "local:readBuddy_targetLangCode"
+    `local:${APP_PREFIX}_targetLangCode`
   );
   const sourceLangCode = await storage.getItem<LangCodeISO6393 | "auto">(
-    "local:readBuddy_sourceLangCode"
+    `local:${APP_PREFIX}_sourceLangCode`
   );
   const detectedLangCode = await storage.getItem<LangCodeISO6393>(
-    "local:readBuddy_detectedLangCode"
+    `local:${APP_PREFIX}_detectedLangCode`
   );
   const langLevel = await storage.getItem<LangLevel>(
-    "local:readBuddy_langLevel"
+    `local:${APP_PREFIX}_langLevel`
   );
   const openaiModel = await storage.getItem<string>(
-    "local:readBuddy_openaiModel"
+    `local:${APP_PREFIX}_openaiModel`
   );
 
   if (!targetLangCode || !sourceLangCode || !detectedLangCode || !openaiModel) {

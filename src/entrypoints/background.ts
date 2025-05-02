@@ -20,9 +20,9 @@ const initialValues: InitialValues = {
 export default defineBackground(() => {
   console.log("Hello background!", { id: browser.runtime.id });
 
-  // browser.runtime.onStartup.addListener(async () => {
-  //   await initializeLanguageSettings();
-  // });
+  browser.runtime.onStartup.addListener(async () => {
+    await initializeLanguageSettings();
+  });
 
   browser.runtime.onInstalled.addListener(async () => {
     await initializeLanguageSettings();

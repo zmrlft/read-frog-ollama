@@ -5,7 +5,7 @@ import { MIN_SIDE_CONTENT_WIDTH } from "../../../../utils/constants/side";
 import Content from "./Content";
 import { Toaster } from "sonner";
 import { TopBar } from "./TopBar";
-
+import { APP_PREFIX } from "@/utils/constants/app";
 export default function SideContent() {
   const isSideOpen = useAtomValue(isSideOpenAtom);
   const [sideContentWidth, setSideContentWidth] = useAtom(sideContentWidthAtom);
@@ -16,12 +16,12 @@ export default function SideContent() {
 
     const loadWidth = async () => {
       const width = await storage.getItem<number>(
-        "local:readBuddy_sideContentWidth"
+        `local:${APP_PREFIX}_sideContentWidth`
       );
       if (width) setSideContentWidth(width);
 
       unwatch = await storage.watch<number>(
-        "local:readBuddy_sideContentWidth",
+        `local:${APP_PREFIX}_sideContentWidth`,
         (newWidth, _oldWidth) => {
           if (newWidth) setSideContentWidth(newWidth);
         }
@@ -37,7 +37,7 @@ export default function SideContent() {
   useEffect(() => {
     const saveWidth = async () => {
       await storage.setItem<number>(
-        "local:readBuddy_sideContentWidth",
+        `local:${APP_PREFIX}_sideContentWidth`,
         sideContentWidth
       );
     };
