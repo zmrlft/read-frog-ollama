@@ -1,7 +1,7 @@
 import { useAtom, useAtomValue } from "jotai";
 import { isSideOpenAtom, sideContentWidthAtom } from "../atoms";
 import { DEFAULT_BUTTON_POSITION } from "../../../utils/constants/side";
-import readBuddyLogo from "@/assets/read-buddy.png";
+import readFrogLogo from "@/assets/read-frog-fill-small.png";
 
 export default function FloatingButton() {
   const [showFloatingButton, _setShowFloatingButton] = useStorageState<boolean>(
@@ -127,8 +127,8 @@ export default function FloatingButton() {
     buttonPosition && (
       <div
         className={cn(
-          "fixed w-14 h-9 rounded-l-full flex items-center shadow-lg hover:translate-x-0 translate-x-5 transition-transform duration-300 z-[2147483647]",
-          "dark:bg-neutral-900 border-border bg-neutral-100 border border-r-0 opacity-80 hover:opacity-100",
+          "fixed w-15 h-10 rounded-l-full shadow-lg flex items-center hover:translate-x-0 translate-x-5 transition-transform duration-300 z-[2147483647]",
+          "dark:bg-neutral-900 border-border bg-white border border-r-0 opacity-80 hover:opacity-100",
           isSideOpen && "opacity-100",
           isDraggingButton ? "cursor-move" : "cursor-pointer"
         )}
@@ -139,9 +139,9 @@ export default function FloatingButton() {
         onMouseDown={handleButtonDragStart}
       >
         <img
-          src={readBuddyLogo}
+          src={readFrogLogo}
           alt="Read Buddy"
-          className="ml-[5px] w-7 h-7"
+          className="ml-[5px] w-7 h-7 rounded-full"
         />
         <div className="absolute inset-0 opacity-0"></div>
       </div>

@@ -5,9 +5,6 @@ export async function getOpenAIClient() {
     "local:readBuddy_openaiApiKey"
   );
 
-  console.log("dev mode", import.meta.env.DEV);
-  console.log("openaiApiKey", import.meta.env.WXT_OPENAI_API_KEY);
-
   // if in dev mode, get api key from .env
   if (import.meta.env.DEV && !openaiApiKey) {
     console.log("dev mode, getting api key from .env");
