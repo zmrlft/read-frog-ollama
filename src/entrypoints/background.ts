@@ -44,4 +44,11 @@ async function initializeLanguageSettings() {
       }
     })
   );
+
+  if (import.meta.env.DEV) {
+    await storage.setItem<string>(
+      `local:${APP_PREFIX}_openaiApiKey`,
+      import.meta.env.WXT_OPENAI_API_KEY
+    );
+  }
 }

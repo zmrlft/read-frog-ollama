@@ -61,6 +61,6 @@
     "tailwindcss": "^4.1.4",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.31.0",
-    "wxt": "^0.20.3"
+    "wxt": "^0.20.6"
   }
 }
