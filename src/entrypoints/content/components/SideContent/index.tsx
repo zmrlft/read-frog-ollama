@@ -5,6 +5,7 @@ import { MIN_SIDE_CONTENT_WIDTH } from "../../../../utils/constants/side";
 import Content from "./Content";
 import { Toaster } from "sonner";
 import { TopBar } from "./TopBar";
+import { Metadata } from "./Metadata";
 
 export default function SideContent() {
   const isSideOpen = useAtomValue(isSideOpenAtom);
@@ -110,7 +111,7 @@ export default function SideContent() {
     <>
       <div
         className={cn(
-          "fixed top-0 right-0 p-2 bg-background h-full z-[2147483647]",
+          "fixed top-0 right-0 p-3 bg-background h-full z-[2147483647]",
           isSideOpen
             ? "translate-x-0 border-l border-border"
             : "translate-x-full"
@@ -125,8 +126,9 @@ export default function SideContent() {
           onMouseDown={handleResizeStart}
         ></div>
 
-        <div className="h-full flex flex-col">
+        <div className="h-full flex flex-col gap-y-2">
           <TopBar />
+          <Metadata />
           <Content />
         </div>
         <Toaster richColors className="z-[2147483647]" />

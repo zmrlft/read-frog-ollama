@@ -39,7 +39,7 @@ export const TopBar = () => {
           </span>
         </div>
         <div className="flex items-center gap-2 px-2 py-1 border rounded-md border-border hover:bg-muted">
-          <div className="w-1 h-1 rounded-full bg-green-500"></div>
+          <div className="w-1 h-1 rounded-full bg-orange-500"></div>
           <span className="font-medium">Level:</span>
           <span className="">{i18n.t(`languageLevels.${langLevel}`)}</span>
         </div>

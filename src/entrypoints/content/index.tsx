@@ -17,6 +17,9 @@ import { mirrorDynamicStyle, addStyleToShadow } from "./utils/styles";
 import { toast } from "sonner";
 import { APP_NAME } from "@/utils/constants/app";
 import { kebabCase } from "case-anything";
+import { TooltipProvider } from "@/components/ui/Tooltip";
+
+export let shadowWrapper: HTMLElement | null = null;
 
 export default defineContentScript({
   matches: ["*://*/*"],
@@ -28,7 +31,14 @@ export default defineContentScript({
       anchor: "html",
       append: "last",
       onMount: (container, shadow) => {
+        // Store shadow root reference
+
         const wrapper = document.createElement("div");
+        wrapper.className = cn(
+          "text-base antialiased font-sans z-[2147483647]",
+          isDarkMode() && "dark"
+        );
+        shadowWrapper = wrapper;
         container.appendChild(wrapper);
 
         const root = ReactDOM.createRoot(wrapper);
@@ -61,7 +71,9 @@ export default defineContentScript({
           <QueryClientProvider client={queryClient}>
             <JotaiProvider store={store}>
               <HydrateAtoms>
-                <App />
+                <TooltipProvider>
+                  <App />
+                </TooltipProvider>
               </HydrateAtoms>
             </JotaiProvider>
             <ReactQueryDevtools
@@ -75,6 +87,7 @@ export default defineContentScript({
       onRemove: (elements) => {
         elements?.root.unmount();
         elements?.wrapper.remove();
+        shadowWrapper = null;
       },
     });
 
