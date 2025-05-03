@@ -319,8 +319,5 @@ export function useExplainArticle() {
     onSuccess: (data) => {
       console.log("explanation", data);
     },
-    onError: (error) => {
-      toast.error(`Failed to generate the explanation: ${error}`);
-    },
   });
 }

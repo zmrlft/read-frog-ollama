@@ -4,15 +4,14 @@ import {
   articleAnalysisSchema,
 } from "@/types/content";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { useAtom, useSetAtom } from "jotai";
 import { explainAtom, requestContinueAtom } from "@/entrypoints/content/atoms";
-import { zodTextFormat } from "openai/helpers/zod";
 import {
   langCodeISO6393,
   LangCodeISO6393,
   langCodeToEnglishName,
 } from "@/types/languages";
+import { generateObject } from "ai";
 
 const getAnalyzePrompt = (targetLang: string) => `# Identity
 
@@ -109,24 +108,15 @@ export function useAnalyzeContent() {
       const targetLang = langCodeToEnglishName[targetLangCode];
 
       console.log("targetLang", targetLang);
-      const openaiClient = await getOpenAIClient();
+      const providerRegistry = await getProviderRegistry();
 
       while (attempts < maxAttempts) {
         try {
-          const response = await openaiClient.responses.parse({
-            model: openaiModel,
-            instructions: getAnalyzePrompt(targetLang),
-            input: JSON.stringify({
-              originalTitle: extractedContent.article.title,
-              content: extractedContent.paragraphs.join("\n").trim(),
-            }),
-            text: {
-              format: zodTextFormat(articleAnalysisSchema, "articleAnalysis"),
-            },
+          const { object: articleAnalysis } = await generateObject({
+            model: providerRegistry.languageModel(`openai:${openaiModel}`),
+            prompt: getAnalyzePrompt(targetLang),
+            schema: articleAnalysisSchema,
           });
-          const articleAnalysis = articleAnalysisSchema.parse(
-            JSON.parse(response.output_text)
-          );
 
           storage.setItem(
             "local:detectedLangCode",
@@ -159,9 +149,6 @@ export function useAnalyzeContent() {
       } else {
         setRequestContinue(true);
       }
-    },
-    onError: (error) => {
-      toast.error(`Failed to analyze the content: ${error}`);
     },
   });
 }

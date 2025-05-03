@@ -11,12 +11,14 @@ import { shadowWrapper } from "../..";
 export const Metadata = () => {
   const title = document.title ?? "Untitled";
   const favicon = getFaviconUrl();
-  console.log("favicon", favicon);
+  // TODO: show regenerate button at certain conditions and implement the logic
 
   return (
-    <div className="relative flex justify-between items-center">
+    <div className="relative flex justify-between items-center gap-x-2">
       <div className="flex items-center gap-x-2 flex-1 min-w-0">
-        <img src={favicon} alt="Favicon" className="w-4 h-4 flex-shrink-0" />
+        {favicon && (
+          <img src={favicon} alt="Favicon" className="w-4 h-4 flex-shrink-0" />
+        )}
         <h1 className="text-lg font-bold truncate">{title}</h1>
       </div>
       <Tooltip>

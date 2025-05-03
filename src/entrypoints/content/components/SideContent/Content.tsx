@@ -13,7 +13,8 @@ import { Progress } from "@/components/ui/Progress";
 export default function Content() {
   const [requestContinue, setRequestContinue] = useAtom(requestContinueAtom);
   const progress = useAtomValue(progressAtom);
-  const { data: extractedContent } = useExtractContent();
+  const { isPending: isExtractingContent, data: extractedContent } =
+    useExtractContent();
   const {
     mutate: analyzeContent,
     isPending: isGeneratingAnalysis,
@@ -47,6 +48,16 @@ export default function Content() {
       toast.error("Cannot generate the explanation: content is not available");
     }
   };
+
+  if (isExtractingContent) {
+    return (
+      <div className="flex-1 flex h-full w-full justify-center items-center p-4 gap-x-2">
+        <LoadingDots />
+        Extracting content...
+      </div>
+    );
+  }
+
   return (
     <>
       {articleExplanation ? (
