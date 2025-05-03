@@ -5,7 +5,7 @@ import {
   LangLevel,
 } from "@/types/languages";
 import { useSetAtom } from "jotai";
-import { ArrowRight, RotateCcw, X } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 import { isSideOpenAtom } from "../../atoms";
 import { useStorageStateValue } from "@/hooks/useStorageState";
 export const TopBar = () => {
@@ -24,9 +24,9 @@ export const TopBar = () => {
   const setIsSideOpen = useSetAtom(isSideOpenAtom);
 
   return (
-    <div className="border-b border-border flex justify-between">
-      <div className="flex text-sm">
-        <div className="flex items-center gap-2 px-2 py-1 border-r border-border">
+    <div className="flex justify-between items-start">
+      <div className="flex text-sm gap-x-2">
+        <div className="flex items-center gap-2 px-2 py-1 border rounded-md border-border hover:bg-muted">
           <div className="w-1 h-1 rounded-full bg-blue-500"></div>
           <span className="max-w-16 truncate">
             {sourceLangCode === "auto"
@@ -38,26 +38,18 @@ export const TopBar = () => {
             {targetLangCode && langCodeToEnglishName[targetLangCode]}
           </span>
         </div>
-        <div className="flex items-center gap-2 px-2 py-1 border-r border-border">
+        <div className="flex items-center gap-2 px-2 py-1 border rounded-md border-border hover:bg-muted">
           <div className="w-1 h-1 rounded-full bg-green-500"></div>
           <span className="font-medium">Level:</span>
           <span className="">{i18n.t(`languageLevels.${langLevel}`)}</span>
         </div>
       </div>
-      <div className="flex">
-        {/* <button
-          className="h-full border-l flex items-center justify-center hover:bg-border w-7"
-          onClick={() => setIsSideOpen(false)}
-        >
-          <RotateCcw size={16} strokeWidth={1} />
-        </button> */}
-        <button
-          className="h-full border-l flex items-center justify-center hover:bg-border w-7"
-          onClick={() => setIsSideOpen(false)}
-        >
-          <X size={20} strokeWidth={1} />
-        </button>
-      </div>
+      <button
+        className="flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-full p-0.5 h-4 w-4 cursor-pointer"
+        onClick={() => setIsSideOpen(false)}
+      >
+        <X strokeWidth={1.2} className="text-neutral-500" />
+      </button>
     </div>
   );
 };

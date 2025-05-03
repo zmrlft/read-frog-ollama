@@ -25,6 +25,8 @@ export function useExtractContent() {
         lang === "und" ? "eng" : (lang as LangCodeISO6393)
       );
 
+      throw new Error("test");
+
       return {
         article: {
           ...article,
@@ -33,6 +35,5 @@ export function useExtractContent() {
         paragraphs,
       };
     },
-    // staleTime: Infinity, // Only run once per page load
   });
 }
