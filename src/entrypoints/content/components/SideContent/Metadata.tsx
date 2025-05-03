@@ -11,11 +11,12 @@ import { shadowWrapper } from "../..";
 export const Metadata = () => {
   const title = document.title ?? "Untitled";
   const favicon = getFaviconUrl();
+  console.log("favicon", favicon);
 
   return (
     <div className="relative flex justify-between items-center">
-      <div className="flex items-center gap-x-2">
-        <img src={favicon} alt="Favicon" className="w-4 h-4" />
+      <div className="flex items-center gap-x-2 flex-1 min-w-0">
+        <img src={favicon} alt="Favicon" className="w-4 h-4 flex-shrink-0" />
         <h1 className="text-lg font-bold truncate">{title}</h1>
       </div>
       <Tooltip>
@@ -24,14 +25,8 @@ export const Metadata = () => {
             <RotateCcw />
           </Button>
         </TooltipTrigger>
-        <TooltipContent container={shadowWrapper}>
-          <p>Refresh</p>
-        </TooltipContent>
-      </Tooltip>
-      <Tooltip>
-        <TooltipTrigger>Hover</TooltipTrigger>
-        <TooltipContent>
-          <p>Add to library</p>
+        <TooltipContent container={shadowWrapper} side="left">
+          <p>Regenerate</p>
         </TooltipContent>
       </Tooltip>
     </div>
