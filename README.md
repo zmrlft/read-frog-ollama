@@ -55,5 +55,6 @@ https://archive.ph/rM6In Main page
 # Bug
 
 - [ ] Don't include text in dom where display is None https://onboarding.immersivetranslate.com/en/instruct/step-3/, 这个网页中有很多 display none 的英文 dom，不应该取到
+- [ ] https://www.cbc.ca/radio/thecurrent/skagway-alaska-yukon-tourism-relationship-1.7524871， 这个网页说是不是文章
 
 - Test z index: https://www.taylorswift.com/, https://www.fdsf.ca/

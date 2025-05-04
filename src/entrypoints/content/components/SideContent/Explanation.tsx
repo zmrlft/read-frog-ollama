@@ -71,7 +71,7 @@ export default function Explanation({
                             {wIndex + 1}. {word.word}
                           </span>
                           <span className="text-muted-foreground">
-                            {word.partOfSpeech}
+                            {word.syntacticCategory}
                           </span>
                         </div>
                         {word.explanation}
