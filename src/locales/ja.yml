@@ -6,7 +6,7 @@ popup:
   showFloatingButton: フローティングボタンを表示
   setting: 設定
 translateService: 翻訳サービス
-languageLevel: 対象言語のレベル
+languageLevel: ソース言語のレベル
 languageLevels:
   beginner: 初級
   intermediate: 中級

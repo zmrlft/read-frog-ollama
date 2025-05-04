@@ -6,7 +6,7 @@ popup:
   showFloatingButton: "Show Floating Button"
   setting: "Setting"
 translateService: "Translate Service"
-languageLevel: "Your Target Lang Level"
+languageLevel: "Your Source Lang Level"
 languageLevels:
   beginner: "Beginner"
   intermediate: "Intermediate"

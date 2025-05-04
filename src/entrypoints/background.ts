@@ -5,6 +5,7 @@ type InitialValues = {
   targetLangCode: LangCodeISO6393;
   langLevel: LangLevel;
   showFloatingButton: boolean;
+  translateService: string;
   openaiModel: string;
 };
 
@@ -13,6 +14,7 @@ const initialValues: InitialValues = {
   targetLangCode: "cmn",
   langLevel: "intermediate",
   showFloatingButton: true,
+  translateService: "openai",
   openaiModel: "gpt-4.1-mini",
 };
 

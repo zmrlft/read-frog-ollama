@@ -33,7 +33,7 @@ export const LanguageOptions = () => {
 
   return (
     <div className="flex items-center gap-2">
-      <div className="relative inline-flex items-center w-32 h-13 justify-between bg-input/50 hover:bg-input rounded-lg">
+      <div className="relative inline-flex items-center w-32 h-13 justify-between bg-input/50 hover:bg-input rounded-lg border border-input">
         <span className="text-sm text-neutral-500 pt-5 pl-4">
           {sourceLang === "auto"
             ? i18n.t("popup.autoLang")
@@ -62,7 +62,7 @@ export const LanguageOptions = () => {
         </select>
       </div>
       <ArrowRight className="w-4 h-4 text-neutral-500" strokeWidth={2} />
-      <div className="relative inline-flex items-center w-32 h-13 justify-between bg-input/50 hover:bg-input rounded-lg">
+      <div className="relative inline-flex items-center w-32 h-13 justify-between bg-input/50 hover:bg-input rounded-lg border border-input">
         <span className="text-sm text-neutral-500 pt-5 pl-4">
           {i18n.t("popup.targetLang")}
         </span>

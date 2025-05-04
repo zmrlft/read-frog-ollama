@@ -6,7 +6,7 @@ popup:
   showFloatingButton: 開啟懸浮按鈕
   setting: 設定
 translateService: 翻譯服務
-languageLevel: 你的目標語言水平
+languageLevel: 你的來源語言水平
 languageLevels:
   beginner: 初級
   intermediate: 中級
