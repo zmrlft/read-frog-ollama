@@ -27,6 +27,7 @@ export default function Content() {
 
   const handleContinue = () => {
     if (extractedContent) {
+      // TODO: useExplainArticle 但是要获得最新的这个 mutate 的返回结果：https://github.com/jotaijs/jotai-tanstack-query#atomwithmutationstate-usage
       // readArticle(extractedContent);
     } else {
       toast.error("Cannot generate the explanation: content is not available");
