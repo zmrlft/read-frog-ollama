@@ -60,12 +60,12 @@ const ProviderConfigSection = ({ provider }: { provider: Provider }) => {
       />
       <div className="flex items-center space-x-2">
         <Checkbox
-          id="apiKey"
+          id={`apiKey-${provider}`}
           checked={showAPIKey}
           onCheckedChange={(checked) => setShowAPIKey(checked === true)}
         />
         <label
-          htmlFor="apiKey"
+          htmlFor={`apiKey-${provider}`}
           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
         >
           Show API Key
@@ -112,7 +112,7 @@ const ProviderConfigSection = ({ provider }: { provider: Provider }) => {
       )}
       <div className="flex items-center space-x-2 mt-2">
         <Checkbox
-          id="isCustomOpenAIModel"
+          id={`isCustomModel-${provider}`}
           checked={providerConfig[provider].isCustomModel}
           onCheckedChange={(checked) => {
             if (checked === false)
@@ -134,7 +134,7 @@ const ProviderConfigSection = ({ provider }: { provider: Provider }) => {
           }}
         />
         <label
-          htmlFor="isCustomOpenAIModel"
+          htmlFor={`isCustomModel-${provider}`}
           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
         >
           Enter the name of the custom model

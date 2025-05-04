@@ -64,8 +64,4 @@ async function initializeLanguageSettings() {
       await storage.setItem(`local:providerConfig`, providerConfigWithApiKey);
     }
   }
-  // await storage.setItem<string>(
-  //   "local:openaiApiKey",
-  //   import.meta.env.WXT_OPENAI_API_KEY
-  // );
 }
