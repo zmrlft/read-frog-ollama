@@ -58,3 +58,4 @@ https://archive.ph/rM6In Main page
 - [ ] https://www.cbc.ca/radio/thecurrent/skagway-alaska-yukon-tourism-relationship-1.7524871， 这个网页说是不是文章
 
 - Test z index: https://www.taylorswift.com/, https://www.fdsf.ca/
+- test japanese: http://jp.tingroom.com/yuedu/yd300p/9741.html

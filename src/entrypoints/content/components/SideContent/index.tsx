@@ -111,7 +111,7 @@ export default function SideContent() {
     <>
       <div
         className={cn(
-          "fixed top-0 right-0 p-3 bg-background h-full z-[2147483647]",
+          "fixed top-0 right-0 bg-background h-full z-[2147483647]",
           isSideOpen
             ? "translate-x-0 border-l border-border"
             : "translate-x-full"
@@ -126,9 +126,9 @@ export default function SideContent() {
           onMouseDown={handleResizeStart}
         ></div>
 
-        <div className="h-full flex flex-col gap-y-2">
-          <TopBar />
-          <Metadata />
+        <div className="h-full flex flex-col gap-y-2 py-3">
+          <TopBar className="px-3" />
+          <Metadata className="px-3" />
           <Content />
         </div>
         <Toaster richColors className="z-[2147483647]" />

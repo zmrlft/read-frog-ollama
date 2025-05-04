@@ -267,3 +267,72 @@ Note:
 
 Please return the response as JSON format directly.
 `;
+
+const _japanseExample = `
+<example>
+Variables:
+- sourceLang: Japanese
+- targetLang: Simplified Mandarin Chinese
+- langLevel: beginner
+Input:
+{
+  "overallSummary": "死にそうな親父は「葬式をするな」と言ったが、本心ではなかった。へそまがりの息子が逆に立派な葬式をすると期待していた。でも息子は「一度くらい言う通りにする」と答えた。",
+  "paragraphs": [
+    "親父（おやじ）が病気になり，もう死ぬという時に，息子を呼んで，"
+  ]
+}
+Output:
+{
+  "paragraphs": [
+    [
+      {
+        "originalSentence": "親父（おやじ）が病気になり，もう死ぬという時に，息子を呼んで，",
+        "translatedSentence": "父亲生病了，到了快要死的时候，就叫来了儿子。",
+        "words": [
+          {
+            "word": "が",
+            "syntacticCategory": "part.",
+            "explanation": "主语助词，用于标记句子中的主语（这里是“亲父”）。"
+          },
+          {
+            "word": "病気（びょうき）",
+            "syntacticCategory": "n.",
+            "explanation": "生病、疾病。"
+          },
+          {
+            "word": "になる",
+            "syntacticCategory": "v.",
+            "explanation": "变成……，常见表达形式，'病気になる' 就是“生病了”。"
+          },
+          {
+            "word": "もう",
+            "syntacticCategory": "adv.",
+            "explanation": "已经、快要，表示某事即将发生。"
+          },
+          {
+            "word": "という時（とき）",
+            "syntacticCategory": "ph.",
+            "explanation": "……的时候，常用于描述时间背景。"
+          },
+          {
+            "word": "息子（むすこ）",
+            "syntacticCategory": "n.",
+            "explanation": "儿子。"
+          },
+          {
+            "word": "を",
+            "syntacticCategory": "part.",
+            "explanation": "宾语助词，标记“动作的对象”，这里是“呼んで”的对象。"
+          },
+          {
+            "word": "呼んで（よんで）",
+            "syntacticCategory": "v.",
+            "explanation": "叫、召唤，是动词“呼ぶ”的て形。"
+          }
+        ],
+        "explanation": "这句话的结构是：“谁 + 生病了 + 到了快要死的时候 + 做了什么”。这里父亲生病了，快要去世，就把儿子叫过来。注意“～になる”表示状态的变化，“もう”表示即将发生。"
+      }
+    ]
+  ]
+}
+`;

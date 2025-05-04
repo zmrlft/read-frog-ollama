@@ -8,7 +8,9 @@ import { useSetAtom } from "jotai";
 import { ArrowRight, X } from "lucide-react";
 import { isSideOpenAtom } from "../../atoms";
 import { useStorageStateValue } from "@/hooks/useStorageState";
-export const TopBar = () => {
+import { cn } from "@/utils/tailwind";
+
+export const TopBar = ({ className }: { className?: string }) => {
   const langLevel = useStorageStateValue<LangLevel>(
     "langLevel",
     "intermediate"
@@ -24,7 +26,7 @@ export const TopBar = () => {
   const setIsSideOpen = useSetAtom(isSideOpenAtom);
 
   return (
-    <div className="flex justify-between items-start">
+    <div className={cn("flex justify-between items-start", className)}>
       <div className="flex text-sm gap-x-2">
         <div className="flex items-center gap-2 px-2 py-1 border rounded-md border-border hover:bg-muted">
           <div className="w-1 h-1 rounded-full bg-blue-500"></div>
