@@ -33,6 +33,5 @@ export function useExtractContent() {
         paragraphs,
       };
     },
-    // staleTime: Infinity, // Only run once per page load
   });
 }

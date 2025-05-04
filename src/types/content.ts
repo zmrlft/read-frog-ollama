@@ -24,7 +24,7 @@ export const articleAnalysisSchema = z.object({
   terms: z.array(z.string()),
 });
 
-export const PartOfSpeechAbbr = z.enum([
+export const partOfSpeechAbbr = z.enum([
   "n.", // noun
   "pron.", // pronoun
   "v.", // verb
@@ -38,6 +38,8 @@ export const PartOfSpeechAbbr = z.enum([
   "part.", // particle
 ]);
 
+export const syntacticCategoryAbbr = partOfSpeechAbbr.or(z.enum(["ph."]));
+
 export const articleExplanationSchema = z.object({
   paragraphs: z.array(
     z.array(
@@ -47,7 +49,7 @@ export const articleExplanationSchema = z.object({
         words: z.array(
           z.object({
             word: z.string(),
-            partOfSpeech: PartOfSpeechAbbr,
+            syntacticCategory: syntacticCategoryAbbr,
             explanation: z.string(),
           })
         ),
@@ -59,3 +61,4 @@ export const articleExplanationSchema = z.object({
 
 export type ArticleAnalysis = z.infer<typeof articleAnalysisSchema>;
 export type ArticleExplanation = z.infer<typeof articleExplanationSchema>;
+export type SyntacticCategoryAbbr = z.infer<typeof syntacticCategoryAbbr>;

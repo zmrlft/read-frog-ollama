@@ -1,7 +1,7 @@
 import { useAtom, useAtomValue } from "jotai";
 import { isSideOpenAtom, sideContentWidthAtom } from "../atoms";
 import { DEFAULT_BUTTON_POSITION } from "../../../utils/constants/side";
-import readFrogLogo from "@/assets/icon/read-frog-fill-small-256.png";
+import readFrogLogo from "@/assets/icon/read-frog-256.png";
 import { Bolt, X } from "lucide-react";
 import { APP_NAME } from "@/utils/constants/app";
 

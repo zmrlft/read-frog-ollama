@@ -5,6 +5,7 @@ import { MIN_SIDE_CONTENT_WIDTH } from "../../../../utils/constants/side";
 import Content from "./Content";
 import { Toaster } from "sonner";
 import { TopBar } from "./TopBar";
+import { Metadata } from "./Metadata";
 
 export default function SideContent() {
   const isSideOpen = useAtomValue(isSideOpenAtom);
@@ -110,8 +111,10 @@ export default function SideContent() {
     <>
       <div
         className={cn(
-          "fixed top-0 right-0 p-2 bg-background h-full z-[2147483647]",
-          isSideOpen ? "translate-x-0 shadow-xl" : "translate-x-full"
+          "fixed top-0 right-0 bg-background h-full z-[2147483647]",
+          isSideOpen
+            ? "translate-x-0 border-l border-border"
+            : "translate-x-full"
         )}
         style={{
           width: `${sideContentWidth}px`,
@@ -123,14 +126,9 @@ export default function SideContent() {
           onMouseDown={handleResizeStart}
         ></div>
 
-        <div className="absolute top-0 left-2 h-full border-r border-border border-dashed" />
-        <div className="absolute top-0 right-2 h-full border-r border-border border-dashed" />
-        <div className="absolute top-2 left-0 w-full border-b border-border border-dashed" />
-        <div className="absolute bottom-2 left-0 w-full border-b border-border border-dashed" />
-
-        {/* Sidebar content */}
-        <div className="h-full border flex flex-col border-border">
-          <TopBar />
+        <div className="h-full flex flex-col gap-y-2 py-3">
+          <TopBar className="px-3" />
+          <Metadata className="px-3" />
           <Content />
         </div>
         <Toaster richColors className="z-[2147483647]" />

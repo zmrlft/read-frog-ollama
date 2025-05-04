@@ -32,7 +32,7 @@ export default function Explanation({
   return (
     <>
       {articleExplanation.map((paragraph, pIndex) => (
-        <div key={pIndex} className="border-b">
+        <div key={pIndex}>
           {paragraph.map((sentence, sIndex) => {
             const globalIndex = getGlobalIndex(
               pIndex,
@@ -43,7 +43,7 @@ export default function Explanation({
               <div
                 key={`${pIndex}-${sIndex}`}
                 className={cn(
-                  "p-2",
+                  "py-2 px-3",
                   globalIndex % 2 === 0
                     ? "bg-background"
                     : "bg-neutral-100 dark:bg-neutral-800" // TODO: move this to variable
@@ -71,7 +71,7 @@ export default function Explanation({
                             {wIndex + 1}. {word.word}
                           </span>
                           <span className="text-muted-foreground">
-                            {word.partOfSpeech}
+                            {word.syntacticCategory}
                           </span>
                         </div>
                         {word.explanation}
