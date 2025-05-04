@@ -6,8 +6,18 @@ import openaiLogo from "@/assets/llm/openai.jpg";
 import deepseekLogo from "@/assets/llm/deepseek.png";
 
 export const defaultProviderConfig: ProviderConfig = {
-  openai: { apiKey: undefined, model: "gpt-4.1-mini", isCustomModel: false },
-  deepseek: { apiKey: undefined, model: "deepseek-chat", isCustomModel: false },
+  openai: {
+    apiKey: undefined,
+    model: "gpt-4.1-mini",
+    isCustomModel: false,
+    customModel: "",
+  },
+  deepseek: {
+    apiKey: undefined,
+    model: "deepseek-chat",
+    isCustomModel: false,
+    customModel: "",
+  },
 };
 
 export const providerItems: Record<Provider, { logo: string; name: string }> = {

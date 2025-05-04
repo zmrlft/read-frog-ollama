@@ -75,13 +75,13 @@ const ProviderConfigSection = ({ provider }: { provider: Provider }) => {
       {providerConfig[provider].isCustomModel ? (
         <Input
           className="mt-1 mb-2"
-          value={providerConfig[provider].model}
+          value={providerConfig[provider].customModel}
           onChange={(e) =>
             setProviderConfig({
               ...providerConfig,
               [provider]: {
                 ...providerConfig[provider],
-                model: e.target.value,
+                customModel: e.target.value,
               },
             })
           }
@@ -115,22 +115,24 @@ const ProviderConfigSection = ({ provider }: { provider: Provider }) => {
           id={`isCustomModel-${provider}`}
           checked={providerConfig[provider].isCustomModel}
           onCheckedChange={(checked) => {
-            if (checked === false)
+            if (checked === false) {
               setProviderConfig({
                 ...providerConfig,
                 [provider]: {
                   ...providerConfig[provider],
-                  model: defaultProviderConfig[provider].model,
                   isCustomModel: false,
                 },
               });
-            setProviderConfig({
-              ...providerConfig,
-              [provider]: {
-                ...providerConfig[provider],
-                isCustomModel: checked === true,
-              },
-            });
+            } else {
+              setProviderConfig({
+                ...providerConfig,
+                [provider]: {
+                  ...providerConfig[provider],
+                  customModel: providerConfig[provider].model,
+                  isCustomModel: true,
+                },
+              });
+            }
           }}
         />
         <label

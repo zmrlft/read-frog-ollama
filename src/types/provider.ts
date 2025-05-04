@@ -32,6 +32,7 @@ export type ProviderConfig = {
     apiKey: string | undefined;
     model: ModelForProvider<P>;
     isCustomModel: boolean;
+    customModel: string;
   };
 };
 
