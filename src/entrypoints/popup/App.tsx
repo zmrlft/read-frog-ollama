@@ -2,14 +2,14 @@ import { Bolt } from "lucide-react";
 import { LanguageOptions } from "./components/LanguageOptions";
 import { LanguageLevelSelector } from "./components/LanguageLevel";
 import { ShowFloatingButton } from "./components/ShowFloatingButton";
-import { TranslateServiceSelector } from "./components/TranslateService";
+import { ProviderSelector } from "./components/ProviderSelector";
 
 function App() {
   return (
     <>
       <div className="pt-5 px-6 pb-4 flex flex-col gap-4 bg-background">
         <LanguageOptions />
-        <TranslateServiceSelector />
+        <ProviderSelector />
         <LanguageLevelSelector />
         {/* <Button>{i18n.t("popup.readForMe")}</Button> */}
         <ShowFloatingButton />

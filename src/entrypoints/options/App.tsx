@@ -1,5 +1,4 @@
 import { Input } from "@/components/ui/Input";
-import openaiLogo from "@/assets/llm/openai.jpg";
 import { Checkbox } from "@/components/ui/Checkbox";
 import {
   Select,
@@ -11,36 +10,53 @@ import {
 } from "@/components/ui/Select";
 import { useState } from "react";
 import { useStorageState } from "@/hooks/useStorageState";
+import {
+  Provider,
+  ProviderConfig,
+  providerModels,
+  providers,
+} from "@/types/provider";
 
 function App() {
-  const [showAPIKey, setShowAPIKey] = useState(false);
-  const [openaiApiKey, setOpenaiApiKey] = useStorageState<string>(
-    "openaiApiKey",
-    ""
+  return (
+    <div className="max-w-[320px] mx-auto min-h-[100vh] my-10 flex flex-col gap-12">
+      {providers.map((provider) => (
+        <ProviderConfigSection key={provider} provider={provider} />
+      ))}
+    </div>
   );
-  const [isCustomOpenAIModel, setIsCustomOpenAIModel] =
-    useStorageState<boolean>("isCustomOpenAIModel", false);
-  const [openAIModel, setOpenAIModel] = useStorageState<string>(
-    "openAIModel",
-    "gpt-4.1-mini"
+}
+
+const ProviderConfigSection = ({ provider }: { provider: Provider }) => {
+  const [showAPIKey, setShowAPIKey] = useState(false);
+  const [providerConfig, setProviderConfig] = useStorageState<ProviderConfig>(
+    "providerConfig",
+    defaultProviderConfig
   );
 
   return (
-    <div className="max-w-[320px] mx-auto min-h-[100vh] my-10">
+    <div>
       <div className="flex items-center justify-center gap-2 mb-4">
         <img
-          src={openaiLogo}
-          alt="OpenAI"
-          className="w-6 h-6 rounded-full border border-border"
+          src={providerItems[provider].logo}
+          alt={providerItems[provider].name}
+          className="w-6 h-6 rounded-full border border-border bg-white"
         />
-        <span className="font-medium">OpenAI Config</span>
+        <span className="font-medium">
+          {providerItems[provider].name} Config
+        </span>
       </div>
       <div className="text-sm font-medium">API Key</div>
       <Input
         className="mt-1 mb-2"
-        value={openaiApiKey}
+        value={providerConfig[provider].apiKey}
         type={showAPIKey ? "text" : "password"}
-        onChange={(e) => setOpenaiApiKey(e.target.value)}
+        onChange={(e) =>
+          setProviderConfig({
+            ...providerConfig,
+            [provider]: { ...providerConfig[provider], apiKey: e.target.value },
+          })
+        }
       />
       <div className="flex items-center space-x-2">
         <Checkbox
@@ -56,28 +72,40 @@ function App() {
         </label>
       </div>
       <div className="text-sm font-medium mt-4">Model</div>
-      {isCustomOpenAIModel ? (
+      {providerConfig[provider].isCustomModel ? (
         <Input
           className="mt-1 mb-2"
-          value={openAIModel}
-          onChange={(e) => setOpenAIModel(e.target.value)}
+          value={providerConfig[provider].model}
+          onChange={(e) =>
+            setProviderConfig({
+              ...providerConfig,
+              [provider]: {
+                ...providerConfig[provider],
+                model: e.target.value,
+              },
+            })
+          }
         />
       ) : (
         <Select
-          value={openAIModel}
-          onValueChange={(value) => setOpenAIModel(value)}
+          value={providerConfig[provider].model}
+          onValueChange={(value) =>
+            setProviderConfig({
+              ...providerConfig,
+              [provider]: { ...providerConfig[provider], model: value },
+            })
+          }
         >
           <SelectTrigger className="w-full mt-1">
             <SelectValue placeholder="Select a model" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="gpt-4.1-mini">gpt-4.1-mini</SelectItem>
-              <SelectItem value="gpt-4o-mini">gpt-4o-mini</SelectItem>
-              <SelectItem value="gpt-4o">gpt-4o</SelectItem>
-              <SelectItem value="gpt-4.1">gpt-4.1</SelectItem>
-              <SelectItem value="gpt-4.1-nano">gpt-4.1-nano</SelectItem>
-              <SelectItem value="gpt-4.5-preview">gpt-4.5-preview</SelectItem>
+              {providerModels[provider].map((model) => (
+                <SelectItem key={model} value={model}>
+                  {model}
+                </SelectItem>
+              ))}
             </SelectGroup>
           </SelectContent>
         </Select>
@@ -85,10 +113,24 @@ function App() {
       <div className="flex items-center space-x-2 mt-2">
         <Checkbox
           id="isCustomOpenAIModel"
-          checked={isCustomOpenAIModel}
+          checked={providerConfig[provider].isCustomModel}
           onCheckedChange={(checked) => {
-            if (checked === false) setOpenAIModel("gpt-4.1-mini");
-            setIsCustomOpenAIModel(checked === true);
+            if (checked === false)
+              setProviderConfig({
+                ...providerConfig,
+                [provider]: {
+                  ...providerConfig[provider],
+                  model: defaultProviderConfig[provider].model,
+                  isCustomModel: false,
+                },
+              });
+            setProviderConfig({
+              ...providerConfig,
+              [provider]: {
+                ...providerConfig[provider],
+                isCustomModel: checked === true,
+              },
+            });
           }}
         />
         <label
@@ -100,6 +142,6 @@ function App() {
       </div>
     </div>
   );
-}
+};
 
 export default App;

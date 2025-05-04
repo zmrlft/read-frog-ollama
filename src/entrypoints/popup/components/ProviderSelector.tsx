@@ -5,39 +5,25 @@ import {
   SelectValue,
 } from "@/components/ui/Select";
 import { Select } from "@/components/ui/Select";
-import openaiLogo from "@/assets/llm/openai.jpg";
-import deepseekLogo from "@/assets/llm/deepseek.png";
-import { TranslateService } from "@/types/model";
+import { Provider } from "@/types/provider";
 
-const TRANSLATE_SERVICES: Record<
-  TranslateService,
-  { logo: string; name: string }
-> = {
-  openai: {
-    logo: openaiLogo,
-    name: "OpenAI",
-  },
-  deepseek: {
-    logo: deepseekLogo,
-    name: "DeepSeek",
-  },
-};
-
-export const TranslateServiceSelector = () => {
-  const [translateService, setTranslateService] =
-    useStorageState<TranslateService>("translateService", "openai");
+export const ProviderSelector = () => {
+  const [provider, setProvider] = useStorageState<Provider>(
+    "provider",
+    "openai"
+  );
 
   return (
     <div className="flex items-center gap-2 justify-between">
       <span className="font-medium text-[13px]">
         {i18n.t("translateService")}
       </span>
-      <Select value={translateService} onValueChange={setTranslateService}>
+      <Select value={provider} onValueChange={setProvider}>
         <SelectTrigger className="outline-none cursor-pointer bg-input/50 hover:bg-input w-30 h-7 pl-2.5 pr-1.5">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {Object.entries(TRANSLATE_SERVICES).map(([value, { logo, name }]) => (
+          {Object.entries(providerItems).map(([value, { logo, name }]) => (
             <SelectItem key={value} value={value}>
               <TranslateItem logo={logo} name={name} />
             </SelectItem>
