@@ -15,6 +15,7 @@ import {
   langCodeToEnglishName,
   LangLevel,
 } from "@/types/languages";
+import { ProviderConfig, Provider } from "@/types/provider";
 import { getAnalyzePrompt } from "@/utils/prompts/analyze";
 import { getExplainPrompt } from "@/utils/prompts/explain";
 import { useMutation } from "@tanstack/react-query";
@@ -42,13 +43,21 @@ export function useAnalyzeContent() {
       const maxAttempts = 3;
       let lastError;
 
+      const provider = await storage.getItem<Provider>("local:provider");
+      const providerConfig = await storage.getItem<ProviderConfig>(
+        "local:providerConfig"
+      );
+      if (!provider || !providerConfig) {
+        throw new Error("No provider config");
+      }
+      const model = providerConfig[provider].model;
+
       const targetLangCode = await storage.getItem<LangCodeISO6393>(
         "local:targetLangCode"
       );
-      const openaiModel = await storage.getItem<string>("local:openaiModel");
 
-      if (!targetLangCode || !openaiModel) {
-        throw new Error("No target language or OpenAI model selected");
+      if (!targetLangCode || !model) {
+        throw new Error("No target language or model selected");
       }
 
       const targetLang = langCodeToEnglishName[targetLangCode];
@@ -57,7 +66,7 @@ export function useAnalyzeContent() {
       while (attempts < maxAttempts) {
         try {
           const { object: articleAnalysis } = await generateObject({
-            model: providerRegistry.languageModel(`openai:${openaiModel}`),
+            model: providerRegistry.languageModel(`${provider}:${model}`),
             system: getAnalyzePrompt(targetLang),
             prompt: JSON.stringify({
               originalTitle: extractedContent.article.title,
@@ -106,10 +115,9 @@ const explainBatch = async (
     "local:detectedLangCode"
   );
   const langLevel = await storage.getItem<LangLevel>("local:langLevel");
-  const openaiModel = await storage.getItem<string>("local:openaiModel");
 
-  if (!targetLangCode || !sourceLangCode || !detectedLangCode || !openaiModel) {
-    throw new Error("Incomplete language settings or OpenAI model");
+  if (!targetLangCode || !sourceLangCode || !detectedLangCode) {
+    throw new Error("Incomplete language settings");
   }
 
   const targetLang = langCodeToEnglishName[targetLangCode];
@@ -118,11 +126,24 @@ const explainBatch = async (
       sourceLangCode === "auto" ? detectedLangCode : sourceLangCode
     ];
 
+  const provider = await storage.getItem<Provider>("local:provider");
+  const providerConfig = await storage.getItem<ProviderConfig>(
+    "local:providerConfig"
+  );
+  if (!provider || !providerConfig) {
+    throw new Error("No provider config");
+  }
+  const model = providerConfig[provider].model;
+
+  if (!model) {
+    throw new Error("No model selected");
+  }
+
   const providerRegistry = await getProviderRegistry();
   while (attempts < MAX_ATTEMPTS) {
     try {
       const { object: articleExplanation } = await generateObject({
-        model: providerRegistry.languageModel(`openai:${openaiModel}`),
+        model: providerRegistry.languageModel(`${provider}:${model}`),
         system: getExplainPrompt(
           sourceLang,
           targetLang,
