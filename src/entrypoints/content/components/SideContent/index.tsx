@@ -6,6 +6,8 @@ import Content from "./Content";
 import { Toaster } from "sonner";
 import { TopBar } from "./TopBar";
 import { Metadata } from "./Metadata";
+import { APP_NAME } from "@/utils/constants/app";
+import { kebabCase } from "case-anything";
 
 export default function SideContent() {
   const isSideOpen = useAtomValue(isSideOpenAtom);
@@ -73,7 +75,7 @@ export default function SideContent() {
 
   // HTML width adjustment
   useEffect(() => {
-    const styleId = "read-buddy-style-right-space";
+    const styleId = `shrink-origin-for-${kebabCase(APP_NAME)}-side-content`;
     let styleTag = document.getElementById(styleId);
 
     if (isSideOpen) {

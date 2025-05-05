@@ -13,7 +13,7 @@ import { queryClientAtom } from "jotai-tanstack-query";
 import { Provider as JotaiProvider } from "jotai/react";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { store } from "./atoms";
-import { mirrorDynamicStyle, addStyleToShadow } from "./utils/styles";
+import { mirrorDynamicStyles, addStyleToShadow } from "./utils/styles";
 import { toast } from "sonner";
 import { APP_NAME } from "@/utils/constants/app";
 import { kebabCase } from "case-anything";
@@ -44,8 +44,12 @@ export default defineContentScript({
         const root = ReactDOM.createRoot(wrapper);
 
         addStyleToShadow(shadow);
-        mirrorDynamicStyle("#_goober", shadow);
-        mirrorDynamicStyle("style[type='text/css']", shadow);
+        mirrorDynamicStyles("#_goober", shadow);
+        // mirrorDynamicStyles(
+        //   "style[type='text/css']",
+        //   shadow,
+        //   ".with-scroll-bars-hidden22"
+        // );
 
         const queryClient = new QueryClient({
           queryCache: new QueryCache({

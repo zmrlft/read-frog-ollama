@@ -11,14 +11,31 @@ export const addStyleToShadow = (shadow: ShadowRoot) => {
   });
 };
 
-export const mirrorDynamicStyle = (
+export const mirrorDynamicStyles = (
   selector: string,
-  shadowRoot: ShadowRoot
+  shadowRoot: ShadowRoot,
+  contentMatch?: string
 ) => {
+  // TODO: 目前函数只会把找到的第一个 style 放进来，但是可能存在多个 style 匹配，那其实要全部放进来，并且对应不同的 mirrorSheet
   const mirrorSheet = new CSSStyleSheet();
   shadowRoot.adoptedStyleSheets.push(mirrorSheet);
 
-  let src = document.querySelector(selector); // the result might be null
+  // Find all elements matching selector, then filter by content if contentMatch is provided
+  const findMatchingElement = () => {
+    const elements = Array.from(document.querySelectorAll(selector));
+    if (contentMatch) {
+      return elements.find(
+        (el) =>
+          el instanceof HTMLStyleElement &&
+          el.textContent?.includes(contentMatch)
+      );
+    }
+    // If no contentMatch is provided, return the first matching element
+    return elements.find((el) => el instanceof HTMLStyleElement);
+  };
+
+  let src = findMatchingElement();
+  console.log("src", src);
 
   const opts = {
     characterData: true,
@@ -30,33 +47,43 @@ export const mirrorDynamicStyle = (
   const srcObserver = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       mirrorSheet.replaceSync(mutation.target.textContent?.trim() ?? "");
-      // console.log(
-      //   "adoptedStyleSheets",
-      //   Array.from(shadowRoot.adoptedStyleSheets)
-      // );
+      console.log(
+        "replace sync in src observer",
+        Array.from(shadowRoot.adoptedStyleSheets)
+      );
     });
   });
 
-  // if src is found, then observe it
+  // If src is found, observe it
   if (src) {
     srcObserver.observe(src, opts);
+    mirrorSheet.replaceSync(src.textContent?.trim() ?? "");
+    console.log(
+      "replace sync in src",
+      Array.from(shadowRoot.adoptedStyleSheets)
+    );
   }
 
-  // if src is not found initially, then observe the head add src style for changes
+  // Observe the head for added style elements
   const headObserver = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       mutation.addedNodes.forEach((node) => {
         if (node instanceof HTMLStyleElement && node.matches(selector)) {
-          src = node;
-          mirrorSheet.replaceSync(node.textContent?.trim() ?? "");
-          // console.log(
-          //   "after replaceSync adoptedStyleSheets",
-          //   Array.from(shadowRoot.adoptedStyleSheets)
-          // );
-          srcObserver.observe(src, opts);
+          // Only check content if contentMatch is provided
+          console.log("match node", selector, node);
+          if (!contentMatch || node.textContent?.includes(contentMatch)) {
+            console.log("match contain", contentMatch);
+            src = node;
+            mirrorSheet.replaceSync(node.textContent?.trim() ?? "");
+            console.log(
+              "replace sync in addnode",
+              Array.from(shadowRoot.adoptedStyleSheets)
+            );
+            srcObserver.observe(src, opts);
+          }
         }
       });
-      // TODO: remove the observer when the node is removed
+      // TODO: handle removed nodes
     });
   });
 
