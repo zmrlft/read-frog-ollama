@@ -267,6 +267,9 @@ export function useReadArticle() {
   const setReadState = useSetAtom(readStateAtom);
 
   const mutate = async (extractedContent: ExtractedContent) => {
+    // Reset explainArticle data before starting a new read operation
+    explainArticle.reset();
+
     const articleAnalysis = await analyzeContent.mutateAsync(extractedContent);
     setReadState("continue?");
     if (articleAnalysis.isArticle) {

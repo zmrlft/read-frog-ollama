@@ -1,7 +1,7 @@
 // 定义一个映射对象，包含所有的provider及其对应的模型
 export const providerModels = {
   openai: ["gpt-4.1-mini", "gpt-4o-mini", "gpt-4o", "gpt-4.1", "gpt-4.1-nano"],
-  deepseek: ["deepseek-chat", "deepseek-reasoner"],
+  deepseek: ["deepseek-chat"],
 } as const;
 
 // 从映射对象中提取provider类型

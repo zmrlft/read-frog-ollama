@@ -18,7 +18,6 @@ import { toast } from "sonner";
 import { APP_NAME } from "@/utils/constants/app";
 import { kebabCase } from "case-anything";
 import { TooltipProvider } from "@/components/ui/Tooltip";
-import "./style.css";
 export let shadowWrapper: HTMLElement | null = null;
 
 export default defineContentScript({

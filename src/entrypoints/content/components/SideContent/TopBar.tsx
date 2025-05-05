@@ -19,6 +19,11 @@ import {
 import { shadowWrapper } from "../..";
 import { useStorageState } from "@/hooks/useStorageState";
 import { SelectGroup } from "@radix-ui/react-select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/Tooltip";
 
 export const TopBar = ({ className }: { className?: string }) => {
   const setIsSideOpen = useSetAtom(isSideOpenAtom);
@@ -36,12 +41,19 @@ export const TopBar = ({ className }: { className?: string }) => {
         <LangLevelSelect />
         <ProviderSelect />
       </div>
-      <button
-        className="flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-full p-0.5 h-4 w-4 cursor-pointer"
-        onClick={() => setIsSideOpen(false)}
-      >
-        <X strokeWidth={1.2} className="text-neutral-500" />
-      </button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            className="flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 rounded-full p-0.5 h-4 w-4 cursor-pointer"
+            onClick={() => setIsSideOpen(false)}
+          >
+            <X strokeWidth={1.2} className="text-neutral-500" />
+          </button>
+        </TooltipTrigger>
+        <TooltipContent container={shadowWrapper} side="left">
+          <p>Close</p>
+        </TooltipContent>
+      </Tooltip>
     </div>
   );
 };

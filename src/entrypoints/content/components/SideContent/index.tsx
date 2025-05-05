@@ -129,8 +129,8 @@ export default function SideContent() {
         ></div>
 
         <div className="h-full flex flex-col gap-y-2 py-3">
-          <TopBar className="px-3" />
-          <Metadata className="px-3" />
+          <TopBar className="mx-3" />
+          <Metadata className="mx-3" />
           <Content />
         </div>
         <Toaster richColors className="z-[2147483647]" />
