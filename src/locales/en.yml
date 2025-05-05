@@ -5,7 +5,10 @@ popup:
   readForMe: "Read For Me"
   showFloatingButton: "Show Floating Button"
   setting: "Setting"
-translateService: "Translate Service"
+side:
+  sourceLang: "Source Language"
+  targetLang: "Target Language"
+translateService: "Translation Service"
 languageLevel: "Your Source Lang Level"
 languageLevels:
   beginner: "Beginner"

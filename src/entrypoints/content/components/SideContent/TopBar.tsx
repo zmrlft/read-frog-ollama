@@ -13,10 +13,12 @@ import {
   Select,
   SelectContent,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
 } from "@/components/ui/Select";
 import { shadowWrapper } from "../..";
 import { useStorageState } from "@/hooks/useStorageState";
+import { SelectGroup } from "@radix-ui/react-select";
 
 export const TopBar = ({ className }: { className?: string }) => {
   const setIsSideOpen = useSetAtom(isSideOpenAtom);
@@ -63,18 +65,21 @@ const ProviderSelect = () => {
         />
       </SelectTrigger>
       <SelectContent container={shadowWrapper}>
-        {Object.entries(providerItems).map(([provider, { logo, name }]) => (
-          <SelectItem key={provider} value={provider}>
-            <div className="flex items-center gap-x-2">
-              <img
-                src={logo}
-                alt={name}
-                className="size-4 rounded-full border bg-white"
-              />
-              <span>{name}</span>
-            </div>
-          </SelectItem>
-        ))}
+        <SelectGroup>
+          <SelectLabel>{i18n.t("translateService")}</SelectLabel>
+          {Object.entries(providerItems).map(([provider, { logo, name }]) => (
+            <SelectItem key={provider} value={provider}>
+              <div className="flex items-center gap-x-2">
+                <img
+                  src={logo}
+                  alt={name}
+                  className="size-4 rounded-full border bg-white"
+                />
+                <span>{name}</span>
+              </div>
+            </SelectItem>
+          ))}
+        </SelectGroup>
       </SelectContent>
     </Select>
   );
@@ -98,15 +103,18 @@ const LangLevelSelect = () => {
         </div>
       </SelectTrigger>
       <SelectContent container={shadowWrapper}>
-        <SelectItem value="beginner">
-          {i18n.t("languageLevels.beginner")}
-        </SelectItem>
-        <SelectItem value="intermediate">
-          {i18n.t("languageLevels.intermediate")}
-        </SelectItem>
-        <SelectItem value="advanced">
-          {i18n.t("languageLevels.advanced")}
-        </SelectItem>
+        <SelectGroup>
+          <SelectLabel>{i18n.t("languageLevel")}</SelectLabel>
+          <SelectItem value="beginner">
+            {i18n.t("languageLevels.beginner")}
+          </SelectItem>
+          <SelectItem value="intermediate">
+            {i18n.t("languageLevels.intermediate")}
+          </SelectItem>
+          <SelectItem value="advanced">
+            {i18n.t("languageLevels.advanced")}
+          </SelectItem>
+        </SelectGroup>
       </SelectContent>
     </Select>
   );
@@ -130,11 +138,14 @@ const TargetLangSelect = () => {
         </div>
       </SelectTrigger>
       <SelectContent container={shadowWrapper}>
-        {Object.entries(langCodeToEnglishName).map(([langCode, name]) => (
-          <SelectItem key={langCode} value={langCode}>
-            {name}
-          </SelectItem>
-        ))}
+        <SelectGroup>
+          <SelectLabel>{i18n.t("side.targetLang")}</SelectLabel>
+          {Object.entries(langCodeToEnglishName).map(([langCode, name]) => (
+            <SelectItem key={langCode} value={langCode}>
+              {name}
+            </SelectItem>
+          ))}
+        </SelectGroup>
       </SelectContent>
     </Select>
   );
@@ -159,11 +170,14 @@ const SourceLangSelect = () => {
         </div>
       </SelectTrigger>
       <SelectContent container={shadowWrapper}>
-        {Object.entries(langCodeToEnglishName).map(([langCode, name]) => (
-          <SelectItem key={langCode} value={langCode}>
-            {name}
-          </SelectItem>
-        ))}
+        <SelectGroup>
+          <SelectLabel>{i18n.t("side.sourceLang")}</SelectLabel>
+          {Object.entries(langCodeToEnglishName).map(([langCode, name]) => (
+            <SelectItem key={langCode} value={langCode}>
+              {name}
+            </SelectItem>
+          ))}
+        </SelectGroup>
       </SelectContent>
     </Select>
   );
