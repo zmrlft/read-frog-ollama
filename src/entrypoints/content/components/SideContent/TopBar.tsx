@@ -16,37 +16,17 @@ import {
   SelectTrigger,
 } from "@/components/ui/Select";
 import { shadowWrapper } from "../..";
+import { useStorageState } from "@/hooks/useStorageState";
 
 export const TopBar = ({ className }: { className?: string }) => {
-  const langLevel = useStorageStateValue<LangLevel>(
-    "langLevel",
-    "intermediate"
-  );
-  const sourceLangCode = useStorageStateValue<
-    LangCodeISO6393 | "auto" | undefined
-  >("sourceLangCode", undefined);
-  const targetLangCode = useStorageStateValue<LangCodeISO6393 | undefined>(
-    "targetLangCode",
-    undefined
-  );
-
   const setIsSideOpen = useSetAtom(isSideOpenAtom);
 
   return (
     <div className={cn("flex justify-between items-start", className)}>
-      <div className="flex text-sm gap-x-2">
-        <div className="flex items-center h-7 gap-2 px-2 border rounded-md border-border hover:bg-muted">
-          <div className="w-1 h-1 rounded-full bg-blue-500"></div>
-          <span className="max-w-16 truncate">
-            {sourceLangCode === "auto"
-              ? "Auto"
-              : langCodeToEnglishName[sourceLangCode as LangCodeISO6393]}
-          </span>
-          <ArrowRight size={12} strokeWidth={1} className="-mx-1" />
-          <span className="max-w-16 truncate">
-            {targetLangCode && langCodeToEnglishName[targetLangCode]}
-          </span>
-        </div>
+      <div className="flex text-sm gap-x-2 items-center">
+        <SourceLangSelect />
+        <ArrowRight size={12} strokeWidth={1} className="-mx-1" />
+        <TargetLangSelect />
         {/* <div className="flex items-center h-7 gap-2 px-2 border rounded-md border-border hover:bg-muted">
           <div className="w-1 h-1 rounded-full bg-orange-500"></div>
           <span className="">{i18n.t(`languageLevels.${langLevel}`)}</span>
@@ -74,7 +54,7 @@ const ProviderSelect = () => {
     <Select value={provider} onValueChange={setProvider}>
       <SelectTrigger
         hideChevron
-        className="size-7 p-0 flex items-center justify-center"
+        className="!size-7 p-0 flex items-center justify-center"
       >
         <img
           src={providerItems[provider].logo}
@@ -110,7 +90,7 @@ const LangLevelSelect = () => {
     <Select value={langLevel} onValueChange={setLangLevel}>
       <SelectTrigger
         hideChevron
-        className="flex items-center h-7 gap-2 px-2 border rounded-md border-border w-auto"
+        className="flex items-center !h-7 gap-2 px-2 border rounded-md border-border w-auto"
       >
         <div className="w-1 h-1 rounded-full bg-orange-500 shrink-0"></div>
         <div className="min-w-0 max-w-16 truncate">
@@ -127,6 +107,63 @@ const LangLevelSelect = () => {
         <SelectItem value="advanced">
           {i18n.t("languageLevels.advanced")}
         </SelectItem>
+      </SelectContent>
+    </Select>
+  );
+};
+
+const TargetLangSelect = () => {
+  const [targetLangCode, setTargetLangCode] = useStorageState<LangCodeISO6393>(
+    "targetLangCode",
+    "eng"
+  );
+
+  return (
+    <Select value={targetLangCode} onValueChange={setTargetLangCode}>
+      <SelectTrigger
+        hideChevron
+        className="flex items-center !h-7 gap-2 px-2 border rounded-md border-border w-auto"
+      >
+        <div className="w-1 h-1 rounded-full bg-blue-500 shrink-0"></div>
+        <div className="min-w-0 max-w-16 truncate">
+          {langCodeToEnglishName[targetLangCode]}
+        </div>
+      </SelectTrigger>
+      <SelectContent container={shadowWrapper}>
+        {Object.entries(langCodeToEnglishName).map(([langCode, name]) => (
+          <SelectItem key={langCode} value={langCode}>
+            {name}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+};
+
+const SourceLangSelect = () => {
+  const [sourceLangCode, setSourceLangCode] = useStorageState<
+    LangCodeISO6393 | "auto"
+  >("sourceLangCode", "auto");
+
+  return (
+    <Select value={sourceLangCode} onValueChange={setSourceLangCode}>
+      <SelectTrigger
+        hideChevron
+        className="flex items-center !h-7 gap-2 px-2 border rounded-md border-border w-auto"
+      >
+        <div className="w-1 h-1 rounded-full bg-blue-500 shrink-0"></div>
+        <div className="min-w-0 max-w-16 truncate">
+          {sourceLangCode === "auto"
+            ? "Auto"
+            : langCodeToEnglishName[sourceLangCode as LangCodeISO6393]}
+        </div>
+      </SelectTrigger>
+      <SelectContent container={shadowWrapper}>
+        {Object.entries(langCodeToEnglishName).map(([langCode, name]) => (
+          <SelectItem key={langCode} value={langCode}>
+            {name}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );

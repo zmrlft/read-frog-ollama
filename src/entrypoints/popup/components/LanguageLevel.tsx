@@ -18,7 +18,10 @@ export const LanguageLevelSelector = () => {
     <div className="flex items-center gap-2 justify-between">
       <span className="font-medium text-[13px]">{i18n.t("languageLevel")}</span>
       <Select value={langLevel} onValueChange={setLangLevel}>
-        <SelectTrigger className="outline-none cursor-pointer bg-input/50 hover:bg-input w-27 h-7 pl-2.5 pr-1.5">
+        <SelectTrigger
+          size="sm"
+          className="outline-none cursor-pointer bg-input/50 hover:bg-input !h-7 w-27 pl-2.5 pr-1.5"
+        >
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
