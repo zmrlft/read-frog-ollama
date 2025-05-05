@@ -35,7 +35,6 @@ export const mirrorDynamicStyles = (
   };
 
   let src = findMatchingElement();
-  console.log("src", src);
 
   const opts = {
     characterData: true,
@@ -47,10 +46,6 @@ export const mirrorDynamicStyles = (
   const srcObserver = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       mirrorSheet.replaceSync(mutation.target.textContent?.trim() ?? "");
-      console.log(
-        "replace sync in src observer",
-        Array.from(shadowRoot.adoptedStyleSheets)
-      );
     });
   });
 
@@ -58,10 +53,6 @@ export const mirrorDynamicStyles = (
   if (src) {
     srcObserver.observe(src, opts);
     mirrorSheet.replaceSync(src.textContent?.trim() ?? "");
-    console.log(
-      "replace sync in src",
-      Array.from(shadowRoot.adoptedStyleSheets)
-    );
   }
 
   // Observe the head for added style elements
@@ -70,15 +61,9 @@ export const mirrorDynamicStyles = (
       mutation.addedNodes.forEach((node) => {
         if (node instanceof HTMLStyleElement && node.matches(selector)) {
           // Only check content if contentMatch is provided
-          console.log("match node", selector, node);
           if (!contentMatch || node.textContent?.includes(contentMatch)) {
-            console.log("match contain", contentMatch);
             src = node;
             mirrorSheet.replaceSync(node.textContent?.trim() ?? "");
-            console.log(
-              "replace sync in addnode",
-              Array.from(shadowRoot.adoptedStyleSheets)
-            );
             srcObserver.observe(src, opts);
           }
         }

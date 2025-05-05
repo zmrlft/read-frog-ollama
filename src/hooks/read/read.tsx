@@ -39,6 +39,7 @@ export function useAnalyzeContent() {
         throw new Error("No content available for summary generation");
       }
 
+      setReadState("analyzing");
       let attempts = 0;
       const maxAttempts = 3;
       let lastError;
@@ -203,7 +204,7 @@ export function useExplainArticle() {
           "No content or summary available for explanation generation"
         );
       }
-
+      setReadState("explaining");
       // Process paragraphs in batches of 3
       const paragraphs = extractedContent.paragraphs;
       const batches = [];
@@ -250,6 +251,8 @@ export function useExplainArticle() {
         .map((explanation) => explanation.paragraphs)
         .flat();
 
+      setReadState(undefined);
+
       return flattenedParagraphExplanations;
     },
     onError: () => {
@@ -264,16 +267,13 @@ export function useReadArticle() {
   const setReadState = useSetAtom(readStateAtom);
 
   const mutate = async (extractedContent: ExtractedContent) => {
-    setReadState("analyzing");
     const articleAnalysis = await analyzeContent.mutateAsync(extractedContent);
     setReadState("continue?");
     if (articleAnalysis.isArticle) {
-      setReadState("explaining");
       await explainArticle.mutateAsync({
         extractedContent,
         articleAnalysis,
       });
-      setReadState(undefined);
     }
   };
 

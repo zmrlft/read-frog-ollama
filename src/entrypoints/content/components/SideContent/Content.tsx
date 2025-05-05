@@ -3,18 +3,28 @@ import { ScrollArea } from "@/components/ui/ScrollArea";
 import { toast } from "sonner";
 import Explanation from "./Explanation";
 import { useExtractContent } from "@/hooks/read/extract";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { progressAtom, readStateAtom } from "../../atoms";
 import LoadingDots from "@/components/LoadingDots";
 import { Progress } from "@/components/ui/Progress";
-import { useReadArticle } from "@/hooks/read/read";
+import { useExplainArticle, useReadArticle } from "@/hooks/read/read";
+import { useMutationState } from "@tanstack/react-query";
+import { ArticleExplanation } from "@/types/content";
 
 export default function Content() {
   const progress = useAtomValue(progressAtom);
-  const readState = useAtomValue(readStateAtom);
+  const [readState, setReadState] = useAtom(readStateAtom);
   const { isPending: isExtractingContent, data: extractedContent } =
     useExtractContent();
-  const { mutate: readArticle, explainArticle } = useReadArticle();
+  const { mutate: readArticle, analyzeContent } = useReadArticle();
+  const { mutate: explainArticle } = useExplainArticle();
+
+  const explainData = useMutationState({
+    filters: {
+      mutationKey: ["explainArticle"],
+    },
+    select: (mutation) => mutation.state.data,
+  });
 
   const handleReadForMe = () => {
     if (!extractedContent?.paragraphs.join("\n").trim()) {
@@ -25,9 +35,13 @@ export default function Content() {
   };
 
   const handleContinue = () => {
-    if (extractedContent) {
+    if (extractedContent && analyzeContent.data) {
       // TODO: useExplainArticle 但是要获得最新的这个 mutate 的返回结果：https://github.com/jotaijs/jotai-tanstack-query#atomwithmutationstate-usage
-      // readArticle(extractedContent);
+      explainArticle({
+        extractedContent,
+        articleAnalysis: analyzeContent.data,
+      });
+      setReadState("explaining");
     } else {
       toast.error("Cannot generate the explanation: content is not available");
     }
@@ -88,9 +102,13 @@ export default function Content() {
   }
   return (
     <>
-      {explainArticle.data ? (
+      {explainData.length > 0 && explainData[0] ? (
         <ScrollArea className="flex-1 h-full">
-          <Explanation articleExplanation={explainArticle.data} />
+          <Explanation
+            articleExplanation={
+              explainData[0] as ArticleExplanation["paragraphs"]
+            }
+          />
         </ScrollArea>
       ) : (
         <div className="flex-1 flex h-full w-full justify-center items-center p-4">
