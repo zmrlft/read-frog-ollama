@@ -98,7 +98,9 @@ export default function FloatingButton() {
       <div
         className="fixed z-[2147483647] flex flex-col items-end group gap-2"
         style={{
-          right: isSideOpen ? `${sideContentWidth}px` : "0",
+          right: isSideOpen
+            ? `calc(${sideContentWidth}px + var(--removed-body-scroll-bar-size, 0px))`
+            : "var(--removed-body-scroll-bar-size, 0px)",
           top: `${buttonPosition * 100}vh`,
         }}
       >

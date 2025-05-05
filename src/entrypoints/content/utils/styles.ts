@@ -18,8 +18,6 @@ export const mirrorDynamicStyle = (
   const mirrorSheet = new CSSStyleSheet();
   shadowRoot.adoptedStyleSheets.push(mirrorSheet);
 
-  // console.log("adoptedStyleSheets", Array.from(shadowRoot.adoptedStyleSheets));
-
   let src = document.querySelector(selector); // the result might be null
 
   const opts = {
@@ -32,6 +30,10 @@ export const mirrorDynamicStyle = (
   const srcObserver = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       mirrorSheet.replaceSync(mutation.target.textContent?.trim() ?? "");
+      // console.log(
+      //   "adoptedStyleSheets",
+      //   Array.from(shadowRoot.adoptedStyleSheets)
+      // );
     });
   });
 
@@ -44,12 +46,17 @@ export const mirrorDynamicStyle = (
   const headObserver = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       mutation.addedNodes.forEach((node) => {
-        if (node instanceof HTMLStyleElement && node.id === "_goober") {
+        if (node instanceof HTMLStyleElement && node.matches(selector)) {
           src = node;
           mirrorSheet.replaceSync(node.textContent?.trim() ?? "");
+          // console.log(
+          //   "after replaceSync adoptedStyleSheets",
+          //   Array.from(shadowRoot.adoptedStyleSheets)
+          // );
           srcObserver.observe(src, opts);
         }
       });
+      // TODO: remove the observer when the node is removed
     });
   });
 

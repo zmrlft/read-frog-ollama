@@ -111,13 +111,13 @@ export default function SideContent() {
     <>
       <div
         className={cn(
-          "fixed top-0 right-0 bg-background h-full z-[2147483647]",
+          "fixed top-0 right-0 bg-background h-full z-[2147483647] pr-[var(--removed-body-scroll-bar-size,0px)]",
           isSideOpen
             ? "translate-x-0 border-l border-border"
             : "translate-x-full"
         )}
         style={{
-          width: `${sideContentWidth}px`,
+          width: `calc(${sideContentWidth}px + var(--removed-body-scroll-bar-size, 0px))`,
         }}
       >
         {/* Resize handle */}

@@ -5,7 +5,6 @@ import Explanation from "./Explanation";
 import { useExtractContent } from "@/hooks/read/extract";
 import { useAtomValue } from "jotai";
 import { progressAtom, readStateAtom } from "../../atoms";
-import { testExplanation } from "../../test";
 import LoadingDots from "@/components/LoadingDots";
 import { Progress } from "@/components/ui/Progress";
 import { useReadArticle } from "@/hooks/read/read";
@@ -91,9 +90,7 @@ export default function Content() {
     <>
       {explainArticle.data ? (
         <ScrollArea className="flex-1 h-full">
-          <Explanation
-            articleExplanation={explainArticle.data ?? testExplanation}
-          />
+          <Explanation articleExplanation={explainArticle.data} />
         </ScrollArea>
       ) : (
         <div className="flex-1 flex h-full w-full justify-center items-center p-4">

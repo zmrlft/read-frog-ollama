@@ -18,7 +18,7 @@ import { toast } from "sonner";
 import { APP_NAME } from "@/utils/constants/app";
 import { kebabCase } from "case-anything";
 import { TooltipProvider } from "@/components/ui/Tooltip";
-
+import "./style.css";
 export let shadowWrapper: HTMLElement | null = null;
 
 export default defineContentScript({
@@ -28,7 +28,7 @@ export default defineContentScript({
     const ui = await createShadowRootUi(ctx, {
       name: kebabCase(APP_NAME),
       position: "overlay",
-      anchor: "html",
+      anchor: "body",
       append: "last",
       onMount: (container, shadow) => {
         // Store shadow root reference
@@ -45,6 +45,7 @@ export default defineContentScript({
 
         addStyleToShadow(shadow);
         mirrorDynamicStyle("#_goober", shadow);
+        mirrorDynamicStyle("style[type='text/css']", shadow);
 
         const queryClient = new QueryClient({
           queryCache: new QueryCache({
