@@ -2,6 +2,7 @@ import { LangCodeISO6393, LangLevel } from "@/types/languages";
 import { Provider, ProviderConfig } from "@/types/provider";
 
 type InitialValues = {
+  detectedLangCode: LangCodeISO6393;
   sourceLangCode: LangCodeISO6393 | "auto";
   targetLangCode: LangCodeISO6393;
   langLevel: LangLevel;
@@ -11,6 +12,7 @@ type InitialValues = {
 };
 
 const initialValues: InitialValues = {
+  detectedLangCode: "eng",
   sourceLangCode: "auto",
   targetLangCode: "cmn",
   langLevel: "intermediate",

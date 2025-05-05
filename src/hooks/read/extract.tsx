@@ -20,10 +20,18 @@ export function useExtractContent() {
       // TODO: in analyzing, we should re-extract the article in case it changed, and reset the lang
       const lang = article?.textContent ? franc(article.textContent) : "und";
 
+      if (import.meta.env.DEV) {
+        console.log("franc detected lang", lang);
+      }
+
       await storage.setItem<LangCodeISO6393>(
         "local:detectedLangCode",
         lang === "und" ? "eng" : (lang as LangCodeISO6393)
       );
+
+      if (import.meta.env.DEV) {
+        console.log("detected lang", lang);
+      }
 
       return {
         article: {
