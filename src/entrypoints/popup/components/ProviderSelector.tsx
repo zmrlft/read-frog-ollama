@@ -19,7 +19,7 @@ export const ProviderSelector = () => {
         {i18n.t("translateService")}
       </span>
       <Select value={provider} onValueChange={setProvider}>
-        <SelectTrigger className="outline-none cursor-pointer bg-input/50 hover:bg-input w-30 !h-7 pl-2.5 pr-1.5">
+        <SelectTrigger className="outline-none cursor-pointer bg-input/50 hover:bg-input w-31 !h-7 pl-2.5 pr-1.5">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

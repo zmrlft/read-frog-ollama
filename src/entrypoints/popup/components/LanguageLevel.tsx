@@ -20,7 +20,7 @@ export const LanguageLevelSelector = () => {
       <Select value={langLevel} onValueChange={setLangLevel}>
         <SelectTrigger
           size="sm"
-          className="outline-none cursor-pointer bg-input/50 hover:bg-input !h-7 w-27 pl-2.5 pr-1.5"
+          className="outline-none cursor-pointer bg-input/50 hover:bg-input !h-7 w-29 pl-2.5 pr-1.5"
         >
           <SelectValue />
         </SelectTrigger>

@@ -49,7 +49,7 @@ export const LanguageOptions = () => {
           onChange={handleSourceLangChange}
         >
           <option value="auto">
-            {langCodeToEnglishName[detectedLang as LangCodeISO6393]} (auto)
+            {langCodeToEnglishName[detectedLang]} (auto)
           </option>
           {langCodeISO6393.options.map(
             (key) =>

@@ -155,7 +155,10 @@ const SourceLangSelect = () => {
   const [sourceLangCode, setSourceLangCode] = useStorageState<
     LangCodeISO6393 | "auto"
   >("sourceLangCode", "auto");
-
+  const detectedLang = useStorageStateValue<LangCodeISO6393>(
+    "detectedLang",
+    "eng"
+  );
   return (
     <Select value={sourceLangCode} onValueChange={setSourceLangCode}>
       <SelectTrigger
@@ -165,13 +168,19 @@ const SourceLangSelect = () => {
         <div className="w-1 h-1 rounded-full bg-blue-500 shrink-0"></div>
         <div className="min-w-0 max-w-16 truncate">
           {sourceLangCode === "auto"
-            ? "Auto"
-            : langCodeToEnglishName[sourceLangCode as LangCodeISO6393]}
+            ? langCodeToEnglishName[detectedLang]
+            : langCodeToEnglishName[sourceLangCode]}
         </div>
       </SelectTrigger>
       <SelectContent container={shadowWrapper}>
         <SelectGroup>
           <SelectLabel>{i18n.t("side.sourceLang")}</SelectLabel>
+          <SelectItem value="auto">
+            {langCodeToEnglishName[detectedLang]}
+            <span className="text-xs bg-neutral-200 dark:bg-neutral-800 rounded-full px-1">
+              auto
+            </span>
+          </SelectItem>
           {Object.entries(langCodeToEnglishName).map(([langCode, name]) => (
             <SelectItem key={langCode} value={langCode}>
               {name}
