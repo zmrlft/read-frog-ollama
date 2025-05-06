@@ -7,39 +7,46 @@ import { useAtom, useAtomValue } from "jotai";
 import { progressAtom, readStateAtom } from "../../atoms";
 import LoadingDots from "@/components/LoadingDots";
 import { Progress } from "@/components/ui/Progress";
-import { useExplainArticle, useReadArticle } from "@/hooks/read/read";
+import { useExplainArticle } from "@/hooks/read/read";
 import { useMutationState } from "@tanstack/react-query";
-import { ArticleExplanation } from "@/types/content";
+import { ArticleAnalysis, ArticleExplanation } from "@/types/content";
 
 export default function Content() {
   const progress = useAtomValue(progressAtom);
   const [readState, setReadState] = useAtom(readStateAtom);
   const { isPending: isExtractingContent, data: extractedContent } =
     useExtractContent();
-  const { mutate: readArticle, analyzeContent } = useReadArticle();
   const { mutate: explainArticle } = useExplainArticle();
 
-  const explainData = useMutationState({
+  const explainDataList = useMutationState({
     filters: {
       mutationKey: ["explainArticle"],
     },
     select: (mutation) => mutation.state.data,
   });
 
-  const handleReadForMe = () => {
-    if (!extractedContent?.paragraphs.join("\n").trim()) {
-      toast.error("Cannot read the content: content is not available");
-      return;
-    }
-    readArticle(extractedContent);
-  };
+  const analyzeContentDataList = useMutationState({
+    filters: {
+      mutationKey: ["analyzeContent"],
+    },
+    select: (mutation) => mutation.state.data,
+  });
+
+  // const handleReadForMe = () => {
+  //   if (!extractedContent?.paragraphs.join("\n").trim()) {
+  //     toast.error("Cannot read the content: content is not available");
+  //     return;
+  //   }
+  //   readArticle(extractedContent);
+  // };
 
   const handleContinue = () => {
-    if (extractedContent && analyzeContent.data) {
-      // TODO: useExplainArticle 但是要获得最新的这个 mutate 的返回结果：https://github.com/jotaijs/jotai-tanstack-query#atomwithmutationstate-usage
+    const analyzeContentData =
+      analyzeContentDataList[analyzeContentDataList.length - 1];
+    if (extractedContent && analyzeContentData) {
       explainArticle({
         extractedContent,
-        articleAnalysis: analyzeContent.data,
+        articleAnalysis: analyzeContentData as ArticleAnalysis,
       });
       setReadState("explaining");
     } else {
@@ -102,19 +109,18 @@ export default function Content() {
   }
   return (
     <>
-      {explainData.length > 0 && explainData[0] ? (
+      {explainDataList.length > 0 &&
+      explainDataList[explainDataList.length - 1] ? (
         <ScrollArea className="flex-1 h-full">
           <Explanation
             articleExplanation={
-              explainData[0] as ArticleExplanation["paragraphs"]
+              explainDataList[
+                explainDataList.length - 1
+              ] as ArticleExplanation["paragraphs"]
             }
           />
         </ScrollArea>
-      ) : (
-        <div className="flex-1 flex h-full w-full justify-center items-center p-4">
-          <Button onClick={handleReadForMe}>Read For Me</Button>
-        </div>
-      )}
+      ) : null}
     </>
   );
 }

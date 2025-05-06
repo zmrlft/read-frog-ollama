@@ -18,7 +18,7 @@ import {
 import { ProviderConfig, Provider } from "@/types/provider";
 import { getAnalyzePrompt } from "@/utils/prompts/analyze";
 import { getExplainPrompt } from "@/utils/prompts/explain";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { generateObject } from "ai";
 import { useSetAtom } from "jotai";
 
@@ -265,10 +265,14 @@ export function useReadArticle() {
   const analyzeContent = useAnalyzeContent();
   const explainArticle = useExplainArticle();
   const setReadState = useSetAtom(readStateAtom);
+  const queryClient = useQueryClient();
 
   const mutate = async (extractedContent: ExtractedContent) => {
     // Reset explainArticle data before starting a new read operation
     explainArticle.reset();
+
+    // Remove previous mutations from the cache to clear useMutationState data
+    queryClient.getMutationCache().clear();
 
     const articleAnalysis = await analyzeContent.mutateAsync(extractedContent);
     setReadState("continue?");

@@ -49,7 +49,7 @@ export const Metadata = ({ className }: { className?: string }) => {
           explainArticle.isPending
         }
       >
-        {explainData.length > 0 && explainData[0] ? (
+        {explainData.length > 0 && explainData[explainData.length - 1] ? (
           <>
             <RotateCcw className="size-3" />
             Regenerate

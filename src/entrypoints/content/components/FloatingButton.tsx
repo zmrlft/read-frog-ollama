@@ -1,7 +1,7 @@
 import { useAtom, useAtomValue } from "jotai";
 import { isSideOpenAtom, sideContentWidthAtom } from "../atoms";
 import { DEFAULT_BUTTON_POSITION } from "../../../utils/constants/side";
-import readFrogLogo from "@/assets/icon/read-frog-256.png";
+import readFrogLogo from "@/assets/icon/read-frog.png";
 import { Bolt, X } from "lucide-react";
 import { APP_NAME } from "@/utils/constants/app";
 
@@ -123,7 +123,7 @@ export default function FloatingButton() {
           <img
             src={readFrogLogo}
             alt={APP_NAME}
-            className="ml-[5px] w-7 h-7 rounded-full"
+            className="ml-[5px] w-8 h-8 rounded-full"
           />
           <div className="absolute inset-0 opacity-0"></div>
         </div>
