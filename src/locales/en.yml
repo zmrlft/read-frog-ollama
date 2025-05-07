@@ -1,3 +1,5 @@
+extName: "Read Frog",
+extDescription: "Read Frog is a browser extension designed to help you learn languages deeply from any website.",
 popup:
   autoLang: "Auto"
   sourceLang: "Source"

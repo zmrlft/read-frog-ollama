@@ -1,3 +1,5 @@
+extName: "陪读蛙",
+extDescription: "陪读蛙是一款浏览器插件，旨在帮助您从任何网站深入学习语言。",
 popup:
   autoLang: 自动检测
   sourceLang: 来源语言
