@@ -3,6 +3,8 @@ import { LanguageOptions } from "./components/LanguageOptions";
 import { LanguageLevelSelector } from "./components/LanguageLevel";
 import { ShowFloatingButton } from "./components/ShowFloatingButton";
 import { ProviderSelector } from "./components/ProviderSelector";
+import { version } from "../../../package.json";
+import { IconBrandGithub } from "@tabler/icons-react";
 
 function App() {
   return (
@@ -14,12 +16,28 @@ function App() {
         {/* <Button>{i18n.t("popup.readForMe")}</Button> */}
         <ShowFloatingButton />
       </div>
-      <div
-        className="p-2 flex items-center justify-center gap-1.5 bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 cursor-pointer"
-        onClick={() => browser.runtime.openOptionsPage()}
-      >
-        <Bolt className="w-4 h-4" strokeWidth={1.6} />
-        <span className=" font-medium">{i18n.t("popup.setting")}</span>
+      <div className="py-1 flex items-center justify-between px-2 bg-neutral-200 dark:bg-neutral-800">
+        <button
+          className="flex items-center gap-1 cursor-pointer rounded-md px-2 py-1 hover:bg-neutral-300 dark:hover:bg-neutral-700"
+          onClick={() => browser.runtime.openOptionsPage()}
+        >
+          <Bolt className="size-4" strokeWidth={1.6} />
+          <span className="text-[13px] font-medium">
+            {i18n.t("popup.setting")}
+          </span>
+        </button>
+        <span className="text-sm text-neutral-500 dark:text-neutral-400">
+          v{version}
+        </span>
+        <button
+          className="flex items-center gap-1 cursor-pointer rounded-md px-2 py-1 hover:bg-neutral-300 dark:hover:bg-neutral-700"
+          onClick={() =>
+            window.open("https://github.com/mengxi-ream/read-frog", "_blank")
+          }
+        >
+          <IconBrandGithub className="size-4" strokeWidth={1.6} />
+          <span className="text-[13px] font-medium">Github</span>
+        </button>
       </div>
     </>
   );
