@@ -1,10 +1,9 @@
-import { Bolt } from "lucide-react";
+import { Bolt, Star } from "lucide-react";
 import { LanguageOptions } from "./components/LanguageOptions";
 import { LanguageLevelSelector } from "./components/LanguageLevel";
 import { ShowFloatingButton } from "./components/ShowFloatingButton";
 import { ProviderSelector } from "./components/ProviderSelector";
 import { version } from "../../../package.json";
-import { IconBrandGithub } from "@tabler/icons-react";
 
 function App() {
   return (
@@ -35,7 +34,7 @@ function App() {
             window.open("https://github.com/mengxi-ream/read-frog", "_blank")
           }
         >
-          <IconBrandGithub className="size-4" strokeWidth={1.6} />
+          <Star className="size-4" strokeWidth={1.6} />
           <span className="text-[13px] font-medium">Github</span>
         </button>
       </div>
