@@ -26,7 +26,7 @@ function App() {
           </span>
         </button>
         <span className="text-sm text-neutral-500 dark:text-neutral-400">
-          v{version}
+          {version}
         </span>
         <button
           className="flex items-center gap-1 cursor-pointer rounded-md px-2 py-1 hover:bg-neutral-300 dark:hover:bg-neutral-700"
