@@ -8,7 +8,8 @@ export default defineConfig({
     plugins: [],
   }),
   manifest: {
-    name: "Read Frog",
+    name: "__MSG_extName__",
+    description: "__MSG_extDescription__",
     default_locale: "en",
     permissions: ["storage"],
   },
