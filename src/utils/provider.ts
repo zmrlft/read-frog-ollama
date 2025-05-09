@@ -1,47 +1,20 @@
 import { createProviderRegistry } from "ai";
 import { createOpenAI } from "@ai-sdk/openai";
 import { createDeepSeek } from "@ai-sdk/deepseek";
-import { Provider, ProviderConfig } from "@/types/provider";
-import openaiLogo from "@/assets/llm/openai.jpg";
-import deepseekLogo from "@/assets/llm/deepseek.png";
-
-export const defaultProviderConfig: ProviderConfig = {
-  openai: {
-    apiKey: undefined,
-    model: "gpt-4.1-mini",
-    isCustomModel: false,
-    customModel: "",
-  },
-  deepseek: {
-    apiKey: undefined,
-    model: "deepseek-chat",
-    isCustomModel: false,
-    customModel: "",
-  },
-};
-
-export const providerItems: Record<Provider, { logo: string; name: string }> = {
-  openai: {
-    logo: openaiLogo,
-    name: "OpenAI",
-  },
-  deepseek: {
-    logo: deepseekLogo,
-    name: "DeepSeek",
-  },
-};
+import { Config } from "@/types/config/config";
+import { CONFIG_STORAGE_KEY } from "./constants/config";
 
 export async function getProviderRegistry() {
-  const providerConfig = await storage.getItem<ProviderConfig>(
-    `local:providerConfig`
-  );
+  const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`);
+
+  console.log("storage config", config);
 
   return createProviderRegistry({
     openai: createOpenAI({
-      apiKey: providerConfig?.openai.apiKey,
+      apiKey: config?.providersConfig?.openai.apiKey,
     }),
     deepseek: createDeepSeek({
-      apiKey: providerConfig?.deepseek.apiKey,
+      apiKey: config?.providersConfig?.deepseek.apiKey,
     }),
   });
 }

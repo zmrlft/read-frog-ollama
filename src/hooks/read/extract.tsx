@@ -1,11 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { Readability } from "@mozilla/readability";
 import { franc } from "franc-min";
-import { flattenToParagraphs } from "@/entrypoints/content/utils/article";
+import { flattenToParagraphs } from "@/entrypoints/side.content/utils/article";
 import { ExtractedContent } from "@/types/content";
-import { LangCodeISO6393 } from "@/types/languages";
+import { LangCodeISO6393 } from "@/types/config/languages";
+import { useSetAtom } from "jotai";
+import { configFields } from "@/utils/atoms/config";
 
 export function useExtractContent() {
+  const setLanguage = useSetAtom(configFields.language);
+
   return useQuery<ExtractedContent>({
     queryKey: ["extractContent"],
     queryFn: async () => {
@@ -24,14 +28,9 @@ export function useExtractContent() {
         console.log("franc detected lang", lang);
       }
 
-      await storage.setItem<LangCodeISO6393>(
-        "local:detectedLangCode",
-        lang === "und" ? "eng" : (lang as LangCodeISO6393)
-      );
-
-      if (import.meta.env.DEV) {
-        console.log("detected lang", lang);
-      }
+      setLanguage({
+        detectedCode: lang === "und" ? "eng" : (lang as LangCodeISO6393),
+      });
 
       return {
         article: {

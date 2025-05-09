@@ -1,47 +1,18 @@
-import { sideContentWidthAtom } from "../../atoms";
 import { useAtom, useAtomValue } from "jotai";
 import { isSideOpenAtom } from "../../atoms";
 import { MIN_SIDE_CONTENT_WIDTH } from "../../../../utils/constants/side";
-import Content from "./Content";
 import { Toaster } from "sonner";
-import { TopBar } from "./TopBar";
-import { Metadata } from "./Metadata";
+import { TopBar } from "./top-bar";
+import { Metadata } from "./metadata";
 import { APP_NAME } from "@/utils/constants/app";
 import { kebabCase } from "case-anything";
+import { configFields } from "@/utils/atoms/config";
+import Content from "./content";
 
 export default function SideContent() {
   const isSideOpen = useAtomValue(isSideOpenAtom);
-  const [sideContentWidth, setSideContentWidth] = useAtom(sideContentWidthAtom);
+  const [sideContent, setSideContent] = useAtom(configFields.sideContent);
   const [isResizing, setIsResizing] = useState(false);
-
-  useEffect(() => {
-    let unwatch: () => void;
-
-    const loadWidth = async () => {
-      const width = await storage.getItem<number>("local:sideContentWidth");
-      if (width) setSideContentWidth(width);
-
-      unwatch = await storage.watch<number>(
-        "local:sideContentWidth",
-        (newWidth, _oldWidth) => {
-          if (newWidth) setSideContentWidth(newWidth);
-        }
-      );
-    };
-    loadWidth();
-
-    return () => {
-      unwatch?.();
-    };
-  }, []);
-
-  useEffect(() => {
-    const saveWidth = async () => {
-      await storage.setItem<number>("local:sideContentWidth", sideContentWidth);
-    };
-
-    saveWidth();
-  }, [sideContentWidth]);
 
   // Setup resize handlers
   useEffect(() => {
@@ -54,7 +25,7 @@ export default function SideContent() {
       const newWidth = windowWidth - e.clientX;
       const clampedWidth = Math.max(MIN_SIDE_CONTENT_WIDTH, newWidth);
 
-      setSideContentWidth(clampedWidth);
+      setSideContent({ width: clampedWidth });
     };
 
     const handleMouseUp = () => {
@@ -86,7 +57,7 @@ export default function SideContent() {
       }
       styleTag.textContent = `
         html {
-          width: calc(100% - ${sideContentWidth}px) !important;
+          width: calc(100% - ${sideContent.width}px) !important;
           position: relative !important;
           min-height: 100vh !important;
         }
@@ -102,7 +73,7 @@ export default function SideContent() {
         document.head.removeChild(styleTag);
       }
     };
-  }, [isSideOpen, sideContentWidth]);
+  }, [isSideOpen, sideContent.width]);
 
   const handleResizeStart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -119,7 +90,7 @@ export default function SideContent() {
             : "translate-x-full"
         )}
         style={{
-          width: `calc(${sideContentWidth}px + var(--removed-body-scroll-bar-size, 0px))`,
+          width: `calc(${sideContent.width}px + var(--removed-body-scroll-bar-size, 0px))`,
         }}
       >
         {/* Resize handle */}
