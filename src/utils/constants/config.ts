@@ -4,12 +4,12 @@ import openaiLogo from "@/assets/llm/openai.jpg";
 import deepseekLogo from "@/assets/llm/deepseek.png";
 export const CONFIG_STORAGE_KEY = "config";
 
-export const HOTKEYS = ["ctrl", "option", "shift", "~"] as const;
+export const HOTKEYS = ["Control", "Alt", "Shift", "`"] as const;
 export const HOTKEY_ITEMS: Record<Hotkey, { label: string; icon: string }> = {
-  ctrl: { label: "Ctrl", icon: "⌃" },
-  option: { label: "Option", icon: "⌥" },
-  shift: { label: "Shift", icon: "⇧" },
-  "~": { label: "Tilde", icon: "~" },
+  Control: { label: "Ctrl", icon: "⌃" },
+  Alt: { label: "Option", icon: "⌥" },
+  Shift: { label: "Shift", icon: "⇧" },
+  "`": { label: "Backtick", icon: "`" },
 };
 
 export const MIN_SIDE_CONTENT_WIDTH = 400; // px
@@ -41,7 +41,7 @@ export const DEFAULT_CONFIG: Config = {
   providersConfig: DEFAULT_PROVIDER_CONFIG,
   manualTranslate: {
     enabled: true,
-    hotkey: "ctrl",
+    hotkey: "Control",
   },
   floatingButton: {
     enabled: true,
