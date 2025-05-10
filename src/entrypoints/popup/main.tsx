@@ -7,7 +7,7 @@ import { Provider as JotaiProvider } from "jotai";
 import { configAtom } from "@/utils/atoms/config";
 import { useHydrateAtoms } from "jotai/utils";
 import { Config } from "@/types/config/config";
-import { DEFAULT_CONFIG } from "@/utils/constants/config.ts";
+import { DEFAULT_CONFIG } from "@/utils/constants/config";
 
 document.documentElement.classList.toggle(
   "dark",
