@@ -1,5 +1,5 @@
-extName: "Read Frog"
-extDescription: "Read Frog is a browser extension designed to help you learn languages deeply from any website."
+extName: "Read Frog - Open Source AI Translator"
+extDescription: "Read Frog is an open source browser extension designed to help you learn languages deeply from any website."
 popup:
   autoLang: "Auto"
   sourceLang: "Source"
