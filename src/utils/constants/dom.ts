@@ -1,6 +1,5 @@
-export const BLOCK_TAGS = new Set([
+export const FORCE_BLOCK_TAGS = new Set([
   "P",
-  "A",
   "BUTTON",
   "SELECT",
   "OPTION",
@@ -19,12 +18,10 @@ export const BLOCK_TAGS = new Set([
   "H4",
   "H5",
   "H6",
-  "DIV",
   "HEADER",
   "FOOTER",
   "MAIN",
   "NAV",
-  "SPAN",
 ]);
 
 export const INLINE_TRANSLATE_TAGS = new Set([

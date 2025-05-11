@@ -9,20 +9,20 @@ export default defineContentScript({
   async main(ctx) {
     await loadGlobalConfigPromise;
     registerTranslationTriggers();
-    const ui = createIntegratedUi(ctx, {
-      position: "inline",
-      anchor: "body",
-      onMount: (container) => {
-        // Append children to the container
-        const app = document.createElement("p");
-        app.textContent = "Hello host.content!";
-        app.classList.add("rf-translation-spinner");
-        container.append(app);
-      },
-    });
+    // const ui = createIntegratedUi(ctx, {
+    //   position: "inline",
+    //   anchor: "body",
+    //   onMount: (container) => {
+    //     // Append children to the container
+    //     const app = document.createElement("p");
+    //     app.textContent = "Hello host.content!";
+    //     app.classList.add("rf-translation-spinner");
+    //     container.append(app);
+    //   },
+    // });
 
-    // Call mount to add the UI to the DOM
-    ui.mount();
+    // // Call mount to add the UI to the DOM
+    // ui.mount();
   },
 });
 
@@ -90,35 +90,6 @@ function registerTranslationTriggers() {
       keyState.isOtherKeyPressed = false;
     }
   });
-
-  // window.addEventListener("blur", () => {
-  //   keyState.isHotkeyPressed = false;
-  //   keyState.isOtherKeyPressed = false;
-  // });
-
-  // window.addEventListener("keydown", (e) => {
-  //   if (e.repeat) return;
-  //   if (e.key === getHotkey()) {
-  //     keyState.isHotkeyPressed = true;
-  //   } else {
-  //     keyState.isOtherKeyPressed = true;
-  //   }
-  // });
-
-  // window.addEventListener("keyup", (e) => {
-  //   console.log("keyup", e.key);
-  //   console.log("hotkey", getHotkey());
-  //   console.log(keyState);
-  //   if (e.key === getHotkey()) {
-  //     keyState.isHotkeyPressed = false;
-  //     if (!keyState.isOtherKeyPressed && isEnabled()) {
-  //       console.log("call translate");
-  //       handleTranslate(mousePosition.x, mousePosition.y);
-  //     }
-  //   } else if (!keyState.isHotkeyPressed) {
-  //     keyState.isOtherKeyPressed = false;
-  //   }
-  // });
 
   document.body.addEventListener("mousemove", (event) => {
     mousePosition.x = event.clientX;
