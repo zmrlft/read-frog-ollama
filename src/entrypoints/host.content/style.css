@@ -16,6 +16,7 @@
   margin: 0 4px;
   animation: spin 1s linear infinite;
   display: inline-block;
+  vertical-align: middle; /* 添加垂直居中对齐 */
 }
 
 .read-frog-translated-content-wrapper {
