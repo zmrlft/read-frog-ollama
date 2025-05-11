@@ -1,0 +1,36 @@
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.rf-spinner {
+  border: 3px solid var(--muted); /* 轨迹灰色 */
+  border-top: 3px solid var(--primary); /* 主色调，首次翻译蓝色、缓存应改为绿色 */
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+.read-frog-translated-content-wrapper {
+  word-break: break-word;
+  user-select: text;
+}
+
+.read-frog-translated-block-content {
+  display: inline-block;
+  margin: 8px 0 !important; /* 上下边距设置为8px，并强制覆盖其他样式 */
+  color: inherit; /* 保持文本颜色与周围文本一致 */
+  font-family: inherit;
+}
+
+.read-frog-translated-inline-content {
+  display: inline-block;
+  color: inherit; /* 保持文本颜色与周围文本一致 */
+  font-family: inherit;
+}

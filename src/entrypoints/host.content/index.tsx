@@ -1,8 +1,7 @@
 import "@/assets/tailwind/theme.css";
 import "@/assets/tailwind/text-small.css";
-import hotkeys from "hotkeys-js";
-import { handleTranslate } from "@/utils/host/translate";
-import { HOTKEYS } from "@/utils/constants/config";
+import "./style.css";
+import { handleShowOrHideTranslationAction } from "@/utils/host/translate";
 import { isEditable } from "@/utils/host/dom";
 
 export default defineContentScript({
@@ -15,9 +14,10 @@ export default defineContentScript({
       anchor: "body",
       onMount: (container) => {
         // Append children to the container
-        // const app = document.createElement("p");
-        // app.textContent = "Hello host.content!";
-        // container.append(app);
+        const app = document.createElement("p");
+        app.textContent = "Hello host.content!";
+        app.classList.add("rf-translation-spinner");
+        container.append(app);
       },
     });
 
@@ -27,6 +27,10 @@ export default defineContentScript({
 });
 
 function registerTranslationTriggers() {
+  const spinner = document.createElement("span");
+  spinner.className = "rf-spinner";
+  document.body.append(spinner);
+
   const mousePosition = { x: 0, y: 0 };
   const keyState = {
     isHotkeyPressed: false,
@@ -38,11 +42,6 @@ function registerTranslationTriggers() {
 
   let timerId: NodeJS.Timeout | null = null; // 延时触发的定时器
   let actionTriggered = false;
-
-  function handleShowOrHideTranslationAction() {
-    // 在这里调用你的翻译逻辑
-    console.log("翻译触发！");
-  }
 
   // Listen the hotkey means the user can't press or hold any other key during the hotkey is holding
   document.addEventListener("keydown", (e) => {
@@ -56,7 +55,7 @@ function registerTranslationTriggers() {
         keyState.isOtherKeyPressed = false;
         timerId = setTimeout(() => {
           if (!keyState.isOtherKeyPressed && keyState.isHotkeyPressed) {
-            handleShowOrHideTranslationAction();
+            handleShowOrHideTranslationAction(mousePosition.x, mousePosition.y);
             actionTriggered = true;
           }
           timerId = null;
@@ -83,7 +82,7 @@ function registerTranslationTriggers() {
           timerId = null;
         }
         if (!actionTriggered) {
-          handleShowOrHideTranslationAction();
+          handleShowOrHideTranslationAction(mousePosition.x, mousePosition.y);
         }
       }
       actionTriggered = false;
