@@ -13,7 +13,7 @@
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
     "postinstall": "wxt prepare",
-    "release": "changeset publish --no-npm"
+    "release": "changeset version && changeset tag && git push --follow-tags"
   },
   "dependencies": {
     "@ai-sdk/deepseek": "^0.2.13",
