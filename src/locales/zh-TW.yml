@@ -7,6 +7,8 @@ popup:
   readForMe: 為我閱讀
   enabledFloatingButton: 開啟懸浮按鈕
   setting: 設定
+  hover: 滑鼠懸停
+  translateParagraph: 來翻譯段落
 translateService: 翻譯服務
 languageLevel: 你的來源語言水平
 languageLevels:

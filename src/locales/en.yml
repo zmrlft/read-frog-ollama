@@ -7,6 +7,8 @@ popup:
   readForMe: "Read For Me"
   enabledFloatingButton: "Show Floating Button"
   setting: "Options"
+  hover: "Hover"
+  translateParagraph: "to translate paragraph"
 side:
   sourceLang: "Source Language"
   targetLang: "Target Language"
