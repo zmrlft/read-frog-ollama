@@ -49,3 +49,29 @@ export function smashTruncationStyle(node: HTMLElement) {
     node.style.maxHeight = "unset";
   }
 }
+
+export function getTextContent(node: HTMLElement): string {
+  if (!node) return "";
+
+  // Skip if the node has sr-only class
+  if (node.classList.contains("sr-only")) {
+    return "";
+  }
+
+  // Get all child nodes
+  const childNodes = Array.from(node.childNodes);
+
+  return childNodes.reduce((text: string, child: Node): string => {
+    // If it's a text node, add its content
+    if (child.nodeType === Node.TEXT_NODE) {
+      return text + child.textContent;
+    }
+
+    // If it's an element node, recursively get its text content
+    if (child instanceof HTMLElement && child.nodeType === Node.ELEMENT_NODE) {
+      return text + getTextContent(child);
+    }
+
+    return text;
+  }, "");
+}

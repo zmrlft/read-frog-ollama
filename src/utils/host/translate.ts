@@ -2,7 +2,7 @@ import { langCodeToEnglishName } from "@/types/config/languages";
 import { generateText } from "ai";
 import { getTranslateLinePrompt } from "../prompts/translate-line";
 import { INLINE_TRANSLATE_TAGS } from "../constants/dom";
-import { selectNode, smashTruncationStyle } from "./dom";
+import { getTextContent, selectNode, smashTruncationStyle } from "./dom";
 
 export function handleShowOrHideTranslationAction(
   mouseX: number,
@@ -40,12 +40,13 @@ async function translateNode(node: HTMLElement) {
     targetNode = targetNode.children[0] as HTMLElement;
   }
 
-  if (!targetNode.textContent) return;
+  const textContent = getTextContent(targetNode);
+  if (!textContent) return;
 
   const spinner = document.createElement("span");
   spinner.className = "read-frog-spinner";
   targetNode.appendChild(spinner);
-  const translatedText = await translateText(targetNode.textContent);
+  const translatedText = await translateText(textContent);
   spinner.remove();
   if (!translatedText) return;
 
