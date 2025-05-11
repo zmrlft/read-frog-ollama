@@ -12,7 +12,8 @@
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
-    "postinstall": "wxt prepare"
+    "postinstall": "wxt prepare",
+    "release": "changeset publish --no-npm"
   },
   "dependencies": {
     "@ai-sdk/deepseek": "^0.2.13",

@@ -1,0 +1,22 @@
+name: GitHub Release
+
+on:
+  push:
+    tags: ["v*"] # 只要出现 vX.Y.Z 之类的 tag 就触发
+  workflow_dispatch: # 允许手动重跑
+
+permissions:
+  contents: write # 创建 Release 需要写权限
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true # GitHub 自动根据 diff 生成说明
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
