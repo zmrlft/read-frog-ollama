@@ -10,6 +10,7 @@ export function handleShowOrHideTranslationAction(
   if (!globalConfig) return;
 
   const node = selectNode(mouseX, mouseY);
+
   if (!node || !(node instanceof HTMLElement) || !shouldTriggerAction(node))
     return;
 
@@ -43,9 +44,24 @@ export function handleShowOrHideTranslationAction(
   }
 }
 
+function deepElementFromPoint(
+  root: Document | ShadowRoot,
+  x: number,
+  y: number
+) {
+  // 第一步：在当前 root（Document 或 ShadowRoot）里拿第一级命中
+  const el = root.elementFromPoint(x, y);
+  // 如果这个元素有 open shadowRoot，继续在它的 shadowRoot 里查
+  if (el && el.shadowRoot) {
+    return deepElementFromPoint(el.shadowRoot, x, y);
+  }
+  // 否则，el 就是我们想要的最深层元素
+  return el;
+}
+
 function selectNode(mouseX: number, mouseY: number) {
   // 1. if not block node, find up to the block node
-  let currentNode = document.elementFromPoint(mouseX, mouseY);
+  let currentNode = deepElementFromPoint(document, mouseX, mouseY);
 
   while (
     currentNode &&

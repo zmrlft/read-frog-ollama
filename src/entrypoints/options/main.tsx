@@ -16,11 +16,6 @@ document.documentElement.classList.toggle(
       window.matchMedia("(prefers-color-scheme: dark)").matches)
 );
 
-const root = document.getElementById("root")!;
-root.className = "antialiased bg-background";
-
-const config = await storage.getItem<Config>("local:config");
-
 const HydrateAtoms = ({
   initialValues,
   children,
@@ -32,12 +27,21 @@ const HydrateAtoms = ({
   return children;
 };
 
-ReactDOM.createRoot(root).render(
-  <React.StrictMode>
-    <JotaiProvider>
-      <HydrateAtoms initialValues={[[configAtom, config ?? DEFAULT_CONFIG]]}>
-        <App />
-      </HydrateAtoms>
-    </JotaiProvider>
-  </React.StrictMode>
-);
+async function initApp() {
+  const root = document.getElementById("root")!;
+  root.className = "antialiased bg-background";
+
+  const config = await storage.getItem<Config>("local:config");
+
+  ReactDOM.createRoot(root).render(
+    <React.StrictMode>
+      <JotaiProvider>
+        <HydrateAtoms initialValues={[[configAtom, config ?? DEFAULT_CONFIG]]}>
+          <App />
+        </HydrateAtoms>
+      </JotaiProvider>
+    </React.StrictMode>
+  );
+}
+
+initApp();
