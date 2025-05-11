@@ -5,7 +5,7 @@ import FloatingButton from "./components/floating-button";
 import ProviderSelector from "./components/provider-selector";
 import { version } from "../../../package.json";
 import Hotkey from "./components/hotkey-selector";
-
+import QuickLinks from "./components/quick-links";
 function App() {
   return (
     <>
@@ -16,6 +16,7 @@ function App() {
         {/* <Button>{i18n.t("popup.readForMe")}</Button> */}
         <Hotkey />
         <FloatingButton />
+        <QuickLinks />
       </div>
       <div className="py-1 flex items-center justify-between px-2 bg-neutral-200 dark:bg-neutral-800">
         <button
