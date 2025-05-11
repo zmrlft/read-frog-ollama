@@ -2,7 +2,7 @@
 
 Master languages effortlessly and deeply with AI, right in your browser.
 
-![Read Frog](/public/opengraph-image.png)
+![Read Frog](/docs/opengraph.svg)
 
 [Official website](https://readfrog.mengxi.work)
 
