@@ -4,6 +4,8 @@ import { getTranslateLinePrompt } from "../prompts/translate-line";
 import { INLINE_TRANSLATE_TAGS } from "../constants/dom";
 import { getTextContent, selectNode, smashTruncationStyle } from "./dom";
 
+const translatingNodes = new Set<HTMLElement>();
+
 export function handleShowOrHideTranslationAction(
   mouseX: number,
   mouseY: number
@@ -20,6 +22,9 @@ export function handleShowOrHideTranslationAction(
   if (translatedWrapperNode) {
     translatedWrapperNode.remove();
   } else {
+    // prevent too quick hotkey trigger
+    if (translatingNodes.has(node)) return;
+    translatingNodes.add(node);
     translateNode(node);
   }
 }
@@ -29,33 +34,39 @@ function shouldTriggerAction(node: Node) {
 }
 
 async function translateNode(node: HTMLElement) {
-  smashTruncationStyle(node);
-  // while currentNode only has one children, and no text node, choose the children
-  let targetNode = node;
-  while (
-    targetNode &&
-    targetNode.childNodes.length === 1 &&
-    targetNode.children.length === 1
-  ) {
-    targetNode = targetNode.children[0] as HTMLElement;
+  try {
+    smashTruncationStyle(node);
+    // while currentNode only has one children, and no text node, choose the children
+    let targetNode = node;
+    while (
+      targetNode &&
+      targetNode.childNodes.length === 1 &&
+      targetNode.children.length === 1
+    ) {
+      targetNode = targetNode.children[0] as HTMLElement;
+    }
+
+    const textContent = getTextContent(targetNode);
+    if (!textContent) return;
+
+    const spinner = document.createElement("span");
+    spinner.className = "read-frog-spinner";
+    targetNode.appendChild(spinner);
+    const translatedText = await translateText(textContent);
+    spinner.remove();
+    if (!translatedText) return;
+
+    const translatedWrapperNode = createTranslatedWrapperNode(
+      targetNode,
+      translatedText
+    );
+
+    targetNode.appendChild(translatedWrapperNode);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    translatingNodes.delete(node);
   }
-
-  const textContent = getTextContent(targetNode);
-  if (!textContent) return;
-
-  const spinner = document.createElement("span");
-  spinner.className = "read-frog-spinner";
-  targetNode.appendChild(spinner);
-  const translatedText = await translateText(textContent);
-  spinner.remove();
-  if (!translatedText) return;
-
-  const translatedWrapperNode = createTranslatedWrapperNode(
-    targetNode,
-    translatedText
-  );
-
-  targetNode.appendChild(translatedWrapperNode);
 }
 
 function createTranslatedWrapperNode(
