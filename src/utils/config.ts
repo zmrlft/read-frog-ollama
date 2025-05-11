@@ -2,6 +2,9 @@ import { Config, configSchema } from "@/types/config/config";
 import { DEFAULT_CONFIG, CONFIG_STORAGE_KEY } from "./constants/config";
 import deepmerge from "deepmerge";
 
+export let globalConfig: Config | null = null;
+export const loadGlobalConfigPromise = loadGlobalConfig();
+
 export async function initializeConfig() {
   const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`);
   const newConfig: Config =
@@ -23,3 +26,19 @@ export async function initializeConfig() {
     });
   }
 }
+
+export async function loadGlobalConfig() {
+  const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`);
+  if (configSchema.safeParse(config).success) {
+    globalConfig = config;
+  } else {
+    await initializeConfig();
+    globalConfig = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`);
+  }
+}
+
+storage.watch<Config>(`local:${CONFIG_STORAGE_KEY}`, (newConfig) => {
+  if (configSchema.safeParse(newConfig).success) {
+    globalConfig = newConfig;
+  }
+});

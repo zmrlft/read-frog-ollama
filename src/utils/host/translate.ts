@@ -1,6 +1,6 @@
-import { globalConfig } from "@/entrypoints/host.content";
 import { langCodeToEnglishName } from "@/types/config/languages";
 import { generateText } from "ai";
+import { getTranslateLinePrompt } from "../prompts/translate-line";
 
 const translatingNode: Set<Node> = new Set();
 
@@ -29,11 +29,14 @@ async function translateNode(node: Node) {
   const provider = globalConfig.provider;
   const model = globalConfig.providersConfig[provider].model;
 
+  if (!node.textContent) return;
+
   const { text } = await generateText({
     model: registry.languageModel(`${provider}:${model}`),
-    prompt: `Translate the following text to ${
-      langCodeToEnglishName[globalConfig.language.targetCode]
-    }: ${node.textContent}`,
+    prompt: getTranslateLinePrompt(
+      langCodeToEnglishName[globalConfig.language.targetCode],
+      node.textContent
+    ),
   });
 
   console.log("translated", text);

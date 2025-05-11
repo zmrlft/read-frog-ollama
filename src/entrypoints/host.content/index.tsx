@@ -1,16 +1,14 @@
 import "@/assets/tailwind/theme.css";
 import "@/assets/tailwind/text-small.css";
-import { CONFIG_STORAGE_KEY } from "@/utils/constants/config";
-import { Config } from "@/types/config/config";
+import hotkeys from "hotkeys-js";
 import { handleTranslate } from "@/utils/host/translate";
-
-export let globalConfig: Config | null = null;
+import { HOTKEYS } from "@/utils/constants/config";
+import { isEditable } from "@/utils/host/dom";
 
 export default defineContentScript({
   matches: ["*://*/*"],
   async main(ctx) {
-    const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`);
-    globalConfig = config;
+    await loadGlobalConfigPromise;
     registerTranslationTriggers();
     const ui = createIntegratedUi(ctx, {
       position: "inline",
@@ -29,43 +27,101 @@ export default defineContentScript({
 });
 
 function registerTranslationTriggers() {
-  const hotkey = globalConfig?.manualTranslate.hotkey;
-
   const mousePosition = { x: 0, y: 0 };
-  const keyPressed = {
-    hotkeyPressed: false,
-    otherKeyPressed: false,
+  const keyState = {
+    isHotkeyPressed: false,
+    isOtherKeyPressed: false,
   };
 
-  window.addEventListener("blur", () => {
-    keyPressed.hotkeyPressed = false;
-    keyPressed.otherKeyPressed = false;
-  });
+  const getHotkey = () => globalConfig?.manualTranslate.hotkey;
+  const isEnabled = () => globalConfig?.manualTranslate.enabled;
 
-  window.addEventListener("keydown", (e) => {
-    console.log("keydown", e.key);
-    if (e.key === hotkey) {
-      keyPressed.hotkeyPressed = true;
-    } else {
-      keyPressed.otherKeyPressed = true;
-    }
-  });
+  let timerId: NodeJS.Timeout | null = null; // 延时触发的定时器
+  let actionTriggered = false;
 
-  window.addEventListener("keyup", (e) => {
-    console.log("keyup", e.key);
-    if (e.key === hotkey) {
-      keyPressed.hotkeyPressed = false;
-      if (e.key === hotkey && !keyPressed.otherKeyPressed) {
-        // DO Translation
-        handleTranslate(mousePosition.x, mousePosition.y);
+  function handleShowOrHideTranslationAction() {
+    // 在这里调用你的翻译逻辑
+    console.log("翻译触发！");
+  }
+
+  // Listen the hotkey means the user can't press or hold any other key during the hotkey is holding
+  document.addEventListener("keydown", (e) => {
+    if (!isEnabled()) return;
+    if (e.target instanceof HTMLElement && isEditable(e.target)) return;
+
+    if (e.key === getHotkey()) {
+      if (!keyState.isHotkeyPressed) {
+        keyState.isHotkeyPressed = true;
+        // If user hold other key, it will trigger keyState.isOtherKeyPressed = true; later by repeat event
+        keyState.isOtherKeyPressed = false;
+        timerId = setTimeout(() => {
+          if (!keyState.isOtherKeyPressed && keyState.isHotkeyPressed) {
+            handleShowOrHideTranslationAction();
+            actionTriggered = true;
+          }
+          timerId = null;
+        }, 500); // 延迟 500ms，可根据需要调整
       }
-    } else {
-      keyPressed.otherKeyPressed = false;
+    } else if (keyState.isHotkeyPressed) {
+      // don't translate if user press other key
+      keyState.isOtherKeyPressed = true;
+      if (timerId) {
+        clearTimeout(timerId);
+        timerId = null;
+      }
     }
   });
+
+  document.addEventListener("keyup", (e) => {
+    if (!isEnabled()) return;
+    if (e.target instanceof HTMLElement && isEditable(e.target)) return;
+    if (e.key === getHotkey()) {
+      // translate if user release the hotkey and no other key is pressed
+      if (!keyState.isOtherKeyPressed) {
+        if (timerId) {
+          clearTimeout(timerId);
+          timerId = null;
+        }
+        if (!actionTriggered) {
+          handleShowOrHideTranslationAction();
+        }
+      }
+      actionTriggered = false;
+      keyState.isHotkeyPressed = false;
+      keyState.isOtherKeyPressed = false;
+    }
+  });
+
+  // window.addEventListener("blur", () => {
+  //   keyState.isHotkeyPressed = false;
+  //   keyState.isOtherKeyPressed = false;
+  // });
+
+  // window.addEventListener("keydown", (e) => {
+  //   if (e.repeat) return;
+  //   if (e.key === getHotkey()) {
+  //     keyState.isHotkeyPressed = true;
+  //   } else {
+  //     keyState.isOtherKeyPressed = true;
+  //   }
+  // });
+
+  // window.addEventListener("keyup", (e) => {
+  //   console.log("keyup", e.key);
+  //   console.log("hotkey", getHotkey());
+  //   console.log(keyState);
+  //   if (e.key === getHotkey()) {
+  //     keyState.isHotkeyPressed = false;
+  //     if (!keyState.isOtherKeyPressed && isEnabled()) {
+  //       console.log("call translate");
+  //       handleTranslate(mousePosition.x, mousePosition.y);
+  //     }
+  //   } else if (!keyState.isHotkeyPressed) {
+  //     keyState.isOtherKeyPressed = false;
+  //   }
+  // });
 
   document.body.addEventListener("mousemove", (event) => {
-    console.log("mousemove", event.clientX, event.clientY);
     mousePosition.x = event.clientX;
     mousePosition.y = event.clientY;
   });

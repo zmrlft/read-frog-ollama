@@ -74,6 +74,9 @@ importers:
       franc-min:
         specifier: ^6.2.0
         version: 6.2.0
+      hotkeys-js:
+        specifier: ^3.13.10
+        version: 3.13.10
       jotai:
         specifier: ^2.12.3
         version: 2.12.3(@types/react@19.1.2)(react@19.1.0)
@@ -2185,6 +2188,9 @@ packages:
 
   hookable@5.5.3:
     resolution: {integrity: sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ==}
+
+  hotkeys-js@3.13.10:
+    resolution: {integrity: sha512-O3ktQfRV5eMDCIxj60enw5FBLQfTiRnX6evXn3UFeWylIcHAXwRkRTeiGX8dg3MKaM7y3SNj6PmcCxrwuoIBtA==}
 
   html-escaper@3.0.3:
     resolution: {integrity: sha512-RuMffC89BOWQoY0WKGpIhn5gX3iI54O6nRA0yC124NYVtzjmFWBIiFd8M0x+ZdX0P9R4lADg1mgP8C7PxGOWuQ==}
@@ -5871,6 +5877,8 @@ snapshots:
   highlight.js@10.7.3: {}
 
   hookable@5.5.3: {}
+
+  hotkeys-js@3.13.10: {}
 
   html-escaper@3.0.3: {}
 
