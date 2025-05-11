@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import App from "./app";
 import "@/assets/tailwind/theme.css";
 import "@/assets/tailwind/text-small.css";
+import "@/entrypoints/host.content/style.css";
 import {
   MutationCache,
   QueryCache,
