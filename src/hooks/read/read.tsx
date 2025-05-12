@@ -69,19 +69,17 @@ export function useAnalyzeContent() {
                 ? "cmn"
                 : articleAnalysis.detectedLang,
           });
-          if (import.meta.env.DEV) {
-            logger.log("articleAnalysis", articleAnalysis);
-          }
+          logger.log("articleAnalysis", articleAnalysis);
+
           return articleAnalysis;
         } catch (error) {
           lastError = error;
           attempts++;
-          if (import.meta.env.DEV) {
-            logger.error(
-              `error when attempt ${attempts} to analyze content`,
-              error,
-            );
-          }
+
+          logger.error(
+            `error when attempt ${attempts} to analyze content`,
+            error,
+          );
         }
       }
 
@@ -133,20 +131,19 @@ const explainBatch = async (
         ...prev,
         completed: prev.completed + 1,
       }));
-      if (import.meta.env.DEV) {
-        logger.log("articleExplanation", articleExplanation);
-      }
+
+      logger.log("articleExplanation", articleExplanation);
+
       return articleExplanation;
     } catch (error) {
       lastError = error;
       attempts++;
-      if (import.meta.env.DEV) {
-        logger.error(
-          `error when attempt ${attempts} to explain batch`,
-          batch,
-          error,
-        );
-      }
+
+      logger.error(
+        `error when attempt ${attempts} to explain batch`,
+        batch,
+        error,
+      );
     }
   }
 
@@ -203,10 +200,8 @@ export function useExplainArticle() {
         total: batches.length,
       });
 
-      if (import.meta.env.DEV) {
-        logger.log("batches length", batches.length);
-        logger.log("batches", batches);
-      }
+      logger.log("batches length", batches.length);
+      logger.log("batches", batches);
 
       const allParagraphExplanations = await sendInBatchesWithFixedDelay(
         batches.map((batch) => explainBatch(batch, articleAnalysis, config)),
