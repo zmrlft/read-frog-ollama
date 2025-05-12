@@ -9,6 +9,9 @@ popup:
   setting: 设置
   hover: 鼠标悬停
   translateParagraph: 来翻译段落
+  help: 帮助
+  advice: 建议
+  discord: Discord
 translateService: 翻译服务
 languageLevel: 你的来源语言水平
 languageLevels:

@@ -9,6 +9,9 @@ popup:
   setting: "Options"
   hover: "Hover"
   translateParagraph: "to translate paragraph"
+  help: "Help"
+  advice: "Advice"
+  discord: "Discord"
 side:
   sourceLang: "Source Language"
   targetLang: "Target Language"

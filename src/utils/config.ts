@@ -1,7 +1,5 @@
 import deepmerge from "deepmerge";
-
 import { Config, configSchema } from "@/types/config/config";
-
 import { CONFIG_STORAGE_KEY, DEFAULT_CONFIG } from "./constants/config";
 
 export let globalConfig: Config | null = null;
