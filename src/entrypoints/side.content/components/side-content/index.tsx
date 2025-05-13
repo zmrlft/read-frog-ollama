@@ -102,6 +102,10 @@ export default function SideContent() {
         ></div>
 
         <div className="flex h-full flex-col gap-y-2 py-3">
+          <div>
+            Hi, I&apos;m <div className="text-red-500">Read Frog</div> How are
+            you?
+          </div>
           <TopBar className="mx-3" />
           <Metadata className="mx-3" />
           <Content />

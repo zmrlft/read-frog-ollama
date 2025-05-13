@@ -43,9 +43,10 @@ async function translateNode(node: HTMLElement) {
     while (
       targetNode &&
       targetNode.childNodes.length === 1 &&
-      targetNode.children.length === 1
+      targetNode.children.length === 1 &&
+      targetNode.children[0] instanceof HTMLElement
     ) {
-      targetNode = targetNode.children[0] as HTMLElement;
+      targetNode = targetNode.children[0];
     }
 
     const textContent = getTextContent(targetNode);

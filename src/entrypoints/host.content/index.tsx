@@ -1,5 +1,6 @@
 import { isEditable } from "@/utils/host/dom";
-import { handleShowOrHideTranslationAction } from "@/utils/host/translate";
+import { handleShowOrHideTranslationAction } from "@/utils/host/translate-node";
+import { translatePage } from "@/utils/host/translate-page";
 
 import "./style.css";
 
@@ -8,6 +9,7 @@ export default defineContentScript({
   async main(ctx) {
     await loadGlobalConfigPromise;
     registerTranslationTriggers();
+    translatePage();
     // const ui = createIntegratedUi(ctx, {
     //   position: "inline",
     //   anchor: "body",
@@ -26,10 +28,6 @@ export default defineContentScript({
 });
 
 function registerTranslationTriggers() {
-  const spinner = document.createElement("span");
-  spinner.className = "rf-spinner";
-  document.body.append(spinner);
-
   const mousePosition = { x: 0, y: 0 };
   const keyState = {
     isHotkeyPressed: false,

@@ -1,4 +1,4 @@
-import { FORCE_BLOCK_TAGS } from "../constants/dom";
+import { FORCE_BLOCK_NODES, INVALID_TRANSLATE_TAGS } from "../constants/dom";
 
 export function isEditable(el: HTMLElement) {
   if (!el) return false;
@@ -8,23 +8,25 @@ export function isEditable(el: HTMLElement) {
   return false;
 }
 
+/**
+ * Select element from the point (allow select element in shadow root)
+ * @param root - The root element (Document or ShadowRoot)
+ * @param x - The x coordinate of the point
+ * @param y - The y coordinate of the point
+ */
 export function deepElementFromPoint(
   root: Document | ShadowRoot,
   x: number,
   y: number,
 ) {
-  // 第一步：在当前 root（Document 或 ShadowRoot）里拿第一级命中
   const el = root.elementFromPoint(x, y);
-  // 如果这个元素有 open shadowRoot，继续在它的 shadowRoot 里查
   if (el && el.shadowRoot) {
     return deepElementFromPoint(el.shadowRoot, x, y);
   }
-  // 否则，el 就是我们想要的最深层元素
   return el;
 }
 
 export function selectNode(mouseX: number, mouseY: number) {
-  // 1. if not block node, find up to the block node
   let currentNode = deepElementFromPoint(document, mouseX, mouseY);
 
   while (
@@ -32,7 +34,7 @@ export function selectNode(mouseX: number, mouseY: number) {
     (window.getComputedStyle(currentNode).display.includes("inline") ||
       currentNode.className.includes("notranslate"))
   ) {
-    if (FORCE_BLOCK_TAGS.has(currentNode.tagName)) {
+    if (FORCE_BLOCK_NODES.has(currentNode.tagName)) {
       break;
     }
     currentNode = currentNode.parentElement;
@@ -42,10 +44,10 @@ export function selectNode(mouseX: number, mouseY: number) {
 }
 
 export function smashTruncationStyle(node: HTMLElement) {
-  if (node.style && node.style.webkitLineClamp !== undefined) {
+  if (node.style && node.style.webkitLineClamp) {
     node.style.webkitLineClamp = "unset";
   }
-  if (node.style && node.style.maxHeight !== undefined) {
+  if (node.style && node.style.maxHeight) {
     node.style.maxHeight = "unset";
   }
 }
@@ -74,4 +76,118 @@ export function getTextContent(node: HTMLElement): string {
 
     return text;
   }, "");
+}
+
+export function walkAndLabelDom(node: Node, id: string) {
+  if (
+    !(node instanceof HTMLElement) ||
+    INVALID_TRANSLATE_TAGS.has(node.tagName)
+  ) {
+    return;
+  }
+
+  let hasInlineNodeChild = false;
+  let hasBlockNodeChild = false;
+
+  for (const child of node.childNodes) {
+    // if child is a text node, add it to the node's text content
+    if (child.nodeType === Node.TEXT_NODE && child.textContent?.trim()) {
+      hasInlineNodeChild = true;
+      continue;
+    }
+
+    if (child instanceof HTMLElement) {
+      if (child.className.includes("notranslate")) {
+        continue;
+      }
+
+      if (
+        window.getComputedStyle(child).display.includes("inline") &&
+        !FORCE_BLOCK_NODES.has(child.tagName)
+      ) {
+        child.setAttribute("data-read-frog-walked", id);
+        if (child.textContent?.trim()) {
+          hasInlineNodeChild = true;
+        }
+        continue;
+      }
+
+      hasBlockNodeChild = true;
+      if (child.textContent?.trim()) {
+        walkAndLabelDom(child, id);
+      }
+    }
+  }
+
+  if (hasInlineNodeChild && !hasBlockNodeChild) {
+    node.setAttribute("data-read-frog-leaf-block-node", "true");
+  }
+
+  if (hasInlineNodeChild) {
+    node.setAttribute("data-read-frog-paragraph", "true");
+  }
+
+  node.setAttribute("data-read-frog-walked", id);
+}
+
+export function isBlockNode(node: Node) {
+  if (
+    !(node instanceof HTMLElement) ||
+    node.className.includes("notranslate")
+  ) {
+    return false;
+  }
+
+  if (node.nodeType === Node.TEXT_NODE) {
+    return false;
+  }
+
+  return (
+    FORCE_BLOCK_NODES.has(node.tagName) ||
+    !window.getComputedStyle(node).display.includes("inline")
+  );
+}
+
+export function translateWalkedNode(node: Node) {
+  if (
+    !(node instanceof HTMLElement) ||
+    !node.hasAttribute("data-read-frog-walked")
+  ) {
+    return;
+  }
+
+  console.log("This is node", node);
+
+  // if the node has data-read-frog-paragraph = "true"
+  if (node.hasAttribute("data-read-frog-paragraph")) {
+    let hasBlockNodeChild = false;
+
+    for (const child of node.childNodes) {
+      if (isBlockNode(child)) {
+        hasBlockNodeChild = true;
+      }
+    }
+
+    if (!hasBlockNodeChild) {
+      node.appendChild(document.createTextNode("Translated"));
+    } else {
+      const children = Array.from(node.childNodes); // Static snapshot, prevent live node change
+      for (const child of children) {
+        if (!child.textContent?.trim()) {
+          continue;
+        }
+
+        if (child.nodeType === Node.TEXT_NODE) {
+          const newText = document.createTextNode("Translated");
+          node.insertBefore(newText, child.nextSibling);
+        } else if (child instanceof HTMLElement) {
+          translateWalkedNode(child);
+        }
+      }
+    }
+  } else {
+    for (const child of node.childNodes) {
+      translateWalkedNode(child);
+    }
+  }
 }
