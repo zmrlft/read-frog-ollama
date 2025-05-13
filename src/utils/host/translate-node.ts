@@ -6,7 +6,7 @@ import { INLINE_TRANSLATE_TAGS } from "../constants/dom";
 import { getTranslateLinePrompt } from "../prompts/translate-line";
 import { getTextContent, selectNode, smashTruncationStyle } from "./dom";
 
-const translatingNodes = new Set<HTMLElement>();
+const translatingNodes = new Set<HTMLElement | Text>();
 
 export function handleShowOrHideTranslationAction(
   mouseX: number,
@@ -35,18 +35,20 @@ function shouldTriggerAction(node: Node) {
   return node.textContent?.trim();
 }
 
-async function translateNode(node: HTMLElement) {
+export async function translateNode(node: HTMLElement | Text) {
   try {
-    smashTruncationStyle(node);
     // while currentNode only has one children, and no text node, choose the children
     let targetNode = node;
-    while (
-      targetNode &&
-      targetNode.childNodes.length === 1 &&
-      targetNode.children.length === 1 &&
-      targetNode.children[0] instanceof HTMLElement
-    ) {
-      targetNode = targetNode.children[0];
+    if (targetNode instanceof HTMLElement) {
+      smashTruncationStyle(targetNode);
+      while (
+        targetNode &&
+        targetNode.childNodes.length === 1 &&
+        targetNode.children.length === 1 &&
+        targetNode.children[0] instanceof HTMLElement
+      ) {
+        targetNode = targetNode.children[0];
+      }
     }
 
     const textContent = getTextContent(targetNode);
@@ -54,12 +56,16 @@ async function translateNode(node: HTMLElement) {
 
     const spinner = document.createElement("span");
     spinner.className = "read-frog-spinner";
-    targetNode.appendChild(spinner);
+    if (targetNode instanceof HTMLElement) {
+      targetNode.appendChild(spinner);
+    } else if (targetNode instanceof Text) {
+      targetNode.parentNode?.insertBefore(spinner, targetNode.nextSibling);
+    }
     const translatedText = await translateText(textContent);
     spinner.remove();
     if (!translatedText) return;
 
-    const translatedWrapperNode = createTranslatedWrapperNode(
+    const translatedWrapperNode = insertTranslatedWrapperNode(
       targetNode,
       translatedText,
     );
@@ -72,8 +78,8 @@ async function translateNode(node: HTMLElement) {
   }
 }
 
-function createTranslatedWrapperNode(
-  targetNode: HTMLElement,
+function insertTranslatedWrapperNode(
+  targetNode: HTMLElement | Text,
   translatedText: string,
 ) {
   const translatedWrapperNode = document.createElement("span");
@@ -82,7 +88,17 @@ function createTranslatedWrapperNode(
 
   const translatedNode = document.createElement("span");
 
-  if (INLINE_TRANSLATE_TAGS.has(targetNode.tagName)) {
+  if (targetNode instanceof Text) {
+    targetNode.parentNode?.insertBefore(
+      translatedWrapperNode,
+      targetNode.nextSibling,
+    );
+    translatedNode.className =
+      "notranslate read-frog-translated-inline-content";
+  } else if (
+    INLINE_TRANSLATE_TAGS.has(targetNode.tagName) ||
+    window.getComputedStyle(targetNode).display.includes("inline")
+  ) {
     const spaceNode = document.createElement("span");
     spaceNode.innerHTML = "&nbsp;&nbsp;";
     translatedWrapperNode.appendChild(spaceNode);

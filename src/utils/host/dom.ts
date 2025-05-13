@@ -1,4 +1,5 @@
 import { FORCE_BLOCK_NODES, INVALID_TRANSLATE_TAGS } from "../constants/dom";
+import { translateNode } from "./translate-node";
 
 export function isEditable(el: HTMLElement) {
   if (!el) return false;
@@ -52,8 +53,10 @@ export function smashTruncationStyle(node: HTMLElement) {
   }
 }
 
-export function getTextContent(node: HTMLElement): string {
-  if (!node) return "";
+export function getTextContent(node: HTMLElement | Text): string {
+  if (node instanceof Text) {
+    return node.textContent ?? "";
+  }
 
   // Skip if the node has sr-only class
   if (node.classList.contains("sr-only")) {
@@ -87,7 +90,7 @@ export function walkAndLabelDom(node: Node, id: string) {
   }
 
   let hasInlineNodeChild = false;
-  let hasBlockNodeChild = false;
+  // let hasBlockNodeChild = false;
 
   for (const child of node.childNodes) {
     // if child is a text node, add it to the node's text content
@@ -112,19 +115,19 @@ export function walkAndLabelDom(node: Node, id: string) {
         continue;
       }
 
-      hasBlockNodeChild = true;
+      // hasBlockNodeChild = true;
       if (child.textContent?.trim()) {
         walkAndLabelDom(child, id);
       }
     }
   }
 
-  if (hasInlineNodeChild && !hasBlockNodeChild) {
-    node.setAttribute("data-read-frog-leaf-block-node", "true");
-  }
+  // if (hasInlineNodeChild && !hasBlockNodeChild) {
+  //   node.setAttribute("data-read-frog-leaf-block-node", "");
+  // }
 
   if (hasInlineNodeChild) {
-    node.setAttribute("data-read-frog-paragraph", "true");
+    node.setAttribute("data-read-frog-paragraph", "");
   }
 
   node.setAttribute("data-read-frog-walked", id);
@@ -156,8 +159,6 @@ export function translateWalkedNode(node: Node) {
     return;
   }
 
-  console.log("This is node", node);
-
   // if the node has data-read-frog-paragraph = "true"
   if (node.hasAttribute("data-read-frog-paragraph")) {
     let hasBlockNodeChild = false;
@@ -169,7 +170,8 @@ export function translateWalkedNode(node: Node) {
     }
 
     if (!hasBlockNodeChild) {
-      node.appendChild(document.createTextNode("Translated"));
+      translateNode(node);
+      // node.appendChild(document.createTextNode("Translated"));
     } else {
       const children = Array.from(node.childNodes); // Static snapshot, prevent live node change
       for (const child of children) {
@@ -177,9 +179,10 @@ export function translateWalkedNode(node: Node) {
           continue;
         }
 
-        if (child.nodeType === Node.TEXT_NODE) {
-          const newText = document.createTextNode("Translated");
-          node.insertBefore(newText, child.nextSibling);
+        if (child instanceof Text) {
+          // const newText = document.createTextNode("Translated");
+          // node.insertBefore(newText, child.nextSibling);
+          translateNode(child);
         } else if (child instanceof HTMLElement) {
           translateWalkedNode(child);
         }
