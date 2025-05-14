@@ -34,32 +34,23 @@ const sideContentSchema = z.object({
   width: z.number().min(MIN_SIDE_CONTENT_WIDTH),
 });
 
+// page translate schema
+// TODO: add "article" as a range
+const pageTranslateRangeSchema = z.enum(["mainContent", "all"]);
+
+const pageTranslateSchema = z.object({
+  range: pageTranslateRangeSchema,
+});
+
 // Complete config schema
 export const configSchema = z.object({
   language: languageSchema,
   provider: providerSchema,
   providersConfig: providersConfigSchema,
   manualTranslate: manualTranslateSchema,
+  pageTranslate: pageTranslateSchema,
   floatingButton: floatingButtonSchema,
   sideContent: sideContentSchema,
 });
 
 export type Config = z.infer<typeof configSchema>;
-
-// export type Config = {
-//   language: {
-//     detectedCode: LangCodeISO6393;
-//     sourceCode: LangCodeISO6393 | "auto";
-//     targetCode: LangCodeISO6393;
-//     level: LangLevel;
-//   };
-//   provider: Provider;
-//   providersConfig: ProviderConfig;
-//   manualTranslate: {
-//     enabled: boolean;
-//     hotkey: Hotkey;
-//   };
-//   floatingButton: {
-//     enabled: boolean;
-//   };
-// };

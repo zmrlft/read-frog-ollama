@@ -100,13 +100,6 @@ export default function FloatingButton() {
         }}
       >
         <div
-          title="Close floating button"
-          className="mr-1 translate-x-6 cursor-pointer rounded-full bg-neutral-100 p-0.5 transition-transform duration-300 group-hover:translate-x-0 dark:bg-neutral-900"
-          onClick={() => setFloatingButton({ enabled: false })}
-        >
-          <X className="h-3 w-3 text-neutral-400 dark:text-neutral-600" />
-        </div>
-        <div
           className={cn(
             "border-border flex h-10 w-15 items-center rounded-l-full border border-r-0 bg-white opacity-60 shadow-lg group-hover:opacity-100 dark:bg-neutral-900",
             "translate-x-5 transition-transform duration-300 group-hover:translate-x-0",
@@ -115,12 +108,25 @@ export default function FloatingButton() {
           )}
           onMouseDown={handleButtonDragStart}
         >
+          <div
+            title="Close floating button"
+            className={cn(
+              "border-border absolute -top-1 -left-1 hidden cursor-pointer rounded-full border bg-neutral-100 dark:bg-neutral-900",
+              "group-hover:block",
+            )}
+            onMouseDown={(e) => e.stopPropagation()} // 父级不会收到 mousedown
+            onClick={(e) => {
+              e.stopPropagation(); // 父级不会收到 click
+              setFloatingButton({ enabled: false });
+            }}
+          >
+            <X className="h-3 w-3 text-neutral-400 dark:text-neutral-600" />
+          </div>
           <img
             src={readFrogLogo}
             alt={APP_NAME}
             className="ml-[5px] h-8 w-8 rounded-full"
           />
-          <div className="absolute inset-0 opacity-0"></div>
         </div>
         <div
           className="border-border mr-2 translate-x-12 cursor-pointer rounded-full border bg-white p-1.5 text-neutral-600 transition-transform duration-300 group-hover:translate-x-0 hover:bg-neutral-100 dark:bg-neutral-900 dark:hover:bg-neutral-800"

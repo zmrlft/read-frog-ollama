@@ -44,6 +44,9 @@ export const DEFAULT_CONFIG: Config = {
     enabled: true,
     hotkey: "Control",
   },
+  pageTranslate: {
+    range: "mainContent",
+  },
   floatingButton: {
     enabled: true,
     position: 0.66,

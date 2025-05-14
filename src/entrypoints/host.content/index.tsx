@@ -12,7 +12,7 @@ export default defineContentScript({
   async main(ctx) {
     await loadGlobalConfigPromise;
     registerTranslationTriggers();
-    translatePage();
+    // translatePage();
     // const ui = createIntegratedUi(ctx, {
     //   position: "inline",
     //   anchor: "body",
