@@ -1,6 +1,7 @@
+import { Point } from "@/types/dom";
 import { isEditable } from "@/utils/host/dom/filter";
 import {
-  handleShowOrHideTranslationAction,
+  hideOrShowManualTranslation,
   translatePage,
 } from "@/utils/host/translate";
 
@@ -30,7 +31,7 @@ export default defineContentScript({
 });
 
 function registerTranslationTriggers() {
-  const mousePosition = { x: 0, y: 0 };
+  const mousePosition: Point = { x: 0, y: 0 };
   const keyState = {
     isHotkeyPressed: false,
     isOtherKeyPressed: false,
@@ -54,7 +55,7 @@ function registerTranslationTriggers() {
         keyState.isOtherKeyPressed = false;
         timerId = setTimeout(() => {
           if (!keyState.isOtherKeyPressed && keyState.isHotkeyPressed) {
-            // handleShowOrHideTranslationAction(mousePosition.x, mousePosition.y);
+            hideOrShowManualTranslation(mousePosition);
             actionTriggered = true;
           }
           timerId = null;
@@ -81,7 +82,7 @@ function registerTranslationTriggers() {
           timerId = null;
         }
         if (!actionTriggered) {
-          // handleShowOrHideTranslationAction(mousePosition.x, mousePosition.y);
+          hideOrShowManualTranslation(mousePosition);
         }
       }
       actionTriggered = false;

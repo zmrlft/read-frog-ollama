@@ -1,13 +1,14 @@
 import { generateText } from "ai";
 
 import { langCodeToEnglishName } from "@/types/config/languages";
-import { TransNode } from "@/types/dom";
+import { Point, TransNode } from "@/types/dom";
 
 import { FORCE_INLINE_TRANSLATION_TAGS } from "../constants/dom";
 import { getTranslateLinePrompt } from "../prompts/translate-line";
 import { isInlineTransNode } from "./dom/filter";
 import {
   extractTextContent,
+  findNearestBlockNodeAt,
   translateWalkedElement,
   unwrapDeepestOnlyChild,
   walkAndLabelElement,
@@ -15,35 +16,35 @@ import {
 
 const translatingNodes = new Set<HTMLElement | Text>();
 
-// export function handleShowOrHideTranslationAction(
-//   mouseX: number,
-//   mouseY: number,
-// ) {
-//   if (!globalConfig) return;
+export function hideOrShowManualTranslation(point: Point) {
+  if (!globalConfig) return;
 
-//   const node = findNearestBlockNodeAtPoint(mouseX, mouseY);
+  const node = findNearestBlockNodeAt(point);
 
-//   if (!node || !(node instanceof HTMLElement) || !shouldTriggerAction(node))
-//     return;
+  if (!node || !(node instanceof HTMLElement) || !shouldTriggerAction(node))
+    return;
 
-//   const translatedWrapperNode = node.querySelector(".notranslate");
+  const translatedWrapperNode = node.querySelector(".notranslate");
 
-//   if (translatedWrapperNode) {
-//     translatedWrapperNode.remove();
-//   } else {
-//     // prevent too quick hotkey trigger
-//     if (translatingNodes.has(node)) return;
-//     translatingNodes.add(node);
-//     translateNode(node);
-//   }
-// }
+  if (translatedWrapperNode) {
+    translatedWrapperNode.remove();
+  } else {
+    // prevent too quick hotkey trigger
+    const id = crypto.randomUUID();
+    walkAndLabelElement(node, id);
+    translateWalkedElement(node);
+  }
+}
 
-// function shouldTriggerAction(node: Node) {
-//   return node.textContent?.trim();
-// }
+function shouldTriggerAction(node: Node) {
+  return node.textContent?.trim();
+}
 
 export async function translatePage() {
   const id = crypto.randomUUID();
+
+  // wait for 3 seconds
+  await new Promise((resolve) => setTimeout(resolve, 3000));
 
   walkAndLabelElement(document.body, id);
   translateWalkedElement(document.body);
@@ -51,6 +52,10 @@ export async function translatePage() {
 
 export async function translateNode(node: TransNode) {
   try {
+    // prevent duplicate translation
+    if (translatingNodes.has(node)) return;
+    translatingNodes.add(node);
+
     const targetNode =
       node instanceof HTMLElement ? unwrapDeepestOnlyChild(node) : node;
 
@@ -101,11 +106,7 @@ function createTranslatedWrapperNode(
   const isForceInlineTranslationElement =
     targetNode instanceof HTMLElement &&
     FORCE_INLINE_TRANSLATION_TAGS.has(targetNode.tagName);
-  if (translatedText === "开始" || translatedText === "开始使用") {
-    console.log(targetNode);
-    console.log(isForceInlineTranslationElement);
-    console.log(isInlineTransNode(targetNode));
-  }
+
   if (isForceInlineTranslationElement || isInlineTransNode(targetNode)) {
     const spaceNode = document.createElement("span");
     spaceNode.innerHTML = "&nbsp;&nbsp;";

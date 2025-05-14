@@ -57,6 +57,16 @@ export function extractTextContent(node: TransNode): string {
 }
 
 export function walkAndLabelElement(element: HTMLElement, walkId: string) {
+  element.setAttribute("data-read-frog-walked", walkId);
+
+  if (element.shadowRoot) {
+    for (const child of element.shadowRoot.children) {
+      if (child instanceof HTMLElement) {
+        walkAndLabelElement(child, walkId);
+      }
+    }
+  }
+
   if (INVALID_TRANSLATE_TAGS.has(element.tagName)) return;
 
   let hasInlineNodeChild = false;
@@ -72,6 +82,7 @@ export function walkAndLabelElement(element: HTMLElement, walkId: string) {
       if (isInlineHTMLElement(child) && child.textContent?.trim()) {
         hasInlineNodeChild = true;
       }
+
       walkAndLabelElement(child, walkId);
     }
   }
@@ -83,8 +94,6 @@ export function walkAndLabelElement(element: HTMLElement, walkId: string) {
   if (hasInlineNodeChild) {
     element.setAttribute("data-read-frog-paragraph", "");
   }
-
-  element.setAttribute("data-read-frog-walked", walkId);
 }
 
 export function translateWalkedElement(element: HTMLElement) {
@@ -120,6 +129,13 @@ export function translateWalkedElement(element: HTMLElement) {
     for (const child of element.childNodes) {
       if (child instanceof HTMLElement) {
         translateWalkedElement(child);
+      }
+    }
+    if (element.shadowRoot) {
+      for (const child of element.shadowRoot.children) {
+        if (child instanceof HTMLElement) {
+          translateWalkedElement(child);
+        }
       }
     }
   }
