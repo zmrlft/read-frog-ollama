@@ -1,6 +1,8 @@
-import { isEditable } from "@/utils/host/dom";
-import { handleShowOrHideTranslationAction } from "@/utils/host/translate-node";
-import { translatePage } from "@/utils/host/translate-page";
+import { isEditable } from "@/utils/host/dom/filter";
+import {
+  handleShowOrHideTranslationAction,
+  translatePage,
+} from "@/utils/host/translate";
 
 import "./style.css";
 
@@ -52,7 +54,7 @@ function registerTranslationTriggers() {
         keyState.isOtherKeyPressed = false;
         timerId = setTimeout(() => {
           if (!keyState.isOtherKeyPressed && keyState.isHotkeyPressed) {
-            handleShowOrHideTranslationAction(mousePosition.x, mousePosition.y);
+            // handleShowOrHideTranslationAction(mousePosition.x, mousePosition.y);
             actionTriggered = true;
           }
           timerId = null;
@@ -79,7 +81,7 @@ function registerTranslationTriggers() {
           timerId = null;
         }
         if (!actionTriggered) {
-          handleShowOrHideTranslationAction(mousePosition.x, mousePosition.y);
+          // handleShowOrHideTranslationAction(mousePosition.x, mousePosition.y);
         }
       }
       actionTriggered = false;

@@ -1,6 +1,5 @@
-export const FORCE_BLOCK_NODES = new Set([
+export const FORCE_BLOCK_TAGS = new Set([
   "BODY",
-  "P",
   "H1",
   "H2",
   "H3",
@@ -27,7 +26,7 @@ export const FORCE_BLOCK_NODES = new Set([
 ]);
 
 export const VALID_TRANSLATE_NODES = new Set([
-  ...FORCE_BLOCK_NODES,
+  ...FORCE_BLOCK_TAGS,
   "DIV",
   "SPAN",
   "A",
@@ -52,7 +51,7 @@ export const INVALID_TRANSLATE_TAGS = new Set([
   "LINK",
 ]);
 
-export const INLINE_TRANSLATE_TAGS = new Set([
+export const FORCE_INLINE_TRANSLATION_TAGS = new Set([
   "A",
   "BUTTON",
   "SELECT",

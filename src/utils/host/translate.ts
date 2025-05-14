@@ -1,57 +1,60 @@
 import { generateText } from "ai";
 
 import { langCodeToEnglishName } from "@/types/config/languages";
+import { TransNode } from "@/types/dom";
 
-import { INLINE_TRANSLATE_TAGS } from "../constants/dom";
+import { FORCE_INLINE_TRANSLATION_TAGS } from "../constants/dom";
 import { getTranslateLinePrompt } from "../prompts/translate-line";
-import { getTextContent, selectNode, smashTruncationStyle } from "./dom";
+import { isInlineTransNode } from "./dom/filter";
+import {
+  extractTextContent,
+  translateWalkedElement,
+  unwrapDeepestOnlyChild,
+  walkAndLabelElement,
+} from "./dom/traversal";
 
 const translatingNodes = new Set<HTMLElement | Text>();
 
-export function handleShowOrHideTranslationAction(
-  mouseX: number,
-  mouseY: number,
-) {
-  if (!globalConfig) return;
+// export function handleShowOrHideTranslationAction(
+//   mouseX: number,
+//   mouseY: number,
+// ) {
+//   if (!globalConfig) return;
 
-  const node = selectNode(mouseX, mouseY);
+//   const node = findNearestBlockNodeAtPoint(mouseX, mouseY);
 
-  if (!node || !(node instanceof HTMLElement) || !shouldTriggerAction(node))
-    return;
+//   if (!node || !(node instanceof HTMLElement) || !shouldTriggerAction(node))
+//     return;
 
-  const translatedWrapperNode = node.querySelector(".notranslate");
+//   const translatedWrapperNode = node.querySelector(".notranslate");
 
-  if (translatedWrapperNode) {
-    translatedWrapperNode.remove();
-  } else {
-    // prevent too quick hotkey trigger
-    if (translatingNodes.has(node)) return;
-    translatingNodes.add(node);
-    translateNode(node);
-  }
+//   if (translatedWrapperNode) {
+//     translatedWrapperNode.remove();
+//   } else {
+//     // prevent too quick hotkey trigger
+//     if (translatingNodes.has(node)) return;
+//     translatingNodes.add(node);
+//     translateNode(node);
+//   }
+// }
+
+// function shouldTriggerAction(node: Node) {
+//   return node.textContent?.trim();
+// }
+
+export async function translatePage() {
+  const id = crypto.randomUUID();
+
+  walkAndLabelElement(document.body, id);
+  translateWalkedElement(document.body);
 }
 
-function shouldTriggerAction(node: Node) {
-  return node.textContent?.trim();
-}
-
-export async function translateNode(node: HTMLElement | Text) {
+export async function translateNode(node: TransNode) {
   try {
-    // while currentNode only has one children, and no text node, choose the children
-    let targetNode = node;
-    if (targetNode instanceof HTMLElement) {
-      smashTruncationStyle(targetNode);
-      while (
-        targetNode &&
-        targetNode.childNodes.length === 1 &&
-        targetNode.children.length === 1 &&
-        targetNode.children[0] instanceof HTMLElement
-      ) {
-        targetNode = targetNode.children[0];
-      }
-    }
+    const targetNode =
+      node instanceof HTMLElement ? unwrapDeepestOnlyChild(node) : node;
 
-    const textContent = getTextContent(targetNode);
+    const textContent = extractTextContent(targetNode);
     if (!textContent) return;
 
     const spinner = document.createElement("span");
@@ -63,23 +66,31 @@ export async function translateNode(node: HTMLElement | Text) {
     }
     const translatedText = await translateText(textContent);
     spinner.remove();
+
     if (!translatedText) return;
 
-    const translatedWrapperNode = insertTranslatedWrapperNode(
+    const translatedWrapperNode = createTranslatedWrapperNode(
       targetNode,
       translatedText,
     );
 
-    targetNode.appendChild(translatedWrapperNode);
+    if (targetNode instanceof HTMLElement) {
+      targetNode.appendChild(translatedWrapperNode);
+    } else if (targetNode instanceof Text) {
+      targetNode.parentNode?.insertBefore(
+        translatedWrapperNode,
+        targetNode.nextSibling,
+      );
+    }
   } catch (error) {
-    console.error(error);
+    logger.error(error);
   } finally {
     translatingNodes.delete(node);
   }
 }
 
-function insertTranslatedWrapperNode(
-  targetNode: HTMLElement | Text,
+function createTranslatedWrapperNode(
+  targetNode: TransNode,
   translatedText: string,
 ) {
   const translatedWrapperNode = document.createElement("span");
@@ -87,18 +98,15 @@ function insertTranslatedWrapperNode(
     "notranslate read-frog-translated-content-wrapper";
 
   const translatedNode = document.createElement("span");
-
-  if (targetNode instanceof Text) {
-    targetNode.parentNode?.insertBefore(
-      translatedWrapperNode,
-      targetNode.nextSibling,
-    );
-    translatedNode.className =
-      "notranslate read-frog-translated-inline-content";
-  } else if (
-    INLINE_TRANSLATE_TAGS.has(targetNode.tagName) ||
-    window.getComputedStyle(targetNode).display.includes("inline")
-  ) {
+  const isForceInlineTranslationElement =
+    targetNode instanceof HTMLElement &&
+    FORCE_INLINE_TRANSLATION_TAGS.has(targetNode.tagName);
+  if (translatedText === "开始" || translatedText === "开始使用") {
+    console.log(targetNode);
+    console.log(isForceInlineTranslationElement);
+    console.log(isInlineTransNode(targetNode));
+  }
+  if (isForceInlineTranslationElement || isInlineTransNode(targetNode)) {
     const spaceNode = document.createElement("span");
     spaceNode.innerHTML = "&nbsp;&nbsp;";
     translatedWrapperNode.appendChild(spaceNode);
@@ -110,7 +118,7 @@ function insertTranslatedWrapperNode(
     translatedNode.className = "notranslate read-frog-translated-block-content";
   }
 
-  translatedNode.textContent = translatedText ?? "";
+  translatedNode.textContent = translatedText;
   translatedWrapperNode.appendChild(translatedNode);
 
   return translatedWrapperNode;
