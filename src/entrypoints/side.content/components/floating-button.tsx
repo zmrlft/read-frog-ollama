@@ -1,9 +1,10 @@
 import { useAtom, useAtomValue } from "jotai";
-import { Bolt, X } from "lucide-react";
+import { Bolt, Languages, X } from "lucide-react";
 
 import readFrogLogo from "@/assets/icon/read-frog.png";
 import { configFields } from "@/utils/atoms/config";
 import { APP_NAME } from "@/utils/constants/app";
+import { translatePage } from "@/utils/host/translate";
 
 import { isSideOpenAtom } from "../atoms";
 
@@ -99,6 +100,14 @@ export default function FloatingButton() {
           top: `${floatingButton.position * 100}vh`,
         }}
       >
+        <div
+          className="border-border mr-2 translate-x-12 cursor-pointer rounded-full border bg-white p-1.5 text-neutral-600 transition-transform duration-300 group-hover:translate-x-0 hover:bg-neutral-100 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+          onClick={() => {
+            translatePage();
+          }}
+        >
+          <Languages className="h-5 w-5" strokeWidth={1.8} />
+        </div>
         <div
           className={cn(
             "border-border flex h-10 w-15 items-center rounded-l-full border border-r-0 bg-white opacity-60 shadow-lg group-hover:opacity-100 dark:bg-neutral-900",

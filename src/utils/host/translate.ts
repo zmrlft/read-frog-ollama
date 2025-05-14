@@ -32,7 +32,7 @@ export function hideOrShowManualTranslation(point: Point) {
     // prevent too quick hotkey trigger
     const id = crypto.randomUUID();
     walkAndLabelElement(node, id);
-    translateWalkedElement(node);
+    translateWalkedElement(node, id);
   }
 }
 
@@ -43,11 +43,8 @@ function shouldTriggerAction(node: Node) {
 export async function translatePage() {
   const id = crypto.randomUUID();
 
-  // wait for 3 seconds
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-
   walkAndLabelElement(document.body, id);
-  translateWalkedElement(document.body);
+  translateWalkedElement(document.body, id);
 }
 
 export async function translateNode(node: TransNode) {
@@ -58,6 +55,8 @@ export async function translateNode(node: TransNode) {
 
     const targetNode =
       node instanceof HTMLElement ? unwrapDeepestOnlyChild(node) : node;
+
+    if (isAlreadyTranslated(targetNode)) return;
 
     const textContent = extractTextContent(targetNode);
     if (!textContent) return;
@@ -91,6 +90,17 @@ export async function translateNode(node: TransNode) {
     logger.error(error);
   } finally {
     translatingNodes.delete(node);
+  }
+}
+
+function isAlreadyTranslated(node: TransNode) {
+  if (node instanceof Text) {
+    return (
+      node.nextSibling instanceof HTMLElement &&
+      node.nextSibling.classList.contains("notranslate")
+    );
+  } else if (node instanceof HTMLElement) {
+    return node.querySelector(":scope > .notranslate");
   }
 }
 
