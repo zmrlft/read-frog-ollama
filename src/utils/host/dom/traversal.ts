@@ -64,10 +64,14 @@ export function walkAndLabelElement(element: HTMLElement, walkId: string) {
   element.setAttribute("data-read-frog-walked", walkId);
 
   if (element.shadowRoot) {
-    for (const child of element.shadowRoot.children) {
-      if (child instanceof HTMLElement) {
-        walkAndLabelElement(child, walkId);
+    if (globalConfig && globalConfig.pageTranslate.range === "all") {
+      for (const child of element.shadowRoot.children) {
+        if (child instanceof HTMLElement) {
+          walkAndLabelElement(child, walkId);
+        }
       }
+    } else {
+      return;
     }
   }
 
