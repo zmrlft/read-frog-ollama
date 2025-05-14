@@ -9,6 +9,8 @@ interface ProtocolMap {
     isPageTranslated: boolean;
   }): void;
   setIsPageTranslatedOnSideContent(data: { isPageTranslated: boolean }): void;
+  readArticle(): void;
+  popupRequestReadArticle(data: { tabId: number }): void;
 }
 
 export const { sendMessage, onMessage } =

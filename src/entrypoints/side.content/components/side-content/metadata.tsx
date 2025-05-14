@@ -1,4 +1,6 @@
+import { useSetAtom } from "jotai";
 import { BookOpenText, RotateCcw } from "lucide-react";
+import { toast } from "sonner";
 
 import { useMutationState } from "@tanstack/react-query";
 
@@ -6,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { useExtractContent } from "@/hooks/read/extract";
 import { useReadArticle } from "@/hooks/read/read";
 import { cn } from "@/utils/tailwind";
+
+import { isSideOpenAtom } from "../../atoms";
 
 export const Metadata = ({ className }: { className?: string }) => {
   const title = document.title ?? "Untitled";
@@ -24,6 +28,27 @@ export const Metadata = ({ className }: { className?: string }) => {
     select: (mutation) => mutation.state.data,
   });
   // TODO: show regenerate button at certain conditions and implement the logic
+
+  const setIsSideOpen = useSetAtom(isSideOpenAtom);
+
+  useEffect(() => {
+    const removeListener = onMessage("readArticle", () => {
+      setIsSideOpen(true);
+      if (!extractedContent) {
+        toast.warning("Waiting content to be extracted...");
+        return;
+      }
+      if (analyzeContent.isPending || explainArticle.isPending) {
+        toast.warning("Reading in progress...");
+        return;
+      }
+      readArticle(extractedContent);
+    });
+
+    return () => {
+      removeListener();
+    };
+  }, [extractedContent, analyzeContent, explainArticle]);
 
   return (
     <div

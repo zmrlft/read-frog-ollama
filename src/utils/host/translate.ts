@@ -41,10 +41,21 @@ export async function translatePage() {
 }
 
 export function removeAllTranslatedWrapperNodes() {
-  const translatedNodes = document.querySelectorAll(
-    ".notranslate.read-frog-translated-content-wrapper",
-  );
-  translatedNodes.forEach((node) => node.remove());
+  function removeFromRoot(root: Document | ShadowRoot) {
+    const translatedNodes = root.querySelectorAll(
+      ".notranslate.read-frog-translated-content-wrapper",
+    );
+    translatedNodes.forEach((node) => node.remove());
+
+    // Recursively search through shadow roots
+    root.querySelectorAll("*").forEach((element) => {
+      if (element instanceof HTMLElement && element.shadowRoot) {
+        removeFromRoot(element.shadowRoot);
+      }
+    });
+  }
+
+  removeFromRoot(document);
 }
 
 /**

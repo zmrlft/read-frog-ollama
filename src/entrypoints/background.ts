@@ -40,6 +40,10 @@ export default defineBackground(async () => {
     isPageTranslatedMap.set(tabId, message.data.isPageTranslated);
   });
 
+  onMessage("popupRequestReadArticle", async (message) => {
+    sendMessage("readArticle", undefined, message.data.tabId);
+  });
+
   browser.tabs.onRemoved.addListener((tabId) => {
     isPageTranslatedMap.delete(tabId);
   });
