@@ -2,6 +2,7 @@ import { kebabCase } from "case-anything";
 import { useAtom, useAtomValue } from "jotai";
 import { Toaster } from "sonner";
 
+import { APIConfigWarning } from "@/components/api-config-warning";
 import { configFields } from "@/utils/atoms/config";
 import { APP_NAME } from "@/utils/constants/app";
 
@@ -15,6 +16,7 @@ export default function SideContent() {
   const isSideOpen = useAtomValue(isSideOpenAtom);
   const [sideContent, setSideContent] = useAtom(configFields.sideContent);
   const [isResizing, setIsResizing] = useState(false);
+  const providersConfig = useAtomValue(configFields.providersConfig);
 
   // Setup resize handlers
   useEffect(() => {
@@ -103,6 +105,9 @@ export default function SideContent() {
 
         <div className="flex h-full flex-col gap-y-2 py-3">
           <TopBar className="mx-3" />
+          {!isAnyAPIKey(providersConfig) && (
+            <APIConfigWarning className="mx-3" />
+          )}
           <Metadata className="mx-3" />
           <Content />
         </div>

@@ -1,5 +1,8 @@
-import { useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { Bolt, Star } from "lucide-react";
+
+import { APIConfigWarning } from "@/components/api-config-warning";
+import { configFields } from "@/utils/atoms/config";
 
 import { version } from "../../../package.json";
 import { initEmptyTabAtom } from "./atom";
@@ -14,13 +17,16 @@ import TranslateButton from "./components/translate-button";
 
 function App() {
   const initEmptyTab = useSetAtom(initEmptyTabAtom);
-
+  const providersConfig = useAtomValue(configFields.providersConfig);
   useEffect(() => {
     initEmptyTab();
   }, []);
 
   return (
     <>
+      {!isAnyAPIKey(providersConfig) && (
+        <APIConfigWarning className="mx-3 mt-3 text-[11px]" />
+      )}
       <div className="bg-background flex flex-col gap-4 px-6 pt-5 pb-4">
         <LanguageOptionsSelector />
         <ProviderSelector />

@@ -1,5 +1,8 @@
 import deepmerge from "deepmerge";
+
 import { Config, configSchema } from "@/types/config/config";
+import { ProvidersConfig } from "@/types/config/provider";
+
 import { CONFIG_STORAGE_KEY, DEFAULT_CONFIG } from "./constants/config";
 
 export let globalConfig: Config | null = null;
@@ -42,3 +45,9 @@ storage.watch<Config>(`local:${CONFIG_STORAGE_KEY}`, (newConfig) => {
     globalConfig = newConfig;
   }
 });
+
+export function isAnyAPIKey(providersConfig: ProvidersConfig) {
+  return Object.values(providersConfig).some((providerConfig) => {
+    return providerConfig.apiKey;
+  });
+}
