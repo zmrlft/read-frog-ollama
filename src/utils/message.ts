@@ -2,7 +2,13 @@ import { defineExtensionMessaging } from "@webext-core/messaging";
 
 interface ProtocolMap {
   openOptionsPage(): void;
-  getShowPageTranslation(): string | null;
+  getIsPageTranslated(data: { tabId: number }): boolean | undefined;
+  uploadIsPageTranslated(data: { isPageTranslated: boolean }): void;
+  updateIsPageTranslated(data: {
+    tabId: number;
+    isPageTranslated: boolean;
+  }): void;
+  setIsPageTranslatedOnSideContent(data: { isPageTranslated: boolean }): void;
 }
 
 export const { sendMessage, onMessage } =

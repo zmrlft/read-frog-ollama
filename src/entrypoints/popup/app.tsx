@@ -1,8 +1,4 @@
-import { useAtom } from "jotai";
 import { Bolt, Star } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import { showPageTranslationAtom } from "@/utils/atoms/translation";
 
 import { version } from "../../../package.json";
 import FloatingButton from "./components/floating-button";
@@ -11,20 +7,16 @@ import LanguageLevelSelector from "./components/language-level-selector";
 import LanguageOptionsSelector from "./components/language-options-selector";
 import ProviderSelector from "./components/provider-selector";
 import QuickLinks from "./components/quick-links";
+import TranslateButton from "./components/translate-button";
 
 function App() {
-  const [showPageTranslation, setShowPageTranslation] = useAtom(
-    showPageTranslationAtom,
-  );
   return (
     <>
       <div className="bg-background flex flex-col gap-4 px-6 pt-5 pb-4">
         <LanguageOptionsSelector />
         <ProviderSelector />
         <LanguageLevelSelector />
-        <Button onClick={() => {}}>
-          {showPageTranslation ? "Show original" : "Translate"}
-        </Button>
+        <TranslateButton />
         <Hotkey />
         <FloatingButton />
         <QuickLinks />

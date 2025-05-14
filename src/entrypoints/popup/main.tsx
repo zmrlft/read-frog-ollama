@@ -7,6 +7,7 @@ import "@/assets/tailwind/text-small.css";
 import "@/assets/tailwind/theme.css";
 import { Config } from "@/types/config/config";
 import { configAtom } from "@/utils/atoms/config";
+import { isPageTranslatedAtom } from "@/utils/atoms/translation.ts";
 import { DEFAULT_CONFIG } from "@/utils/constants/config";
 
 import App from "./app.tsx";
@@ -22,7 +23,10 @@ const HydrateAtoms = ({
   initialValues,
   children,
 }: {
-  initialValues: [[typeof configAtom, Config]];
+  initialValues: [
+    [typeof configAtom, Config],
+    [typeof isPageTranslatedAtom, boolean],
+  ];
   children: React.ReactNode;
 }) => {
   useHydrateAtoms(initialValues);
@@ -34,10 +38,28 @@ async function initApp() {
   root.className = "text-base antialiased w-[320px] bg-background";
   const config = await storage.getItem<Config>("local:config");
 
+  const activeTab = await browser.tabs.query({
+    active: true,
+    currentWindow: true,
+  });
+  const tabId = activeTab[0].id;
+  let isPageTranslated: boolean = false;
+  if (tabId) {
+    isPageTranslated =
+      (await sendMessage("getIsPageTranslated", {
+        tabId,
+      })) ?? false;
+  }
+
   ReactDOM.createRoot(root).render(
     <React.StrictMode>
       <JotaiProvider>
-        <HydrateAtoms initialValues={[[configAtom, config ?? DEFAULT_CONFIG]]}>
+        <HydrateAtoms
+          initialValues={[
+            [configAtom, config ?? DEFAULT_CONFIG],
+            [isPageTranslatedAtom, isPageTranslated],
+          ]}
+        >
           <App />
         </HydrateAtoms>
       </JotaiProvider>

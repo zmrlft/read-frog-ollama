@@ -1,4 +1,4 @@
-import { onMessage, sendMessage } from "@/utils/message";
+const isPageTranslatedMap = new Map<number, boolean>();
 
 export default defineBackground(async () => {
   logger.info("Hello background!", { id: browser.runtime.id });
@@ -20,26 +20,27 @@ export default defineBackground(async () => {
     browser.runtime.openOptionsPage();
   });
 
-  try {
-    // wait for 3 seconds
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    const tabs = await browser.tabs.query({
-      active: true,
-      currentWindow: true,
-    });
-    const tabId = tabs[0]?.id;
-    console.log("tabs", tabs);
-    if (tabId) {
-      logger.info("Sending to tab", tabId);
-      // Only try to get the status if explicitly requested
-      const pageTranslation = await sendMessage(
-        "getShowPageTranslation",
-        undefined,
-        { tabId, frameId: 0 },
-      );
-      logger.info("pageTranslation", pageTranslation);
-    }
-  } catch (error) {
-    logger.error("Error getting tab info:", error);
-  }
+  onMessage("getIsPageTranslated", (message) => {
+    return isPageTranslatedMap.get(message.data.tabId);
+  });
+
+  onMessage("updateIsPageTranslated", (message) => {
+    isPageTranslatedMap.set(message.data.tabId, message.data.isPageTranslated);
+    sendMessage(
+      "setIsPageTranslatedOnSideContent",
+      {
+        isPageTranslated: message.data.isPageTranslated,
+      },
+      message.data.tabId,
+    );
+  });
+
+  onMessage("uploadIsPageTranslated", async (message) => {
+    const tabId = message.sender.tab.id;
+    isPageTranslatedMap.set(tabId, message.data.isPageTranslated);
+  });
+
+  browser.tabs.onRemoved.addListener((tabId) => {
+    isPageTranslatedMap.delete(tabId);
+  });
 });

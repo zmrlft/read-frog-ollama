@@ -149,7 +149,6 @@ function insertTranslatedNodeIntoWrapper(
 }
 
 async function translateText(sourceText: string) {
-  await new Promise((resolve) => setTimeout(resolve, 10000));
   if (!globalConfig) return;
   const registry = await getProviderRegistry();
   const provider = globalConfig.provider;
