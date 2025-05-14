@@ -24,16 +24,9 @@ export function hideOrShowManualTranslation(point: Point) {
   if (!node || !(node instanceof HTMLElement) || !shouldTriggerAction(node))
     return;
 
-  const translatedWrapperNode = node.querySelector(".notranslate");
-
-  if (translatedWrapperNode) {
-    translatedWrapperNode.remove();
-  } else {
-    // prevent too quick hotkey trigger
-    const id = crypto.randomUUID();
-    walkAndLabelElement(node, id);
-    translateWalkedElement(node, id);
-  }
+  const id = crypto.randomUUID();
+  walkAndLabelElement(node, id);
+  translateWalkedElement(node, id, true);
 }
 
 function shouldTriggerAction(node: Node) {
@@ -47,7 +40,19 @@ export async function translatePage() {
   translateWalkedElement(document.body, id);
 }
 
-export async function translateNode(node: TransNode) {
+export function removeAllTranslatedNodes() {
+  const translatedNodes = document.querySelectorAll(
+    ".notranslate.read-frog-translated-content-wrapper",
+  );
+  translatedNodes.forEach((node) => node.remove());
+}
+
+/**
+ * Translate the node
+ * @param node - The node to translate
+ * @param toggle - Whether to toggle the translation, if true, the translation will be removed if it already exists
+ */
+export async function translateNode(node: TransNode, toggle: boolean = false) {
   try {
     // prevent duplicate translation
     if (translatingNodes.has(node)) return;
@@ -56,7 +61,13 @@ export async function translateNode(node: TransNode) {
     const targetNode =
       node instanceof HTMLElement ? unwrapDeepestOnlyChild(node) : node;
 
-    if (isAlreadyTranslated(targetNode)) return;
+    const existedTranslatedWrapper = findExistedTranslatedWrapper(targetNode);
+    if (existedTranslatedWrapper) {
+      if (toggle) {
+        existedTranslatedWrapper.remove();
+      }
+      return;
+    }
 
     const textContent = extractTextContent(targetNode);
     if (!textContent) return;
@@ -95,15 +106,18 @@ export async function translateNode(node: TransNode) {
   }
 }
 
-function isAlreadyTranslated(node: TransNode) {
+function findExistedTranslatedWrapper(node: TransNode) {
   if (node instanceof Text) {
-    return (
+    if (
       node.nextSibling instanceof HTMLElement &&
       node.nextSibling.classList.contains("notranslate")
-    );
+    ) {
+      return node.nextSibling;
+    }
   } else if (node instanceof HTMLElement) {
     return node.querySelector(":scope > .notranslate");
   }
+  return null;
 }
 
 function createTranslatedWrapperNode(

@@ -32,6 +32,9 @@ export default defineContentScript({
   cssInjectionMode: "ui",
   async main(ctx) {
     const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`);
+    onMessage("getShowPageTranslation", () => {
+      return sessionStorage.getItem("showPageTranslation");
+    });
     const ui = await createShadowRootUi(ctx, {
       name: kebabCase(APP_NAME),
       position: "overlay",

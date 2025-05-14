@@ -1,7 +1,8 @@
 import { defineExtensionMessaging } from "@webext-core/messaging";
 
 interface ProtocolMap {
-  invalidateLangCode(): void;
+  openOptionsPage(): void;
+  getShowPageTranslation(): string | null;
 }
 
 export const { sendMessage, onMessage } =

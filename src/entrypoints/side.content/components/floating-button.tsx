@@ -1,12 +1,15 @@
 import { useAtom, useAtomValue } from "jotai";
-import { Bolt, Languages, X } from "lucide-react";
+import { Bolt, Check, Languages, X } from "lucide-react";
 
 import readFrogLogo from "@/assets/icon/read-frog.png";
 import { configFields } from "@/utils/atoms/config";
 import { APP_NAME } from "@/utils/constants/app";
-import { translatePage } from "@/utils/host/translate";
+import {
+  removeAllTranslatedNodes,
+  translatePage,
+} from "@/utils/host/translate";
 
-import { isSideOpenAtom } from "../atoms";
+import { isSideOpenAtom, showPageTranslationAtomPersistence } from "../atoms";
 
 export default function FloatingButton() {
   const [floatingButton, setFloatingButton] = useAtom(
@@ -17,6 +20,9 @@ export default function FloatingButton() {
   const [isDraggingButton, setIsDraggingButton] = useState(false);
   // clientY is the top of the icon button
   const [initialClientY, setInitialClientY] = useState<number | null>(null);
+  const [showPageTranslation, setShowPageTranslation] = useAtom(
+    showPageTranslationAtomPersistence,
+  );
 
   // 按钮拖动处理
   useEffect(() => {
@@ -103,10 +109,22 @@ export default function FloatingButton() {
         <div
           className="border-border mr-2 translate-x-12 cursor-pointer rounded-full border bg-white p-1.5 text-neutral-600 transition-transform duration-300 group-hover:translate-x-0 hover:bg-neutral-100 dark:bg-neutral-900 dark:hover:bg-neutral-800"
           onClick={() => {
-            translatePage();
+            if (!showPageTranslation) {
+              translatePage();
+              setShowPageTranslation(true);
+            } else {
+              removeAllTranslatedNodes();
+              setShowPageTranslation(false);
+            }
           }}
         >
           <Languages className="h-5 w-5" strokeWidth={1.8} />
+          <Check
+            className={cn(
+              "absolute -right-0.5 -bottom-0.5 h-3 w-3 rounded-full bg-green-500 text-white",
+              showPageTranslation ? "block" : "hidden",
+            )}
+          />
         </div>
         <div
           className={cn(
@@ -140,7 +158,7 @@ export default function FloatingButton() {
         <div
           className="border-border mr-2 translate-x-12 cursor-pointer rounded-full border bg-white p-1.5 text-neutral-600 transition-transform duration-300 group-hover:translate-x-0 hover:bg-neutral-100 dark:bg-neutral-900 dark:hover:bg-neutral-800"
           onClick={() => {
-            browser.runtime.sendMessage({ action: "openOptionsPage" });
+            sendMessage("openOptionsPage", undefined);
           }}
         >
           <Bolt className="h-5 w-5" strokeWidth={1.8} />

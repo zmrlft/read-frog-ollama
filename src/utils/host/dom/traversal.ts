@@ -100,14 +100,19 @@ export function walkAndLabelElement(element: HTMLElement, walkId: string) {
   }
 }
 
-export function translateWalkedElement(element: HTMLElement, walkId: string) {
+/**
+ * Translate the element if it has inline node child
+ * @param element - The element to translate
+ * @param walkId - The walk id
+ * @param toggle - Whether to toggle the translation, if true, the translation will be removed if it already exists
+ */
+export function translateWalkedElement(
+  element: HTMLElement,
+  walkId: string,
+  toggle: boolean = false,
+) {
   // if the walkId is not the same, return
   if (element.getAttribute("data-read-frog-walked") !== walkId) return;
-
-  console.log("element", element);
-  if (element.classList.contains("fd-step")) {
-    logger.info("fd-step", element);
-  }
 
   if (element.hasAttribute("data-read-frog-paragraph")) {
     let hasBlockNodeChild = false;
@@ -120,7 +125,7 @@ export function translateWalkedElement(element: HTMLElement, walkId: string) {
     }
 
     if (!hasBlockNodeChild) {
-      translateNode(element);
+      translateNode(element, toggle);
     } else {
       // prevent children change during iteration
       const children = Array.from(element.childNodes);
@@ -130,22 +135,22 @@ export function translateWalkedElement(element: HTMLElement, walkId: string) {
         }
 
         if (child instanceof Text) {
-          translateNode(child);
+          translateNode(child, toggle);
         } else if (child instanceof HTMLElement) {
-          translateWalkedElement(child, walkId);
+          translateWalkedElement(child, walkId, toggle);
         }
       }
     }
   } else {
     for (const child of element.childNodes) {
       if (child instanceof HTMLElement) {
-        translateWalkedElement(child, walkId);
+        translateWalkedElement(child, walkId, toggle);
       }
     }
     if (element.shadowRoot) {
       for (const child of element.shadowRoot.children) {
         if (child instanceof HTMLElement) {
-          translateWalkedElement(child, walkId);
+          translateWalkedElement(child, walkId, toggle);
         }
       }
     }

@@ -1,9 +1,6 @@
 import { Point } from "@/types/dom";
 import { isEditable } from "@/utils/host/dom/filter";
-import {
-  hideOrShowManualTranslation,
-  translatePage,
-} from "@/utils/host/translate";
+import { hideOrShowManualTranslation } from "@/utils/host/translate";
 
 import "./style.css";
 
@@ -12,7 +9,6 @@ export default defineContentScript({
   async main(ctx) {
     await loadGlobalConfigPromise;
     registerTranslationTriggers();
-    // translatePage();
     // const ui = createIntegratedUi(ctx, {
     //   position: "inline",
     //   anchor: "body",
