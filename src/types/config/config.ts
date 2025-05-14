@@ -36,7 +36,8 @@ const sideContentSchema = z.object({
 
 // page translate schema
 // TODO: add "article" as a range
-const pageTranslateRangeSchema = z.enum(["mainContent", "all"]);
+export const pageTranslateRangeSchema = z.enum(["mainContent", "all"]);
+export type PageTranslateRange = z.infer<typeof pageTranslateRangeSchema>;
 
 const pageTranslateSchema = z.object({
   range: pageTranslateRangeSchema,

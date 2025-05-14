@@ -1,6 +1,6 @@
 import deepseekLogo from "@/assets/llm/deepseek.png";
 import openaiLogo from "@/assets/llm/openai.jpg";
-import { Config, Hotkey } from "@/types/config/config";
+import { Config, Hotkey, PageTranslateRange } from "@/types/config/config";
 import { Provider, ProvidersConfig } from "@/types/config/provider";
 
 export const CONFIG_STORAGE_KEY = "config";
@@ -67,3 +67,11 @@ export const PROVIDER_ITEMS: Record<Provider, { logo: string; name: string }> =
       name: "DeepSeek",
     },
   };
+
+export const PAGE_TRANSLATE_RANGE_ITEMS: Record<
+  PageTranslateRange,
+  { label: string }
+> = {
+  mainContent: { label: "Main content" },
+  all: { label: "All content" },
+};

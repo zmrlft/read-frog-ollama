@@ -64,3 +64,9 @@ export const FORCE_INLINE_TRANSLATION_TAGS = new Set([
   "H5",
   "H6",
 ]);
+
+export const MAIN_CONTENT_IGNORE_TAGS = new Set([
+  "HEADER",
+  "FOOTER",
+  "NAV",
+]);

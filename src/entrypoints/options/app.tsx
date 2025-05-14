@@ -11,13 +11,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import {
+  PageTranslateRange,
+  pageTranslateRangeSchema,
+} from "@/types/config/config";
 import {
   Provider,
   providerModels,
   providerSchema,
 } from "@/types/config/provider";
 import { configFields } from "@/utils/atoms/config";
-import { PROVIDER_ITEMS } from "@/utils/constants/config";
+import {
+  PAGE_TRANSLATE_RANGE_ITEMS,
+  PROVIDER_ITEMS,
+} from "@/utils/constants/config";
 
 function App() {
   return (
@@ -25,9 +33,47 @@ function App() {
       {providerSchema.options.map((provider) => (
         <ProviderConfigSection key={provider} provider={provider} />
       ))}
+      <Separator />
+      <TranslationConfigSection />
     </div>
   );
 }
+
+const TranslationConfigSection = () => {
+  const [pageTranslate, setPageTranslate] = useAtom(configFields.pageTranslate);
+  return (
+    <div>
+      <div className="mb-4 flex items-center justify-center gap-2">
+        <span className="font-medium">Translation Config</span>
+      </div>
+      <div className="text-sm font-medium">Translate Range</div>
+      <Select
+        value={PAGE_TRANSLATE_RANGE_ITEMS[pageTranslate.range].label}
+        onValueChange={(value: PageTranslateRange) =>
+          setPageTranslate({
+            ...pageTranslate,
+            range: value,
+          })
+        }
+      >
+        <SelectTrigger className="mt-1 w-full">
+          <SelectValue asChild>
+            <span>{PAGE_TRANSLATE_RANGE_ITEMS[pageTranslate.range].label}</span>
+          </SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {pageTranslateRangeSchema.options.map((range) => (
+              <SelectItem key={range} value={range}>
+                {PAGE_TRANSLATE_RANGE_ITEMS[range].label}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </div>
+  );
+};
 
 const ProviderConfigSection = ({ provider }: { provider: Provider }) => {
   const [showAPIKey, setShowAPIKey] = useState(false);

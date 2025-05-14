@@ -1,5 +1,8 @@
 import { Point, TransNode } from "@/types/dom";
-import { INVALID_TRANSLATE_TAGS } from "@/utils/constants/dom";
+import {
+  INVALID_TRANSLATE_TAGS,
+  MAIN_CONTENT_IGNORE_TAGS,
+} from "@/utils/constants/dom";
 
 import { translateNode } from "../translate";
 import { isBlockTransNode, isInlineHTMLElement } from "./filter";
@@ -62,6 +65,14 @@ export function walkAndLabelElement(element: HTMLElement, walkId: string) {
   }
 
   element.setAttribute("data-read-frog-walked", walkId);
+
+  if (
+    globalConfig &&
+    globalConfig.pageTranslate.range !== "all" &&
+    MAIN_CONTENT_IGNORE_TAGS.has(element.tagName)
+  ) {
+    return;
+  }
 
   if (element.shadowRoot) {
     if (globalConfig && globalConfig.pageTranslate.range === "all") {
