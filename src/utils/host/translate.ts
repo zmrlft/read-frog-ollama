@@ -40,7 +40,7 @@ export async function translatePage() {
   translateWalkedElement(document.body, id);
 }
 
-export function removeAllTranslatedNodes() {
+export function removeAllTranslatedWrapperNodes() {
   const translatedNodes = document.querySelectorAll(
     ".notranslate.read-frog-translated-content-wrapper",
   );
@@ -72,25 +72,12 @@ export async function translateNode(node: TransNode, toggle: boolean = false) {
     const textContent = extractTextContent(targetNode);
     if (!textContent) return;
 
+    const translatedWrapperNode = document.createElement("span");
+    translatedWrapperNode.className =
+      "notranslate read-frog-translated-content-wrapper";
     const spinner = document.createElement("span");
     spinner.className = "read-frog-spinner";
-    if (targetNode instanceof HTMLElement) {
-      targetNode.appendChild(spinner);
-    } else if (targetNode instanceof Text) {
-      targetNode.parentNode?.insertBefore(spinner, targetNode.nextSibling);
-    }
-    const translatedText = await translateText(textContent);
-    spinner.remove();
-
-    if (!translatedText) return;
-
-    const translatedWrapperNode = createTranslatedWrapperNode(
-      targetNode,
-      translatedText,
-    );
-
-    if (!translatedWrapperNode) return;
-
+    translatedWrapperNode.appendChild(spinner);
     if (targetNode instanceof HTMLElement) {
       targetNode.appendChild(translatedWrapperNode);
     } else if (targetNode instanceof Text) {
@@ -99,6 +86,16 @@ export async function translateNode(node: TransNode, toggle: boolean = false) {
         targetNode.nextSibling,
       );
     }
+    const translatedText = await translateText(textContent);
+    spinner.remove();
+
+    if (!translatedText) return;
+
+    insertTranslatedNodeIntoWrapper(
+      translatedWrapperNode,
+      targetNode,
+      translatedText,
+    );
   } catch (error) {
     logger.error(error);
   } finally {
@@ -120,14 +117,11 @@ function findExistedTranslatedWrapper(node: TransNode) {
   return null;
 }
 
-function createTranslatedWrapperNode(
+function insertTranslatedNodeIntoWrapper(
+  translatedWrapperNode: HTMLElement,
   targetNode: TransNode,
   translatedText: string,
 ) {
-  const translatedWrapperNode = document.createElement("span");
-  translatedWrapperNode.className =
-    "notranslate read-frog-translated-content-wrapper";
-
   const translatedNode = document.createElement("span");
   const isForceInlineTranslationElement =
     targetNode instanceof HTMLElement &&
@@ -155,6 +149,7 @@ function createTranslatedWrapperNode(
 }
 
 async function translateText(sourceText: string) {
+  await new Promise((resolve) => setTimeout(resolve, 10000));
   if (!globalConfig) return;
   const registry = await getProviderRegistry();
   const provider = globalConfig.provider;

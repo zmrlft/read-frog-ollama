@@ -3,13 +3,14 @@ import { Bolt, Check, Languages, X } from "lucide-react";
 
 import readFrogLogo from "@/assets/icon/read-frog.png";
 import { configFields } from "@/utils/atoms/config";
+import { showPageTranslationAtom } from "@/utils/atoms/translation";
 import { APP_NAME } from "@/utils/constants/app";
 import {
-  removeAllTranslatedNodes,
+  removeAllTranslatedWrapperNodes,
   translatePage,
 } from "@/utils/host/translate";
 
-import { isSideOpenAtom, showPageTranslationAtomPersistence } from "../atoms";
+import { isSideOpenAtom } from "../atoms";
 
 export default function FloatingButton() {
   const [floatingButton, setFloatingButton] = useAtom(
@@ -21,7 +22,7 @@ export default function FloatingButton() {
   // clientY is the top of the icon button
   const [initialClientY, setInitialClientY] = useState<number | null>(null);
   const [showPageTranslation, setShowPageTranslation] = useAtom(
-    showPageTranslationAtomPersistence,
+    showPageTranslationAtom,
   );
 
   // 按钮拖动处理
@@ -113,7 +114,7 @@ export default function FloatingButton() {
               translatePage();
               setShowPageTranslation(true);
             } else {
-              removeAllTranslatedNodes();
+              removeAllTranslatedWrapperNodes();
               setShowPageTranslation(false);
             }
           }}
