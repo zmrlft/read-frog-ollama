@@ -17,18 +17,32 @@ export function isInlineTransNode(node: Node): boolean {
 }
 
 export function isInlineHTMLElement(element: HTMLElement): boolean {
+  if (element.classList.contains("notranslate")) {
+    return false;
+  }
+
   return (
-    (window.getComputedStyle(element).display.includes("inline") ||
-      element.className.includes("notranslate")) &&
+    window.getComputedStyle(element).display.includes("inline") &&
     !FORCE_BLOCK_TAGS.has(element.tagName)
   );
 }
 
+// Note: !(inline node) != block node because of `notranslate` class and all cases not in the if else block
 export function isBlockTransNode(node: Node): boolean {
   if (node instanceof Text) {
     return false;
   } else if (node instanceof HTMLElement) {
-    return !isInlineHTMLElement(node);
+    return isBlockElement(node);
   }
   return false;
+}
+
+export function isBlockElement(element: HTMLElement): boolean {
+  if (element.classList.contains("notranslate")) {
+    return false;
+  }
+  return (
+    !window.getComputedStyle(element).display.includes("inline") ||
+    FORCE_BLOCK_TAGS.has(element.tagName)
+  );
 }

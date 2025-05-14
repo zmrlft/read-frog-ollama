@@ -5,7 +5,7 @@ import { Point, TransNode } from "@/types/dom";
 
 import { FORCE_INLINE_TRANSLATION_TAGS } from "../constants/dom";
 import { getTranslateLinePrompt } from "../prompts/translate-line";
-import { isInlineTransNode } from "./dom/filter";
+import { isBlockTransNode, isInlineTransNode } from "./dom/filter";
 import {
   extractTextContent,
   findNearestBlockNodeAt,
@@ -78,6 +78,8 @@ export async function translateNode(node: TransNode) {
       translatedText,
     );
 
+    if (!translatedWrapperNode) return;
+
     if (targetNode instanceof HTMLElement) {
       targetNode.appendChild(translatedWrapperNode);
     } else if (targetNode instanceof Text) {
@@ -123,10 +125,13 @@ function createTranslatedWrapperNode(
     translatedWrapperNode.appendChild(spaceNode);
     translatedNode.className =
       "notranslate read-frog-translated-inline-content";
-  } else {
+  } else if (isBlockTransNode(targetNode)) {
     const brNode = document.createElement("br");
     translatedWrapperNode.appendChild(brNode);
     translatedNode.className = "notranslate read-frog-translated-block-content";
+  } else {
+    // not inline or block, maybe notranslate
+    return null;
   }
 
   translatedNode.textContent = translatedText;

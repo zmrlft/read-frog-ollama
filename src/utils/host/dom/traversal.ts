@@ -57,6 +57,10 @@ export function extractTextContent(node: TransNode): string {
 }
 
 export function walkAndLabelElement(element: HTMLElement, walkId: string) {
+  if (element.classList.contains("notranslate")) {
+    return;
+  }
+
   element.setAttribute("data-read-frog-walked", walkId);
 
   if (element.shadowRoot) {
@@ -78,13 +82,6 @@ export function walkAndLabelElement(element: HTMLElement, walkId: string) {
       continue;
     }
 
-    if (
-      child instanceof HTMLElement &&
-      child.classList.contains("notranslate")
-    ) {
-      continue;
-    }
-
     if (child instanceof HTMLElement) {
       if (isInlineHTMLElement(child) && child.textContent?.trim()) {
         hasInlineNodeChild = true;
@@ -102,8 +99,6 @@ export function walkAndLabelElement(element: HTMLElement, walkId: string) {
     element.setAttribute("data-read-frog-paragraph", "");
   }
 }
-
-// ignore notranslate, not make it inline
 
 export function translateWalkedElement(element: HTMLElement, walkId: string) {
   // if the walkId is not the same, return
