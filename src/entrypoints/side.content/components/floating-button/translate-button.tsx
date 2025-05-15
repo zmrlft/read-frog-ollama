@@ -37,7 +37,7 @@ export default function TranslateButton() {
       Icon={Languages}
       onClick={() => {
         if (!isAnyAPIKey(providersConfig)) {
-          toast.error("Please set API key on the options page first");
+          toast.error(i18n.t("noConfig.warning"));
           return;
         }
         if (!isPageTranslated) {

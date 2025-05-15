@@ -4,9 +4,11 @@ popup:
   autoLang: 自動偵測
   sourceLang: 來源語言
   targetLang: 目標語言
-  readForMe: 為我閱讀
+  read: 閱讀文章
+  translate: 翻譯
+  showOriginal: 顯示原文
   enabledFloatingButton: 開啟懸浮按鈕
-  setting: 設定
+  options: 選項
   hover: 滑鼠懸停
   translateParagraph: 來翻譯段落
   help: 幫助
@@ -18,3 +20,11 @@ languageLevels:
   beginner: 初級
   intermediate: 中級
   advanced: 高級
+noConfig:
+  warning: 請先在選項頁設置 API Key
+  warningWithLink:
+    youMust: 您必須先
+    setTheAPIKey: 設置 API Key
+    firstOnThe: 在
+    optionsPage: 選項
+    page: 頁

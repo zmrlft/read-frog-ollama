@@ -4,9 +4,11 @@ popup:
   autoLang: 自动检测
   sourceLang: 来源语言
   targetLang: 目标语言
-  readForMe: 为我阅读
+  read: 阅读文章
+  translate: 翻译
+  showOriginal: 显示原文
   enabledFloatingButton: 开启悬浮按钮
-  setting: 设置
+  options: 选项
   hover: 鼠标悬停
   translateParagraph: 来翻译段落
   help: 帮助
@@ -18,3 +20,11 @@ languageLevels:
   beginner: 初级
   intermediate: 中级
   advanced: 高级
+noConfig:
+  warning: 请先在选项页设置 API Key
+  warningWithLink:
+    youMust: 您必须先
+    setTheAPIKey: 设置 API Key
+    firstOnThe: 在
+    optionsPage: 选项
+    page: 页

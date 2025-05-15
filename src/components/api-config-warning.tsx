@@ -6,23 +6,23 @@ export function APIConfigWarning({ className }: { className?: string }) {
         className,
       )}
     >
-      You must{" "}
+      {i18n.t("noConfig.warningWithLink.youMust")}{" "}
       <a
         href="https://readfrog.mengxi.work/tutorial/api-key"
         target="_blank"
         rel="noreferrer"
         className="underline"
       >
-        set the API key
+        {i18n.t("noConfig.warningWithLink.setTheAPIKey")}
       </a>{" "}
-      first on the{" "}
+      {i18n.t("noConfig.warningWithLink.firstOnThe")}{" "}
       <button
         className="cursor-pointer underline"
         onClick={() => sendMessage("openOptionsPage", undefined)}
       >
-        options
+        {i18n.t("noConfig.warningWithLink.optionsPage")}
       </button>{" "}
-      page.
+      {i18n.t("noConfig.warningWithLink.page")}.
     </div>
   );
 }

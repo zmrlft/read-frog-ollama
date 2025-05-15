@@ -21,7 +21,7 @@ export default function FloatingReadButton() {
 
   const startReadArticle = () => {
     if (!isAnyAPIKey(providersConfig)) {
-      toast.error("Please set API key on the options page first");
+      toast.error(i18n.t("noConfig.warning"));
       return;
     }
 

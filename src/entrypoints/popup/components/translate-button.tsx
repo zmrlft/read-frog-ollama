@@ -21,7 +21,7 @@ export default function TranslateButton({ className }: { className?: string }) {
     if (currentTab.id) {
       if (!isPageTranslated) {
         if (!isAnyAPIKey(providersConfig)) {
-          toast.error("Please set the API key on the options page first");
+          toast.error(i18n.t("noConfig.warning"));
           return;
         }
       }
@@ -40,7 +40,9 @@ export default function TranslateButton({ className }: { className?: string }) {
       variant="outline"
       className={cn("border-primary", className)}
     >
-      {isPageTranslated ? "Show original" : "Translate"}
+      {isPageTranslated
+        ? i18n.t("popup.showOriginal")
+        : i18n.t("popup.translate")}
     </Button>
   );
 }

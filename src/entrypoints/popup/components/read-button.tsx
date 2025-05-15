@@ -12,7 +12,7 @@ export default function ReadButton({ className }: { className?: string }) {
 
   const requestReadArticle = async () => {
     if (!isAnyAPIKey(providersConfig)) {
-      toast.error("Please set the API key on the options page first");
+      toast.error(i18n.t("noConfig.warning"));
       return;
     }
     const [currentTab] = await browser.tabs.query({
@@ -32,7 +32,7 @@ export default function ReadButton({ className }: { className?: string }) {
       className={cn("border-primary", className)}
       disabled={isIgnoreTab}
     >
-      Read Article
+      {i18n.t("popup.read")}
     </Button>
   );
 }
