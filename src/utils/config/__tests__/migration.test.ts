@@ -13,34 +13,36 @@ describe("Config Migration", () => {
     });
   });
 
-  describe("Migration Functions", () => {
-    it("should have migration function for version 2", () => {
-      expect(migrations[2]).toBeDefined();
-      expect(typeof migrations[2]).toBe("function");
-    });
+  describe("Schema Migration Functions", () => {
+    describe("1 -> 2", () => {
+      it("should have migration function for version 2", () => {
+        expect(migrations[2]).toBeDefined();
+        expect(typeof migrations[2]).toBe("function");
+      });
 
-    it("should add pageTranslate config in version 2 migration", () => {
-      // Create a config without pageTranslate
+      it("should add pageTranslate config in version 2 migration", () => {
+        // Create a config without pageTranslate
 
-      // Cast to Config to simulate an old config before pageTranslate was required
-      const oldConfig = ConfigV1Example as Config;
+        // Cast to Config to simulate an old config before pageTranslate was required
+        const oldConfig = ConfigV1Example as Config;
 
-      const newConfig = migrations[2](oldConfig);
+        const newConfig = migrations[2](oldConfig);
 
-      expect(newConfig.pageTranslate).toBeDefined();
-      expect(newConfig.pageTranslate.range).toBe("mainContent");
-    });
+        expect(newConfig.pageTranslate).toBeDefined();
+        expect(newConfig.pageTranslate.range).toBe("mainContent");
+      });
 
-    it("should preserve existing config properties during migration", () => {
-      // Clone DEFAULT_CONFIG to avoid modifying the original
-      const oldConfig = ConfigV1Example as Config;
+      it("should preserve existing config properties during migration", () => {
+        // Clone DEFAULT_CONFIG to avoid modifying the original
+        const oldConfig = ConfigV1Example as Config;
 
-      const newConfig = migrations[2](oldConfig);
+        const newConfig = migrations[2](oldConfig);
 
-      // Verify original properties are preserved
-      expect(newConfig.language.targetCode).toBe("jpn");
-      expect(newConfig.providersConfig.openai.apiKey).toBe("sk-1234567890");
-      expect(newConfig.providersConfig.deepseek.apiKey).toBeUndefined();
+        // Verify original properties are preserved
+        expect(newConfig.language.targetCode).toBe("jpn");
+        expect(newConfig.providersConfig.openai.apiKey).toBe("sk-1234567890");
+        expect(newConfig.providersConfig.deepseek.apiKey).toBeUndefined();
+      });
     });
   });
 });
