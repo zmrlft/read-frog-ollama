@@ -1,15 +1,22 @@
 import { useAtom, useAtomValue } from "jotai";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { configFields } from "@/utils/atoms/config";
 import { isPageTranslatedAtom } from "@/utils/atoms/translation";
 
-import { isEmptyTabAtom } from "../atom";
+import { isIgnoreTabAtom } from "../atom";
 
 export default function TranslateButton({ className }: { className?: string }) {
   const [isPageTranslated, setIsPageTranslated] = useAtom(isPageTranslatedAtom);
-  const isEmptyTab = useAtomValue(isEmptyTabAtom);
+  const isIgnoreTab = useAtomValue(isIgnoreTabAtom);
+  const providersConfig = useAtomValue(configFields.providersConfig);
 
   const toggleTranslation = async () => {
+    if (!isAnyAPIKey(providersConfig)) {
+      toast.error("Please set the API key on the options page first");
+      return;
+    }
     const [currentTab] = await browser.tabs.query({
       active: true,
       currentWindow: true,
@@ -27,7 +34,7 @@ export default function TranslateButton({ className }: { className?: string }) {
   return (
     <Button
       onClick={toggleTranslation}
-      disabled={isEmptyTab}
+      disabled={isIgnoreTab}
       variant="outline"
       className={cn("border-primary", className)}
     >

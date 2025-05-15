@@ -23,7 +23,7 @@ import { CONFIG_STORAGE_KEY, DEFAULT_CONFIG } from "@/utils/constants/config";
 
 import App from "./app";
 import { store } from "./atoms";
-import { addStyleToShadow, mirrorDynamicStyles } from "./utils/styles";
+import { addStyleToShadow, mirrorDynamicStyles } from "../../utils/styles";
 
 export let shadowWrapper: HTMLElement | null = null;
 

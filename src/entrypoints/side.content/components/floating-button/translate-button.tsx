@@ -1,7 +1,9 @@
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { Check } from "lucide-react";
 import { Languages } from "lucide-react";
+import { toast } from "sonner";
 
+import { configFields } from "@/utils/atoms/config";
 import { isPageTranslatedAtom } from "@/utils/atoms/translation";
 import { removeAllTranslatedWrapperNodes } from "@/utils/host/translate";
 import { translatePage } from "@/utils/host/translate";
@@ -10,6 +12,7 @@ import HiddenButton from "./components/hidden-button";
 
 export default function TranslateButton() {
   const [isPageTranslated, setIsPageTranslated] = useAtom(isPageTranslatedAtom);
+  const providersConfig = useAtomValue(configFields.providersConfig);
 
   useEffect(() => {
     const removeListener = onMessage(
@@ -34,6 +37,10 @@ export default function TranslateButton() {
     <HiddenButton
       Icon={Languages}
       onClick={() => {
+        if (!isAnyAPIKey(providersConfig)) {
+          toast.error("Please set API key on the options page first");
+          return;
+        }
         if (!isPageTranslated) {
           translatePage();
           setIsPageTranslated(true);

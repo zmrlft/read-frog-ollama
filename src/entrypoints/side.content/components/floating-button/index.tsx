@@ -1,5 +1,6 @@
 import { useAtom, useAtomValue } from "jotai";
 import { Bolt, X } from "lucide-react";
+import { Toaster } from "sonner";
 
 import readFrogLogo from "@/assets/icon/read-frog.png";
 import { configFields } from "@/utils/atoms/config";
@@ -137,6 +138,7 @@ export default function FloatingButton() {
             sendMessage("openOptionsPage", undefined);
           }}
         />
+        <Toaster richColors className="z-[2147483647]" />
       </div>
     )
   );

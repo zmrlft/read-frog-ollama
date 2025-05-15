@@ -1,4 +1,5 @@
 import { generateText } from "ai";
+import { toast } from "sonner";
 
 import { langCodeToEnglishName } from "@/types/config/languages";
 import { Point, TransNode } from "@/types/dom";
@@ -97,8 +98,13 @@ export async function translateNode(node: TransNode, toggle: boolean = false) {
         targetNode.nextSibling,
       );
     }
-    const translatedText = await translateText(textContent);
-    spinner.remove();
+
+    let translatedText: string | undefined;
+    try {
+      translatedText = await translateText(textContent);
+    } finally {
+      spinner.remove();
+    }
 
     if (!translatedText) return;
 

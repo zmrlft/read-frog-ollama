@@ -1,11 +1,12 @@
 import { useAtomValue, useSetAtom } from "jotai";
 import { Bolt, Star } from "lucide-react";
+import { Toaster } from "sonner";
 
 import { APIConfigWarning } from "@/components/api-config-warning";
 import { configFields } from "@/utils/atoms/config";
 
 import { version } from "../../../package.json";
-import { initEmptyTabAtom } from "./atom";
+import { initIsIgnoreTabAtom } from "./atom";
 import FloatingButton from "./components/floating-button";
 import Hotkey from "./components/hotkey-selector";
 import LanguageLevelSelector from "./components/language-level-selector";
@@ -16,10 +17,10 @@ import ReadButton from "./components/read-button";
 import TranslateButton from "./components/translate-button";
 
 function App() {
-  const initEmptyTab = useSetAtom(initEmptyTabAtom);
+  const initIsIgnoreTab = useSetAtom(initIsIgnoreTabAtom);
   const providersConfig = useAtomValue(configFields.providersConfig);
   useEffect(() => {
-    initEmptyTab();
+    initIsIgnoreTab();
   }, []);
 
   return (
@@ -62,6 +63,7 @@ function App() {
           <span className="text-[13px] font-medium">Github</span>
         </button>
       </div>
+      <Toaster richColors position="bottom-center" className="-translate-y-8" />
     </>
   );
 }

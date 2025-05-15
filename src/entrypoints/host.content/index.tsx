@@ -1,4 +1,9 @@
+import { kebabCase } from "case-anything";
+import ReactDOM from "react-dom/client";
+import { Toaster } from "sonner";
+
 import { Point } from "@/types/dom";
+import { APP_NAME } from "@/utils/constants/app";
 import { isEditable } from "@/utils/host/dom/filter";
 import { hideOrShowManualTranslation } from "@/utils/host/translate";
 
@@ -6,23 +11,9 @@ import "./style.css";
 
 export default defineContentScript({
   matches: ["*://*/*"],
-  async main(ctx) {
+  async main() {
     await loadGlobalConfigPromise;
     registerTranslationTriggers();
-    // const ui = createIntegratedUi(ctx, {
-    //   position: "inline",
-    //   anchor: "body",
-    //   onMount: (container) => {
-    //     // Append children to the container
-    //     const app = document.createElement("p");
-    //     app.textContent = "Hello host.content!";
-    //     app.classList.add("read-frog-spinner");
-    //     container.append(app);
-    //   },
-    // });
-
-    // // Call mount to add the UI to the DOM
-    // ui.mount();
   },
 });
 
