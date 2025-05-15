@@ -104,8 +104,8 @@ export async function translateNode(node: TransNode, toggle: boolean = false) {
     try {
       translatedText = await translateText(textContent);
     } catch (error) {
-      translatedWrapperNode.remove();
       logger.error(error);
+      translatedWrapperNode.remove();
     } finally {
       spinner.remove();
     }
@@ -117,8 +117,6 @@ export async function translateNode(node: TransNode, toggle: boolean = false) {
       targetNode,
       translatedText,
     );
-  } catch (error) {
-    logger.error(error);
   } finally {
     translatingNodes.delete(node);
   }
