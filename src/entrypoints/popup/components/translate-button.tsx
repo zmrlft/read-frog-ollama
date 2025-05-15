@@ -13,16 +13,18 @@ export default function TranslateButton({ className }: { className?: string }) {
   const providersConfig = useAtomValue(configFields.providersConfig);
 
   const toggleTranslation = async () => {
-    if (!isAnyAPIKey(providersConfig)) {
-      toast.error("Please set the API key on the options page first");
-      return;
-    }
     const [currentTab] = await browser.tabs.query({
       active: true,
       currentWindow: true,
     });
 
     if (currentTab.id) {
+      if (!isPageTranslated) {
+        if (!isAnyAPIKey(providersConfig)) {
+          toast.error("Please set the API key on the options page first");
+          return;
+        }
+      }
       setIsPageTranslated((prev) => !prev);
       sendMessage("updateIsPageTranslated", {
         tabId: currentTab.id,

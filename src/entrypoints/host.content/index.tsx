@@ -1,9 +1,4 @@
-import { kebabCase } from "case-anything";
-import ReactDOM from "react-dom/client";
-import { Toaster } from "sonner";
-
 import { Point } from "@/types/dom";
-import { APP_NAME } from "@/utils/constants/app";
 import { isEditable } from "@/utils/host/dom/filter";
 import { hideOrShowManualTranslation } from "@/utils/host/translate";
 
