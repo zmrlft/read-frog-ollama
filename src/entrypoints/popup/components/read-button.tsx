@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { configFields } from "@/utils/atoms/config";
 
 import { isIgnoreTabAtom } from "../atom";
+import { isAnyAPIKey } from "@/utils/config/config";
 
 export default function ReadButton({ className }: { className?: string }) {
   const isIgnoreTab = useAtomValue(isIgnoreTabAtom);

@@ -4,6 +4,7 @@ import { Toaster } from "sonner";
 
 import { APIConfigWarning } from "@/components/api-config-warning";
 import { configFields } from "@/utils/atoms/config";
+import { isAnyAPIKey } from "@/utils/config/config";
 
 import { version } from "../../../package.json";
 import { initIsIgnoreTabAtom } from "./atom";

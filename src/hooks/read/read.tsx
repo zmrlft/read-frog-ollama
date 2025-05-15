@@ -22,6 +22,7 @@ import { configFields } from "@/utils/atoms/config";
 import { configAtom } from "@/utils/atoms/config";
 import { getAnalyzePrompt } from "@/utils/prompts/analyze";
 import { getExplainPrompt } from "@/utils/prompts/explain";
+import { isAnyAPIKey } from "@/utils/config/config";
 
 type ExplainArticleParams = {
   extractedContent: ExtractedContent;

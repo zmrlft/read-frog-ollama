@@ -7,6 +7,7 @@ import {
 import { translateNode } from "../translate";
 import { isBlockTransNode, isInlineHTMLElement } from "./filter";
 import { smashTruncationStyle } from "./style";
+import { globalConfig } from "@/utils/config/config";
 
 /**
  * Find the element at the given point even inside shadow roots

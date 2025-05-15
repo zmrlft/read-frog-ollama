@@ -3,6 +3,8 @@ import { isEditable } from "@/utils/host/dom/filter";
 import { hideOrShowManualTranslation } from "@/utils/host/translate";
 
 import "./style.css";
+import { loadGlobalConfigPromise } from "@/utils/config/config";
+import { globalConfig } from "@/utils/config/config";
 
 export default defineContentScript({
   matches: ["*://*/*"],

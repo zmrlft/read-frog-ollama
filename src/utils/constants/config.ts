@@ -4,6 +4,7 @@ import { Config, Hotkey, PageTranslateRange } from "@/types/config/config";
 import { Provider, ProvidersConfig } from "@/types/config/provider";
 
 export const CONFIG_STORAGE_KEY = "config";
+export const CONFIG_SCHEMA_VERSION = 2;
 
 export const HOTKEYS = ["Control", "Alt", "Shift", "`"] as const;
 export const HOTKEY_ITEMS: Record<Hotkey, { label: string; icon: string }> = {

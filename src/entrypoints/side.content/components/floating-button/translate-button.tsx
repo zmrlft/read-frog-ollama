@@ -8,6 +8,7 @@ import { removeAllTranslatedWrapperNodes } from "@/utils/host/translate";
 import { translatePage } from "@/utils/host/translate";
 
 import HiddenButton from "./components/hidden-button";
+import { isAnyAPIKey } from "@/utils/config/config";
 
 export default function TranslateButton() {
   const [isPageTranslated, setIsPageTranslated] = useAtom(isPageTranslatedAtom);

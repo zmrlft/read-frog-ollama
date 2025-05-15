@@ -1,10 +1,18 @@
+import { initializeConfig } from "@/utils/config/config";
+import { CONFIG_SCHEMA_VERSION } from "@/utils/constants/config";
+
 const isPageTranslatedMap = new Map<number, boolean>();
 
 export default defineBackground(async () => {
   logger.info("Hello background!", { id: browser.runtime.id });
 
   browser.runtime.onInstalled.addListener(async (details) => {
-    await storage.setItem<number>("local:__configSchemaVersion", 1);
+    if (details.reason === "install") {
+      await storage.setItem<number>(
+        "local:__configSchemaVersion",
+        CONFIG_SCHEMA_VERSION,
+      );
+    }
     await initializeConfig();
 
     // Open tutorial page when extension is installed

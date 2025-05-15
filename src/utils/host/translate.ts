@@ -13,6 +13,7 @@ import {
   unwrapDeepestOnlyChild,
   walkAndLabelElement,
 } from "./dom/traversal";
+import { globalConfig } from "../config/config";
 
 const translatingNodes = new Set<HTMLElement | Text>();
 

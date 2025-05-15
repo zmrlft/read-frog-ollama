@@ -11,6 +11,7 @@ import { isSideOpenAtom } from "../../atoms";
 import Content from "./content";
 import { Metadata } from "./metadata";
 import { TopBar } from "./top-bar";
+import { isAnyAPIKey } from "@/utils/config/config";
 
 export default function SideContent() {
   const isSideOpen = useAtomValue(isSideOpenAtom);
