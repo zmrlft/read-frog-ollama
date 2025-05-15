@@ -4,11 +4,11 @@ import { toast } from "sonner";
 
 import { configFields } from "@/utils/atoms/config";
 import { isPageTranslatedAtom } from "@/utils/atoms/translation";
+import { isAnyAPIKey } from "@/utils/config/config";
 import { removeAllTranslatedWrapperNodes } from "@/utils/host/translate";
 import { translatePage } from "@/utils/host/translate";
 
 import HiddenButton from "./components/hidden-button";
-import { isAnyAPIKey } from "@/utils/config/config";
 
 export default function TranslateButton() {
   const [isPageTranslated, setIsPageTranslated] = useAtom(isPageTranslatedAtom);
@@ -41,6 +41,7 @@ export default function TranslateButton() {
           toast.error(i18n.t("noConfig.warning"));
           return;
         }
+        console.log("isPageTranslated", isPageTranslated);
         if (!isPageTranslated) {
           translatePage();
           setIsPageTranslated(true);

@@ -52,6 +52,7 @@ export async function initializeConfig() {
     storage.setItem<number>(`local:__configSchemaVersion`, currentVersion),
   ]);
 
+  globalConfig = config;
   await loadAPIKeyFromEnv(config);
 }
 

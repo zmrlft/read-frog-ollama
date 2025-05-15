@@ -3,6 +3,7 @@ import { generateText } from "ai";
 import { langCodeToEnglishName } from "@/types/config/languages";
 import { Point, TransNode } from "@/types/dom";
 
+import { globalConfig } from "../config/config";
 import { FORCE_INLINE_TRANSLATION_TAGS } from "../constants/dom";
 import { getTranslateLinePrompt } from "../prompts/translate-line";
 import { isBlockTransNode, isInlineTransNode } from "./dom/filter";
@@ -13,7 +14,6 @@ import {
   unwrapDeepestOnlyChild,
   walkAndLabelElement,
 } from "./dom/traversal";
-import { globalConfig } from "../config/config";
 
 const translatingNodes = new Set<HTMLElement | Text>();
 
@@ -169,7 +169,9 @@ function insertTranslatedNodeIntoWrapper(
 }
 
 async function translateText(sourceText: string) {
-  if (!globalConfig) return;
+  if (!globalConfig) {
+    throw new Error("No global config when translate text");
+  }
   const registry = await getProviderRegistry();
   const provider = globalConfig.provider;
   const model = globalConfig.providersConfig[provider].model;
