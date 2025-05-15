@@ -20,9 +20,9 @@ import {
 } from "@/types/content";
 import { configFields } from "@/utils/atoms/config";
 import { configAtom } from "@/utils/atoms/config";
+import { isAnyAPIKey } from "@/utils/config/config";
 import { getAnalyzePrompt } from "@/utils/prompts/analyze";
 import { getExplainPrompt } from "@/utils/prompts/explain";
-import { isAnyAPIKey } from "@/utils/config/config";
 
 type ExplainArticleParams = {
   extractedContent: ExtractedContent;
@@ -30,7 +30,7 @@ type ExplainArticleParams = {
 };
 
 const MAX_ATTEMPTS = 3;
-const MAX_CHARACTERS = 1500;
+const MAX_CHARACTERS = 1000;
 
 export function useAnalyzeContent() {
   const setReadState = useSetAtom(readStateAtom);
