@@ -46,3 +46,15 @@ export function isBlockElement(element: HTMLElement): boolean {
     FORCE_BLOCK_TAGS.has(element.tagName)
   );
 }
+
+export function isDontWalkIntoElement(element: HTMLElement): boolean {
+  const dontWalkClass = ["notranslate", "sr-only"].some((className) =>
+    element.classList.contains(className),
+  );
+
+  const dontWalkCSS =
+    window.getComputedStyle(element).display === "none" ||
+    window.getComputedStyle(element).visibility === "hidden";
+
+  return dontWalkClass || dontWalkCSS;
+}

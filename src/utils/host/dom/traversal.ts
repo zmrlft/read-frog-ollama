@@ -1,13 +1,17 @@
 import { Point, TransNode } from "@/types/dom";
+import { globalConfig } from "@/utils/config/config";
 import {
   INVALID_TRANSLATE_TAGS,
   MAIN_CONTENT_IGNORE_TAGS,
 } from "@/utils/constants/dom";
 
 import { translateNode } from "../translate";
-import { isBlockTransNode, isInlineHTMLElement } from "./filter";
+import {
+  isBlockTransNode,
+  isDontWalkIntoElement,
+  isInlineHTMLElement,
+} from "./filter";
 import { smashTruncationStyle } from "./style";
-import { globalConfig } from "@/utils/config/config";
 
 /**
  * Find the element at the given point even inside shadow roots
@@ -46,7 +50,7 @@ export function extractTextContent(node: TransNode): string {
     return node.textContent ?? "";
   }
 
-  if (node.classList.contains("sr-only")) {
+  if (isDontWalkIntoElement(node)) {
     return "";
   }
 
@@ -61,11 +65,12 @@ export function extractTextContent(node: TransNode): string {
 }
 
 export function walkAndLabelElement(element: HTMLElement, walkId: string) {
-  if (element.classList.contains("notranslate")) {
+  element.setAttribute("data-read-frog-walked", walkId);
+
+  if (isDontWalkIntoElement(element)) {
+    console.log("isDontWalkIntoElement", element);
     return;
   }
-
-  element.setAttribute("data-read-frog-walked", walkId);
 
   if (
     globalConfig &&
