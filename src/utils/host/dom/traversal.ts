@@ -4,6 +4,10 @@ import {
   INVALID_TRANSLATE_TAGS,
   MAIN_CONTENT_IGNORE_TAGS,
 } from "@/utils/constants/dom";
+import {
+  PARAGRAPH_ATTRIBUTE,
+  WALKED_ATTRIBUTE,
+} from "@/utils/constants/translation";
 
 import { translateNode } from "../translate";
 import {
@@ -65,7 +69,7 @@ export function extractTextContent(node: TransNode): string {
 }
 
 export function walkAndLabelElement(element: HTMLElement, walkId: string) {
-  element.setAttribute("data-read-frog-walked", walkId);
+  element.setAttribute(WALKED_ATTRIBUTE, walkId);
 
   if (isDontWalkIntoElement(element)) {
     console.log("isDontWalkIntoElement", element);
@@ -117,7 +121,7 @@ export function walkAndLabelElement(element: HTMLElement, walkId: string) {
   // }
 
   if (hasInlineNodeChild) {
-    element.setAttribute("data-read-frog-paragraph", "");
+    element.setAttribute(PARAGRAPH_ATTRIBUTE, "");
   }
 }
 
@@ -133,9 +137,9 @@ export function translateWalkedElement(
   toggle: boolean = false,
 ) {
   // if the walkId is not the same, return
-  if (element.getAttribute("data-read-frog-walked") !== walkId) return;
+  if (element.getAttribute(WALKED_ATTRIBUTE) !== walkId) return;
 
-  if (element.hasAttribute("data-read-frog-paragraph")) {
+  if (element.hasAttribute(PARAGRAPH_ATTRIBUTE)) {
     let hasBlockNodeChild = false;
 
     for (const child of element.childNodes) {

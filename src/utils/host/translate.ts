@@ -1,11 +1,12 @@
-import { generateText } from "ai";
-
-import { langCodeToEnglishName } from "@/types/config/languages";
 import { Point, TransNode } from "@/types/dom";
 
 import { globalConfig } from "../config/config";
 import { FORCE_INLINE_TRANSLATION_TAGS } from "../constants/dom";
-import { getTranslateLinePrompt } from "../prompts/translate-line";
+import {
+  BLOCK_CONTENT_CLASS,
+  CONTENT_WRAPPER_CLASS,
+  INLINE_CONTENT_CLASS,
+} from "../constants/translation";
 import { isBlockTransNode, isInlineTransNode } from "./dom/filter";
 import {
   extractTextContent,
@@ -14,6 +15,7 @@ import {
   unwrapDeepestOnlyChild,
   walkAndLabelElement,
 } from "./dom/traversal";
+import { translateText } from "./translate-text";
 
 const translatingNodes = new Set<HTMLElement | Text>();
 
@@ -46,7 +48,7 @@ export function removeAllTranslatedWrapperNodes(
 ) {
   function removeFromRoot(root: Document | ShadowRoot) {
     const translatedNodes = root.querySelectorAll(
-      ".notranslate.read-frog-translated-content-wrapper",
+      `.notranslate.${CONTENT_WRAPPER_CLASS}`,
     );
     translatedNodes.forEach((node) => node.remove());
 
@@ -87,8 +89,7 @@ export async function translateNode(node: TransNode, toggle: boolean = false) {
     if (!textContent) return;
 
     const translatedWrapperNode = document.createElement("span");
-    translatedWrapperNode.className =
-      "notranslate read-frog-translated-content-wrapper";
+    translatedWrapperNode.className = `notranslate ${CONTENT_WRAPPER_CLASS}`;
     const spinner = document.createElement("span");
     spinner.className = "read-frog-spinner";
     translatedWrapperNode.appendChild(spinner);
@@ -151,12 +152,11 @@ function insertTranslatedNodeIntoWrapper(
     const spaceNode = document.createElement("span");
     spaceNode.innerHTML = "&nbsp;&nbsp;";
     translatedWrapperNode.appendChild(spaceNode);
-    translatedNode.className =
-      "notranslate read-frog-translated-inline-content";
+    translatedNode.className = `notranslate ${INLINE_CONTENT_CLASS}`;
   } else if (isBlockTransNode(targetNode)) {
     const brNode = document.createElement("br");
     translatedWrapperNode.appendChild(brNode);
-    translatedNode.className = "notranslate read-frog-translated-block-content";
+    translatedNode.className = `notranslate ${BLOCK_CONTENT_CLASS}`;
   } else {
     // not inline or block, maybe notranslate
     return null;
@@ -166,25 +166,4 @@ function insertTranslatedNodeIntoWrapper(
   translatedWrapperNode.appendChild(translatedNode);
 
   return translatedWrapperNode;
-}
-
-async function translateText(sourceText: string) {
-  if (!globalConfig) {
-    throw new Error("No global config when translate text");
-  }
-  const registry = await getProviderRegistry();
-  const provider = globalConfig.provider;
-  const model = globalConfig.providersConfig[provider].model;
-
-  // TODO: retry logic + cache logic
-  const { text } = await generateText({
-    model: registry.languageModel(`${provider}:${model}`),
-    prompt: getTranslateLinePrompt(
-      langCodeToEnglishName[globalConfig.language.targetCode],
-      sourceText,
-    ),
-  });
-
-  // LLM models can't return empty text, so we need to return empty string if the translation is the same as the source text
-  return text === sourceText ? "" : text;
 }
