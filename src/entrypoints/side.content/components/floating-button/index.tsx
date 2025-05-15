@@ -8,6 +8,7 @@ import { APP_NAME } from "@/utils/constants/app";
 
 import { isSideOpenAtom } from "../../atoms";
 import HiddenButton from "./components/hidden-button";
+import FloatingReadButton from "./floating-read-button";
 import TranslateButton from "./translate-button";
 
 export default function FloatingButton() {
@@ -102,6 +103,7 @@ export default function FloatingButton() {
           top: `${floatingButton.position * 100}vh`,
         }}
       >
+        <FloatingReadButton />
         <TranslateButton />
         <div
           className={cn(

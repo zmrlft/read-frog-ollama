@@ -1,5 +1,4 @@
 import { generateText } from "ai";
-import { toast } from "sonner";
 
 import { langCodeToEnglishName } from "@/types/config/languages";
 import { Point, TransNode } from "@/types/dom";
@@ -41,7 +40,9 @@ export async function translatePage() {
   translateWalkedElement(document.body, id);
 }
 
-export function removeAllTranslatedWrapperNodes() {
+export function removeAllTranslatedWrapperNodes(
+  root: Document | ShadowRoot = document,
+) {
   function removeFromRoot(root: Document | ShadowRoot) {
     const translatedNodes = root.querySelectorAll(
       ".notranslate.read-frog-translated-content-wrapper",
@@ -56,7 +57,7 @@ export function removeAllTranslatedWrapperNodes() {
     });
   }
 
-  removeFromRoot(document);
+  removeFromRoot(root);
 }
 
 /**

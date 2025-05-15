@@ -1,6 +1,5 @@
 import { useAtom, useAtomValue } from "jotai";
-import { Check } from "lucide-react";
-import { Languages } from "lucide-react";
+import { Check, Languages } from "lucide-react";
 import { toast } from "sonner";
 
 import { configFields } from "@/utils/atoms/config";
