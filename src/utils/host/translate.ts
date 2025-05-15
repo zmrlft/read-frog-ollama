@@ -102,6 +102,9 @@ export async function translateNode(node: TransNode, toggle: boolean = false) {
     let translatedText: string | undefined;
     try {
       translatedText = await translateText(textContent);
+    } catch (error) {
+      translatedWrapperNode.remove();
+      logger.error(error);
     } finally {
       spinner.remove();
     }

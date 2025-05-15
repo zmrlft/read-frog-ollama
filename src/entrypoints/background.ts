@@ -10,7 +10,7 @@ export default defineBackground(async () => {
     // Open tutorial page when extension is installed
     if (details.reason === "install") {
       await browser.tabs.create({
-        url: "https://readfrog.mengxi.work/tutorial/installation",
+        url: "https://readfrog.mengxi.work/tutorial/api-key",
       });
     }
   });

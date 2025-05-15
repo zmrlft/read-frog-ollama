@@ -8,7 +8,7 @@ export function APIConfigWarning({ className }: { className?: string }) {
     >
       You must{" "}
       <a
-        href="https://readfrog.mengxi.work/en/tutorial/installation"
+        href="https://readfrog.mengxi.work/tutorial/api-key"
         target="_blank"
         rel="noreferrer"
         className="underline"
