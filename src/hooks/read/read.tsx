@@ -1,5 +1,6 @@
 import { generateObject } from "ai";
 import { useAtomValue, useSetAtom } from "jotai";
+import { toast } from "sonner";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -226,8 +227,13 @@ export function useReadArticle() {
   const explainArticle = useExplainArticle();
   const setReadState = useSetAtom(readStateAtom);
   const queryClient = useQueryClient();
+  const providersConfig = useAtomValue(configFields.providersConfig);
 
   const mutate = async (extractedContent: ExtractedContent) => {
+    if (!isAnyAPIKey(providersConfig)) {
+      toast.error(i18n.t("noConfig.warning"));
+      return;
+    }
     // Reset explainArticle data before starting a new read operation
     explainArticle.reset();
 
