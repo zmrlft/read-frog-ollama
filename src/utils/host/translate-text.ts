@@ -3,6 +3,7 @@ import { generateText } from "ai";
 import { langCodeToEnglishName } from "@/types/config/languages";
 
 import { globalConfig } from "../config/config";
+import { logger } from "../logger";
 import { getTranslateLinePrompt } from "../prompts/translate-line";
 
 export async function translateText(sourceText: string) {
@@ -13,15 +14,26 @@ export async function translateText(sourceText: string) {
   const provider = globalConfig.provider;
   const model = globalConfig.providersConfig[provider].model;
 
+  // replace /\u200B/g is for Feishu, it's a zero-width space
+  const cleanSourceText = sourceText.replace(/\u200B/g, "").trim();
+
   // TODO: retry logic + cache logic
   const { text } = await generateText({
     model: registry.languageModel(`${provider}:${model}`),
     prompt: getTranslateLinePrompt(
       langCodeToEnglishName[globalConfig.language.targetCode],
-      sourceText,
+      cleanSourceText,
     ),
   });
 
-  // LLM models can't return empty text, so we need to return empty string if the translation is the same as the source text
-  return text === sourceText ? "" : text;
+  if (cleanSourceText.includes("介绍")) {
+    logger.warn(
+      "sourceText",
+      sourceText,
+      cleanSourceText,
+      text === cleanSourceText,
+    );
+  }
+  // Compare cleaned versions to determine if translation is the same
+  return cleanSourceText === text ? "" : text;
 }

@@ -14,7 +14,6 @@ function removeDummyNodes(root: Document) {
   const elements = root.querySelectorAll("*");
   elements.forEach((element) => {
     if (element instanceof HTMLElement && isDontWalkIntoElement(element)) {
-      logger.info("removing element when extracting content", element);
       element.remove();
     }
   });

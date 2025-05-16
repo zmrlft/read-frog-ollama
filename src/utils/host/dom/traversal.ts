@@ -83,7 +83,6 @@ export function walkAndLabelElement(
   element.setAttribute(WALKED_ATTRIBUTE, walkId);
 
   if (isDontWalkIntoElement(element)) {
-    console.log("isDontWalkIntoElement", element);
     return false;
   }
 

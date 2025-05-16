@@ -41,7 +41,6 @@ export default function TranslateButton() {
           toast.error(i18n.t("noConfig.warning"));
           return;
         }
-        console.log("isPageTranslated", isPageTranslated);
         if (!isPageTranslated) {
           translatePage();
           setIsPageTranslated(true);
