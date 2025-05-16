@@ -57,21 +57,17 @@ export const DEFAULT_CONFIG: Config = {
   },
 };
 
-export const PROVIDER_ITEMS: Record<
-  Provider,
-  { logo: string; name: string; description: string }
-> = {
-  openai: {
-    logo: openaiLogo,
-    name: "OpenAI",
-    description: "Provides models like GPT-4o",
-  },
-  deepseek: {
-    logo: deepseekLogo,
-    name: "DeepSeek",
-    description: "Recommend to use in China",
-  },
-};
+export const PROVIDER_ITEMS: Record<Provider, { logo: string; name: string }> =
+  {
+    openai: {
+      logo: openaiLogo,
+      name: "OpenAI",
+    },
+    deepseek: {
+      logo: deepseekLogo,
+      name: "DeepSeek",
+    },
+  };
 
 export const PAGE_TRANSLATE_RANGE_ITEMS: Record<
   PageTranslateRange,

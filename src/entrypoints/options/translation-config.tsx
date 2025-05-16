@@ -18,10 +18,12 @@ export default function TranslationConfigSection() {
   return (
     <section>
       <h2 className="mb-8 text-center text-2xl font-bold">
-        Translation Config
+        {i18n.t("options.translationConfig.title")}
       </h2>
       <div className="mx-auto grid max-w-sm items-center gap-0.5">
-        <label className="text-sm font-medium">Translate Range</label>
+        <label className="text-sm font-medium">
+          {i18n.t("options.translationConfig.translateRange.title")}
+        </label>
         <Select
           value={PAGE_TRANSLATE_RANGE_ITEMS[pageTranslate.range].label}
           onValueChange={(value: PageTranslateRange) =>
@@ -34,7 +36,9 @@ export default function TranslationConfigSection() {
           <SelectTrigger className="mt-1 w-full">
             <SelectValue asChild>
               <span>
-                {PAGE_TRANSLATE_RANGE_ITEMS[pageTranslate.range].label}
+                {i18n.t(
+                  `options.translationConfig.translateRange.range.${pageTranslate.range}`,
+                )}
               </span>
             </SelectValue>
           </SelectTrigger>
@@ -42,7 +46,9 @@ export default function TranslationConfigSection() {
             <SelectGroup>
               {pageTranslateRangeSchema.options.map((range) => (
                 <SelectItem key={range} value={range}>
-                  {PAGE_TRANSLATE_RANGE_ITEMS[range].label}
+                  {i18n.t(
+                    `options.translationConfig.translateRange.range.${range}`,
+                  )}
                 </SelectItem>
               ))}
             </SelectGroup>

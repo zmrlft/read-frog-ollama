@@ -14,6 +14,24 @@ popup:
   help: "Help"
   advice: "Advice"
   discord: "Discord"
+options:
+  providerConfig:
+    title: "Model Config"
+    description:
+      openai: "Provides models like GPT-4o"
+      deepseek: "Recommend to use in China"
+    apiKey:
+      showAPIKey: "Show API Key"
+    model:
+      title: "Model"
+      enterCustomModel: "Enter the name of the custom model"
+  translationConfig:
+    title: "Translation Config"
+    translateRange:
+      title: "Translate Range"
+      range:
+        mainContent: "Main Content"
+        all: "All Content"
 side:
   sourceLang: "Source Language"
   targetLang: "Target Language"

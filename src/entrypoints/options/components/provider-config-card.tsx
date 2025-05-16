@@ -33,7 +33,7 @@ export function ProviderConfigCard({ provider }: { provider: Provider }) {
     <Card
       className={cn(
         "w-[360px]",
-        currentProvider === provider && "border-primary",
+        currentProvider === provider && "border-primary shadow-primary",
       )}
     >
       <CardHeader>
@@ -56,7 +56,7 @@ export function ProviderConfigCard({ provider }: { provider: Provider }) {
           />
         </CardTitle>
         <CardDescription>
-          {PROVIDER_ITEMS[provider].description}
+          {i18n.t(`options.providerConfig.description.${provider}`)}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -88,13 +88,13 @@ export function ProviderConfigCard({ provider }: { provider: Provider }) {
               htmlFor={`apiKey-${provider}`}
               className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              Show API Key
+              {i18n.t("options.providerConfig.apiKey.showAPIKey")}
             </label>
           </div>
         </div>
         <div className="mt-6 grid max-w-sm items-center gap-0.5">
           <label htmlFor="model" className="text-sm font-medium">
-            Model
+            {i18n.t("options.providerConfig.model.title")}
           </label>
           {providersConfig[provider].isCustomModel ? (
             <Input
@@ -163,7 +163,7 @@ export function ProviderConfigCard({ provider }: { provider: Provider }) {
               htmlFor={`isCustomModel-${provider}`}
               className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              Enter the name of the custom model
+              {i18n.t("options.providerConfig.model.enterCustomModel")}
             </label>
           </div>
         </div>
