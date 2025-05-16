@@ -37,7 +37,7 @@ export default defineContentScript({
       position: "overlay",
       anchor: "body",
       append: "last",
-      onMount: (container, shadow) => {
+      onMount: (container, shadow, shadowHost) => {
         // Store shadow root reference
         const wrapper = document.createElement("div");
         wrapper.className = cn(
@@ -56,6 +56,8 @@ export default defineContentScript({
         //   shadow,
         //   ".with-scroll-bars-hidden22"
         // );
+
+        protectShadowRoot(shadowHost);
 
         const queryClient = new QueryClient({
           queryCache: new QueryCache({
@@ -118,3 +120,40 @@ export default defineContentScript({
     ui.mount();
   },
 });
+
+function protectShadowRoot(shadowHost: HTMLElement) {
+  window.addEventListener(
+    "keydown",
+    (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "a") {
+        // 焦点不在组件里 → 拦截
+        if (!shadowHost.contains(document.activeElement)) {
+          e.preventDefault();
+          e.stopPropagation();
+
+          /* 把 host 从选区里排除 */
+          requestAnimationFrame(() => rebuildSelectionWithoutHost(shadowHost));
+        }
+        // 焦点在组件里 → 放行默认行为，浏览器只会全选 shadow 内文字
+      }
+    },
+    true, // capture 阶段
+  );
+}
+
+function rebuildSelectionWithoutHost(shadowHost: HTMLElement) {
+  const sel = window.getSelection();
+  if (!sel) return;
+  sel.removeAllRanges();
+
+  const before = document.createRange();
+  before.setStart(document.body, 0);
+  before.setEndBefore(shadowHost);
+
+  const after = document.createRange();
+  after.setStartAfter(shadowHost);
+  after.setEnd(document.body, document.body.childNodes.length);
+
+  sel.addRange(before);
+  sel.addRange(after);
+}
