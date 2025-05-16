@@ -8,7 +8,6 @@ import {
   CONTENT_WRAPPER_CLASS,
 } from "@/utils/constants/translation";
 import { INLINE_CONTENT_CLASS } from "@/utils/constants/translation";
-import { printNodeStructure } from "@/utils/debug";
 
 import { translateNode, translatePage } from "../translate";
 import { translateText } from "../translate-text";

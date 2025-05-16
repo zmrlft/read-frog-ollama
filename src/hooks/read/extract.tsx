@@ -8,7 +8,16 @@ import { flattenToParagraphs } from "@/entrypoints/side.content/utils/article";
 import { LangCodeISO6393 } from "@/types/config/languages";
 import { ExtractedContent } from "@/types/content";
 import { configFields } from "@/utils/atoms/config";
-import { removeAllTranslatedWrapperNodes } from "@/utils/host/translate";
+import { isDontWalkIntoElement } from "@/utils/host/dom/filter";
+
+function removeDummyNodes(root: Document) {
+  const elements = root.querySelectorAll("*");
+  elements.forEach((element) => {
+    if (element instanceof HTMLElement && isDontWalkIntoElement(element)) {
+      element.remove();
+    }
+  });
+}
 
 export function useExtractContent() {
   const setLanguage = useSetAtom(configFields.language);
@@ -17,7 +26,7 @@ export function useExtractContent() {
     queryKey: ["extractContent"],
     queryFn: async () => {
       const documentClone = document.cloneNode(true);
-      removeAllTranslatedWrapperNodes(documentClone as Document);
+      removeDummyNodes(documentClone as Document);
       const article = new Readability(documentClone as Document, {
         serializer: (el) => el,
       }).parse();

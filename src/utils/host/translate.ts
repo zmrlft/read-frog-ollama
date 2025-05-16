@@ -7,10 +7,7 @@ import {
   CONTENT_WRAPPER_CLASS,
   INLINE_CONTENT_CLASS,
 } from "../constants/translation";
-import {
-  isBlockTransNode,
-  isInlineTransNode,
-} from "./dom/filter";
+import { isBlockTransNode, isInlineTransNode } from "./dom/filter";
 import {
   extractTextContent,
   findNearestBlockNodeAt,
