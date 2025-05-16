@@ -74,7 +74,7 @@ describe("translatePage", () => {
   it("should insert inline translation and block translation correctly in a node with inline and block node inside", async () => {
     render(
       <div data-testid="test-node">
-        <span>1</span>
+        <span style={{ display: "inline" }}>1</span>
         <div>2</div>
         3
         <br />4
@@ -109,5 +109,54 @@ describe("translatePage", () => {
     expect(lastInlineTranslationChild?.childNodes[1]).toHaveClass(
       INLINE_CONTENT_CLASS,
     );
+  });
+  it("should translate the deepest inline node", async () => {
+    render(
+      <div data-testid="test-node">
+        <span style={{ display: "inline" }}>
+          <span style={{ display: "inline" }}>1</span>
+        </span>
+      </div>,
+    );
+    const node = screen.getByTestId("test-node");
+    await translatePage();
+    const targetNode = node.firstChild?.firstChild;
+    expect(targetNode?.childNodes[1]).toHaveClass(CONTENT_WRAPPER_CLASS);
+    expect(targetNode?.childNodes[1].childNodes[1]).toHaveClass(
+      INLINE_CONTENT_CLASS,
+    );
+  });
+  it("should translate the deepest block node", async () => {
+    render(
+      <div data-testid="test-node">
+        <div>
+          <div>1</div>
+        </div>
+      </div>,
+    );
+    const node = screen.getByTestId("test-node");
+    await translatePage();
+    const targetNode = node.firstChild?.firstChild;
+    expect(targetNode?.childNodes[1]).toHaveClass(CONTENT_WRAPPER_CLASS);
+    expect(targetNode?.childNodes[1].childNodes[1]).toHaveClass(
+      BLOCK_CONTENT_CLASS,
+    );
+  });
+  it("should translate the middle node", async () => {
+    render(
+      <div data-testid="test-node">
+        <span style={{ display: "inline" }}>
+          <div className="test" style={{ display: "inline" }}>
+            1
+          </div>
+          2
+        </span>
+      </div>,
+    );
+    const node = screen.getByTestId("test-node");
+    await translatePage();
+    const targetNode = node.firstChild;
+    expect(targetNode?.lastChild).toHaveClass(CONTENT_WRAPPER_CLASS);
+    expect(targetNode?.lastChild?.lastChild).toHaveClass(INLINE_CONTENT_CLASS);
   });
 });
