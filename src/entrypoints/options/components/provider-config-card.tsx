@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { Provider, providerModels } from "@/types/config/provider";
 import { configFields } from "@/utils/atoms/config";
 import { PROVIDER_ITEMS } from "@/utils/constants/config";
@@ -26,17 +27,33 @@ export function ProviderConfigCard({ provider }: { provider: Provider }) {
   const [providersConfig, setProvidersConfig] = useAtom(
     configFields.providersConfig,
   );
+  const [currentProvider, setCurrentProvider] = useAtom(configFields.provider);
 
   return (
-    <Card className="w-[360px]">
+    <Card
+      className={cn(
+        "w-[360px]",
+        currentProvider === provider && "border-primary",
+      )}
+    >
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <img
-            src={PROVIDER_ITEMS[provider].logo}
-            alt={PROVIDER_ITEMS[provider].name}
-            className="border-border h-6 w-6 rounded-full border bg-white"
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <img
+              src={PROVIDER_ITEMS[provider].logo}
+              alt={PROVIDER_ITEMS[provider].name}
+              className="border-border h-6 w-6 rounded-full border bg-white"
+            />
+            {PROVIDER_ITEMS[provider].name}
+          </div>
+          <Switch
+            checked={currentProvider === provider}
+            onCheckedChange={() => {
+              if (currentProvider !== provider) {
+                setCurrentProvider(provider);
+              }
+            }}
           />
-          {PROVIDER_ITEMS[provider].name}
         </CardTitle>
         <CardDescription>
           {PROVIDER_ITEMS[provider].description}
