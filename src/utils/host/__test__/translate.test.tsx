@@ -30,7 +30,15 @@ describe("translateNode", () => {
   });
 
   it("should insert wrapper into block node", async () => {
-    render(<div data-testid="test-node">原文</div>);
+    render(
+      <div
+        data-testid="test-node"
+        data-read-frog-block-node
+        data-read-frog-paragraph
+      >
+        原文
+      </div>,
+    );
     const node = screen.getByTestId("test-node");
     await translateNode(node, false);
     expect(node.childNodes[1]).toHaveClass(CONTENT_WRAPPER_CLASS);

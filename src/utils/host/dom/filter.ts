@@ -1,4 +1,9 @@
+import { TransNode } from "@/types/dom";
 import { FORCE_BLOCK_TAGS } from "@/utils/constants/dom";
+import {
+  BLOCK_ATTRIBUTE,
+  INLINE_ATTRIBUTE,
+} from "@/utils/constants/translation";
 
 export function isEditable(element: HTMLElement): boolean {
   const tag = element.tagName;
@@ -7,17 +12,22 @@ export function isEditable(element: HTMLElement): boolean {
   return false;
 }
 
-export function isInlineTransNode(node: Node): boolean {
+// shallow means only check the node itself, not the children
+// if a shallow inline node has children are block node, then it's block node rather than inline node
+export function isShallowInlineTransNode(node: Node): boolean {
   if (node instanceof Text) {
     return true;
   } else if (node instanceof HTMLElement) {
-    return isInlineHTMLElement(node);
+    return isShallowInlineHTMLElement(node);
   }
   return false;
 }
 
-export function isInlineHTMLElement(element: HTMLElement): boolean {
-  if (element.classList.contains("notranslate")) {
+export function isShallowInlineHTMLElement(element: HTMLElement): boolean {
+  if (
+    element.classList.contains("notranslate") ||
+    !element.textContent?.trim()
+  ) {
     return false;
   }
 
@@ -28,17 +38,20 @@ export function isInlineHTMLElement(element: HTMLElement): boolean {
 }
 
 // Note: !(inline node) != block node because of `notranslate` class and all cases not in the if else block
-export function isBlockTransNode(node: Node): boolean {
+export function isShallowBlockTransNode(node: Node): boolean {
   if (node instanceof Text) {
     return false;
   } else if (node instanceof HTMLElement) {
-    return isBlockElement(node);
+    return isShallowBlockHTMLElement(node);
   }
   return false;
 }
 
-export function isBlockElement(element: HTMLElement): boolean {
-  if (element.classList.contains("notranslate")) {
+export function isShallowBlockHTMLElement(element: HTMLElement): boolean {
+  if (
+    element.classList.contains("notranslate") ||
+    !element.textContent?.trim()
+  ) {
     return false;
   }
   return (
@@ -57,4 +70,18 @@ export function isDontWalkIntoElement(element: HTMLElement): boolean {
     window.getComputedStyle(element).visibility === "hidden";
 
   return dontWalkClass || dontWalkCSS;
+}
+
+export function isInlineTransNode(node: TransNode): boolean {
+  if (node instanceof Text) {
+    return true;
+  }
+  return node.hasAttribute(INLINE_ATTRIBUTE);
+}
+
+export function isBlockTransNode(node: TransNode): boolean {
+  if (node instanceof Text) {
+    return false;
+  }
+  return node.hasAttribute(BLOCK_ATTRIBUTE);
 }

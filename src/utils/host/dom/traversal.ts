@@ -5,15 +5,17 @@ import {
   MAIN_CONTENT_IGNORE_TAGS,
 } from "@/utils/constants/dom";
 import {
+  BLOCK_ATTRIBUTE,
+  INLINE_ATTRIBUTE,
   PARAGRAPH_ATTRIBUTE,
   WALKED_ATTRIBUTE,
 } from "@/utils/constants/translation";
 
 import { translateNode } from "../translate";
 import {
-  isBlockTransNode,
   isDontWalkIntoElement,
-  isInlineHTMLElement,
+  isShallowBlockHTMLElement,
+  isShallowInlineHTMLElement,
 } from "./filter";
 import { smashTruncationStyle } from "./style";
 
@@ -41,7 +43,7 @@ export function findNearestBlockNodeAt(point: Point) {
   // TODO: support SVGElement in the future
   while (
     currentNode instanceof HTMLElement &&
-    isInlineHTMLElement(currentNode)
+    isShallowInlineHTMLElement(currentNode)
   ) {
     currentNode = currentNode.parentElement;
   }
@@ -68,12 +70,21 @@ export function extractTextContent(node: TransNode): string {
   }, "");
 }
 
-export function walkAndLabelElement(element: HTMLElement, walkId: string) {
+/**
+ * Walk and label the element
+ * @param element - The element to walk and label
+ * @param walkId - The walk id
+ * @returns "hasBlock" if the element has a block node child or is block node, false otherwise (has inline node child or is inline node or other nodes should be ignored)
+ */
+export function walkAndLabelElement(
+  element: HTMLElement,
+  walkId: string,
+): "hasBlock" | false {
   element.setAttribute(WALKED_ATTRIBUTE, walkId);
 
   if (isDontWalkIntoElement(element)) {
     console.log("isDontWalkIntoElement", element);
-    return;
+    return false;
   }
 
   if (
@@ -81,8 +92,10 @@ export function walkAndLabelElement(element: HTMLElement, walkId: string) {
     globalConfig.pageTranslate.range !== "all" &&
     MAIN_CONTENT_IGNORE_TAGS.has(element.tagName)
   ) {
-    return;
+    return false;
   }
+
+  if (INVALID_TRANSLATE_TAGS.has(element.tagName)) return false;
 
   if (element.shadowRoot) {
     if (globalConfig && globalConfig.pageTranslate.range === "all") {
@@ -92,14 +105,12 @@ export function walkAndLabelElement(element: HTMLElement, walkId: string) {
         }
       }
     } else {
-      return;
+      return false;
     }
   }
 
-  if (INVALID_TRANSLATE_TAGS.has(element.tagName)) return;
-
   let hasInlineNodeChild = false;
-  // let hasBlockNodeChild = false;
+  let hasBlockNodeChild = false;
 
   for (const child of element.childNodes) {
     if (child.nodeType === Node.TEXT_NODE && child.textContent?.trim()) {
@@ -108,11 +119,16 @@ export function walkAndLabelElement(element: HTMLElement, walkId: string) {
     }
 
     if (child instanceof HTMLElement) {
-      if (isInlineHTMLElement(child) && child.textContent?.trim()) {
+      // if (isInlineHTMLElement(child) && child.textContent?.trim()) {
+      //   hasInlineNodeChild = true;
+      // }
+
+      const hasBlock = walkAndLabelElement(child, walkId);
+      if (hasBlock) {
+        hasBlockNodeChild = true;
+      } else if (child.textContent?.trim()) {
         hasInlineNodeChild = true;
       }
-
-      walkAndLabelElement(child, walkId);
     }
   }
 
@@ -123,6 +139,15 @@ export function walkAndLabelElement(element: HTMLElement, walkId: string) {
   if (hasInlineNodeChild) {
     element.setAttribute(PARAGRAPH_ATTRIBUTE, "");
   }
+
+  if (hasBlockNodeChild || isShallowBlockHTMLElement(element)) {
+    element.setAttribute(BLOCK_ATTRIBUTE, "");
+    return "hasBlock";
+  } else if (isShallowInlineHTMLElement(element)) {
+    element.setAttribute(INLINE_ATTRIBUTE, "");
+  }
+
+  return false;
 }
 
 /**
@@ -143,7 +168,7 @@ export function translateWalkedElement(
     let hasBlockNodeChild = false;
 
     for (const child of element.childNodes) {
-      if (isBlockTransNode(child)) {
+      if (child instanceof HTMLElement && child.hasAttribute(BLOCK_ATTRIBUTE)) {
         hasBlockNodeChild = true;
         break;
       }
