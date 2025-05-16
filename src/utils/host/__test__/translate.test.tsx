@@ -18,7 +18,7 @@ vi.mock("../translate-text", () => ({
 
 describe("translateText stub", () => {
   it("translateText should be mocked", async () => {
-    expect(await translateText("原文")).toBe("translation");
+    expect(await translateText("任何文字")).toBe("translation");
   });
 });
 

@@ -50,9 +50,9 @@ Join our growing community of language learners and help shape the future of Rea
 
 加入我们不断壮大的语言学习者社区，帮助塑造阅读青蛙的未来！
 
-🌟 Github (Open-Source Code): [https://github.com/mengxi-work/read-frog](https://github.com/mengxi-work/read-frog)
+🌟 Github (Open-Source Code): [https://github.com/mengxi-ream/read-frog](https://github.com/mengxi-ream/read-frog)
 
-🌟 Github（开源代码）：[https://github.com/mengxi-work/read-frog](https://github.com/mengxi-work/read-frog)
+🌟 Github（开源代码）：[https://github.com/mengxi-ream/read-frog](https://github.com/mengxi-ream/read-frog)
 
 ## How to contribute
 
