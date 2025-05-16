@@ -57,7 +57,7 @@ export default defineContentScript({
         //   ".with-scroll-bars-hidden22"
         // );
 
-        protectShadowRoot(shadowHost);
+        protectShadowRoot(shadowHost, wrapper);
 
         const queryClient = new QueryClient({
           queryCache: new QueryCache({
@@ -121,24 +121,55 @@ export default defineContentScript({
   },
 });
 
-function protectShadowRoot(shadowHost: HTMLElement) {
+function protectShadowRoot(shadowHost: HTMLElement, wrapper: HTMLElement) {
+  // ① 追踪鼠标是否在组件上
+  let pointerInside = false;
+  shadowHost.addEventListener("pointerenter", () => {
+    pointerInside = true;
+  });
+  shadowHost.addEventListener("pointerleave", () => {
+    pointerInside = false;
+  });
+
   window.addEventListener(
     "keydown",
     (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "a") {
-        // 焦点不在组件里 → 拦截
-        if (!shadowHost.contains(document.activeElement)) {
-          e.preventDefault();
-          e.stopPropagation();
+      if (!(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== "a") return;
 
-          /* 把 host 从选区里排除 */
-          requestAnimationFrame(() => rebuildSelectionWithoutHost(shadowHost));
-        }
-        // 焦点在组件里 → 放行默认行为，浏览器只会全选 shadow 内文字
+      const active = document.activeElement;
+
+      /* --- 分三种情况 --- */
+      if (shadowHost.contains(active)) {
+        // A. 焦点已经在组件里 → 放行默认行为
+        return;
       }
+
+      if (pointerInside) {
+        // B. 鼠标悬停在组件里 → 自定义“组件专选”
+        e.preventDefault();
+        e.stopPropagation();
+        requestAnimationFrame(() => selectAllInside(wrapper));
+        return;
+      }
+
+      // C. 其它情况（宿主页面全选，但排除组件）
+      e.preventDefault();
+      e.stopPropagation();
+      requestAnimationFrame(() => rebuildSelectionWithoutHost(shadowHost));
     },
-    true, // capture 阶段
+    true, // capture
   );
+}
+
+/* 全选组件内部（只需 1 个 Range） */
+function selectAllInside(root: HTMLElement) {
+  const sel = window.getSelection();
+  if (!sel) return;
+  sel.removeAllRanges();
+
+  const range = document.createRange();
+  range.selectNodeContents(root); // 选中整个 wrapper ⭐
+  sel.addRange(range); // 立即呈现高亮
 }
 
 function rebuildSelectionWithoutHost(shadowHost: HTMLElement) {
