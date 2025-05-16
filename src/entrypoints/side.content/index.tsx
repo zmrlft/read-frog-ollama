@@ -21,9 +21,9 @@ import { configAtom } from "@/utils/atoms/config";
 import { APP_NAME } from "@/utils/constants/app";
 import { CONFIG_STORAGE_KEY, DEFAULT_CONFIG } from "@/utils/constants/config";
 
+import { addStyleToShadow, mirrorDynamicStyles } from "../../utils/styles";
 import App from "./app";
 import { store } from "./atoms";
-import { addStyleToShadow, mirrorDynamicStyles } from "../../utils/styles";
 
 export let shadowWrapper: HTMLElement | null = null;
 

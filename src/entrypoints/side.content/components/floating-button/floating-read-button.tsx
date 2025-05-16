@@ -5,10 +5,10 @@ import { toast } from "sonner";
 import { useExtractContent } from "@/hooks/read/extract";
 import { useReadArticle } from "@/hooks/read/read";
 import { configFields } from "@/utils/atoms/config";
+import { isAnyAPIKey } from "@/utils/config/config";
 
 import { isSideOpenAtom } from "../../atoms";
 import HiddenButton from "./components/hidden-button";
-import { isAnyAPIKey } from "@/utils/config/config";
 
 export default function FloatingReadButton() {
   const providersConfig = useAtomValue(configFields.providersConfig);

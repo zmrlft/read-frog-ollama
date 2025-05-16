@@ -6,6 +6,7 @@ import {
   BLOCK_CONTENT_CLASS,
   CONTENT_WRAPPER_CLASS,
   INLINE_CONTENT_CLASS,
+  NOTRANSLATE_CLASS,
 } from "../constants/translation";
 import { isBlockTransNode, isInlineTransNode } from "./dom/filter";
 import {
@@ -48,7 +49,7 @@ export function removeAllTranslatedWrapperNodes(
 ) {
   function removeFromRoot(root: Document | ShadowRoot) {
     const translatedNodes = root.querySelectorAll(
-      `.notranslate.${CONTENT_WRAPPER_CLASS}`,
+      `.${NOTRANSLATE_CLASS}.${CONTENT_WRAPPER_CLASS}`,
     );
     translatedNodes.forEach((node) => node.remove());
 
@@ -89,7 +90,7 @@ export async function translateNode(node: TransNode, toggle: boolean = false) {
     if (!textContent) return;
 
     const translatedWrapperNode = document.createElement("span");
-    translatedWrapperNode.className = `notranslate ${CONTENT_WRAPPER_CLASS}`;
+    translatedWrapperNode.className = `${NOTRANSLATE_CLASS} ${CONTENT_WRAPPER_CLASS}`;
     const spinner = document.createElement("span");
     spinner.className = "read-frog-spinner";
     translatedWrapperNode.appendChild(spinner);
@@ -128,12 +129,12 @@ function findExistedTranslatedWrapper(node: TransNode) {
   if (node instanceof Text) {
     if (
       node.nextSibling instanceof HTMLElement &&
-      node.nextSibling.classList.contains("notranslate")
+      node.nextSibling.classList.contains(NOTRANSLATE_CLASS)
     ) {
       return node.nextSibling;
     }
   } else if (node instanceof HTMLElement) {
-    return node.querySelector(":scope > .notranslate");
+    return node.querySelector(`:scope > .${NOTRANSLATE_CLASS}`);
   }
   return null;
 }
@@ -152,11 +153,11 @@ function insertTranslatedNodeIntoWrapper(
     const spaceNode = document.createElement("span");
     spaceNode.innerHTML = "&nbsp;&nbsp;";
     translatedWrapperNode.appendChild(spaceNode);
-    translatedNode.className = `notranslate ${INLINE_CONTENT_CLASS}`;
+    translatedNode.className = `${NOTRANSLATE_CLASS} ${INLINE_CONTENT_CLASS}`;
   } else if (isBlockTransNode(targetNode)) {
     const brNode = document.createElement("br");
     translatedWrapperNode.appendChild(brNode);
-    translatedNode.className = `notranslate ${BLOCK_CONTENT_CLASS}`;
+    translatedNode.className = `${NOTRANSLATE_CLASS} ${BLOCK_CONTENT_CLASS}`;
   } else {
     // not inline or block, maybe notranslate
     return null;

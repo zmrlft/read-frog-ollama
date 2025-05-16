@@ -3,6 +3,7 @@ import { FORCE_BLOCK_TAGS } from "@/utils/constants/dom";
 import {
   BLOCK_ATTRIBUTE,
   INLINE_ATTRIBUTE,
+  NOTRANSLATE_CLASS,
 } from "@/utils/constants/translation";
 
 export function isEditable(element: HTMLElement): boolean {
@@ -25,7 +26,7 @@ export function isShallowInlineTransNode(node: Node): boolean {
 
 export function isShallowInlineHTMLElement(element: HTMLElement): boolean {
   if (
-    element.classList.contains("notranslate") ||
+    element.classList.contains(NOTRANSLATE_CLASS) ||
     !element.textContent?.trim()
   ) {
     return false;
@@ -49,7 +50,7 @@ export function isShallowBlockTransNode(node: Node): boolean {
 
 export function isShallowBlockHTMLElement(element: HTMLElement): boolean {
   if (
-    element.classList.contains("notranslate") ||
+    element.classList.contains(NOTRANSLATE_CLASS) ||
     !element.textContent?.trim()
   ) {
     return false;
@@ -61,7 +62,7 @@ export function isShallowBlockHTMLElement(element: HTMLElement): boolean {
 }
 
 export function isDontWalkIntoElement(element: HTMLElement): boolean {
-  const dontWalkClass = ["notranslate", "sr-only"].some((className) =>
+  const dontWalkClass = [NOTRANSLATE_CLASS, "sr-only"].some((className) =>
     element.classList.contains(className),
   );
 

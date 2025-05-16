@@ -4,9 +4,9 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { configFields } from "@/utils/atoms/config";
 import { isPageTranslatedAtom } from "@/utils/atoms/translation";
+import { isAnyAPIKey } from "@/utils/config/config";
 
 import { isIgnoreTabAtom } from "../atom";
-import { isAnyAPIKey } from "@/utils/config/config";
 
 export default function TranslateButton({ className }: { className?: string }) {
   const [isPageTranslated, setIsPageTranslated] = useAtom(isPageTranslatedAtom);

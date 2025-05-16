@@ -8,3 +8,5 @@ export const PARAGRAPH_ATTRIBUTE = "data-read-frog-paragraph";
 
 export const BLOCK_ATTRIBUTE = "data-read-frog-block-node";
 export const INLINE_ATTRIBUTE = "data-read-frog-inline-node";
+
+export const NOTRANSLATE_CLASS = "read-frog-notranslate";
