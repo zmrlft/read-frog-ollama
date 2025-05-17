@@ -16,6 +16,8 @@ Master languages effortlessly and deeply with AI, right in your browser.
   <img src="docs/translate.png" width="64%" alt="Read Frog Translation Interface" />
 </div>
 
+If you like it, **⭐️ Star to support**
+
 ## Introduction
 
 Transform your everyday web reading into an immersive language learning journey! Read Frog is your intelligent companion that makes language learning natural and enjoyable.
