@@ -25,7 +25,7 @@ describe('translateText stub', () => {
 describe('translateNode', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    document.body.innerHTML = ''
+    document.body.textContent = ''
   })
 
   it('should insert wrapper into block node', async () => {

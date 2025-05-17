@@ -160,7 +160,7 @@ function insertTranslatedNodeIntoWrapper(
 
   if (isForceInlineTranslationElement || isInlineTransNode(targetNode)) {
     const spaceNode = document.createElement('span')
-    spaceNode.innerHTML = '&nbsp;&nbsp;'
+    spaceNode.textContent = '  '
     translatedWrapperNode.appendChild(spaceNode)
     translatedNode.className = `${NOTRANSLATE_CLASS} ${INLINE_CONTENT_CLASS}`
   }
@@ -171,11 +171,9 @@ function insertTranslatedNodeIntoWrapper(
   }
   else {
     // not inline or block, maybe notranslate
-    return null
+    return
   }
 
   translatedNode.textContent = translatedText
   translatedWrapperNode.appendChild(translatedNode)
-
-  return translatedWrapperNode
 }
