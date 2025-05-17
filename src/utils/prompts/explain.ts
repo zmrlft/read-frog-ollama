@@ -32,7 +32,7 @@ For each paragraph, you should:
      a) Fix any orthographic or typographic errors.
      b) Translate the sentence into ${targetLang}.
      c) Select difficult or interesting words, phrases, or technical terms suitable for your student's source language level (${langLevel}). Explain their part of speech and contextual understanding. For higher language level, you should not select too basic words. For lower language level, you should explain more basic words or phrases.
-     d) Explain the sentence to your student based on their language level (${langLevel}). Translate the sentence first, then explain the words, phrases, and whole sentences vividly. Provide context, examples, or reference classical texts if beneficial.
+     d) Explain the sentence to your student based on their language level (${langLevel}). Translate the sentence first, then explain the words, phrases, and whole sentences vividly. Provide analysis of grammar if the sentence is complex. Provide context, examples, or reference classical texts if beneficial.
 3. If no, exclude the paragraph from your response.
 
 If your student is Chinese learn Japanese, some words have similar shape and meaning, you can ignore and not explain them. For example, you don't need to explain "親父" because it's similar to "父亲".
@@ -51,7 +51,7 @@ Your response should be the JSON format:
       "syntacticCategory": string, // select from the syntacticCategoryAbbr list below
       "explanation": string, // explain the word use language ${targetLang}
       }[], // words, phrases, technical terms, select less words for higher langLevel, If your student is Chinese learn Japanese, don't select words have similar shape and meaning in Chinese and Japanese. For example, you don't need to explain "親父" because it's similar to "父亲".
-    "explanation": string, // explain the sentence use language ${targetLang}
+    "explanation": string, // explain the sentence use language ${targetLang}, may include grammar analysis if the sentence is complex
   }[][], // 1-dimensional means paragraph, 2-dimensional means sentence
 }
 \`\`\`
@@ -116,7 +116,7 @@ Output:
             "explanation": "难以忍受的，极度痛苦的。来自 bear（承受）的否定形式。"
           }
         ],
-        "explanation": "这句话说明，英国大多数人也支持协助死亡，尤其是针对那些长期承受严重痛苦的人。‘enduring unbearable suffering’ 强调了他们所经历的是极度难忍的状态，是立法支持背后的同情理由。"
+        "explanation": "‘enduring unbearable suffering’ 强调了他们所经历的是极度难忍的状态，是立法支持背后的同情理由。用 ‘so + 助动词 + 主语’ 的倒装形式表达三分之二的英国人同样长期支持安乐死，助动词 do 与前一句的时态保持一致，代替前一句 have been in favour 的一般意义动作。"
       },
       {
         "originalSentence": "And so do the citizens of many other democracies—18 jurisdictions have passed laws in the past decade.",

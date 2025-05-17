@@ -3,7 +3,6 @@ import { generateText } from 'ai'
 import { iso6393To1, langCodeToEnglishName } from '@/types/config/languages'
 
 import { globalConfig } from '../config/config'
-import { logger } from '../logger'
 import { getTranslateLinePrompt } from '../prompts/translate-line'
 
 export async function translateText(sourceText: string) {
@@ -49,14 +48,6 @@ export async function translateText(sourceText: string) {
     translatedText = text
   }
 
-  if (cleanSourceText.includes('介绍')) {
-    logger.warn(
-      'sourceText',
-      sourceText,
-      cleanSourceText,
-      translatedText === cleanSourceText,
-    )
-  }
   // Compare cleaned versions to determine if translation is the same
   return cleanSourceText === translatedText ? '' : translatedText
 }
