@@ -1,28 +1,27 @@
-import { useAtomValue, useSetAtom } from "jotai";
-import { Bolt, Star } from "lucide-react";
-import { Toaster } from "sonner";
-
-import { APIConfigWarning } from "@/components/api-config-warning";
-import { configFields } from "@/utils/atoms/config";
-import { isAnyAPIKey } from "@/utils/config/config";
-
-import { version } from "../../../package.json";
-import { initIsIgnoreTabAtom } from "./atom";
-import FloatingButton from "./components/floating-button";
-import Hotkey from "./components/hotkey-selector";
-import LanguageLevelSelector from "./components/language-level-selector";
-import LanguageOptionsSelector from "./components/language-options-selector";
-import ProviderSelector from "./components/provider-selector";
-import QuickLinks from "./components/quick-links";
-import ReadButton from "./components/read-button";
-import TranslateButton from "./components/translate-button";
+import { useAtomValue, useSetAtom } from 'jotai'
+import { Bolt, Star } from 'lucide-react'
+import { Toaster } from 'sonner'
+import { APIConfigWarning } from '@/components/api-config-warning'
+import { configFields } from '@/utils/atoms/config'
+import { isAnyAPIKey } from '@/utils/config/config'
+import { version } from '../../../package.json'
+import { initIsIgnoreTabAtom } from './atom'
+import FloatingButton from './components/floating-button'
+import Hotkey from './components/hotkey-selector'
+import LanguageLevelSelector from './components/language-level-selector'
+import LanguageOptionsSelector from './components/language-options-selector'
+import ProviderSelector from './components/provider-selector'
+import QuickLinks from './components/quick-links'
+import ReadButton from './components/read-button'
+import TranslateButton from './components/translate-button'
+import TranslateProviderSelector from './components/translate-provider-selector'
 
 function App() {
-  const initIsIgnoreTab = useSetAtom(initIsIgnoreTabAtom);
-  const providersConfig = useAtomValue(configFields.providersConfig);
+  const initIsIgnoreTab = useSetAtom(initIsIgnoreTabAtom)
+  const providersConfig = useAtomValue(configFields.providersConfig)
   useEffect(() => {
-    initIsIgnoreTab();
-  }, []);
+    initIsIgnoreTab()
+  }, [initIsIgnoreTab])
 
   return (
     <>
@@ -31,8 +30,9 @@ function App() {
       )}
       <div className="bg-background flex flex-col gap-4 px-6 pt-5 pb-4">
         <LanguageOptionsSelector />
-        <ProviderSelector />
         <LanguageLevelSelector />
+        <ProviderSelector />
+        <TranslateProviderSelector />
         <div className="grid w-full grid-cols-2 gap-2">
           <ReadButton />
           <TranslateButton />
@@ -43,22 +43,23 @@ function App() {
       </div>
       <div className="flex items-center justify-between bg-neutral-200 px-2 py-1 dark:bg-neutral-800">
         <button
+          type="button"
           className="flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 hover:bg-neutral-300 dark:hover:bg-neutral-700"
           onClick={() => browser.runtime.openOptionsPage()}
         >
           <Bolt className="size-4" strokeWidth={1.6} />
           <span className="text-[13px] font-medium">
-            {i18n.t("popup.options")}
+            {i18n.t('popup.options')}
           </span>
         </button>
         <span className="text-sm text-neutral-500 dark:text-neutral-400">
           {version}
         </span>
         <button
+          type="button"
           className="flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 hover:bg-neutral-300 dark:hover:bg-neutral-700"
           onClick={() =>
-            window.open("https://github.com/mengxi-ream/read-frog", "_blank")
-          }
+            window.open('https://github.com/mengxi-ream/read-frog', '_blank')}
         >
           <Star className="size-4" strokeWidth={1.6} />
           <span className="text-[13px] font-medium">Github</span>
@@ -66,7 +67,7 @@ function App() {
       </div>
       <Toaster richColors position="bottom-center" className="-translate-y-8" />
     </>
-  );
+  )
 }
 
-export default App;
+export default App

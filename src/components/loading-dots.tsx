@@ -1,16 +1,17 @@
-import { cn } from "@/utils/tailwind";
+import { cn } from '@/utils/tailwind'
 
-type LoadingDotsProps = {
-  className?: string;
-};
+interface LoadingDotsProps {
+  className?: string
+}
 
 export default function LoadingDots({ className }: LoadingDotsProps) {
   return (
     <div
-      className={cn("flex items-center justify-center gap-[3px]", className)}
+      className={cn('flex items-center justify-center gap-[3px]', className)}
     >
-      {[...Array(3)].map((_, i) => (
+      {[...Array.from({ length: 3 })].map((_, i) => (
         <div
+          // eslint-disable-next-line react/no-array-index-key
           key={i}
           className="h-1.5 w-1 animate-bounce rounded-full bg-black dark:bg-white"
           style={{
@@ -19,5 +20,5 @@ export default function LoadingDots({ className }: LoadingDotsProps) {
         />
       ))}
     </div>
-  );
+  )
 }
