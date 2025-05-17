@@ -41,6 +41,8 @@ aiService:
 translateService:
   title: Translation Service
   description: For translate the webpage only
+  normalTranslator: Normal Translator
+  aiTranslator: AI Translator
 languageLevel: Your Source Lang Level
 languageLevels:
   beginner: Beginner

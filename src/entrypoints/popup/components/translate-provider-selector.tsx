@@ -6,16 +6,23 @@ import ProviderIcon from '@/components/provider-icon'
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { providerNames } from '@/types/config/provider'
 import { configFields } from '@/utils/atoms/config'
-import { TRANSLATE_PROVIDER_ITEMS } from '@/utils/constants/config'
+import { PROVIDER_ITEMS, TRANSLATE_PROVIDER_ITEMS } from '@/utils/constants/config'
 
 export default function TranslateProviderSelector() {
   const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
+
+  const PURE_TRANSLATE_PROVIDER_ITEMS = Object.fromEntries(Object.entries(TRANSLATE_PROVIDER_ITEMS).filter(([value]) => {
+    return !(providerNames as readonly string[]).includes(value)
+  }))
 
   return (
     <div className="flex items-center justify-between gap-2">
@@ -45,11 +52,22 @@ export default function TranslateProviderSelector() {
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {Object.entries(TRANSLATE_PROVIDER_ITEMS).map(([value, { logo, name }]) => (
-            <SelectItem key={value} value={value}>
-              <ProviderIcon logo={logo} name={name} />
-            </SelectItem>
-          ))}
+          <SelectGroup>
+            <SelectLabel>{i18n.t('translateService.aiTranslator')}</SelectLabel>
+            {Object.entries(PROVIDER_ITEMS).map(([value, { logo, name }]) => (
+              <SelectItem key={value} value={value}>
+                <ProviderIcon logo={logo} name={name} />
+              </SelectItem>
+            ))}
+          </SelectGroup>
+          <SelectGroup>
+            <SelectLabel>{i18n.t('translateService.normalTranslator')}</SelectLabel>
+            {Object.entries(PURE_TRANSLATE_PROVIDER_ITEMS).map(([value, { logo, name }]) => (
+              <SelectItem key={value} value={value}>
+                <ProviderIcon logo={logo} name={name} />
+              </SelectItem>
+            ))}
+          </SelectGroup>
         </SelectContent>
       </Select>
     </div>

@@ -38,6 +38,8 @@ aiService:
 translateService:
   title: 翻译服务
   description: 仅用于翻译网页内容
+  normalTranslator: 普通翻译
+  aiTranslator: AI 翻译
 languageLevel: 你的来源语言水平
 languageLevels:
   beginner: 初级
