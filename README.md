@@ -1,7 +1,7 @@
 # Read Frog
 
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/modkelfkcfjpgbfmnbnllalkiogfofhb?style=flat-square&logo=google-chrome&label=Chrome%20Web%20Store)](https://chrome.google.com/webstore/detail/read-frog-open-source-ai/modkelfkcfjpgbfmnbnllalkiogfofhb)
-[![Discord](https://img.shields.io/discord/308323056592486420?style=flat-square&label=Discord&logo=discord&logoColor=white&color=5865F2)](https://discord.com/invite/nmhvb6u2T7)
+[![Discord](https://img.shields.io/discord/1371229720942874646?style=flat-square&label=Discord&logo=discord&logoColor=white&color=5865F2)](https://discord.com/invite/nmhvb6u2T7)
 
 Master languages effortlessly and deeply with AI, right in your browser.
 
