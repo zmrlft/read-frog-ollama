@@ -12,7 +12,7 @@ Master languages effortlessly and deeply with AI, right in your browser.
 ![Read Frog](/docs/opengraph.svg)
 
 <div align="center">
-  <img src="docs/popup.png" width="35%" alt="Read Frog Popup Interface" />
+  <img src="docs/popup-page.png" width="35%" alt="Read Frog Popup Interface" />
   <img src="docs/translate.png" width="64%" alt="Read Frog Translation Interface" />
 </div>
 
