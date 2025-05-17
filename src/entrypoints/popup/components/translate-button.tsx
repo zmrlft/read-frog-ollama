@@ -2,16 +2,18 @@ import { useAtom, useAtomValue } from 'jotai'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
+import { providerNames } from '@/types/config/provider'
 import { configFields } from '@/utils/atoms/config'
 import { isPageTranslatedAtom } from '@/utils/atoms/translation'
-import { isAnyAPIKey } from '@/utils/config/config'
 
+import { isAnyAPIKey } from '@/utils/config/config'
 import { isIgnoreTabAtom } from '../atom'
 
 export default function TranslateButton({ className }: { className?: string }) {
   const [isPageTranslated, setIsPageTranslated] = useAtom(isPageTranslatedAtom)
   const isIgnoreTab = useAtomValue(isIgnoreTabAtom)
   const providersConfig = useAtomValue(configFields.providersConfig)
+  const translateConfig = useAtomValue(configFields.translate)
 
   const toggleTranslation = async () => {
     const [currentTab] = await browser.tabs.query({
@@ -21,7 +23,7 @@ export default function TranslateButton({ className }: { className?: string }) {
 
     if (currentTab.id) {
       if (!isPageTranslated) {
-        if (!isAnyAPIKey(providersConfig)) {
+        if ((providerNames as readonly string[]).includes(translateConfig.provider) && !isAnyAPIKey(providersConfig)) {
           toast.error(i18n.t('noConfig.warning'))
           return
         }

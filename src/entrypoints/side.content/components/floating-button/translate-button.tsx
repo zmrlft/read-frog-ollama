@@ -2,16 +2,18 @@ import { useAtom, useAtomValue } from 'jotai'
 import { Check, Languages } from 'lucide-react'
 import { toast } from 'sonner'
 
+import { providerNames } from '@/types/config/provider'
 import { configFields } from '@/utils/atoms/config'
 import { isPageTranslatedAtom } from '@/utils/atoms/translation'
 import { isAnyAPIKey } from '@/utils/config/config'
-import { removeAllTranslatedWrapperNodes, translatePage } from '@/utils/host/translate'
 
+import { removeAllTranslatedWrapperNodes, translatePage } from '@/utils/host/translate'
 import HiddenButton from './components/hidden-button'
 
 export default function TranslateButton() {
   const [isPageTranslated, setIsPageTranslated] = useAtom(isPageTranslatedAtom)
   const providersConfig = useAtomValue(configFields.providersConfig)
+  const translateConfig = useAtomValue(configFields.translate)
 
   useEffect(() => {
     const removeListener = onMessage(
@@ -37,7 +39,7 @@ export default function TranslateButton() {
     <HiddenButton
       Icon={Languages}
       onClick={() => {
-        if (!isAnyAPIKey(providersConfig)) {
+        if ((providerNames as readonly string[]).includes(translateConfig.provider) && !isAnyAPIKey(providersConfig)) {
           toast.error(i18n.t('noConfig.warning'))
           return
         }

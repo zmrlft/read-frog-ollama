@@ -44,7 +44,7 @@ languageLevels:
   intermediate: 中級
   advanced: 高級
 noConfig:
-  warning: 請先在選項頁設置 API Key
+  warning: 如果想要使用 AI 模型，請先在選項頁設置 API Key
   warningWithLink:
     youMust: 您必須先
     setTheAPIKey: 設置 API Key

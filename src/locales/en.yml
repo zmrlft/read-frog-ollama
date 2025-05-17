@@ -47,7 +47,7 @@ languageLevels:
   intermediate: Intermediate
   advanced: Advanced
 noConfig:
-  warning: Please set API key on the options page first
+  warning: If you want to use AI models, please set API key on the options page first
   warningWithLink:
     youMust: You must
     setTheAPIKey: set the API key

@@ -8,7 +8,7 @@ export const providerModels = {
   deepseek: ['deepseek-chat'],
 } as const
 
-const providerNames = ['openai', 'deepseek'] as const satisfies Readonly<
+export const providerNames = ['openai', 'deepseek'] as const satisfies Readonly<
   (keyof typeof providerModels)[]
 >
 
