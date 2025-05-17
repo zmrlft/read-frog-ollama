@@ -57,8 +57,8 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0
       '@wxt-dev/i18n':
-        specifier: https://pkg.pr.new/@wxt-dev/i18n@1617
-        version: https://pkg.pr.new/@wxt-dev/i18n@1617(wxt@0.20.6(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1))
+        specifier: ^0.2.4
+        version: 0.2.4(wxt@0.20.6(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1))
       ai:
         specifier: ^4.3.13
         version: 4.3.13(react@19.1.0)(zod@3.24.3)
@@ -2031,9 +2031,11 @@ packages:
   '@wxt-dev/browser@0.0.317':
     resolution: {integrity: sha512-tpFr/OJjTlGY7FLIr950fNi9fIBLQQ9pRVDDajeqEMip5LsXFAxpbF4I1GAGUkdTJEghKQ8P5N9XnsAdbPBAOQ==}
 
-  '@wxt-dev/i18n@https://pkg.pr.new/@wxt-dev/i18n@1617':
-    resolution: {tarball: https://pkg.pr.new/@wxt-dev/i18n@1617}
-    version: 0.2.3
+  '@wxt-dev/browser@0.0.318':
+    resolution: {integrity: sha512-rVZBWikRK8tkVOmvR1gCSMvN5omsIAt4L1Je32I/wl4yJgAcu3xb3ZjJceRWiXUNPvjH1vWfQbEUQD7+nJ2cCg==}
+
+  '@wxt-dev/i18n@0.2.4':
+    resolution: {integrity: sha512-qYWCRlMcRY/fCcwYpPcZV55NHFlri8K+eJqS/0bhHnDClWkiYHyYnIzI0tMeNdXCCo8oyKQr+qhrVM/LKNRymw==}
     peerDependencies:
       wxt: '>=0.19.7'
     peerDependenciesMeta:
@@ -7452,8 +7454,14 @@ snapshots:
       '@types/filesystem': 0.0.36
       '@types/har-format': 1.2.16
 
-  '@wxt-dev/i18n@https://pkg.pr.new/@wxt-dev/i18n@1617(wxt@0.20.6(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1))':
+  '@wxt-dev/browser@0.0.318':
     dependencies:
+      '@types/filesystem': 0.0.36
+      '@types/har-format': 1.2.16
+
+  '@wxt-dev/i18n@0.2.4(wxt@0.20.6(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1))':
+    dependencies:
+      '@wxt-dev/browser': 0.0.318
       chokidar: 4.0.3
       confbox: 0.2.2
       fast-glob: 3.3.3
