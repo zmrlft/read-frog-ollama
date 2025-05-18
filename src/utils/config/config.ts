@@ -1,9 +1,9 @@
 import type { Config } from '@/types/config/config'
 
-import type { ProvidersConfig } from '@/types/config/provider'
+import type { APIProviderNames, ProvidersConfig } from '@/types/config/provider'
 import deepmerge from 'deepmerge'
-import { configSchema } from '@/types/config/config'
 
+import { configSchema } from '@/types/config/config'
 import {
   CONFIG_SCHEMA_VERSION,
   CONFIG_STORAGE_KEY,
@@ -67,6 +67,10 @@ export function isAnyAPIKey(providersConfig: ProvidersConfig) {
   return Object.values(providersConfig).some((providerConfig) => {
     return providerConfig.apiKey
   })
+}
+
+export function hasSetAPIKey(provider: APIProviderNames, providersConfig: ProvidersConfig) {
+  return providersConfig[provider]?.apiKey !== undefined
 }
 
 export async function loadAPIKeyFromEnv() {

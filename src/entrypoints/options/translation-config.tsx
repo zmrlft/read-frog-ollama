@@ -1,6 +1,6 @@
-import type { PageTranslateRange } from '@/types/config/config'
-import deepmerge from 'deepmerge'
+import type { PageTranslateRange } from '@/types/config/provider'
 
+import deepmerge from 'deepmerge'
 import { useAtom } from 'jotai'
 import {
   Select,
@@ -10,17 +10,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { pageTranslateRangeSchema } from '@/types/config/config'
+import { pageTranslateRangeSchema } from '@/types/config/provider'
 import { configFields } from '@/utils/atoms/config'
 
 export default function TranslationConfigSection() {
   const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
   return (
     <section>
-      <h2 className="mb-8 text-center text-2xl font-bold">
+      <h2 className="mb-8 text-2xl font-bold">
         {i18n.t('options.translationConfig.title')}
       </h2>
-      <div className="mx-auto grid max-w-sm items-center gap-0.5">
+      <div className="grid w-[220px] items-center gap-0.5">
         <label className="text-sm font-medium">
           {i18n.t('options.translationConfig.translateRange.title')}
         </label>
