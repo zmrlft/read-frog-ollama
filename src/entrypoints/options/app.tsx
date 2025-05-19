@@ -1,13 +1,13 @@
-import Container from '@/components/container'
+import { Route, Routes } from 'react-router'
 
-import ProviderConfig from './providers'
-import TranslationConfigSection from './translation-config'
+import { NAV_ITEMS } from './app-sidebar/nav-items'
 
 export default function App() {
   return (
-    <Container className="mt-12 max-w-2xl space-y-16">
-      <ProviderConfig />
-      <TranslationConfigSection />
-    </Container>
+    <Routes>
+      {Object.entries(NAV_ITEMS).map(([key, item]) => (
+        <Route key={key} path={item.url} element={<item.component />} />
+      ))}
+    </Routes>
   )
 }

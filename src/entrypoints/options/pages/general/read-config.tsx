@@ -1,6 +1,6 @@
 import type { ReadProviderNames } from '@/types/config/provider'
 import deepmerge from 'deepmerge'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import ProviderIcon from '@/components/provider-icon'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
@@ -8,26 +8,35 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { readProviderModels } from '@/types/config/provider'
 import { configFields } from '@/utils/atoms/config'
 import { READ_PROVIDER_ITEMS } from '@/utils/constants/config'
+import { ConfigCard } from '../../components/config-card'
+import { FieldWithLabel } from '../../components/field-with-label'
+import { SetApiKeyWarning } from '../../components/set-api-key-warning'
 
-export default function ReadProvider() {
+export function ReadConfig() {
   return (
-    <div>
-      <h3 className="text-md font-semibold mb-2">Read Provider</h3>
-      <div className="flex gap-8">
+    <ConfigCard title="Read Config" description="For all advanced AI functions, such as in-depth article explanations and keyword extraction.">
+      <div className="flex flex-col gap-4">
         <ReadProviderSelector />
         <ReadModelSelector />
       </div>
-    </div>
+    </ConfigCard>
   )
 }
 
 function ReadProviderSelector() {
   const [readConfig, setReadConfig] = useAtom(configFields.read)
+  const providersConfig = useAtomValue(configFields.providersConfig)
+  const providerConfig = providersConfig[readConfig.provider]
   return (
-    <div className="flex flex-col w-[220px] gap-1.5">
-      <label className="text-sm font-medium">
-        Provider
-      </label>
+    <FieldWithLabel
+      id="readProvider"
+      label={(
+        <div className="flex gap-2">
+          Provider
+          {!providerConfig.apiKey && <SetApiKeyWarning />}
+        </div>
+      )}
+    >
       <Select
         value={readConfig.provider}
         onValueChange={(value: ReadProviderNames) =>
@@ -48,7 +57,7 @@ function ReadProviderSelector() {
           </SelectGroup>
         </SelectContent>
       </Select>
-    </div>
+    </FieldWithLabel>
   )
 }
 
@@ -56,10 +65,7 @@ function ReadModelSelector() {
   const [readConfig, setReadConfig] = useAtom(configFields.read)
   const modelConfig = readConfig.models[readConfig.provider]
   return (
-    <div className="flex flex-col w-[280px] gap-1.5">
-      <label htmlFor="model" className="text-sm font-medium">
-        LLM Model
-      </label>
+    <FieldWithLabel id="readModel" label="LLM Model">
       {modelConfig.isCustomModel
         ? (
             <Input
@@ -100,7 +106,7 @@ function ReadModelSelector() {
               </SelectContent>
             </Select>
           )}
-      <div className="mt-2 flex items-center space-x-2">
+      <div className="mt-0.5 flex items-center space-x-2">
         <Checkbox
           id={`isCustomModel-${readConfig.provider}`}
           checked={modelConfig.isCustomModel}
@@ -134,6 +140,6 @@ function ReadModelSelector() {
           {i18n.t('options.providerConfig.model.enterCustomModel')}
         </label>
       </div>
-    </div>
+    </FieldWithLabel>
   )
 }

@@ -1,33 +1,92 @@
-import type { TranslateProviderNames } from '@/types/config/provider'
+import type { PageTranslateRange, TranslateProviderNames } from '@/types/config/provider'
 import deepmerge from 'deepmerge'
-import { useAtom } from 'jotai'
+
+import { useAtom, useAtomValue } from 'jotai'
 import ProviderIcon from '@/components/provider-icon'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { translateProviderModels } from '@/types/config/provider'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { isLLMTranslateProvider, pageTranslateRangeSchema, translateProviderModels } from '@/types/config/provider'
 import { configFields } from '@/utils/atoms/config'
 import { LLM_TRANSLATE_PROVIDER_ITEMS, PURE_TRANSLATE_PROVIDER_ITEMS } from '@/utils/constants/config'
+import { ConfigCard } from '../../components/config-card'
+import { FieldWithLabel } from '../../components/field-with-label'
+import { SetApiKeyWarning } from '../../components/set-api-key-warning'
 
-export default function ReadProvider() {
+export default function TranslationConfig() {
   return (
-    <div>
-      <h3 className="text-md font-semibold mb-2">Read Provider</h3>
-      <div className="flex gap-8">
+    <ConfigCard title="Translation Config" description="Only for translation within web pages, such as bilingual paragraph translation.">
+      <div className="space-y-4">
         <TranslateProviderSelector />
         <TranslateModelSelector />
+        <RangeSelector />
       </div>
-    </div>
+    </ConfigCard>
+  )
+}
+
+function RangeSelector() {
+  const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
+  return (
+    <FieldWithLabel id="translateRange" label={i18n.t('options.translationConfig.translateRange.title')}>
+      <Select
+        value={translateConfig.page.range}
+        onValueChange={(value: PageTranslateRange) =>
+          setTranslateConfig(
+            deepmerge(translateConfig, { page: { range: value } }),
+          )}
+      >
+        <SelectTrigger className="w-full">
+          <SelectValue asChild>
+            <span>
+              {i18n.t(
+                `options.translationConfig.translateRange.range.${translateConfig.page.range}`,
+              )}
+            </span>
+          </SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {pageTranslateRangeSchema.options.map(range => (
+              <SelectItem key={range} value={range}>
+                {i18n.t(
+                  `options.translationConfig.translateRange.range.${range}`,
+                )}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </FieldWithLabel>
   )
 }
 
 function TranslateProviderSelector() {
   const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
+  const providersConfig = useAtomValue(configFields.providersConfig)
+
+  const providerConfig = isLLMTranslateProvider(translateConfig.provider)
+    ? providersConfig[translateConfig.provider]
+    : null
+
   return (
-    <div className="flex flex-col w-[220px] gap-1.5">
-      <label className="text-sm font-medium">
-        Provider
-      </label>
+    <FieldWithLabel
+      id="translateProvider"
+      label={(
+        <div className="flex gap-2">
+          Provider
+          {providerConfig && !providerConfig.apiKey && <SetApiKeyWarning />}
+        </div>
+      )}
+    >
       <Select
         value={translateConfig.provider}
         onValueChange={(value: TranslateProviderNames) =>
@@ -57,25 +116,23 @@ function TranslateProviderSelector() {
           </SelectGroup>
         </SelectContent>
       </Select>
-    </div>
+    </FieldWithLabel>
   )
 }
 
 function TranslateModelSelector() {
   const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
-  const modelConfig = translateConfig.models[translateConfig.provider]
 
-  if (!modelConfig) {
+  const provider = translateConfig.provider
+
+  if (!isLLMTranslateProvider(provider)) {
     return null
   }
 
-  const provider = translateConfig.provider as keyof typeof translateProviderModels
+  const modelConfig = translateConfig.models[provider]
 
   return (
-    <div className="flex flex-col w-[280px] gap-1.5">
-      <label htmlFor="model" className="text-sm font-medium">
-        LLM Model
-      </label>
+    <FieldWithLabel id="translateModel" label="LLM Model">
       {modelConfig.isCustomModel
         ? (
             <Input
@@ -116,7 +173,7 @@ function TranslateModelSelector() {
               </SelectContent>
             </Select>
           )}
-      <div className="mt-2 flex items-center space-x-2">
+      <div className="mt-0.5 flex items-center space-x-2">
         <Checkbox
           id={`isCustomModel-${translateConfig.provider}`}
           checked={modelConfig.isCustomModel}
@@ -150,6 +207,6 @@ function TranslateModelSelector() {
           {i18n.t('options.providerConfig.model.enterCustomModel')}
         </label>
       </div>
-    </div>
+    </FieldWithLabel>
   )
 }

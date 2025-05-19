@@ -15,31 +15,40 @@ export const translateProviderModels = {
 } as const
 export const pureTranslateProvider = ['google', 'microsoft'] as const
 
-// need to be set api key
-export const apiProviderNames = ['openai', 'deepseek', 'openrouter'] as const
-export type APIProviderNames = typeof apiProviderNames[number]
-
 /* ──────────────────────────────
   Derived provider names
   ────────────────────────────── */
 
+// read provider names
 export const readProviderNames = ['openai', 'deepseek'] as const satisfies Readonly<
   (keyof typeof readProviderModels)[]
 >
 export type ReadProviderNames = typeof readProviderNames[number]
+// translate provider names
 export const translateProviderNames = ['google', 'microsoft', 'openai', 'deepseek', 'openrouter'] as const satisfies Readonly<
   (keyof typeof translateProviderModels | typeof pureTranslateProvider[number])[]
 >
 export type TranslateProviderNames = typeof translateProviderNames[number]
+// translate provider names that support LLM
+export const llmTranslateProviderNames = ['openai', 'deepseek', 'openrouter'] as const satisfies Readonly<
+  (keyof typeof translateProviderModels)[]
+>
+export type LLMTranslateProviderNames = typeof llmTranslateProviderNames[number]
+export function isLLMTranslateProvider(provider: TranslateProviderNames): provider is LLMTranslateProviderNames {
+  return llmTranslateProviderNames.includes(provider as LLMTranslateProviderNames)
+}
 
-export const providerNames = ['openai', 'deepseek', 'google', 'microsoft', 'openrouter'] as const satisfies Readonly<
+// all provider names
+export const allProviderNames = ['openai', 'deepseek', 'google', 'microsoft', 'openrouter'] as const satisfies Readonly<
   (typeof readProviderNames[number] | typeof translateProviderNames[number])[]
 >
-export type ProviderNames = typeof providerNames[number]
-export const llmProviderNames = ['openai', 'deepseek', 'openrouter'] as const satisfies Readonly<
+export type AllProviderNames = typeof allProviderNames[number]
+
+// need to be set api key for LLM
+export const apiProviderNames = ['openai', 'deepseek', 'openrouter'] as const satisfies Readonly<
   (keyof typeof readProviderModels | keyof typeof translateProviderModels)[]
 >
-export type LLMProviderNames = typeof llmProviderNames[number]
+export type APIProviderNames = typeof apiProviderNames[number]
 
 /* ──────────────────────────────
   Providers config schema
