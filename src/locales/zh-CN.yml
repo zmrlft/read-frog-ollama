@@ -15,26 +15,47 @@ popup:
   advice: 建议
   discord: Discord
 options:
-  providerConfig:
-    title: 模型配置
+  setAPIKeyWarning:
+    please: 请在
+    page: 页设置 API Key
+  apiKeys:
+    title: API Keys
     description:
-      openai: 提供 GPT-4 等模型
+      openai: 提供 GPT-4o 等模型
       deepseek: 推荐在中国使用
       openrouter: 多个 LLM 提供商的统一接口
     apiKey:
       showAPIKey: 显示 API Key
-    model:
-      title: 模型
-      enterCustomModel: 输入自定义模型名称
-  translationConfig:
-    title: 翻译配置
-    translateRange:
-      title: 翻译范围
-      range:
-        main: 主要内容
-        all: 所有内容
-aiService:
-  title: AI 服务
+    advancedConfig:
+      show: 显示高级配置
+      hide: 隐藏高级配置
+  general:
+    title: 通用
+    readConfig:
+      title: 阅读配置
+      description:
+        适用于所有高级 AI 功能，如深度文章解释和关键词提取。
+      provider: 提供商
+      model:
+        title: 模型
+        enterCustomModel: 输入自定义模型名称
+    translationConfig:
+      title: 翻译配置
+      description: 仅用于网页内的翻译，如双语段落翻译。
+      provider: 提供商
+      model:
+        title: 模型
+        enterCustomModel: 输入自定义模型名称
+      translateRange:
+        title: 翻译范围
+        range:
+          main: 主要内容
+          all: 所有内容
+side:
+  sourceLang: 来源语言
+  targetLang: 目标语言
+readService:
+  title: 阅读服务
   description: 用于阅读和解释文章
 translateService:
   title: 翻译服务

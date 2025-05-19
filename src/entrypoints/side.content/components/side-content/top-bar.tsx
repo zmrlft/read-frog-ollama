@@ -92,7 +92,7 @@ function ProviderSelect() {
       </SelectTrigger>
       <SelectContent container={shadowWrapper}>
         <SelectGroup>
-          <SelectLabel>{i18n.t('aiService.title')}</SelectLabel>
+          <SelectLabel>{i18n.t('readService.title')}</SelectLabel>
           {Object.entries(READ_PROVIDER_ITEMS).map(([provider, { logo, name }]) => (
             <SelectItem key={provider} value={provider}>
               <ProviderIcon logo={logo} name={name} />

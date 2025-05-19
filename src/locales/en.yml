@@ -15,29 +15,47 @@ popup:
   advice: Advice
   discord: Discord
 options:
-  providerConfig:
-    title: Model Config
+  setAPIKeyWarning:
+    please: Please set API Key on
+    page: page
+  apiKeys:
+    title: API Keys
     description:
       openai: Provides models like GPT-4o
       deepseek: Recommend to use in China
       openrouter: The unified interface for multiple LLM providers
     apiKey:
       showAPIKey: Show API Key
-    model:
-      title: Model
-      enterCustomModel: Enter the name of the custom model
-  translationConfig:
-    title: Translation Config
-    translateRange:
-      title: Translate Range
-      range:
-        main: Main Content
-        all: All Content
+    advancedConfig:
+      show: Show Advanced Config
+      hide: Hide Advanced Config
+  general:
+    title: General
+    readConfig:
+      title: Read Config
+      description:
+        For all advanced AI functions, such as in-depth article explanations and keyword extraction.
+      provider: Provider
+      model:
+        title: Model
+        enterCustomModel: Enter the name of the custom model
+    translationConfig:
+      title: Translation Config
+      description: Only for translation within web pages, such as bilingual paragraph translation.
+      provider: Provider
+      model:
+        title: Model
+        enterCustomModel: Enter the name of the custom model
+      translateRange:
+        title: Translate Range
+        range:
+          main: Main Content
+          all: All Content
 side:
   sourceLang: Source Language
   targetLang: Target Language
-aiService:
-  title: AI Service
+readService:
+  title: Read Service
   description: For read and explain articles
 translateService:
   title: Translation Service

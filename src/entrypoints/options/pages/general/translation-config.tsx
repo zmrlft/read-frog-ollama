@@ -23,7 +23,7 @@ import { SetApiKeyWarning } from '../../components/set-api-key-warning'
 
 export default function TranslationConfig() {
   return (
-    <ConfigCard title="Translation Config" description="Only for translation within web pages, such as bilingual paragraph translation.">
+    <ConfigCard title={i18n.t('options.general.translationConfig.title')} description={i18n.t('options.general.translationConfig.description')}>
       <div className="space-y-4">
         <TranslateProviderSelector />
         <TranslateModelSelector />
@@ -36,7 +36,7 @@ export default function TranslationConfig() {
 function RangeSelector() {
   const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
   return (
-    <FieldWithLabel id="translateRange" label={i18n.t('options.translationConfig.translateRange.title')}>
+    <FieldWithLabel id="translateRange" label={i18n.t('options.general.translationConfig.translateRange.title')}>
       <Select
         value={translateConfig.page.range}
         onValueChange={(value: PageTranslateRange) =>
@@ -48,7 +48,7 @@ function RangeSelector() {
           <SelectValue asChild>
             <span>
               {i18n.t(
-                `options.translationConfig.translateRange.range.${translateConfig.page.range}`,
+                `options.general.translationConfig.translateRange.range.${translateConfig.page.range}`,
               )}
             </span>
           </SelectValue>
@@ -58,7 +58,7 @@ function RangeSelector() {
             {pageTranslateRangeSchema.options.map(range => (
               <SelectItem key={range} value={range}>
                 {i18n.t(
-                  `options.translationConfig.translateRange.range.${range}`,
+                  `options.general.translationConfig.translateRange.range.${range}`,
                 )}
               </SelectItem>
             ))}
@@ -82,7 +82,7 @@ function TranslateProviderSelector() {
       id="translateProvider"
       label={(
         <div className="flex gap-2">
-          Provider
+          {i18n.t('options.general.translationConfig.provider')}
           {providerConfig && !providerConfig.apiKey && <SetApiKeyWarning />}
         </div>
       )}
@@ -132,7 +132,7 @@ function TranslateModelSelector() {
   const modelConfig = translateConfig.models[provider]
 
   return (
-    <FieldWithLabel id="translateModel" label="LLM Model">
+    <FieldWithLabel id="translateModel" label={i18n.t('options.general.translationConfig.model.title')}>
       {modelConfig.isCustomModel
         ? (
             <Input
@@ -204,7 +204,7 @@ function TranslateModelSelector() {
           htmlFor={`isCustomModel-${translateConfig.provider}`}
           className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
         >
-          {i18n.t('options.providerConfig.model.enterCustomModel')}
+          {i18n.t('options.general.translationConfig.model.enterCustomModel')}
         </label>
       </div>
     </FieldWithLabel>

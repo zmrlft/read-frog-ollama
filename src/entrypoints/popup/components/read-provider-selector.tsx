@@ -20,14 +20,14 @@ export default function ReadProviderSelector() {
   return (
     <div className="flex items-center justify-between gap-2">
       <span className="text-[13px] font-medium flex items-center gap-1.5">
-        {i18n.t('aiService.title')}
+        {i18n.t('readService.title')}
         <Tooltip>
           <TooltipTrigger asChild>
             <CircleHelp className="size-3 text-blue-300 dark:text-blue-700/70" />
           </TooltipTrigger>
           <TooltipContent>
             <p>
-              {i18n.t('aiService.description')}
+              {i18n.t('readService.description')}
             </p>
           </TooltipContent>
         </Tooltip>

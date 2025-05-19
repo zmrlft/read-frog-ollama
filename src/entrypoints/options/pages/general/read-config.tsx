@@ -14,7 +14,7 @@ import { SetApiKeyWarning } from '../../components/set-api-key-warning'
 
 export function ReadConfig() {
   return (
-    <ConfigCard title="Read Config" description="For all advanced AI functions, such as in-depth article explanations and keyword extraction.">
+    <ConfigCard title={i18n.t('options.general.readConfig.title')} description={i18n.t('options.general.readConfig.description')}>
       <div className="flex flex-col gap-4">
         <ReadProviderSelector />
         <ReadModelSelector />
@@ -32,7 +32,7 @@ function ReadProviderSelector() {
       id="readProvider"
       label={(
         <div className="flex gap-2">
-          Provider
+          {i18n.t('options.general.readConfig.provider')}
           {!providerConfig.apiKey && <SetApiKeyWarning />}
         </div>
       )}
@@ -65,7 +65,7 @@ function ReadModelSelector() {
   const [readConfig, setReadConfig] = useAtom(configFields.read)
   const modelConfig = readConfig.models[readConfig.provider]
   return (
-    <FieldWithLabel id="readModel" label="LLM Model">
+    <FieldWithLabel id="readModel" label={i18n.t('options.general.readConfig.model.title')}>
       {modelConfig.isCustomModel
         ? (
             <Input
@@ -137,7 +137,7 @@ function ReadModelSelector() {
           htmlFor={`isCustomModel-${readConfig.provider}`}
           className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
         >
-          {i18n.t('options.providerConfig.model.enterCustomModel')}
+          {i18n.t('options.general.readConfig.model.enterCustomModel')}
         </label>
       </div>
     </FieldWithLabel>

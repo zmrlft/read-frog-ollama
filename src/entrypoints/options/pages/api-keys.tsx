@@ -12,7 +12,7 @@ import { PageLayout } from '../components/page-layout'
 
 export function ApiKeysPage() {
   return (
-    <PageLayout title="API Keys" innerClassName="[&>*]:border-b [&>*:last-child]:border-b-0">
+    <PageLayout title={i18n.t('options.apiKeys.title')} innerClassName="[&>*]:border-b [&>*:last-child]:border-b-0">
       {apiProviderNames.map(provider => (
         <ProviderConfigCard key={provider} provider={provider} />
       ))}
@@ -36,7 +36,7 @@ export function ProviderConfigCard({ provider }: { provider: APIProviderNames })
           {API_PROVIDER_ITEMS[provider].name}
         </div>
       )}
-      description={i18n.t(`options.providerConfig.description.${provider}`)}
+      description={i18n.t(`options.apiKeys.description.${provider}`)}
     >
       <div className="flex flex-col gap-y-4">
         <FieldWithLabel id={`${provider}-apiKey`} label="API Key">
@@ -63,7 +63,7 @@ export function ProviderConfigCard({ provider }: { provider: APIProviderNames })
               htmlFor={`apiKey-${provider}`}
               className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              {i18n.t('options.providerConfig.apiKey.showAPIKey')}
+              {i18n.t('options.apiKeys.apiKey.showAPIKey')}
             </label>
           </div>
         </FieldWithLabel>
@@ -85,7 +85,7 @@ function AdvancedProviderConfig({ provider }: { provider: APIProviderNames }) {
         className={cn('text-sm font-medium text-blue-600 hover:underline', showAdvanced && 'mb-2')}
         onClick={() => setShowAdvanced(!showAdvanced)}
       >
-        {showAdvanced ? 'Hide Advanced Config' : 'Show Advanced Config'}
+        {showAdvanced ? i18n.t('options.apiKeys.advancedConfig.hide') : i18n.t('options.apiKeys.advancedConfig.show')}
       </button>
 
       {showAdvanced && (

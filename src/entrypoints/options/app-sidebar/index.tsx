@@ -36,7 +36,7 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild>
                     <Link to={item.url}>
                       <item.icon />
-                      <span>{item.title}</span>
+                      <span>{i18n.t(`options.${item.title}.title`)}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
