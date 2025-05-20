@@ -56,6 +56,8 @@ Join our growing community of language learners and help shape the future of Rea
 
 ## 🤝 Contribute
 
+Understand the project through AI: [DeepWiki](https://deepwiki.com/mengxi-ream/read-frog)
+
 ```bash
 pnpm install
 pnpm dev
