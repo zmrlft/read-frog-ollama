@@ -46,7 +46,7 @@ export const DEFAULT_READ_MODELS: ReadModels = {
     customModel: '',
   },
   ollama: {
-    model: 'deepseek-r1:8b',
+    model: 'gemma3:1b',
     isCustomModel: false,
     customModel: '',
   },
@@ -71,7 +71,7 @@ export const DEFAULT_TRANSLATE_MODELS: TranslateModels = {
     customModel: '',
   },
   ollama: {
-    model: 'deepseek-r1:8b',
+    model: 'gemma3:1b',
     isCustomModel: false,
     customModel: '',
   },

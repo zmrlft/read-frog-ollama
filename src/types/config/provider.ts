@@ -7,13 +7,13 @@ import { HOTKEYS } from '@/utils/constants/hotkeys'
 export const readProviderModels = {
   openai: ['gpt-4.1-mini', 'gpt-4o-mini', 'gpt-4o', 'gpt-4.1', 'gpt-4.1-nano'],
   deepseek: ['deepseek-chat'],
-  ollama: ['deepseek-r1:8b', 'gemma3:1b', 'llama2-13b-instruct', 'llama2-70b-instruct'],
+  ollama: ['qwen3:8b', 'llama3.1:8b'],
 } as const
 export const translateProviderModels = {
   openai: ['gpt-4.1-mini', 'gpt-4o-mini', 'gpt-4o', 'gpt-4.1', 'gpt-4.1-nano'],
   deepseek: ['deepseek-chat'],
   openrouter: ['meta-llama/llama-4-maverick:free', 'deepseek/deepseek-chat-v3-0324:free', 'deepseek/deepseek-prover-v2:free'],
-  ollama: ['deepseek-r1:8b', 'gemma3:1b', 'llama2-13b-instruct', 'llama2-70b-instruct'],
+  ollama: ['deepseek-r1:8b', 'gemma3:1b', 'qwen3:0.6b', 'qwen3:8b', 'gemma3:latest', 'llama3.1:8b'],
 } as const
 export const pureTranslateProvider = ['google', 'microsoft'] as const
 

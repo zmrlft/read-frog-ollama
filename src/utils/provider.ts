@@ -5,7 +5,6 @@ import { createDeepSeek } from '@ai-sdk/deepseek'
 import { createOpenAI } from '@ai-sdk/openai'
 
 import { createOpenRouter } from '@openrouter/ai-sdk-provider'
-// import { createOllama } from 'ollama-ai-provider'
 
 import { createProviderRegistry } from 'ai'
 import { CONFIG_STORAGE_KEY, DEFAULT_PROVIDER_CONFIG } from './constants/config'
@@ -36,8 +35,7 @@ export async function getTranslateModel(provider: keyof typeof translateProvider
     return openrouter.languageModel(model)
   }
   if (provider === 'ollama') {
-    // ollama have cors problem
-
+    // ollama has cross-domain issues. Currently, cross-domain is supported on the ollama server
     return createOpenRouter({
       baseURL: config?.providersConfig?.ollama.baseURL ?? DEFAULT_PROVIDER_CONFIG.ollama.baseURL,
       apiKey: config?.providersConfig?.ollama.apiKey,
