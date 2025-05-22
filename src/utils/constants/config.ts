@@ -3,6 +3,7 @@ import type { AllProviderNames, PageTranslateRange, ProvidersConfig, ReadModels,
 import deepseekLogo from '@/assets/provider/deepseek.png'
 import googleLogo from '@/assets/provider/google.png'
 import microsoftLogo from '@/assets/provider/microsoft.png'
+import ollamaLogo from '@/assets/provider/ollama.png'
 import openaiLogo from '@/assets/provider/openai.jpg'
 import openrouterLogo from '@/assets/provider/openrouter.png'
 import { apiProviderNames, pureTranslateProvider, readProviderNames, translateProviderNames } from '@/types/config/provider'
@@ -27,6 +28,10 @@ export const DEFAULT_PROVIDER_CONFIG: ProvidersConfig = {
     apiKey: undefined,
     baseURL: 'https://openrouter.ai/api/v1',
   },
+  ollama: {
+    apiKey: undefined,
+    baseURL: 'http://localhost:11434/v1',
+  },
 }
 
 export const DEFAULT_READ_MODELS: ReadModels = {
@@ -37,6 +42,11 @@ export const DEFAULT_READ_MODELS: ReadModels = {
   },
   deepseek: {
     model: 'deepseek-chat',
+    isCustomModel: false,
+    customModel: '',
+  },
+  ollama: {
+    model: 'deepseek-r1:8b',
     isCustomModel: false,
     customModel: '',
   },
@@ -57,6 +67,11 @@ export const DEFAULT_TRANSLATE_MODELS: TranslateModels = {
   },
   openrouter: {
     model: 'meta-llama/llama-4-maverick:free',
+    isCustomModel: false,
+    customModel: '',
+  },
+  ollama: {
+    model: 'deepseek-r1:8b',
     isCustomModel: false,
     customModel: '',
   },
@@ -115,6 +130,10 @@ export const PROVIDER_ITEMS: Record<AllProviderNames, { logo: string, name: stri
     openrouter: {
       logo: openrouterLogo,
       name: 'OpenRouter',
+    },
+    ollama: {
+      logo: ollamaLogo,
+      name: 'Ollama',
     },
   }
 
