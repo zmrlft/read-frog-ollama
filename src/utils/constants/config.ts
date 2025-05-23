@@ -66,7 +66,7 @@ export const DEFAULT_CONFIG: Config = {
   language: {
     detectedCode: 'eng',
     sourceCode: 'auto',
-    targetCode: 'cmn',
+    targetCode: 'eng',
     level: 'intermediate',
   },
   providersConfig: DEFAULT_PROVIDER_CONFIG,

@@ -74,7 +74,7 @@ export function useAnalyzeContent() {
           setLanguage({
             detectedCode:
               articleAnalysis.detectedLang === 'und'
-                ? 'cmn'
+                ? 'eng'
                 : articleAnalysis.detectedLang,
           })
           logger.log('articleAnalysis', articleAnalysis)
