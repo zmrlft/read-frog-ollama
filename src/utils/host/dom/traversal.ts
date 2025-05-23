@@ -20,17 +20,40 @@ import {
 import { smashTruncationStyle } from './style'
 
 /**
- * Find the element at the given point even inside shadow roots
+ * Find the deepest element at the given point, including inside shadow roots
  * @param root - The root element (Document or ShadowRoot)
- * @param point - The point to find the element
+ * @param point - The point to find the deepest element
  */
-export function findElementAt(root: Document | ShadowRoot, point: Point) {
+export function findElementAt(root: Document | ShadowRoot, point: Point): Element | null {
   const { x, y } = point
-  const element = root.elementFromPoint(x, y)
-  if (element && element.shadowRoot) {
-    return findElementAt(element.shadowRoot, point)
+
+  function findDeepestElement(element: Element): Element {
+    for (const child of element.children) {
+      if (child instanceof HTMLElement) {
+        const rect = child.getBoundingClientRect()
+        const isPointInChild = x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom
+
+        if (isPointInChild) {
+          if (child.shadowRoot) {
+            const shadowResult = findElementAt(child.shadowRoot, point)
+            if (shadowResult) {
+              return shadowResult
+            }
+          }
+          return findDeepestElement(child)
+        }
+      }
+    }
+    // No deeper child found, return current element
+    return element
   }
-  return element
+
+  const initialElement = root.elementFromPoint(x, y)
+  if (!initialElement) {
+    return null
+  }
+
+  return findDeepestElement(initialElement)
 }
 
 /**
