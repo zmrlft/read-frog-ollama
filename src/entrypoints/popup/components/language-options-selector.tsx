@@ -5,8 +5,9 @@ import { useAtom } from 'jotai'
 
 import { ArrowRight, ChevronDown } from 'lucide-react'
 import {
-  langCodeISO6393,
-  langCodeToEnglishName,
+  LANG_CODE_TO_EN_NAME,
+  LANG_CODE_TO_LOCALE_NAME,
+  langCodeISO6393Schema,
 } from '@/types/config/languages'
 import { configFields } from '@/utils/atoms/config'
 
@@ -43,13 +44,13 @@ export default function LanguageOptionsSelector() {
           onChange={handleSourceLangChange}
         >
           <option value="auto">
-            {langCodeToEnglishName[language.detectedCode]}
+            {`${LANG_CODE_TO_EN_NAME[language.detectedCode]} (${LANG_CODE_TO_LOCALE_NAME[language.detectedCode]})`}
             {' '}
             (auto)
           </option>
-          {langCodeISO6393.options.map(key => (
+          {langCodeISO6393Schema.options.map(key => (
             <option key={key} value={key}>
-              {langCodeToEnglishName[key]}
+              {`${LANG_CODE_TO_EN_NAME[key]} (${LANG_CODE_TO_LOCALE_NAME[key]})`}
             </option>
           ))}
         </select>
@@ -68,9 +69,9 @@ export default function LanguageOptionsSelector() {
           value={language.targetCode}
           onChange={handleTargetLangChange}
         >
-          {langCodeISO6393.options.map(key => (
+          {langCodeISO6393Schema.options.map(key => (
             <option key={key} value={key}>
-              {langCodeToEnglishName[key]}
+              {`${LANG_CODE_TO_EN_NAME[key]} (${LANG_CODE_TO_LOCALE_NAME[key]})`}
             </option>
           ))}
         </select>
