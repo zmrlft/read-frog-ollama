@@ -7,7 +7,7 @@ import { HOTKEYS } from '@/utils/constants/hotkeys'
 export const readProviderModels = {
   openai: ['gpt-4.1-mini', 'gpt-4o-mini', 'gpt-4o', 'gpt-4.1', 'gpt-4.1-nano'],
   deepseek: ['deepseek-chat'],
-  ollama: ['qwen3:8b', 'llama3.1:8b'],
+  ollama: ['gemma3:1b', 'qwen3:8b', 'llama3.1:8b'],
 } as const
 export const translateProviderModels = {
   openai: ['gpt-4.1-mini', 'gpt-4o-mini', 'gpt-4o', 'gpt-4.1', 'gpt-4.1-nano'],
