@@ -2,7 +2,7 @@ export function APIConfigWarning({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'rounded-md border border-amber-500 bg-amber-100 px-2 py-1.5 text-center text-sm font-medium',
+        'rounded-md border border-amber-500 bg-amber-100 px-2 py-1.5 text-center text-sm font-medium dark:bg-amber-900',
         className,
       )}
     >
