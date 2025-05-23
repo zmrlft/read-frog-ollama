@@ -18,7 +18,7 @@ export default defineBackground(() => {
     // Open tutorial page when extension is installed
     if (details.reason === 'install') {
       await browser.tabs.create({
-        url: 'https://readfrog.mengxi.work/tutorial/translation',
+        url: 'https://readfrog.mengxi.work/guide/step-1',
       })
     }
   })
