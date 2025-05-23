@@ -16,6 +16,7 @@ interface ProtocolMap {
   getPinState: () => boolean
   returnPinState: (data: { isPinned: boolean }) => void
   setTargetLanguage: (data: { langCodeISO6393: LangCodeISO6393 }) => void
+  getTargetLanguage: () => LangCodeISO6393 | undefined
 }
 
 export const { sendMessage, onMessage }

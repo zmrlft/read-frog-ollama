@@ -5,8 +5,9 @@ import { OFFICIAL_SITE_URL_PATTERNS } from '@/utils/constants/site'
 let lastIsPinned = false
 
 export function newUserGuide() {
-  guidePinExtension()
   guideSetTargetLanguage()
+  guidePinExtension()
+  guideGetTargetLanguage()
 }
 
 export async function guidePinExtension() {
@@ -52,5 +53,12 @@ export async function guideSetTargetLanguage() {
         targetCode: langCodeISO6393,
       },
     })
+  })
+}
+
+export async function guideGetTargetLanguage() {
+  onMessage('getTargetLanguage', async () => {
+    const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`)
+    return config?.language.targetCode
   })
 }

@@ -28,5 +28,15 @@ export default defineContentScript({
         await sendMessage('setTargetLanguage', { langCodeISO6393 })
       }
     })
+
+    window.addEventListener('message', async (e) => {
+      if (e.source !== window)
+        return
+      const { source, type } = e.data || {}
+      if (source === 'read-frog-page' && type === 'getTargetLanguage') {
+        const targetLanguage = await sendMessage('getTargetLanguage', undefined)
+        window.postMessage({ source: `${kebabCase(APP_NAME)}-ext`, type: 'getTargetLanguage', data: { targetLanguage } }, '*')
+      }
+    })
   },
 })
