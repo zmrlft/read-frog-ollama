@@ -21,9 +21,9 @@ export async function getProviderRegistry() {
       baseURL: config?.providersConfig?.deepseek.baseURL ?? DEFAULT_PROVIDER_CONFIG.deepseek.baseURL,
       apiKey: config?.providersConfig?.deepseek.apiKey,
     }),
-    ollama: createOpenRouter({
-      apiKey: config?.providersConfig?.ollama.apiKey,
+    ollama: createOpenAI({
       baseURL: config?.providersConfig?.ollama.baseURL ?? DEFAULT_PROVIDER_CONFIG.ollama.baseURL,
+      apiKey: config?.providersConfig?.ollama.apiKey,
     }),
   })
 }
@@ -37,13 +37,6 @@ export async function getTranslateModel(provider: keyof typeof translateProvider
   })
   if (provider === 'openrouter') {
     return openrouter.languageModel(model)
-  }
-  if (provider === 'ollama') {
-    // ollama has cross-domain issues. Currently, cross-domain is supported on the ollama server
-    return createOpenRouter({
-      baseURL: config?.providersConfig?.ollama.baseURL ?? DEFAULT_PROVIDER_CONFIG.ollama.baseURL,
-      apiKey: config?.providersConfig?.ollama.apiKey,
-    }).languageModel(model)
   }
   return registry.languageModel(`${provider}:${model}`)
 }

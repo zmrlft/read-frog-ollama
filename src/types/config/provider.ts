@@ -7,7 +7,6 @@ import { HOTKEYS } from '@/utils/constants/hotkeys'
 export const readProviderModels = {
   openai: ['gpt-4.1-mini', 'gpt-4o-mini', 'gpt-4o', 'gpt-4.1', 'gpt-4.1-nano'],
   deepseek: ['deepseek-chat'],
-  ollama: ['gemma3:1b', 'qwen3:8b', 'llama3.1:8b'],
 } as const
 export const translateProviderModels = {
   openai: ['gpt-4.1-mini', 'gpt-4o-mini', 'gpt-4o', 'gpt-4.1', 'gpt-4.1-nano'],
@@ -22,7 +21,7 @@ export const pureTranslateProvider = ['google', 'microsoft'] as const
   ────────────────────────────── */
 
 // read provider names
-export const readProviderNames = ['openai', 'deepseek', 'ollama'] as const satisfies Readonly<
+export const readProviderNames = ['openai', 'deepseek'] as const satisfies Readonly<
   (keyof typeof readProviderModels)[]
 >
 export type ReadProviderNames = typeof readProviderNames[number]
