@@ -10,7 +10,7 @@ import { apiProviderNames, pureTranslateProvider, readProviderNames, translatePr
 import { omit, pick } from '@/types/utils'
 
 export const CONFIG_STORAGE_KEY = 'config'
-export const CONFIG_SCHEMA_VERSION = 5
+export const CONFIG_SCHEMA_VERSION = 6
 
 export const MIN_SIDE_CONTENT_WIDTH = 400 // px
 export const DEFAULT_SIDE_CONTENT_WIDTH = 400 // px
@@ -42,11 +42,6 @@ export const DEFAULT_READ_MODELS: ReadModels = {
   },
   deepseek: {
     model: 'deepseek-chat',
-    isCustomModel: false,
-    customModel: '',
-  },
-  ollama: {
-    model: 'gemma3:1b',
     isCustomModel: false,
     customModel: '',
   },
