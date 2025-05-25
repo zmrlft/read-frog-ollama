@@ -104,7 +104,7 @@ export function extractTextContent(node: TransNode): string {
 export function walkAndLabelElement(
   element: HTMLElement,
   walkId: string,
-): 'hasBlock' | false {
+): 'isOrHasBlockNode' | 'isShallowInlineNode' | false {
   element.setAttribute(WALKED_ATTRIBUTE, walkId)
 
   if (isDontWalkIntoElement(element)) {
@@ -148,12 +148,12 @@ export function walkAndLabelElement(
     }
 
     if (isHTMLElement(child)) {
-      const hasBlock = walkAndLabelElement(child, walkId)
+      const result = walkAndLabelElement(child, walkId)
 
-      if (hasBlock) {
+      if (result === 'isOrHasBlockNode') {
         hasBlockNodeChild = true
       }
-      else if (child.textContent?.trim()) {
+      else if (result === 'isShallowInlineNode') {
         hasInlineNodeChild = true
       }
     }
@@ -165,10 +165,11 @@ export function walkAndLabelElement(
 
   if (hasBlockNodeChild || isShallowBlockHTMLElement(element)) {
     element.setAttribute(BLOCK_ATTRIBUTE, '')
-    return 'hasBlock'
+    return 'isOrHasBlockNode'
   }
   else if (isShallowInlineHTMLElement(element)) {
     element.setAttribute(INLINE_ATTRIBUTE, '')
+    return 'isShallowInlineNode'
   }
 
   return false

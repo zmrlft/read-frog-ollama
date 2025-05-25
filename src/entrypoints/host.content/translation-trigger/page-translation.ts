@@ -1,3 +1,5 @@
+import { isHTMLElement } from '@/utils/host/dom/filter'
+import { translateWalkedElement, walkAndLabelElement } from '@/utils/host/dom/traversal'
 import { translatePage } from '@/utils/host/translate'
 
 export function registerPageTranslationTriggers() {
@@ -119,3 +121,70 @@ export function registerPageTranslationTriggers() {
 //     document.removeEventListener('touchcancel', reset);
 //   };
 // }
+
+export function observeAndTranslateVisibleElements(
+  options: IntersectionObserverInit = { root: null, rootMargin: '0px', threshold: 0.1 },
+) {
+  const id = crypto.randomUUID()
+
+  // Listen to existing elements when they enter the viewpoint
+  const io = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        if (isHTMLElement(entry.target)) {
+          translateWalkedElement(entry.target, id)
+        }
+        observer.unobserve(entry.target)
+      }
+    })
+  }, options)
+
+  observerTopLevelParagraphs(document.body, id, io)
+
+  // Listen to new nodes
+  const mo = new MutationObserver((records) => {
+    for (const rec of records) {
+      if (rec.type === 'childList') {
+        rec.addedNodes.forEach((node) => {
+          if (isHTMLElement(node)) {
+            observerTopLevelParagraphs(node, id, io)
+          }
+        })
+      }
+
+      else if (
+        rec.type === 'attributes'
+        && (rec.attributeName === 'style' || rec.attributeName === 'class')
+      ) {
+        const el = rec.target
+        if (isHTMLElement(el)) {
+          observerTopLevelParagraphs(el, id, io)
+        }
+      }
+    }
+  })
+
+  mo.observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['style', 'class'],
+  })
+
+  return () => {
+    io.disconnect()
+    mo.disconnect()
+  }
+}
+
+function observerTopLevelParagraphs(container: HTMLElement, id: string, io: IntersectionObserver) {
+  walkAndLabelElement(container, id)
+  logger.info('array', Array.from(
+    container.querySelectorAll<HTMLElement>(`[data-read-frog-paragraph][data-read-frog-walked="${CSS.escape(id)}"]`),
+  ))
+  const topLevelParagraphs = Array.from(
+    container.querySelectorAll<HTMLElement>(`[data-read-frog-paragraph][data-read-frog-walked="${CSS.escape(id)}"]`),
+  ).filter(el => el.parentElement?.closest('[data-read-frog-paragraph]') == null)
+  topLevelParagraphs.forEach(el => io.observe(el))
+  logger.info('topLevelParagraphs', topLevelParagraphs)
+}

@@ -30,10 +30,25 @@ jobs:
         shell: bash
 
       - name: Create Release Pull Request
+        id: changesets
         uses: changesets/action@v1
         with:
           commit: 'chore(release): version packages'
           title: 'chore(release): version packages'
           publish: pnpm run release
+          createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get latest tag
+        if: steps.changesets.outputs.published == 'true'
+        id: tag
+        run: echo "TAG=$(git describe --abbrev=0 --tags)" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release (auto notes)
+        if: steps.changesets.outputs.published == 'true'
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag.outputs.TAG }}
+          generateReleaseNotes: true
+          omitBody: true
