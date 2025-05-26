@@ -1,9 +1,6 @@
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useSetAtom } from 'jotai'
 import { Bolt, Star } from 'lucide-react'
 import { Toaster } from 'sonner'
-import { APIConfigWarning } from '@/components/api-config-warning'
-import { configFields } from '@/utils/atoms/config'
-import { isAnyAPIKey } from '@/utils/config/config'
 import { version } from '../../../package.json'
 import { initIsIgnoreTabAtom } from './atom'
 import FloatingButton from './components/floating-button'
@@ -18,16 +15,12 @@ import TranslateProviderSelector from './components/translate-provider-selector'
 
 function App() {
   const initIsIgnoreTab = useSetAtom(initIsIgnoreTabAtom)
-  const providersConfig = useAtomValue(configFields.providersConfig)
   useEffect(() => {
     initIsIgnoreTab()
   }, [initIsIgnoreTab])
 
   return (
     <>
-      {!isAnyAPIKey(providersConfig) && (
-        <APIConfigWarning className="mx-3 mt-3 text-[11px]" />
-      )}
       <div className="bg-background flex flex-col gap-4 px-6 pt-5 pb-4">
         <LanguageOptionsSelector />
         <LanguageLevelSelector />
