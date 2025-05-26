@@ -21,7 +21,7 @@ import { protectSelectAllShadowRoot } from '@/utils/select-all'
 import { addStyleToShadow, mirrorDynamicStyles } from '../../utils/styles'
 import App from './app'
 
-import { store } from './atoms'
+import { store, translationPortAtom } from './atoms'
 import '@/assets/tailwind/text-small.css'
 import '@/assets/tailwind/theme.css'
 import '@/entrypoints/host.content/style.css'
@@ -89,9 +89,10 @@ export default defineContentScript({
           return children
         }
 
-        sendMessage('uploadIsPageTranslated', {
-          isPageTranslated: false,
-        })
+        const port = browser.runtime.connect({ name: 'translation' })
+
+        // Set port to atom so React components can access it
+        store.set(translationPortAtom, port)
 
         root.render(
           <QueryClientProvider client={queryClient}>
