@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: '0 0 * * *'
 
+  workflow_dispatch:
+
 jobs:
   stale:
     runs-on: ubuntu-latest
@@ -11,12 +13,22 @@ jobs:
       - uses: actions/stale@v4
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          days-before-stale: 7 # Mark as stale after 7 days total
-          days-before-close: 30 # Close after 30 days
+
+          # ---- Only process PRs, not issues ----
+          days-before-issue-stale: -1
+          days-before-issue-close: -1
+          stale-issue-message: ''
+          close-issue-message: ''
+          # ----------------------------------
+
+          days-before-stale: 7
+          days-before-close: 30
           stale-pr-message: |
-            This PR has been inactive for 7 days and is now marked as stale. It will be automatically closed in 30 days if no further activity occurs.
+            This PR has been inactive for 7 days and is now marked as stale.
+            It will be automatically closed in 30 days if no further activity occurs.
           close-pr-message: |
-            Since it has been a long time without updates, the PR has been automatically closed. If you need to continue, please reopen or create a new PR.
+            Since it has been a long time without updates, the PR has been automatically closed.
+            If you need to continue, please reopen or create a new PR.
           exempt-pr-labels: |
             pinned
             WIP
