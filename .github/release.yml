@@ -3,9 +3,14 @@ changelog:
     labels:
       - ignore-for-release
       - dependencies
+      - automated
+      - bot
+      - github-actions
     authors:
       - dependabot[bot]
       - github-actions[bot]
+      - github-actions
+      - action-bot
 
   categories:
     - title: 🚨 Breaking Changes
