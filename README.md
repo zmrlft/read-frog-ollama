@@ -62,17 +62,7 @@ Join our growing community of language learners and help shape the future of Rea
 
 Understand the project through AI: [DeepWiki](https://deepwiki.com/mengxi-ream/read-frog)
 
-```bash
-pnpm install
-pnpm dev
-```
-
-To build for chrome, edge:
-
-```bash
-pnpm install
-pnpm zip
-```
+Check out the [Contribution Guide](https://readfrog.mengxi.work/en/tutorial/contribution) for more details.
 
 ### Thanks to our Contributors
 
