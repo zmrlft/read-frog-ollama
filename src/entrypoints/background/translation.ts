@@ -1,17 +1,9 @@
 import type { Config } from '@/types/config/config'
 import { CONFIG_STORAGE_KEY } from '@/utils/constants/config'
+import { shouldAutoEnable } from '@/utils/host/translate'
 
 export function translationMessage() {
   const tabPageTranslationState = new Map<number, { enabled: boolean, ports: Browser.runtime.Port[] }>()
-
-  async function shouldAutoEnable(url: string): Promise<boolean> {
-    const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`)
-    const autoTranslatePatterns = config?.translate.page.autoTranslatePatterns
-    if (!autoTranslatePatterns)
-      return false
-
-    return autoTranslatePatterns.some(pattern => url.toLowerCase().includes(pattern.toLowerCase()))
-  }
 
   browser.runtime.onConnect.addListener(async (port) => {
     if (port.name !== 'translation') {
@@ -25,7 +17,9 @@ export function translationMessage() {
 
     const entry = tabPageTranslationState.get(tabId) ?? { enabled: false, ports: [] }
 
-    if (entry.ports.length === 0 && tabUrl && await shouldAutoEnable(tabUrl)) {
+    const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`)
+    const autoEnable = config && tabUrl && await shouldAutoEnable(tabUrl, config)
+    if (entry.ports.length === 0 && autoEnable) {
       entry.enabled = true
     }
 
@@ -76,8 +70,10 @@ export function translationMessage() {
     const tabId = msg.sender?.tab?.id
     const { url } = msg.data
     if (typeof tabId === 'number') {
-      // 检查新 URL 是否应该自动启用翻译
-      const shouldEnable = await shouldAutoEnable(url)
+      const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`)
+      if (!config)
+        return
+      const shouldEnable = await shouldAutoEnable(url, config)
       setEnabled(tabId, shouldEnable)
     }
   })

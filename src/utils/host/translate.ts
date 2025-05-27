@@ -1,5 +1,5 @@
+import type { Config } from '@/types/config/config'
 import type { Point, TransNode } from '@/types/dom'
-
 import { globalConfig } from '../config/config'
 import { FORCE_INLINE_TRANSLATION_TAGS } from '../constants/dom'
 import {
@@ -176,4 +176,12 @@ function insertTranslatedNodeIntoWrapper(
 
   translatedNode.textContent = translatedText
   translatedWrapperNode.appendChild(translatedNode)
+}
+
+export async function shouldAutoEnable(url: string, config: Config): Promise<boolean> {
+  const autoTranslatePatterns = config?.translate.page.autoTranslatePatterns
+  if (!autoTranslatePatterns)
+    return false
+
+  return autoTranslatePatterns.some(pattern => url.toLowerCase().includes(pattern.toLowerCase()))
 }

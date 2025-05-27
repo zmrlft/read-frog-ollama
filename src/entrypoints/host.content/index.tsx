@@ -1,5 +1,6 @@
 // import eruda from 'eruda'
-import { loadGlobalConfigPromise } from '@/utils/config/config'
+import { globalConfig, loadGlobalConfigPromise } from '@/utils/config/config'
+import { shouldAutoEnable } from '@/utils/host/translate'
 import { registerTranslationTriggers } from './translation-trigger'
 import { PageTranslationManager } from './translation-trigger/page-translation'
 import './listen'
@@ -37,11 +38,14 @@ export default defineContentScript({
     })
 
     port.onMessage.addListener((msg) => {
-      if (msg.type !== 'STATUS_PUSH')
-        return
-      if (msg.enabled === manager.isActive)
+      if (msg.type !== 'STATUS_PUSH' || msg.enabled === manager.isActive)
         return
       msg.enabled ? manager.start() : manager.stop()
     })
+
+    // ! Temporary code for browser has no port.onMessage.addListener api like Orion
+    const autoEnable = globalConfig && await shouldAutoEnable(window.location.href, globalConfig)
+    if (autoEnable && !manager.isActive)
+      manager.start()
   },
 })
