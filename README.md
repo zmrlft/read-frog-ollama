@@ -95,7 +95,3 @@ If you like Read Frog, you can give a star ⭐️ at Github or upvote us at [Pro
    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=mengxi-ream/read-frog&type=Timeline" />
  </picture>
 </a>
-
-```
-
-```
