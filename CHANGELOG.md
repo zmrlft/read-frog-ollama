@@ -1,5 +1,11 @@
 # read-frog
 
+## 0.8.2
+
+### Patch Changes
+
+- [#85](https://github.com/mengxi-ream/read-frog/pull/85) [`03a8c21`](https://github.com/mengxi-ream/read-frog/commit/03a8c21060cef31c8fcc479b0e5afa3a0ad75967) Thanks [@LixWyk5](https://github.com/LixWyk5)! - underline anchor elements in translated content
+
 ## 0.8.1
 
 ### Patch Changes
