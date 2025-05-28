@@ -75,7 +75,7 @@ function addDebugButton() {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     font-family: Arial, sans-serif;
   `
-  button.classList.add('read-frog-notranslate')
+  button.classList.add('notranslate')
 
   button.addEventListener('click', simulateFourFingerTap)
   document.body.appendChild(button)

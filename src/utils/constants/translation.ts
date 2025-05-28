@@ -14,4 +14,4 @@ export const INLINE_ATTRIBUTE = 'data-read-frog-inline-node'
 // this attribute is used to determine if the translation of this target node should be the next sibling, rather than inside the node
 export const CONSECUTIVE_INLINE_END_ATTRIBUTE = 'data-read-frog-consecutive-consecutive-inline-end'
 
-export const NOTRANSLATE_CLASS = 'read-frog-notranslate'
+export const NOTRANSLATE_CLASS = 'notranslate'
