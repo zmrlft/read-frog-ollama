@@ -18,7 +18,7 @@ export async function guidePinExtension() {
     browser.action.onUserSettingsChanged.addListener(checkPinnedAndNotify)
   }
   else {
-    setInterval(checkPinnedAndNotify, 5_000)
+    setInterval(checkPinnedAndNotify, 1_000)
   }
 }
 
