@@ -6,15 +6,17 @@ import {
 } from '@/utils/constants/dom'
 import {
   BLOCK_ATTRIBUTE,
+  CONSECUTIVE_INLINE_END_ATTRIBUTE,
   INLINE_ATTRIBUTE,
   PARAGRAPH_ATTRIBUTE,
   WALKED_ATTRIBUTE,
 } from '@/utils/constants/translation'
 
-import { translateNode } from '../translate'
+import { translateConsecutiveInlineNodes, translateNode } from '../translate'
 import {
   isDontWalkIntoElement,
   isHTMLElement,
+  isInlineTransNode,
   isShallowBlockHTMLElement,
   isShallowInlineHTMLElement,
   isTextNode,
@@ -206,17 +208,32 @@ export function translateWalkedElement(
     else {
       // prevent children change during iteration
       const children = Array.from(element.childNodes)
+      let consecutiveInlineNodes: TransNode[] = []
       for (const child of children) {
         if (!child.textContent?.trim()) {
           continue
         }
-
-        if (isTextNode(child)) {
-          translateNode(child, toggle)
+        if (!(isTextNode(child) || isHTMLElement(child))) {
+          continue
         }
-        else if (isHTMLElement(child)) {
+
+        if (isInlineTransNode(child)) {
+          consecutiveInlineNodes.push(child)
+          continue
+        }
+        else if (consecutiveInlineNodes.length) {
+          dealWithConsecutiveInlineNodes(consecutiveInlineNodes, toggle)
+          consecutiveInlineNodes = []
+        }
+
+        if (isHTMLElement(child)) {
           translateWalkedElement(child, walkId, toggle)
         }
+      }
+
+      if (consecutiveInlineNodes.length) {
+        dealWithConsecutiveInlineNodes(consecutiveInlineNodes, toggle)
+        consecutiveInlineNodes = []
       }
     }
   }
@@ -236,7 +253,7 @@ export function translateWalkedElement(
   }
 }
 
-export function unwrapDeepestOnlyChild(element: HTMLElement) {
+export function unwrapDeepestOnlyHTMLChild(element: HTMLElement) {
   let currentElement = element
   while (currentElement) {
     smashTruncationStyle(currentElement)
@@ -255,4 +272,18 @@ export function unwrapDeepestOnlyChild(element: HTMLElement) {
   }
 
   return currentElement
+}
+
+function dealWithConsecutiveInlineNodes(nodes: TransNode[], toggle: boolean = false) {
+  if (nodes.length > 1) {
+    // give attribute to the last node
+    const lastNode = nodes[nodes.length - 1]
+    if (isHTMLElement(lastNode)) {
+      lastNode.setAttribute(CONSECUTIVE_INLINE_END_ATTRIBUTE, '')
+    }
+    translateConsecutiveInlineNodes(nodes, toggle)
+  }
+  else if (nodes.length === 1) {
+    translateNode(nodes[0], toggle)
+  }
 }

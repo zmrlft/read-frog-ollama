@@ -4,6 +4,7 @@ import { globalConfig } from '../config/config'
 import { FORCE_INLINE_TRANSLATION_TAGS } from '../constants/dom'
 import {
   BLOCK_CONTENT_CLASS,
+  CONSECUTIVE_INLINE_END_ATTRIBUTE,
   CONTENT_WRAPPER_CLASS,
   INLINE_CONTENT_CLASS,
   NOTRANSLATE_CLASS,
@@ -13,7 +14,7 @@ import {
   extractTextContent,
   findNearestBlockNodeAt,
   translateWalkedElement,
-  unwrapDeepestOnlyChild,
+  unwrapDeepestOnlyHTMLChild,
   walkAndLabelElement,
 } from './dom/traversal'
 import { translateText } from './translate-text'
@@ -38,11 +39,11 @@ function shouldTriggerAction(node: Node) {
   return node.textContent?.trim()
 }
 
-export async function translatePage() {
+export async function hideOrShowPageTranslation(toggle: boolean = false) {
   const id = crypto.randomUUID()
 
   walkAndLabelElement(document.body, id)
-  translateWalkedElement(document.body, id)
+  translateWalkedElement(document.body, id, toggle)
 }
 
 export function removeAllTranslatedWrapperNodes(
@@ -78,7 +79,7 @@ export async function translateNode(node: TransNode, toggle: boolean = false) {
     translatingNodes.add(node)
 
     const targetNode
-      = isHTMLElement(node) ? unwrapDeepestOnlyChild(node) : node
+      = isHTMLElement(node) ? unwrapDeepestOnlyHTMLChild(node) : node
 
     const existedTranslatedWrapper = findExistedTranslatedWrapper(targetNode)
     if (existedTranslatedWrapper) {
@@ -97,14 +98,15 @@ export async function translateNode(node: TransNode, toggle: boolean = false) {
     const spinner = document.createElement('span')
     spinner.className = 'read-frog-spinner'
     translatedWrapperNode.appendChild(spinner)
-    if (isHTMLElement(targetNode)) {
-      targetNode.appendChild(translatedWrapperNode)
-    }
-    else if (isTextNode(targetNode)) {
+
+    if (isTextNode(targetNode)) {
       targetNode.parentNode?.insertBefore(
         translatedWrapperNode,
         targetNode.nextSibling,
       )
+    }
+    else {
+      targetNode.appendChild(translatedWrapperNode)
     }
 
     let translatedText: string | undefined
@@ -133,8 +135,69 @@ export async function translateNode(node: TransNode, toggle: boolean = false) {
   }
 }
 
+export async function translateConsecutiveInlineNodes(nodes: TransNode[], toggle: boolean = false) {
+  try {
+    // if translatingNodes has all nodes, return
+    if (nodes.every(node => translatingNodes.has(node))) {
+      return
+    }
+    nodes.forEach(node => translatingNodes.add(node))
+
+    const targetNode = nodes[nodes.length - 1]
+    const existedTranslatedWrapper = findExistedTranslatedWrapper(targetNode)
+    if (existedTranslatedWrapper) {
+      if (toggle) {
+        existedTranslatedWrapper.remove()
+      }
+      return
+    }
+
+    const textContent = nodes.map(node => extractTextContent(node)).join(' ')
+    if (!textContent)
+      return
+
+    const translatedWrapperNode = document.createElement('span')
+    translatedWrapperNode.className = `${NOTRANSLATE_CLASS} ${CONTENT_WRAPPER_CLASS}`
+    const spinner = document.createElement('span')
+    spinner.className = 'read-frog-spinner'
+    translatedWrapperNode.appendChild(spinner)
+
+    targetNode.parentNode?.insertBefore(
+      translatedWrapperNode,
+      targetNode.nextSibling,
+    )
+
+    let translatedText: string | undefined
+    try {
+      translatedText = await translateText(textContent)
+    }
+    catch (error) {
+      logger.error(error)
+      translatedWrapperNode.remove()
+    }
+    finally {
+      spinner.remove()
+    }
+
+    if (!translatedText)
+      return
+
+    insertTranslatedNodeIntoWrapper(
+      translatedWrapperNode,
+      targetNode,
+      translatedText,
+    )
+  }
+  catch (error) {
+    logger.error(error)
+  }
+  finally {
+    nodes.forEach(node => translatingNodes.delete(node))
+  }
+}
+
 function findExistedTranslatedWrapper(node: TransNode) {
-  if (isTextNode(node)) {
+  if (isTextNode(node) || node.hasAttribute(CONSECUTIVE_INLINE_END_ATTRIBUTE)) {
     if (
       node.nextSibling && isHTMLElement(node.nextSibling)
       && node.nextSibling.classList.contains(NOTRANSLATE_CLASS)
