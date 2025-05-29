@@ -28,33 +28,50 @@ import { smashTruncationStyle } from './style'
  * @param root - The root element (Document or ShadowRoot)
  * @param point - The point to find the deepest element
  */
-export function findElementAt(root: Document | ShadowRoot, point: Point): Element | null {
+function findElementAt(root: Document | ShadowRoot, point: Point): Element | null {
   const { x, y } = point
 
+  // First, try to get the element at the point from the root
+  const initialElement = root.elementFromPoint(x, y)
+  if (!initialElement) {
+    return null
+  }
+
+  // If the initial element has a shadow root, check if the point is actually inside the shadow content
+  if (initialElement.shadowRoot) {
+    const shadowElement = findElementAt(initialElement.shadowRoot, point)
+    if (shadowElement) {
+      return shadowElement
+    }
+  }
+
+  // Find the deepest element by traversing children
   function findDeepestElement(element: Element): Element {
+    let deepestElement = element
+
     for (const child of element.children) {
       if (isHTMLElement(child)) {
         const rect = child.getBoundingClientRect()
         const isPointInChild = x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom
 
         if (isPointInChild) {
+          // If child has shadow root, recursively search within it
           if (child.shadowRoot) {
             const shadowResult = findElementAt(child.shadowRoot, point)
             if (shadowResult) {
               return shadowResult
             }
           }
-          return findDeepestElement(child)
+
+          // Continue searching deeper in this child
+          deepestElement = findDeepestElement(child)
+          if (deepestElement.textContent?.trim())
+            return deepestElement
         }
       }
     }
-    // No deeper child found, return current element
-    return element
-  }
 
-  const initialElement = root.elementFromPoint(x, y)
-  if (!initialElement) {
-    return null
+    return deepestElement
   }
 
   return findDeepestElement(initialElement)
