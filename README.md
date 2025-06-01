@@ -1,7 +1,7 @@
 ![Read Frog Tile](/docs/store/large-promo-tile.png)
 
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/modkelfkcfjpgbfmnbnllalkiogfofhb?style=flat-square&logo=google-chrome&label=Chrome%20Web%20Store)](https://chrome.google.com/webstore/detail/read-frog-open-source-ai/modkelfkcfjpgbfmnbnllalkiogfofhb)
-![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/modkelfkcfjpgbfmnbnllalkiogfofhb?style=flat-square&label=Chrome%20users&color=orange)
+[![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/modkelfkcfjpgbfmnbnllalkiogfofhb?style=flat-square&label=Chrome%20users&color=orange)](https://chromewebstore.google.com/detail/read-frog-open-source-ai/modkelfkcfjpgbfmnbnllalkiogfofhb)
 [![Edge Addons Version](https://img.shields.io/badge/dynamic/json?style=flat-square&logo=microsoft-edge&label=Microsoft%20Edge%20Addons&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fcbcbomlgikfbdnoaohcjfledcoklcjbo)](https://microsoftedge.microsoft.com/addons/detail/read-frog-open-source-a/cbcbomlgikfbdnoaohcjfledcoklcjbo)
 [![Edge Addons Users](https://img.shields.io/badge/dynamic/json?style=flat-square&logo=microsoft-edge&label=Edge%20users&query=%24.activeInstallCount&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fcbcbomlgikfbdnoaohcjfledcoklcjbo)](https://microsoftedge.microsoft.com/addons/detail/read-frog-open-source-a/cbcbomlgikfbdnoaohcjfledcoklcjbo)
 
@@ -88,3 +88,5 @@ If you like Read Frog, you can give a star ⭐️ at Github or upvote us at [Pro
    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=mengxi-ream/read-frog&type=Timeline" />
  </picture>
 </a>
+
+![123](https://github-readme-stats.vercel.app/api?username=xile611&rank_icon=percentile)
