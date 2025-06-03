@@ -5,7 +5,7 @@
 [![Edge Addons Version](https://img.shields.io/badge/dynamic/json?style=flat-square&logo=microsoft-edge&label=Microsoft%20Edge%20Addons&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fcbcbomlgikfbdnoaohcjfledcoklcjbo)](https://microsoftedge.microsoft.com/addons/detail/read-frog-open-source-a/cbcbomlgikfbdnoaohcjfledcoklcjbo)
 [![Edge Addons Users](https://img.shields.io/badge/dynamic/json?style=flat-square&logo=microsoft-edge&label=Edge%20users&query=%24.activeInstallCount&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fcbcbomlgikfbdnoaohcjfledcoklcjbo)](https://microsoftedge.microsoft.com/addons/detail/read-frog-open-source-a/cbcbomlgikfbdnoaohcjfledcoklcjbo)
 
-[![Discord](https://img.shields.io/discord/1371229720942874646?style=flat-square&label=Discord&logo=discord&logoColor=white&color=5865F2)](https://discord.com/invite/nmhvb6u2T7)
+[![Discord](https://img.shields.io/discord/1371229720942874646?style=flat-square&label=Discord&logo=discord&logoColor=white&color=5865F2)](https://discord.gg/ej45e3PezJ)
 ![GitHub Release](https://img.shields.io/github/v/release/mengxi-ream/read-frog?style=flat-square)
 ![GitHub last commit](https://img.shields.io/github/last-commit/mengxi-ream/read-frog?style=flat-square)
 
