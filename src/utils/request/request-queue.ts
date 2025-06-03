@@ -39,6 +39,7 @@ export class RequestQueue {
   enqueue<T>(thunk: () => Promise<T>, scheduleAt: number, hash: string): Promise<T> {
     const duplicateTask = this.duplicateTask(hash)
     if (duplicateTask) {
+      // console.info(`🔄 Found duplicate task for hash: ${hash}, returning existing promise`)
       return duplicateTask.promise
     }
 
@@ -62,6 +63,9 @@ export class RequestQueue {
 
     this.waitingTasks.set(hash, task)
     this.waitingQueue.push({ ...task, hash }, scheduleAt)
+
+    // console.info(`✅ Task ${task.id} added to queue. Queue size: ${this.waitingQueue.size()}, waiting: ${this.waitingTasks.size}, executing: ${this.executingTasks.size}`)
+
     this.schedule()
     return promise
   }
@@ -69,7 +73,7 @@ export class RequestQueue {
   private schedule() {
     this.refillTokens()
 
-    while (this.bucketTokens > 0 && this.waitingQueue.size() > 0) {
+    while (this.bucketTokens >= 1 && this.waitingQueue.size() > 0) {
       const task = this.waitingQueue.peek()
       if (task && task.scheduleAt <= Date.now()) {
         this.waitingQueue.pop()
@@ -105,10 +109,15 @@ export class RequestQueue {
   }
 
   private async executeTask(task: RequestTask & { hash: string }) {
+    // console.info(`🏃 Starting execution of task ${task.id} (attempt ${task.retryCount + 1}) at ${Date.now()}`)
+
+    let timeoutId: NodeJS.Timeout | null = null
+
     try {
       // Create a timeout promise
       const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => {
+        timeoutId = setTimeout(() => {
+          // console.info(`⏰ Task ${task.id} timed out after ${this.options.timeoutMs}ms`)
           reject(new Error(`Task ${task.id} timed out after ${this.options.timeoutMs}ms`))
         }, this.options.timeoutMs)
       })
@@ -118,9 +127,25 @@ export class RequestQueue {
         task.thunk(),
         timeoutPromise,
       ])
+
+      // Clear timeout if task completed successfully
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+        timeoutId = null
+      }
+
+      // console.info(`✅ Task ${task.id} completed successfully at ${Date.now()}`)
       task.resolve(result)
     }
     catch (error) {
+      // Clear timeout if it hasn't fired yet
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+        timeoutId = null
+      }
+
+      // console.error(`❌ Task ${task.id} failed at ${Date.now()}:`, error)
+
       // Check if we should retry
       if (task.retryCount < this.options.maxRetries) {
         task.retryCount++
@@ -136,7 +161,7 @@ export class RequestQueue {
         const retryAt = Date.now() + delayMs
         task.scheduleAt = retryAt
 
-        console.warn(`Retrying task ${task.id} (attempt ${task.retryCount}/${this.options.maxRetries}) after ${Math.round(delayMs)}ms`)
+        // console.warn(`🔄 Retrying task ${task.id} (attempt ${task.retryCount}/${this.options.maxRetries}) after ${Math.round(delayMs)}ms`)
 
         // Move task back to waiting queue for retry
         this.waitingTasks.set(task.hash, task)
@@ -145,10 +170,16 @@ export class RequestQueue {
       }
       else {
         // Max retries exceeded, reject the promise
+        // console.error(`💀 Task ${task.id} failed permanently after ${this.options.maxRetries} retries`)
         task.reject(error)
       }
     }
     finally {
+      // Ensure timeout is always cleared
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+
       this.executingTasks.delete(task.hash)
       this.schedule()
     }
@@ -166,7 +197,13 @@ export class RequestQueue {
     const now = Date.now()
     const timeSinceLastRefill = now - this.lastRefill
     const tokensToAdd = (timeSinceLastRefill / 1000) * this.options.rate
+    // const oldTokens = this.bucketTokens
     this.bucketTokens = Math.min(this.bucketTokens + tokensToAdd, this.options.capacity)
+
+    // if (tokensToAdd > 0.01) { // Only log if meaningful tokens were added
+    //   console.log(`🪣 Token bucket refilled: ${oldTokens.toFixed(2)} -> ${this.bucketTokens.toFixed(2)} (+${tokensToAdd.toFixed(2)}) after ${timeSinceLastRefill}ms`)
+    // }
+
     this.lastRefill = now
   }
 }
