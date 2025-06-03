@@ -20,7 +20,7 @@ const LINKS: {
   {
     label: 'discord',
     icon: discordIcon,
-    url: 'https://discord.gg/nmhvb6u2T7',
+    url: 'https://discord.gg/ej45e3PezJ',
   },
 ]
 
