@@ -67,7 +67,7 @@ importers:
         version: 2.2.0
       '@wxt-dev/i18n':
         specifier: ^0.2.4
-        version: 0.2.4(wxt@0.20.6(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1))
+        version: 0.2.4(wxt@0.20.7(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1))
       ai:
         specifier: ^4.3.13
         version: 4.3.13(react@19.1.0)(zod@3.24.3)
@@ -164,7 +164,7 @@ importers:
         version: 3.1.3(vitest@3.1.3(@types/debug@4.1.12)(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(lightningcss@1.29.2)(yaml@2.7.1))
       '@wxt-dev/module-react':
         specifier: ^1.1.3
-        version: 1.1.3(vite@6.3.0(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.7.1))(wxt@0.20.6(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1))
+        version: 1.1.3(vite@6.3.0(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.7.1))(wxt@0.20.7(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1))
       autoprefixer:
         specifier: ^10.4.21
         version: 10.4.21(postcss@8.5.3)
@@ -211,8 +211,8 @@ importers:
         specifier: ^3.1.3
         version: 3.1.3(@types/debug@4.1.12)(@types/node@22.14.1)(jiti@2.4.2)(jsdom@26.1.0)(lightningcss@1.29.2)(yaml@2.7.1)
       wxt:
-        specifier: ^0.20.6
-        version: 0.20.6(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1)
+        specifier: ^0.20.7
+        version: 0.20.7(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1)
 
 packages:
 
@@ -2101,11 +2101,11 @@ packages:
   '@webext-core/messaging@2.2.0':
     resolution: {integrity: sha512-CRKFSH8ZAp55QpzfseOO/RlW6fAVSGWYNJK1j23khB855Ba9wHu8PB3uuqMVZtfEAwAmsw/2U8HIkony5adFBQ==}
 
-  '@wxt-dev/browser@0.0.317':
-    resolution: {integrity: sha512-tpFr/OJjTlGY7FLIr950fNi9fIBLQQ9pRVDDajeqEMip5LsXFAxpbF4I1GAGUkdTJEghKQ8P5N9XnsAdbPBAOQ==}
-
   '@wxt-dev/browser@0.0.318':
     resolution: {integrity: sha512-rVZBWikRK8tkVOmvR1gCSMvN5omsIAt4L1Je32I/wl4yJgAcu3xb3ZjJceRWiXUNPvjH1vWfQbEUQD7+nJ2cCg==}
+
+  '@wxt-dev/browser@0.0.326':
+    resolution: {integrity: sha512-4Pb4ES7jMsxYFHEEhK005bOL2BnDEXO3jjZTOvF0gWdota8Ytpg81VtKVSC1ohj17C6tE6oNI3FdcVRfKUBl3Q==}
 
   '@wxt-dev/i18n@0.2.4':
     resolution: {integrity: sha512-qYWCRlMcRY/fCcwYpPcZV55NHFlri8K+eJqS/0bhHnDClWkiYHyYnIzI0tMeNdXCCo8oyKQr+qhrVM/LKNRymw==}
@@ -2747,8 +2747,8 @@ packages:
     resolution: {integrity: sha512-1gxPBJpI/pcjQhKgIU91II6Wkay+dLcN3M6rf2uwP8hRur3HtQXjVrdAK3sjC0piaEuxzMwjXChcETiJl47lAQ==}
     engines: {node: '>=18'}
 
-  dotenv-expand@12.0.1:
-    resolution: {integrity: sha512-LaKRbou8gt0RNID/9RoI+J2rvXsBRPMV7p+ElHlPhcSARbCPDYcYG2s1TIzAfWv4YSgyY5taidWzzs31lNV3yQ==}
+  dotenv-expand@12.0.2:
+    resolution: {integrity: sha512-lXpXz2ZE1cea1gL4sz2Ipj8y4PiVjytYr3Ij0SWoms1PGxIv7m2CRKuRuCRtHdVuvM/hNJPMxt5PbhboNC4dPQ==}
     engines: {node: '>=12'}
 
   dotenv@16.5.0:
@@ -2806,9 +2806,6 @@ packages:
 
   eruda@3.4.1:
     resolution: {integrity: sha512-RmaO5yD97URY/9Q0lye3cmmNPoXNKreeePIw7c/zllbscR92CjGFZFuQ70+0fLIvLcKW3Xha8DS8NFhmeNbEBQ==}
-
-  es-module-lexer@1.6.0:
-    resolution: {integrity: sha512-qqnD1yMU6tk/jnaMosogGySTZP8YtUgAffA9nMN+E/rjxcfRQ6IEk7IiozUjgxKoFHBGjTLnrHB/YC45r/59EQ==}
 
   es-module-lexer@1.7.0:
     resolution: {integrity: sha512-jEQoCwk8hyb2AZziIOLhDqpm5+2ww5uIE6lkO/6jcOCusfk6LhMHpXXfBLXTZ7Ydyt0j4VoUQv6uGNYbdW+kBA==}
@@ -3898,17 +3895,13 @@ packages:
     resolution: {integrity: sha512-wM1+Z03eypVAVUCE7QdSqpVIvelbOakn1M0bPDoA4SGWPx3sNDVUiMo3L6To6WWGClB7VyXnhQ4Sn7gxiJbE6A==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
-  linkedom@0.18.9:
-    resolution: {integrity: sha512-Pfvhwjs46nBrcQdauQjMXDJZqj6VwN7KStT84xQqmIgD9bPH6UVJ/ESW8y4VHVF2h7di0/P+f4Iln4U5emRcmg==}
+  linkedom@0.18.10:
+    resolution: {integrity: sha512-ESCqVAtme2GI3zZnlVRidiydByV6WmPlmKeFzFVQslADiAO2Wi+H6xL/5kr/pUOESjEoVb2Eb3cYFJ/TQhQOWA==}
 
   lint-staged@16.0.0:
     resolution: {integrity: sha512-sUCprePs6/rbx4vKC60Hez6X10HPkpDJaGcy3D1NdwR7g1RcNkWL8q9mJMreOqmHBTs+1sNFp+wOiX9fr+hoOQ==}
     engines: {node: '>=20.18'}
     hasBin: true
-
-  listr2@8.3.2:
-    resolution: {integrity: sha512-vsBzcU4oE+v0lj4FhVLzr9dBTv4/fHIa57l+GCwovP8MoFNZJTOhGU8PXd4v2VJCbECAaijBiHntiekFMLvo0g==}
-    engines: {node: '>=18.0.0'}
 
   listr2@8.3.3:
     resolution: {integrity: sha512-LWzX2KsqcB1wqQ4AHgYb4RsDXauQiqhjLk+6hjbaeHG4zpjjVAB6wC/gz6X0l+Du1cN3pUB5ZlrvTbhGSNnUQQ==}
@@ -4313,8 +4306,8 @@ packages:
     resolution: {integrity: sha512-VXJjc87FScF88uafS3JllDgvAm+c/Slfz06lorj2uAY34rlUu0Nt+v8wreiImcrgAjjIHp1rXpTDlLOGw29WwQ==}
     engines: {node: '>=18'}
 
-  open@10.1.1:
-    resolution: {integrity: sha512-zy1wx4+P3PfhXSEPJNtZmJXfhkkIaxU1VauWIrDZw1O7uJRDRJtKr9n3Ic4NgbA16KyOxOXO2ng9gYwCdXuSXA==}
+  open@10.1.2:
+    resolution: {integrity: sha512-cxN6aIDPz6rm8hbebcP7vrQNhvRcveZoJU72Y7vskh4oIm+BZwBECnx5nTmrlres1Qapvx27Qo1Auukpf8PKXw==}
     engines: {node: '>=18'}
 
   open@8.4.2:
@@ -5292,11 +5285,6 @@ packages:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
 
-  vite-node@3.1.1:
-    resolution: {integrity: sha512-V+IxPAE2FvXpTCHXyNem0M+gWm6J7eRyWPR6vYoG/Gl+IscNOjXzztUhimQgTxaAoUoj40Qqimaa0NLIOOAH4w==}
-    engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
-    hasBin: true
-
   vite-node@3.1.3:
     resolution: {integrity: sha512-uHV4plJ2IxCl4u1up1FQRrqclylKAogbtBfOTwcuJ28xFi+89PZ57BRh+naIRvH70HPwxy5QHYzg1OrEaC7AbA==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
@@ -5304,6 +5292,46 @@ packages:
 
   vite@6.3.0:
     resolution: {integrity: sha512-9aC0n4pr6hIbvi1YOpFjwQ+QOTGssvbJKoeYkuHHGWwlXfdxQlI8L2qNMo9awEEcCPSiS+5mJZk5jH1PAqoDeQ==}
+    engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': ^18.0.0 || ^20.0.0 || >=22.0.0
+      jiti: '>=1.21.0'
+      less: '*'
+      lightningcss: ^1.21.0
+      sass: '*'
+      sass-embedded: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.16.0
+      tsx: ^4.8.1
+      yaml: ^2.4.2
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      jiti:
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      sass-embedded:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+      tsx:
+        optional: true
+      yaml:
+        optional: true
+
+  vite@6.3.5:
+    resolution: {integrity: sha512-cZn6NDFE7wdTpINgs++ZJ4N49W2vRp8LCKrn3Ob1kYNtOo21vfDoaV5GzBfLU4MovSAB8uNRm4jgzVQZ+mBzPQ==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
     peerDependencies:
@@ -5477,8 +5505,8 @@ packages:
       utf-8-validate:
         optional: true
 
-  wxt@0.20.6:
-    resolution: {integrity: sha512-CdExyv2yWfpmPWFjhrKBA+nUSHOTRpRKqScod66AaLpMQ0famZ18tM0+4a9m7oX4Pts1XZH4nw79XQp06QsC2Q==}
+  wxt@0.20.7:
+    resolution: {integrity: sha512-KABq5i3CnXMUaJTcORGDLCi04K/IceUVAx5rler2QbZpLvS13OUOO0k+4s/7LI3+N8zXLh/GlQArMyJfk3M2yQ==}
     hasBin: true
 
   xdg-basedir@5.1.0:
@@ -7612,29 +7640,29 @@ snapshots:
       uid: 2.0.2
       webextension-polyfill: 0.10.0
 
-  '@wxt-dev/browser@0.0.317':
-    dependencies:
-      '@types/filesystem': 0.0.36
-      '@types/har-format': 1.2.16
-
   '@wxt-dev/browser@0.0.318':
     dependencies:
       '@types/filesystem': 0.0.36
       '@types/har-format': 1.2.16
 
-  '@wxt-dev/i18n@0.2.4(wxt@0.20.6(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1))':
+  '@wxt-dev/browser@0.0.326':
+    dependencies:
+      '@types/filesystem': 0.0.36
+      '@types/har-format': 1.2.16
+
+  '@wxt-dev/i18n@0.2.4(wxt@0.20.7(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1))':
     dependencies:
       '@wxt-dev/browser': 0.0.318
       chokidar: 4.0.3
       confbox: 0.2.2
       fast-glob: 3.3.3
     optionalDependencies:
-      wxt: 0.20.6(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1)
+      wxt: 0.20.7(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1)
 
-  '@wxt-dev/module-react@1.1.3(vite@6.3.0(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.7.1))(wxt@0.20.6(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1))':
+  '@wxt-dev/module-react@1.1.3(vite@6.3.0(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.7.1))(wxt@0.20.7(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1))':
     dependencies:
       '@vitejs/plugin-react': 4.4.1(vite@6.3.0(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.7.1))
-      wxt: 0.20.6(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1)
+      wxt: 0.20.7(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1)
     transitivePeerDependencies:
       - supports-color
       - vite
@@ -8216,7 +8244,7 @@ snapshots:
     dependencies:
       type-fest: 4.40.1
 
-  dotenv-expand@12.0.1:
+  dotenv-expand@12.0.2:
     dependencies:
       dotenv: 16.5.0
 
@@ -8261,8 +8289,6 @@ snapshots:
       is-arrayish: 0.2.1
 
   eruda@3.4.1: {}
-
-  es-module-lexer@1.6.0: {}
 
   es-module-lexer@1.7.0: {}
 
@@ -9471,7 +9497,7 @@ snapshots:
 
   lines-and-columns@2.0.4: {}
 
-  linkedom@0.18.9:
+  linkedom@0.18.10:
     dependencies:
       css-select: 5.1.0
       cssom: 0.5.0
@@ -9493,15 +9519,6 @@ snapshots:
       yaml: 2.7.1
     transitivePeerDependencies:
       - supports-color
-
-  listr2@8.3.2:
-    dependencies:
-      cli-truncate: 4.0.0
-      colorette: 2.0.20
-      eventemitter3: 5.0.1
-      log-update: 6.1.0
-      rfdc: 1.4.1
-      wrap-ansi: 9.0.0
 
   listr2@8.3.3:
     dependencies:
@@ -10065,7 +10082,7 @@ snapshots:
     dependencies:
       mimic-function: 5.0.1
 
-  open@10.1.1:
+  open@10.1.2:
     dependencies:
       default-browser: 5.2.1
       define-lazy-prop: 3.0.0
@@ -10345,7 +10362,7 @@ snapshots:
       dotenv: 16.5.0
       extract-zip: 2.0.1
       formdata-node: 6.0.3
-      listr2: 8.3.2
+      listr2: 8.3.3
       lodash.camelcase: 4.3.0
       lodash.kebabcase: 4.1.1
       lodash.snakecase: 4.1.1
@@ -10930,7 +10947,7 @@ snapshots:
       pkg-types: 2.1.0
       scule: 1.3.0
       strip-literal: 3.0.0
-      tinyglobby: 0.2.12
+      tinyglobby: 0.2.13
       unplugin: 2.3.2
       unplugin-utils: 0.2.4
 
@@ -11038,27 +11055,6 @@ snapshots:
 
   uuid@8.3.2: {}
 
-  vite-node@3.1.1(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.7.1):
-    dependencies:
-      cac: 6.7.14
-      debug: 4.4.0
-      es-module-lexer: 1.6.0
-      pathe: 2.0.3
-      vite: 6.3.0(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.7.1)
-    transitivePeerDependencies:
-      - '@types/node'
-      - jiti
-      - less
-      - lightningcss
-      - sass
-      - sass-embedded
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-      - tsx
-      - yaml
-
   vite-node@3.1.3(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.7.1):
     dependencies:
       cac: 6.7.14
@@ -11088,6 +11084,21 @@ snapshots:
       postcss: 8.5.3
       rollup: 4.40.0
       tinyglobby: 0.2.12
+    optionalDependencies:
+      '@types/node': 22.14.1
+      fsevents: 2.3.3
+      jiti: 2.4.2
+      lightningcss: 1.29.2
+      yaml: 2.7.1
+
+  vite@6.3.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.7.1):
+    dependencies:
+      esbuild: 0.25.2
+      fdir: 6.4.4(picomatch@4.0.2)
+      picomatch: 4.0.2
+      postcss: 8.5.3
+      rollup: 4.40.0
+      tinyglobby: 0.2.13
     optionalDependencies:
       '@types/node': 22.14.1
       fsevents: 2.3.3
@@ -11262,14 +11273,14 @@ snapshots:
 
   ws@8.18.1: {}
 
-  wxt@0.20.6(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1):
+  wxt@0.20.7(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(yaml@2.7.1):
     dependencies:
       '@1natsu/wait-element': 4.1.2
       '@aklinker1/rollup-plugin-visualizer': 5.12.0(rollup@4.40.0)
       '@webext-core/fake-browser': 1.3.2
       '@webext-core/isolated-element': 1.1.2
       '@webext-core/match-patterns': 1.0.3
-      '@wxt-dev/browser': 0.0.317
+      '@wxt-dev/browser': 0.0.326
       '@wxt-dev/storage': 1.1.1
       async-mutex: 0.5.0
       c12: 3.0.3(magicast@0.3.5)
@@ -11279,7 +11290,7 @@ snapshots:
       consola: 3.4.2
       defu: 6.1.4
       dotenv: 16.5.0
-      dotenv-expand: 12.0.1
+      dotenv-expand: 12.0.2
       esbuild: 0.25.2
       fast-glob: 3.3.3
       filesize: 10.1.6
@@ -11291,14 +11302,14 @@ snapshots:
       is-wsl: 3.1.0
       json5: 2.2.3
       jszip: 3.10.1
-      linkedom: 0.18.9
+      linkedom: 0.18.10
       magicast: 0.3.5
       minimatch: 10.0.1
       nano-spawn: 0.2.0
       normalize-path: 3.0.0
       nypm: 0.6.0
       ohash: 2.0.11
-      open: 10.1.1
+      open: 10.1.2
       ora: 8.2.0
       perfect-debounce: 1.0.0
       picocolors: 1.1.1
@@ -11306,8 +11317,8 @@ snapshots:
       publish-browser-extension: 3.0.0
       scule: 1.3.0
       unimport: 4.2.0
-      vite: 6.3.0(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.7.1)
-      vite-node: 3.1.1(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.7.1)
+      vite: 6.3.5(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.7.1)
+      vite-node: 3.1.3(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.7.1)
       web-ext-run: 0.2.3
     transitivePeerDependencies:
       - '@types/node'
