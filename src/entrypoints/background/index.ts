@@ -29,6 +29,10 @@ export default defineBackground(() => {
     browser.runtime.openOptionsPage()
   })
 
+  onMessage('popupRequestReadArticle', async (message) => {
+    sendMessage('readArticle', undefined, message.data.tabId)
+  })
+
   newUserGuide()
   translationMessage()
 
