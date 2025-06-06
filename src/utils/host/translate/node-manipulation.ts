@@ -12,7 +12,9 @@ import {
   NOTRANSLATE_CLASS,
 } from '../../constants/translation'
 import { isBlockTransNode, isHTMLElement, isInlineTransNode, isTextNode } from '../dom/filter'
+import { injectStylesIntoDocument } from '../dom/style'
 import {
+  deepQueryTopLevelSelector,
   extractTextContent,
   findNearestBlockNodeAt,
   translateWalkedElement,
@@ -23,22 +25,25 @@ import { translateText } from './translate-text'
 
 const translatingNodes = new Set<HTMLElement | Text>()
 
+/**
+ * Get the document that owns the given node
+ */
+function getOwnerDocument(node: Node): Document {
+  return node.ownerDocument || document
+}
+
 export async function hideOrShowNodeTranslation(point: Point) {
   if (!globalConfig)
     return
 
   const node = findNearestBlockNodeAt(point)
 
-  if (!node || !isHTMLElement(node) || !shouldTriggerAction(node))
+  if (!node || !isHTMLElement(node) || !node.textContent?.trim())
     return
 
   const id = crypto.randomUUID()
   walkAndLabelElement(node, id)
   await translateWalkedElement(node, id, true)
-}
-
-function shouldTriggerAction(node: Node) {
-  return node.textContent?.trim()
 }
 
 export async function hideOrShowPageTranslation(toggle: boolean = false) {
@@ -51,25 +56,14 @@ export async function hideOrShowPageTranslation(toggle: boolean = false) {
 export function removeAllTranslatedWrapperNodes(
   root: Document | ShadowRoot = document,
 ) {
-  function removeFromRoot(root: Document | ShadowRoot) {
-    const translatedNodes = root.querySelectorAll(
-      `.${NOTRANSLATE_CLASS}.${CONTENT_WRAPPER_CLASS}`,
-    )
-    translatedNodes.forEach((node) => {
-      // Clean up any React components before removing the node
-      cleanupAllReactWrappers(node as Element)
-      node.remove()
-    })
-
-    // Recursively search through shadow roots
-    root.querySelectorAll('*').forEach((element) => {
-      if (isHTMLElement(element) && element.shadowRoot) {
-        removeFromRoot(element.shadowRoot)
-      }
-    })
+  const isTranslatedWrapperNode = (node: Node) => {
+    return isHTMLElement(node) && node.classList.contains(NOTRANSLATE_CLASS) && node.classList.contains(CONTENT_WRAPPER_CLASS)
   }
-
-  removeFromRoot(root)
+  const translatedNodes = deepQueryTopLevelSelector(root, isTranslatedWrapperNode)
+  translatedNodes.forEach((node) => {
+    cleanupAllReactWrappers(node)
+    node.remove()
+  })
 }
 
 /**
@@ -99,9 +93,12 @@ export async function translateNode(node: TransNode, toggle: boolean = false) {
     if (!textContent)
       return
 
-    const translatedWrapperNode = document.createElement('span')
+    // Use the node's owner document instead of main document
+    const ownerDoc = getOwnerDocument(targetNode)
+    injectStylesIntoDocument(ownerDoc)
+    const translatedWrapperNode = ownerDoc.createElement('span')
     translatedWrapperNode.className = `${NOTRANSLATE_CLASS} ${CONTENT_WRAPPER_CLASS}`
-    const spinner = document.createElement('span')
+    const spinner = ownerDoc.createElement('span')
     spinner.className = 'read-frog-spinner'
     translatedWrapperNode.appendChild(spinner)
 
@@ -140,6 +137,7 @@ export async function translateConsecutiveInlineNodes(nodes: TransNode[], toggle
     nodes.forEach(node => translatingNodes.add(node))
 
     const targetNode = nodes[nodes.length - 1]
+
     const existedTranslatedWrapper = findExistedTranslatedWrapper(targetNode)
     if (existedTranslatedWrapper) {
       existedTranslatedWrapper.remove()
@@ -152,9 +150,12 @@ export async function translateConsecutiveInlineNodes(nodes: TransNode[], toggle
     if (!textContent)
       return
 
-    const translatedWrapperNode = document.createElement('span')
+    // Use the node's owner document instead of main document
+    const ownerDoc = getOwnerDocument(targetNode)
+    injectStylesIntoDocument(ownerDoc)
+    const translatedWrapperNode = ownerDoc.createElement('span')
     translatedWrapperNode.className = `${NOTRANSLATE_CLASS} ${CONTENT_WRAPPER_CLASS}`
-    const spinner = document.createElement('span')
+    const spinner = ownerDoc.createElement('span')
     spinner.className = 'read-frog-spinner'
     translatedWrapperNode.appendChild(spinner)
 
@@ -202,19 +203,21 @@ function insertTranslatedNodeIntoWrapper(
   targetNode: TransNode,
   translatedText: string,
 ) {
-  const translatedNode = document.createElement('span')
+  // Use the wrapper's owner document
+  const ownerDoc = getOwnerDocument(translatedWrapperNode)
+  const translatedNode = ownerDoc.createElement('span')
   const isForceInlineTranslationElement
     = isHTMLElement(targetNode)
       && FORCE_INLINE_TRANSLATION_TAGS.has(targetNode.tagName)
 
   if (isForceInlineTranslationElement || isInlineTransNode(targetNode)) {
-    const spaceNode = document.createElement('span')
+    const spaceNode = ownerDoc.createElement('span')
     spaceNode.textContent = '  '
     translatedWrapperNode.appendChild(spaceNode)
     translatedNode.className = `${NOTRANSLATE_CLASS} ${INLINE_CONTENT_CLASS}`
   }
   else if (isBlockTransNode(targetNode)) {
-    const brNode = document.createElement('br')
+    const brNode = ownerDoc.createElement('br')
     translatedWrapperNode.appendChild(brNode)
     translatedNode.className = `${NOTRANSLATE_CLASS} ${BLOCK_CONTENT_CLASS}`
   }

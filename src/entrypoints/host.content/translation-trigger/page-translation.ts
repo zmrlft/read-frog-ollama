@@ -1,6 +1,7 @@
-import { isHTMLElement } from '@/utils/host/dom/filter'
-import { translateWalkedElement, walkAndLabelElement } from '@/utils/host/dom/traversal'
+import { isDontWalkIntoElement, isHTMLElement, isIFrameElement } from '@/utils/host/dom/filter'
+import { deepQueryTopLevelSelector, translateWalkedElement, walkAndLabelElement } from '@/utils/host/dom/traversal'
 import { removeAllTranslatedWrapperNodes } from '@/utils/host/translate/node-manipulation'
+import { sendMessage } from '@/utils/message'
 
 // export function registerPageTranslationTriggers() {
 //   // Four-finger touch gesture to trigger translatePage
@@ -79,9 +80,10 @@ const MOVE_THRESHOLD2 = 30 * 30
 export class PageTranslationManager {
   private isAutoTranslated: boolean = false
   private intersectionObserver: IntersectionObserver | null = null
-  private mutationObserver: MutationObserver | null = null
+  private mutationObservers: MutationObserver[] = []
   private id: string | null = null
   private options: IntersectionObserverInit
+  private dontWalkIntoElementsCache = new WeakSet<HTMLElement>()
 
   constructor(options: IntersectionObserverInit = { root: null, rootMargin: '0px', threshold: 0.1 }) {
     this.options = options
@@ -117,36 +119,12 @@ export class PageTranslationManager {
       })
     }, this.options)
 
+    // Initialize walkability state for existing elements
+    this.addDontWalkIntoElements(document.body)
     this.observerTopLevelParagraphs(document.body)
 
-    // Listen to new nodes
-    this.mutationObserver = new MutationObserver((records) => {
-      for (const rec of records) {
-        if (rec.type === 'childList') {
-          rec.addedNodes.forEach((node) => {
-            if (isHTMLElement(node)) {
-              this.observerTopLevelParagraphs(node)
-            }
-          })
-        }
-        else if (
-          rec.type === 'attributes'
-          && (rec.attributeName === 'style' || rec.attributeName === 'class')
-        ) {
-          const el = rec.target
-          if (isHTMLElement(el)) {
-            this.observerTopLevelParagraphs(el)
-          }
-        }
-      }
-    })
-
-    this.mutationObserver.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['style', 'class'],
-    })
+    // Start observing mutations from document.body and all shadow roots
+    this.observeMutations(document.body)
   }
 
   stop(): void {
@@ -161,10 +139,11 @@ export class PageTranslationManager {
       this.intersectionObserver = null
     }
 
-    if (this.mutationObserver) {
-      this.mutationObserver.disconnect()
-      this.mutationObserver = null
-    }
+    // Disconnect all mutation observers
+    this.mutationObservers.forEach(observer => observer.disconnect())
+    this.mutationObservers = []
+
+    this.dontWalkIntoElementsCache = new WeakSet()
 
     removeAllTranslatedWrapperNodes()
 
@@ -186,7 +165,8 @@ export class PageTranslationManager {
       observer.observe(container)
       return
     }
-    const paragraphs = Array.from(container.querySelectorAll<HTMLElement>(`[data-read-frog-paragraph][data-read-frog-walked="${CSS.escape(this.id)}"]`))
+
+    const paragraphs = this.collectParagraphElementsDeep(container, this.id)
     const topLevelParagraphs = paragraphs.filter((el) => {
       const ancestor = el.parentElement?.closest('[data-read-frog-paragraph]')
       // keep it if either:
@@ -195,6 +175,48 @@ export class PageTranslationManager {
       return !ancestor || !container.contains(ancestor)
     })
     topLevelParagraphs.forEach(el => observer.observe(el))
+  }
+
+  /**
+   * Recursively collect elements with paragraph attributes from shadow roots and iframes
+   */
+  private collectParagraphElementsDeep(container: HTMLElement, walkId: string): HTMLElement[] {
+    const result: HTMLElement[] = []
+
+    const collectFromContainer = (root: HTMLElement | Document | ShadowRoot) => {
+      const elements = root.querySelectorAll<HTMLElement>(`[data-read-frog-paragraph][data-read-frog-walked="${CSS.escape(walkId)}"]`)
+      result.push(...Array.from(elements))
+    }
+
+    const traverseElement = (element: HTMLElement) => {
+      if (element.shadowRoot) {
+        collectFromContainer(element.shadowRoot)
+        for (const child of element.shadowRoot.children) {
+          if (child instanceof HTMLElement) {
+            traverseElement(child)
+          }
+        }
+      }
+
+      if (isIFrameElement(element)) {
+        const iframeDocument = element.contentDocument
+        if (iframeDocument && iframeDocument.body) {
+          collectFromContainer(iframeDocument)
+          traverseElement(iframeDocument.body)
+        }
+      }
+
+      for (const child of element.children) {
+        if (child instanceof HTMLElement) {
+          traverseElement(child)
+        }
+      }
+    }
+
+    collectFromContainer(container)
+    traverseElement(container)
+
+    return result
   }
 
   private registerPageTranslationTriggers() {
@@ -249,6 +271,107 @@ export class PageTranslationManager {
       document.removeEventListener('touchmove', onMove)
       document.removeEventListener('touchend', onEnd)
       document.removeEventListener('touchcancel', reset)
+    }
+  }
+
+  /**
+   * Handle style/class attribute changes and only trigger observation
+   * when element transitions from "don't walk into" to "walkable"
+   */
+  private handleElementWalkabilityChange(element: HTMLElement): void {
+    const wasDontWalkInto = this.dontWalkIntoElementsCache.has(element)
+    const isDontWalkIntoNow = isDontWalkIntoElement(element)
+
+    // Update cache with current state
+    if (isDontWalkIntoNow) {
+      this.dontWalkIntoElementsCache.add(element)
+    }
+    else {
+      this.dontWalkIntoElementsCache.delete(element)
+    }
+
+    // Only trigger observation if element transitioned from "don't walk into" to "walkable"
+    // wasDontWalkInto === true means it was previously not walkable
+    // isDontWalkIntoNow === false means it's now walkable
+    if (wasDontWalkInto === true && isDontWalkIntoNow === false) {
+      this.observerTopLevelParagraphs(element)
+    }
+  }
+
+  /**
+   * Initialize walkability state for an element and its descendants
+   */
+  private addDontWalkIntoElements(element: HTMLElement): void {
+    const dontWalkIntoElements = deepQueryTopLevelSelector(element, isDontWalkIntoElement)
+    dontWalkIntoElements.forEach(el => this.dontWalkIntoElementsCache.add(el))
+  }
+
+  /**
+   * Start observing mutations for a container and all its shadow roots
+   */
+  private observeMutations(container: HTMLElement): void {
+    const mutationObserver = new MutationObserver((records) => {
+      for (const rec of records) {
+        if (rec.type === 'childList') {
+          rec.addedNodes.forEach((node) => {
+            if (isHTMLElement(node)) {
+              this.addDontWalkIntoElements(node)
+              this.observerTopLevelParagraphs(node)
+              this.observeIsolatedDescendantsMutations(node)
+            }
+          })
+        }
+        else if (
+          rec.type === 'attributes'
+          && (rec.attributeName === 'style' || rec.attributeName === 'class')
+        ) {
+          const el = rec.target
+          if (isHTMLElement(el)) {
+            this.handleElementWalkabilityChange(el)
+          }
+        }
+      }
+    })
+
+    mutationObserver.observe(container, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['style', 'class'],
+    })
+
+    this.mutationObservers.push(mutationObserver)
+    this.observeIsolatedDescendantsMutations(container)
+  }
+
+  /**
+   * Recursively find and observe shadow roots and iframes in an element and its descendants
+   * These can't be find as top level paragraph elements because isolated shadow roots and iframes are not
+   * considered as part of the document.
+   */
+  private observeIsolatedDescendantsMutations(element: HTMLElement): void {
+    // Check if this element has a shadow root
+    if (element.shadowRoot) {
+      for (const child of element.shadowRoot.children) {
+        if (isHTMLElement(child)) {
+          this.observeMutations(child)
+        }
+      }
+    }
+
+    // Check iframes
+    if (isIFrameElement(element)) {
+      const iframeDocument = element.contentDocument
+      if (iframeDocument && iframeDocument.body) {
+        this.observeMutations(iframeDocument.body)
+      }
+    }
+
+    // Recursively check children
+    for (const child of element.children) {
+      if (isHTMLElement(child)) {
+        this.observeIsolatedDescendantsMutations(child)
+      }
     }
   }
 }
