@@ -63,7 +63,7 @@ jobs:
                    "title": "🎉 New Release Published!",
                    "description": "**${{ github.repository }}** has published a new release `${{ steps.tag.outputs.TAG }}`",
                    "url": "https://github.com/${{ github.repository }}/releases/tag/${{ steps.tag.outputs.TAG }}",
-                   "color": 5814783,
+                   "color": 48253,
                    "fields": [
                      {
                        "name": "Version",
