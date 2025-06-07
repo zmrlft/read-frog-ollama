@@ -208,6 +208,8 @@ export async function translateWalkedElement(
   walkId: string,
   toggle: boolean = false,
 ) {
+  const promises: Promise<void>[] = []
+
   // if the walkId is not the same, return
   if (element.getAttribute(WALKED_ATTRIBUTE) !== walkId)
     return
@@ -223,7 +225,7 @@ export async function translateWalkedElement(
     }
 
     if (!hasBlockNodeChild) {
-      await translateNode(element, toggle)
+      promises.push(translateNode(element, toggle))
     }
     else {
       // prevent children change during iteration
@@ -242,17 +244,17 @@ export async function translateWalkedElement(
           continue
         }
         else if (consecutiveInlineNodes.length) {
-          await dealWithConsecutiveInlineNodes(consecutiveInlineNodes, toggle)
+          promises.push(dealWithConsecutiveInlineNodes(consecutiveInlineNodes, toggle))
           consecutiveInlineNodes = []
         }
 
         if (isHTMLElement(child)) {
-          await translateWalkedElement(child, walkId, toggle)
+          promises.push(translateWalkedElement(child, walkId, toggle))
         }
       }
 
       if (consecutiveInlineNodes.length) {
-        await dealWithConsecutiveInlineNodes(consecutiveInlineNodes, toggle)
+        promises.push(dealWithConsecutiveInlineNodes(consecutiveInlineNodes, toggle))
         consecutiveInlineNodes = []
       }
     }
@@ -271,10 +273,10 @@ export async function translateWalkedElement(
         }
       }
     }
-
-    // TODO: don't need to await, otherwise, it's slow
-    await Promise.all(promises)
   }
+  // This simultaneously ensures that when concurrent translation
+  // and external await call this function, all translations are completed
+  await Promise.all(promises)
 }
 
 export function unwrapDeepestOnlyHTMLChild(element: HTMLElement) {
