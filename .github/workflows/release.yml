@@ -52,3 +52,35 @@ jobs:
           tag: ${{ steps.tag.outputs.TAG }}
           generateReleaseNotes: true
           omitBody: true
+
+      - name: Send Discord Notification
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{
+                 "embeds": [{
+                   "title": "🎉 New Release Published!",
+                   "description": "**${{ github.repository }}** has published a new release `${{ steps.tag.outputs.TAG }}`",
+                   "url": "https://github.com/${{ github.repository }}/releases/tag/${{ steps.tag.outputs.TAG }}",
+                   "color": 5814783,
+                   "fields": [
+                     {
+                       "name": "Version",
+                       "value": "`${{ steps.tag.outputs.TAG }}`",
+                       "inline": true
+                     },
+                     {
+                       "name": "Repository",
+                       "value": "[${{ github.repository }}](https://github.com/${{ github.repository }})",
+                       "inline": true
+                     }
+                   ],
+                   "footer": {
+                     "text": "GitHub Actions",
+                     "icon_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                   },
+                   "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%S.000Z)'"
+                 }]
+               }' \
+               ${{ secrets.DISCORD_WEBHOOK_URL }}
