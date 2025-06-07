@@ -49,6 +49,7 @@ export const INVALID_TRANSLATE_TAGS = new Set([
   'SCRIPT',
   'STYLE',
   'LINK',
+  'CODE',
 ])
 
 export const FORCE_INLINE_TRANSLATION_TAGS = new Set([
