@@ -96,7 +96,7 @@ jobs:
           {
             "embeds": [{
               "title": "🎉 Release Notification",
-              "description": "**${{ github.repository }}** release \`${{ steps.tag.outputs.TAG }}\`",
+              "description": "**${{ github.repository }}** has published a new release!",
               "url": "${{ steps.release_info.outputs.RELEASE_URL }}",
               "color": 48253,
               "fields": [
