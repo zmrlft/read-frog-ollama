@@ -1,16 +1,21 @@
 import type { Point, TransNode } from '@/types/dom'
 import React from 'react'
+import textSmallCSS from '@/assets/tailwind/text-small.css?inline'
+import themeCSS from '@/assets/tailwind/theme.css?inline'
 import { TranslationError } from '@/components/tranlation-error'
-import { cleanupAllReactWrappers, createReactComponentWrapper } from '@/utils/render-react-component'
+import { createReactShadowHost, removeReactShadowHost } from '@/utils/react-shadow-host/create-shadow-host'
 import { globalConfig } from '../../config/config'
-import { FORCE_INLINE_TRANSLATION_TAGS } from '../../constants/dom'
 import {
   BLOCK_CONTENT_CLASS,
   CONSECUTIVE_INLINE_END_ATTRIBUTE,
   CONTENT_WRAPPER_CLASS,
   INLINE_CONTENT_CLASS,
   NOTRANSLATE_CLASS,
-} from '../../constants/translation'
+  REACT_SHADOW_HOST_CLASS,
+  TRANSLATION_ERROR_CONTAINER_CLASS,
+} from '../../constants/dom-labels'
+import { FORCE_INLINE_TRANSLATION_TAGS } from '../../constants/dom-tags'
+import { logger } from '../../logger'
 import { isBlockTransNode, isHTMLElement, isInlineTransNode, isTextNode } from '../dom/filter'
 import { injectStylesIntoDocument } from '../dom/style'
 import {
@@ -21,6 +26,7 @@ import {
   unwrapDeepestOnlyHTMLChild,
   walkAndLabelElement,
 } from '../dom/traversal'
+
 import { translateText } from './translate-text'
 
 const translatingNodes = new Set<HTMLElement | Text>()
@@ -61,7 +67,11 @@ export function removeAllTranslatedWrapperNodes(
   }
   const translatedNodes = deepQueryTopLevelSelector(root, isTranslatedWrapperNode)
   translatedNodes.forEach((node) => {
-    cleanupAllReactWrappers(node)
+    const translationShadowHost = node.querySelector(`.${REACT_SHADOW_HOST_CLASS}`)
+    if (translationShadowHost && isHTMLElement(translationShadowHost)) {
+      // TODO: test if this works or not
+      removeReactShadowHost(translationShadowHost)
+    }
     node.remove()
   })
 }
@@ -243,10 +253,19 @@ async function getTranslatedTextAndRemoveSpinner(node: TransNode | TransNode[], 
       node,
       error: error as Error,
     })
-    const { container, cleanup } = createReactComponentWrapper(errorComponent, 'read-frog-error-wrapper')
 
-    // Store cleanup function on the container for later use
-    ;(container as any).__reactCleanup = cleanup
+    const container = createReactShadowHost(
+      errorComponent,
+      {
+        className: TRANSLATION_ERROR_CONTAINER_CLASS,
+        position: 'inline',
+        inheritStyles: false,
+        cssContent: [themeCSS, textSmallCSS],
+        style: {
+          verticalAlign: 'middle',
+        },
+      },
+    )
 
     translatedWrapperNode.appendChild(container)
   }
