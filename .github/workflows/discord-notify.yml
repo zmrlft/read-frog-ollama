@@ -20,17 +20,45 @@ jobs:
         id: tag
         run: |
           if [ -n "${{ github.event.inputs.tag }}" ]; then
-            echo "TAG=${{ github.event.inputs.tag }}" >> $GITHUB_OUTPUT
+            TAG="${{ github.event.inputs.tag }}"
+            echo "Using input tag: $TAG"
           else
-            echo "TAG=$(git describe --abbrev=0 --tags)" >> $GITHUB_OUTPUT
+            # Get latest release tag from GitHub API instead of git describe
+            TAG=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/releases/latest" \
+              | jq -r '.tag_name // ""')
+
+            if [ -z "$TAG" ] || [ "$TAG" = "null" ]; then
+              echo "No releases found, trying git describe..."
+              TAG=$(git describe --abbrev=0 --tags 2>/dev/null || echo "")
+            fi
+
+            echo "Found latest tag: $TAG"
           fi
+
+          if [ -z "$TAG" ]; then
+            echo "Error: No tag found!"
+            exit 1
+          fi
+
+          echo "TAG=$TAG" >> $GITHUB_OUTPUT
 
       - name: Get Release Info
         id: release_info
         run: |
+          echo "Getting release info for tag: ${{ steps.tag.outputs.TAG }}"
+
           # Get release info from GitHub API
           RELEASE_DATA=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ steps.tag.outputs.TAG }}")
+
+          # Check if API call was successful
+          if echo "$RELEASE_DATA" | jq -e '.message' > /dev/null 2>&1; then
+            echo "API Error: $(echo "$RELEASE_DATA" | jq -r '.message')"
+            echo "Trying to use latest release instead..."
+            RELEASE_DATA=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/releases/latest")
+          fi
 
           # Extract release notes and escape for shell
           RELEASE_NOTES=$(echo "$RELEASE_DATA" | jq -r '.body // "No release notes available"')
@@ -48,8 +76,12 @@ jobs:
           RELEASE_URL=$(echo "$RELEASE_DATA" | jq -r '.html_url // ""')
           echo "RELEASE_URL=$RELEASE_URL" >> $GITHUB_OUTPUT
 
+          echo "Release URL: $RELEASE_URL"
+
       - name: Send Discord Notification
         run: |
+          echo "Sending Discord notification for tag: ${{ steps.tag.outputs.TAG }}"
+
           # Read release notes from file and properly escape for JSON
           RELEASE_NOTES=$(cat /tmp/release_notes.txt | jq -Rs .)
 
@@ -86,6 +118,9 @@ jobs:
             }]
           }
           EOF
+
+          echo "Discord payload:"
+          cat /tmp/discord_payload.json
 
           # Send to Discord
           curl -H "Content-Type: application/json" \
