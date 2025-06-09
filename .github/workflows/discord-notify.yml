@@ -66,8 +66,15 @@ jobs:
           # Remove HTML comments (<!-- ... -->)
           RELEASE_NOTES=$(echo "$RELEASE_NOTES" | sed 's/<!--[^>]*-->//g')
 
-          # Remove any leading/trailing whitespace and empty lines
-          RELEASE_NOTES=$(echo "$RELEASE_NOTES" | sed '/^\s*$/d' | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
+          # Improve formatting: replace markdown headers and add spacing
+          RELEASE_NOTES=$(echo "$RELEASE_NOTES" | \
+            sed 's/^## \(.*\)$/\n**\1**\n/g' | \
+            sed 's/^### \(.*\)$/\n▸ **\1**\n/g' | \
+            sed 's/^#### \(.*\)$/\n  • **\1**\n/g' | \
+            sed 's/^##### \(.*\)$/\n    ◦ **\1**\n/g')
+
+          # Remove any leading/trailing whitespace and consecutive empty lines
+          RELEASE_NOTES=$(echo "$RELEASE_NOTES" | sed '/^\s*$/d' | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//' | awk '/^$/{if(!p)print;p=1;next} {p=0;print}')
 
           # Limit to first 900 characters for Discord embed limit (leaving room for truncation text)
           if [ ${#RELEASE_NOTES} -gt 900 ]; then
