@@ -1,0 +1,94 @@
+name: Discord Release Notification
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to notify about (leave empty for latest)
+        required: false
+        type: string
+
+jobs:
+  notify:
+    name: Send Discord Notification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Get target tag
+        id: tag
+        run: |
+          if [ -n "${{ github.event.inputs.tag }}" ]; then
+            echo "TAG=${{ github.event.inputs.tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "TAG=$(git describe --abbrev=0 --tags)" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Get Release Info
+        id: release_info
+        run: |
+          # Get release info from GitHub API
+          RELEASE_DATA=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ steps.tag.outputs.TAG }}")
+
+          # Extract release notes and escape for shell
+          RELEASE_NOTES=$(echo "$RELEASE_DATA" | jq -r '.body // "No release notes available"')
+
+          # Limit to first 900 characters for Discord embed limit (leaving room for truncation text)
+          if [ ${#RELEASE_NOTES} -gt 900 ]; then
+            RELEASE_NOTES=$(echo "$RELEASE_NOTES" | head -c 900)
+            RELEASE_NOTES="${RELEASE_NOTES}..."
+          fi
+
+          # Save to file to avoid shell escaping issues
+          echo "$RELEASE_NOTES" > /tmp/release_notes.txt
+
+          # Get release URL
+          RELEASE_URL=$(echo "$RELEASE_DATA" | jq -r '.html_url // ""')
+          echo "RELEASE_URL=$RELEASE_URL" >> $GITHUB_OUTPUT
+
+      - name: Send Discord Notification
+        run: |
+          # Read release notes from file and properly escape for JSON
+          RELEASE_NOTES=$(cat /tmp/release_notes.txt | jq -Rs .)
+
+          # Create the JSON payload
+          cat << EOF > /tmp/discord_payload.json
+          {
+            "embeds": [{
+              "title": "🎉 Release Notification",
+              "description": "**${{ github.repository }}** release \`${{ steps.tag.outputs.TAG }}\`",
+              "url": "${{ steps.release_info.outputs.RELEASE_URL }}",
+              "color": 48253,
+              "fields": [
+                {
+                  "name": "Version",
+                  "value": "\`${{ steps.tag.outputs.TAG }}\`",
+                  "inline": true
+                },
+                {
+                  "name": "Repository",
+                  "value": "[${{ github.repository }}](https://github.com/${{ github.repository }})",
+                  "inline": true
+                },
+                {
+                  "name": "Release Notes",
+                  "value": $RELEASE_NOTES,
+                  "inline": false
+                }
+              ],
+              "footer": {
+                "text": "GitHub Actions",
+                "icon_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+              },
+              "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)"
+            }]
+          }
+          EOF
+
+          # Send to Discord
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d @/tmp/discord_payload.json \
+               ${{ secrets.DISCORD_WEBHOOK_URL }}
