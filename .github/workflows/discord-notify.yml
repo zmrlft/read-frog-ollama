@@ -82,9 +82,8 @@ jobs:
             RELEASE_NOTES="${RELEASE_NOTES}..."
           fi
 
-          # Save to file with a blank line at the beginning
-          echo "" > /tmp/release_notes.txt
-          echo "$RELEASE_NOTES" >> /tmp/release_notes.txt
+          # Save to file to avoid shell escaping issues (Discord strips leading whitespace anyway)
+          echo "$RELEASE_NOTES" > /tmp/release_notes.txt
 
           # Get release URL
           RELEASE_URL=$(echo "$RELEASE_DATA" | jq -r '.html_url // ""')
