@@ -76,6 +76,9 @@ jobs:
           # Only remove leading/trailing whitespace from the entire text
           RELEASE_NOTES=$(echo "$RELEASE_NOTES" | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
 
+          # Add a blank line at the beginning of release notes
+          RELEASE_NOTES=$'\n'"$RELEASE_NOTES"
+
           # Limit to first 900 characters for Discord embed limit (leaving room for truncation text)
           if [ ${#RELEASE_NOTES} -gt 900 ]; then
             RELEASE_NOTES=$(echo "$RELEASE_NOTES" | head -c 900)
