@@ -82,11 +82,9 @@ jobs:
             RELEASE_NOTES="${RELEASE_NOTES}..."
           fi
 
-          # Add a blank line at the beginning of release notes
-          RELEASE_NOTES=$'\n'"$RELEASE_NOTES"
-
-          # Save to file to avoid shell escaping issues
-          echo "$RELEASE_NOTES" > /tmp/release_notes.txt
+          # Save to file with a blank line at the beginning
+          echo "" > /tmp/release_notes.txt
+          echo "$RELEASE_NOTES" >> /tmp/release_notes.txt
 
           # Get release URL
           RELEASE_URL=$(echo "$RELEASE_DATA" | jq -r '.html_url // ""')
