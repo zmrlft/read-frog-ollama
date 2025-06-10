@@ -30,7 +30,12 @@ Master languages effortlessly and deeply with AI, right in your browser.
 
 #### TOC
 
-####
+- [📺 Demo](#-demo)
+- [👋🏻 Getting Started \& Join Our Community](#-getting-started--join-our-community)
+- [📖 Introduction](#-introduction)
+- [🤝 Contribute](#-contribute)
+  - [Contribute Code](#contribute-code)
+- [❤️ Sponsors](#️-sponsors)
 
 <br/>
 
@@ -50,6 +55,11 @@ Master languages effortlessly and deeply with AI, right in your browser.
 Read Frog's vision is to provide an easy-to-use, intelligent, and personalized language learning experience for language learners of all levels. This has become possible in the AI era, but there are few products on the market that meet this demand. Therefore, we decided to take matters into our own hands and ultimately make the world no longer reliant on human language instructors.
 
 Whether you are a user or a developer, Read Frog will be an important part of your journey toward this vision. Please be aware that Read Frog is currently under active development, and feedback is welcome for any [issues][issues-link] encountered.
+
+| Browser | Version                                         | Download                                                          |
+| ------- | ----------------------------------------------- | ----------------------------------------------------------------- |
+| Chrome  | [![][chrome-version-shield]][chrome-store-link] | [Chrome Web Store](chrome-store-link) or [中国镜像](crxsoso-link) |
+| Edge    | [![][edge-version-shield]][edge-store-link]     | [Microsoft Edge Addons](edge-store-link)                          |
 
 | [![][discord-shield-badge]][discord-link] | In Discord ask questions, and connect with developers.                                 |
 | :---------------------------------------- | :------------------------------------------------------------------------------------- |
@@ -103,19 +113,6 @@ Perfect for:
 - Anyone who wants to make their web browsing more educational
 
 Join our growing community of language learners and help shape the future of Read Frog!
-
-<div align="right">
-
-[![][back-to-top]](#readme-top)
-
-</div>
-
-## 📦 Download
-
-| Browser | Version                                         | Download                                                          |
-| ------- | ----------------------------------------------- | ----------------------------------------------------------------- |
-| Chrome  | [![][chrome-version-shield]][chrome-store-link] | [Chrome Web Store](chrome-store-link) or [中国镜像](crxsoso-link) |
-| Edge    | [![][edge-version-shield]][edge-store-link]     | [Microsoft Edge Addons](edge-store-link)                          |
 
 <div align="right">
 
