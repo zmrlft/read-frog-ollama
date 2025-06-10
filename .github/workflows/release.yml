@@ -127,16 +127,9 @@ jobs:
               # Build fields using jq
               if [ -n "$RELEASE_NOTES_RAW" ] && [ "$RELEASE_NOTES_RAW" != "No release notes available" ]; then
                 FIELDS_JSON=$(jq -n \
-                  --arg package_name "$PACKAGE_DISPLAY_NAME" \
-                  --arg package_version "$PACKAGE_VERSION" \
                   --arg tag "$PACKAGE_TAG" \
                   --arg release_notes "$RELEASE_NOTES_RAW" \
                   '[
-                    {
-                      "name": "📦 Package",
-                      "value": ("**" + $package_name + "** `" + $package_version + "`"),
-                      "inline": true
-                    },
                     {
                       "name": "🏷️ Tag",
                       "value": ("`" + $tag + "`"),
@@ -150,15 +143,8 @@ jobs:
                   ]')
               else
                 FIELDS_JSON=$(jq -n \
-                  --arg package_name "$PACKAGE_DISPLAY_NAME" \
-                  --arg package_version "$PACKAGE_VERSION" \
                   --arg tag "$PACKAGE_TAG" \
                   '[
-                    {
-                      "name": "📦 Package",
-                      "value": ("**" + $package_name + "** `" + $package_version + "`"),
-                      "inline": true
-                    },
                     {
                       "name": "🏷️ Tag",
                       "value": ("`" + $tag + "`"),
