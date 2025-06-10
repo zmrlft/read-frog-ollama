@@ -1,0 +1,82 @@
+name: 陪读蛙
+extName: 陪读蛙 - 开源沉浸式翻译
+extDescription: 陪读蛙是一款开放源代码的浏览器插件，旨在帮助您从任何网站深入学习语言。
+popup:
+  autoLang: 自动检测
+  sourceLang: 来源语言
+  targetLang: 目标语言
+  read: 阅读文章
+  translate: 翻译
+  showOriginal: 显示原文
+  enabledFloatingButton: 开启悬浮按钮
+  alwaysTranslate: 总是翻译这个网站
+  options: 选项
+  hover: 鼠标悬停
+  translateParagraph: 来翻译段落
+  help: 帮助
+  advice: 建议
+  discord: Discord
+options:
+  setAPIKeyWarning:
+    please: 请在
+    page: 页设置 API Key
+  apiKeys:
+    title: API Keys
+    description:
+      openai: 提供 GPT-4o 等模型
+      deepseek: 推荐在中国使用
+      openrouter: 多个 LLM 提供商的统一接口
+      ollama: 本地大模型服务
+    apiKey:
+      showAPIKey: 显示 API Key
+    advancedConfig:
+      show: 显示高级配置
+      hide: 隐藏高级配置
+  general:
+    title: 通用
+    readConfig:
+      title: 阅读配置
+      description:
+        适用于所有高级 AI 功能，如深度文章解释和关键词提取。
+      provider: 提供商
+      model:
+        title: 模型
+        enterCustomModel: 输入自定义模型名称
+    translationConfig:
+      title: 翻译配置
+      description: 仅用于网页内的翻译，如双语段落翻译。
+      provider: 提供商
+      model:
+        title: 模型
+        enterCustomModel: 输入自定义模型名称
+      translateRange:
+        title: 翻译范围
+        range:
+          main: 主要内容
+          all: 所有内容
+  translation:
+    title: 翻译
+side:
+  sourceLang: 来源语言
+  targetLang: 目标语言
+readService:
+  title: 阅读服务
+  description: 用于阅读和解释文章
+translateService:
+  title: 翻译服务
+  description: 仅用于翻译网页内容
+  normalTranslator: 普通翻译
+  aiTranslator: AI 翻译
+languageLevel: 你的来源语言水平
+languageLevels:
+  beginner: 初级
+  intermediate: 中级
+  advanced: 高级
+noConfig:
+  warning: 如果想要使用 AI 模型，请先在选项页设置 API Key
+  warningWithLink:
+    youMust: 您必须先
+    setTheAPIKey: 设置 API Key
+    firstOnThe: 在
+    optionsPage: 选项
+    page: 页
