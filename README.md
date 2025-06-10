@@ -1,20 +1,40 @@
-![Read Frog Tile](/docs/store/large-promo-tile.png)
+<div align="center"><a name="readme-top"></a>
 
-![Extension Version](https://img.shields.io/github/package-json/v/mengxi-ream/read-frog?filename=apps%2Fextension%2Fpackage.json&style=flat-square&label=Extension%20Latest%20Version&color=success&labelColor=black)
-[![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/modkelfkcfjpgbfmnbnllalkiogfofhb?style=flat-square&label=Chrome%20Web%20Store&labelColor=black)](https://chrome.google.com/webstore/detail/read-frog-open-source-ai/modkelfkcfjpgbfmnbnllalkiogfofhb)
-[![Edge Addons Version](https://img.shields.io/badge/dynamic/json?style=flat-square&logo=microsoft-edge&label=Microsoft%20Edge%20Addons&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fcbcbomlgikfbdnoaohcjfledcoklcjbo&labelColor=black&prefix=v)](https://microsoftedge.microsoft.com/addons/detail/read-frog-open-source-a/cbcbomlgikfbdnoaohcjfledcoklcjbo)
-[![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/modkelfkcfjpgbfmnbnllalkiogfofhb?style=flat-square&label=Chrome%20users&color=orange&labelColor=black)](https://chromewebstore.google.com/detail/read-frog-open-source-ai/modkelfkcfjpgbfmnbnllalkiogfofhb)
-[![Edge Addons Users](https://img.shields.io/badge/dynamic/json?style=flat-square&logo=microsoft-edge&label=Edge%20users&query=%24.activeInstallCount&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fcbcbomlgikfbdnoaohcjfledcoklcjbo&labelColor=black)](https://microsoftedge.microsoft.com/addons/detail/read-frog-open-source-a/cbcbomlgikfbdnoaohcjfledcoklcjbo)
+[![][image-banner]][website]
 
-[![Discord](https://img.shields.io/discord/1371229720942874646?style=flat-square&label=Discord&logo=discord&logoColor=white&color=5865F2&labelColor=black)](https://discord.gg/ej45e3PezJ)
-![Website Version](https://img.shields.io/github/package-json/v/mengxi-ream/read-frog?filename=apps%2Fwebsite%2Fpackage.json&style=flat-square&label=Website%20Latest%20Version&color=blue&labelColor=black)
-![GitHub last commit](https://img.shields.io/github/last-commit/mengxi-ream/read-frog?style=flat-square&labelColor=black)
-
+An open-source AI-powered language learning extension for browsers.<br/>
+Supports immersive translation, article analysis, multiple AI models, and more.<br/>
 Master languages effortlessly and deeply with AI, right in your browser.
 
-陪读蛙 - 在浏览器中轻松深入地掌握语言，由AI驱动。
+**English** | [简体中文](./README.zh-CN.md) | [Official Website](https://readfrog.app)
 
-[Official website](https://readfrog.app)
+<!-- SHIELD GROUP -->
+
+[![][extension-release-shield]][github-release-link]
+[![][chrome-version-shield]][chrome-store-link]
+[![][edge-version-shield]][edge-store-link]
+[![][website-release-shield]][github-release-link]<br/>
+[![][star-history-shield]][star-history-link]
+[![][contributors-shield]][contributors-link]
+![][last-commit-shield]
+[![][issues-shield]][issues-link]<br/>
+[![][discord-shield]][discord-link]
+[![][chrome-users-shield]][chrome-store-link]
+[![][edge-users-shield]][edge-store-link]<br/>
+[![][sponsor-shield]][sponsor-link]
+
+</div>
+
+<details>
+<summary><kbd>Table of contents</kbd></summary>
+
+#### TOC
+
+####
+
+<br/>
+
+</details>
 
 ## 📺 Demo
 
@@ -25,12 +45,42 @@ Master languages effortlessly and deeply with AI, right in your browser.
   <img src="docs/page-translation-demo.gif" width="60%" alt="Read Frog Translation Interface" />
 </div>
 
-## 📦 Download
+## 👋🏻 Getting Started & Join Our Community
 
-| Browser | Version                                                                                                                                                                                                                                                                                                                                                                                                                | Download                                                                                                                                                                                                       |
-| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Chrome  | [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/modkelfkcfjpgbfmnbnllalkiogfofhb?style=flat-square&logo=google-chrome&label=Chrome%20Web%20Store&labelColor=black)](https://chrome.google.com/webstore/detail/read-frog-open-source-ai/modkelfkcfjpgbfmnbnllalkiogfofhb)                                                                                                                        | [Chrome Web Store](https://chromewebstore.google.com/detail/read-frog-open-source-ai/modkelfkcfjpgbfmnbnllalkiogfofhb) or [中国镜像](https://www.crxsoso.com/webstore/detail/modkelfkcfjpgbfmnbnllalkiogfofhb) |
-| Edge    | [![Edge Addons Version](https://img.shields.io/badge/dynamic/json?style=flat-square&logo=microsoft-edge&label=Microsoft%20Edge%20Addons&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fcbcbomlgikfbdnoaohcjfledcoklcjbo&labelColor=black&prefix=v)](https://microsoftedge.microsoft.com/addons/detail/read-frog-open-source-a/cbcbomlgikfbdnoaohcjfledcoklcjbo) | [Microsoft Edge Addons](https://microsoftedge.microsoft.com/addons/detail/read-frog-open-source-a/cbcbomlgikfbdnoaohcjfledcoklcjbo)                                                                            |
+Read Frog's vision is to provide an easy-to-use, intelligent, and personalized language learning experience for language learners of all levels. This has become possible in the AI era, but there are few products on the market that meet this demand. Therefore, we decided to take matters into our own hands and ultimately make the world no longer reliant on human language instructors.
+
+Whether you are a user or a developer, Read Frog will be an important part of your journey toward this vision. Please be aware that Read Frog is currently under active development, and feedback is welcome for any [issues][issues-link] encountered.
+
+| [![][discord-shield-badge]][discord-link] | In Discord ask questions, and connect with developers.                                 |
+| :---------------------------------------- | :------------------------------------------------------------------------------------- |
+| [![][wechat-shield-badge]][wechat-link]   | If you are in mainland China, you can add the WeChat account to join the WeChat group. |
+
+> \[!IMPORTANT]
+>
+> **⭐️ Star Us**, You will receive all release notifications from GitHub without any delay \~
+
+[![][image-star]][github-star-link]
+
+<details>
+<summary>
+  <kbd>Star History</kbd>
+</summary>
+
+<a href="https://www.star-history.com/#mengxi-ream/read-frog&Timeline">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=mengxi-ream/read-frog&type=Timeline&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=mengxi-ream/read-frog&type=Timeline" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=mengxi-ream/read-frog&type=Timeline" />
+ </picture>
+</a>
+
+</details>
+
+<div align="right">
+
+[![][back-to-top]](#readme-top)
+
+</div>
 
 ## 📖 Introduction
 
@@ -44,14 +94,6 @@ Transform your everyday web reading into an immersive language learning journey!
 - Contextual Learning: Learn languages through content you're actually interested in
 - Multiple AI Models: OpenAI, DeepSeek, and more in the future
 
-✨ 主要特点：
-
-- 沉浸式翻译：直接翻译页面中相邻的元素
-- 智能内容提取：自动识别并提取文章的主要内容
-- 全面解释：根据您的语言水平，获取单词、短语和句子的详细解释
-- 情境学习：通过您真正感兴趣的内容来学习语言
-- 多种AI模型：OpenAI、DeepSeek，未来还将支持更多
-
 Whether you're reading news, articles, or any web content, Read Frog helps you understand and learn languages in depth. It's like having a language teacher right in your browser!
 
 Perfect for:
@@ -62,28 +104,109 @@ Perfect for:
 
 Join our growing community of language learners and help shape the future of Read Frog!
 
+<div align="right">
+
+[![][back-to-top]](#readme-top)
+
+</div>
+
+## 📦 Download
+
+| Browser | Version                                         | Download                                                          |
+| ------- | ----------------------------------------------- | ----------------------------------------------------------------- |
+| Chrome  | [![][chrome-version-shield]][chrome-store-link] | [Chrome Web Store](chrome-store-link) or [中国镜像](crxsoso-link) |
+| Edge    | [![][edge-version-shield]][edge-store-link]     | [Microsoft Edge Addons](edge-store-link)                          |
+
+<div align="right">
+
+[![][back-to-top]](#readme-top)
+
+</div>
+
 ## 🤝 Contribute
+
+Contributions of all types are more than welcome.
+
+1. Promote Read Frog to your friends and family.
+2. Report [issues][issues-link] and feedback.
+3. Contribute code.
+
+### Contribute Code
 
 Understand the project through AI: [DeepWiki](https://deepwiki.com/mengxi-ream/read-frog)
 
 Check out the [Contribution Guide](https://readfrog.app/en/tutorial/contribution) for more details.
 
-### Thanks to our Contributors
-
 <a href="https://github.com/mengxi-ream/read-frog/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=mengxi-ream/read-frog" />
+  <table>
+    <tr>
+      <th colspan="2">
+        <img src="https://contrib.rocks/image?repo=mengxi-ream/read-frog"><br>
+      </th>
+    </tr>
+    <tr>
+      <td>
+        <picture>
+          <source media="(prefers-color-scheme: dark)" srcset="https://next.ossinsight.io/widgets/official/compose-recent-top-contributors/thumbnail.png?repo_id=967738751&image_size=auto&color_scheme=dark" width="373" height="auto">
+          <img alt="Top Contributors of mengxi-ream/read-frog - Last 28 days" src="https://next.ossinsight.io/widgets/official/compose-recent-top-contributors/thumbnail.png?repo_id=967738751&image_size=auto&color_scheme=light" width="373" height="auto">
+        </picture>
+      </td>
+      <td rowspan="2">
+        <picture>
+          <source media="(prefers-color-scheme: dark)" srcset="https://next.ossinsight.io/widgets/official/compose-last-28-days-stats/thumbnail.png?repo_id=967738751&image_size=4x7&color_scheme=dark" width="655" height="auto">
+          <img alt="Performance Stats of mengxi-ream/read-frog - Last 28 days" src="https://next.ossinsight.io/widgets/official/compose-last-28-days-stats/thumbnail.png?repo_id=967738751&image_size=auto&color_scheme=light" width="655" height="auto">
+        </picture>
+      </td>
+    </tr>
+  </table>
 </a>
 
-## ❤️ Support us
+<div align="right">
 
-If you like Read Frog, you can give a star ⭐️ at Github.
+[![][back-to-top]](#readme-top)
 
-## ⭐ Star History
+</div>
 
-<a href="https://www.star-history.com/#mengxi-ream/read-frog&Timeline">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=mengxi-ream/read-frog&type=Timeline&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=mengxi-ream/read-frog&type=Timeline" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=mengxi-ream/read-frog&type=Timeline" />
- </picture>
-</a>
+## ❤️ Sponsors
+
+Every donation helps us build a better language learning experience. Thank you for supporting our mission!
+
+![sponsors badge](https://readme-contribs.as93.net/sponsors/mengxi-ream?shape=circle)
+
+<div align="right">
+
+[![][back-to-top]](#readme-top)
+
+</div>
+
+<!-- LINK GROUP -->
+
+[back-to-top]: https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square
+[chrome-store-link]: https://chromewebstore.google.com/detail/read-frog-open-source-ai/modkelfkcfjpgbfmnbnllalkiogfofhb
+[chrome-users-shield]: https://img.shields.io/chrome-web-store/users/modkelfkcfjpgbfmnbnllalkiogfofhb?style=flat-square&label=Chrome%20users&color=orange&labelColor=black
+[chrome-version-shield]: https://img.shields.io/chrome-web-store/v/modkelfkcfjpgbfmnbnllalkiogfofhb?style=flat-square&label=Chrome&labelColor=black
+[contributors-link]: https://github.com/mengxi-ream/read-frog/graphs/contributors
+[contributors-shield]: https://img.shields.io/github/contributors/mengxi-ream/read-frog?style=flat-square&labelColor=black
+[crxsoso-link]: https://www.crxsoso.com/webstore/detail/modkelfkcfjpgbfmnbnllalkiogfofhb
+[discord-link]: https://discord.gg/ej45e3PezJ
+[discord-shield]: https://img.shields.io/discord/1371229720942874646?style=flat-square&label=Discord&logo=discord&logoColor=white&color=5865F2&labelColor=black
+[discord-shield-badge]: https://img.shields.io/badge/chat-Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white&labelColor=black
+[edge-store-link]: https://microsoftedge.microsoft.com/addons/detail/read-frog-open-source-a/cbcbomlgikfbdnoaohcjfledcoklcjbo
+[edge-users-shield]: https://img.shields.io/badge/dynamic/json?style=flat-square&logo=microsoft-edge&label=Edge%20users&query=%24.activeInstallCount&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fcbcbomlgikfbdnoaohcjfledcoklcjbo&labelColor=black
+[edge-version-shield]: https://img.shields.io/badge/dynamic/json?style=flat-square&logo=microsoft-edge&label=Edge&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fcbcbomlgikfbdnoaohcjfledcoklcjbo&labelColor=black&prefix=v
+[extension-release-shield]: https://img.shields.io/github/package-json/v/mengxi-ream/read-frog?filename=apps%2Fextension%2Fpackage.json&style=flat-square&label=extension&color=brightgreen&labelColor=black
+[github-release-link]: https://github.com/mengxi-ream/read-frog/releases
+[github-star-link]: https://github.com/mengxi-ream/read-frog/stargazers
+[image-banner]: /docs/store/large-promo-tile.png
+[image-star]: ./docs/star.png
+[issues-link]: https://github.com/mengxi-ream/read-frog/issues
+[issues-shield]: https://img.shields.io/github/issues/mengxi-ream/read-frog?style=flat-square&labelColor=black
+[last-commit-shield]: https://img.shields.io/github/last-commit/mengxi-ream/read-frog?style=flat-square&labelColor=black
+[sponsor-link]: https://github.com/sponsors/mengxi-ream
+[sponsor-shield]: https://img.shields.io/github/sponsors/mengxi-ream?style=flat-square&label=Sponsor&color=EA4AAA&labelColor=black
+[star-history-link]: https://www.star-history.com/#mengxi-ream/read-frog&Timeline
+[star-history-shield]: https://img.shields.io/github/stars/mengxi-ream/read-frog?style=flat-square&label=stars&color=yellow&labelColor=black
+[website]: https://readfrog.app
+[website-release-shield]: https://img.shields.io/github/package-json/v/mengxi-ream/read-frog?filename=apps%2Fwebsite%2Fpackage.json&style=flat-square&label=website&color=success&labelColor=black
+[wechat-link]: ./docs/wechat.jpg
+[wechat-shield-badge]: https://img.shields.io/badge/chat-WeChat-07C160?style=for-the-badge&logo=wechat&logoColor=white&labelColor=black
