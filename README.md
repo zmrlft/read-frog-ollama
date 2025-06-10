@@ -174,7 +174,7 @@ Check out the [Contribution Guide](https://readfrog.app/en/tutorial/contribution
 
 Every donation helps us build a better language learning experience. Thank you for supporting our mission!
 
-![sponsors badge](https://readme-contribs.as93.net/sponsors/mengxi-ream?shape=circle)
+[![][sponsor-image]][sponsor-link]
 
 <div align="right">
 
@@ -205,6 +205,7 @@ Every donation helps us build a better language learning experience. Thank you f
 [issues-link]: https://github.com/mengxi-ream/read-frog/issues
 [issues-shield]: https://img.shields.io/github/issues/mengxi-ream/read-frog?style=flat-square&labelColor=black
 [last-commit-shield]: https://img.shields.io/github/last-commit/mengxi-ream/read-frog?style=flat-square&labelColor=black
+[sponsor-image]: ./docs/sponsorkit/sponsors.svg
 [sponsor-link]: https://github.com/sponsors/mengxi-ream
 [sponsor-shield]: https://img.shields.io/github/sponsors/mengxi-ream?style=flat-square&label=Sponsor&color=EA4AAA&labelColor=black
 [star-history-link]: https://www.star-history.com/#mengxi-ream/read-frog&Timeline

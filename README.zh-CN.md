@@ -174,7 +174,7 @@ Read Frog 的愿景是为各个级别的语言学习者提供易于使用、智�
 
 每一笔捐赠都帮助我们构建更好的语言学习体验。感谢您支持我们的使命！
 
-![sponsors badge](https://readme-contribs.as93.net/sponsors/mengxi-ream?shape=circle)
+[![][sponsor-image]][sponsor-link]
 
 <div align="right">
 
@@ -201,6 +201,7 @@ Read Frog 的愿景是为各个级别的语言学习者提供易于使用、智�
 [github-release-link]: https://github.com/mengxi-ream/read-frog/releases
 [github-star-link]: https://github.com/mengxi-ream/read-frog/stargazers
 [image-banner]: /docs/store/large-promo-tile.png
+[sponsor-image]: ./docs/sponsorkit/sponsors.svg
 [image-star]: ./docs/star.png
 [issues-link]: https://github.com/mengxi-ream/read-frog/issues
 [issues-shield]: https://img.shields.io/github/issues/mengxi-ream/read-frog?style=flat-square&labelColor=black
