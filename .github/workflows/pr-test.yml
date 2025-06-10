@@ -15,8 +15,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -38,8 +36,11 @@ jobs:
           fi
         shell: bash
 
-      - name: Compile
-        run: pnpm compile
+      - name: Syncpack lint
+        run: pnpm syncpack:lint
+
+      - name: Type check
+        run: pnpm type-check
 
       - name: Run tests
         run: pnpm test
