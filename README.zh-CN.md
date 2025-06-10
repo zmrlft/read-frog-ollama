@@ -211,5 +211,5 @@ Read Frog 的愿景是为各个级别的语言学习者提供易于使用、智�
 [star-history-shield]: https://img.shields.io/github/stars/mengxi-ream/read-frog?style=flat-square&label=stars&color=yellow&labelColor=black
 [website]: https://readfrog.app
 [website-release-shield]: https://img.shields.io/github/package-json/v/mengxi-ream/read-frog?filename=apps%2Fwebsite%2Fpackage.json&style=flat-square&label=网站&color=success&labelColor=black
-[wechat-link]: ./docs/wechat.jpg
+[wechat-link]: ./docs/wechat-account.jpg
 [wechat-shield-badge]: https://img.shields.io/badge/聊天-微信-07C160?style=for-the-badge&logo=wechat&logoColor=white&labelColor=black

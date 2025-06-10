@@ -211,5 +211,5 @@ Every donation helps us build a better language learning experience. Thank you f
 [star-history-shield]: https://img.shields.io/github/stars/mengxi-ream/read-frog?style=flat-square&label=stars&color=yellow&labelColor=black
 [website]: https://readfrog.app
 [website-release-shield]: https://img.shields.io/github/package-json/v/mengxi-ream/read-frog?filename=apps%2Fwebsite%2Fpackage.json&style=flat-square&label=website&color=success&labelColor=black
-[wechat-link]: ./docs/wechat.jpg
+[wechat-link]: ./docs/wechat-account.jpg
 [wechat-shield-badge]: https://img.shields.io/badge/chat-WeChat-07C160?style=for-the-badge&logo=wechat&logoColor=white&labelColor=black
