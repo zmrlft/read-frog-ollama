@@ -53,7 +53,47 @@ jobs:
 
           echo "Published packages: $PUBLISHED_PACKAGES"
 
-          # Build notification content
+          # Get the latest release tag to fetch release notes
+          LATEST_TAG=$(git describe --abbrev=0 --tags 2>/dev/null || echo "")
+          if [ -z "$LATEST_TAG" ]; then
+            # Fallback to getting latest release from GitHub API
+            LATEST_TAG=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/releases/latest" \
+              | jq -r '.tag_name // ""')
+          fi
+
+          echo "Latest tag: $LATEST_TAG"
+
+          # Get release info and notes from GitHub API
+          RELEASE_NOTES=""
+          RELEASE_URL=""
+          if [ -n "$LATEST_TAG" ] && [ "$LATEST_TAG" != "null" ]; then
+            RELEASE_DATA=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/releases/tags/$LATEST_TAG")
+
+            # Extract release notes and clean them up
+            RELEASE_NOTES=$(echo "$RELEASE_DATA" | jq -r '.body // "No release notes available"')
+            RELEASE_URL=$(echo "$RELEASE_DATA" | jq -r '.html_url // ""')
+
+            # Remove HTML comments and format headers
+            RELEASE_NOTES=$(echo "$RELEASE_NOTES" | sed 's/<!--[^>]*-->//g')
+            RELEASE_NOTES=$(echo "$RELEASE_NOTES" | \
+              sed 's/^## \(.*\)$/**\1**/g' | \
+              sed 's/^### \(.*\)$/▸ **\1**/g' | \
+              sed 's/^#### \(.*\)$/  • **\1**/g' | \
+              sed 's/^##### \(.*\)$/    ◦ **\1**/g')
+
+            # Remove leading/trailing whitespace
+            RELEASE_NOTES=$(echo "$RELEASE_NOTES" | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
+
+            # Limit to Discord embed limit (leaving room for other content)
+            if [ ${#RELEASE_NOTES} -gt 800 ]; then
+              RELEASE_NOTES=$(echo "$RELEASE_NOTES" | head -c 800)
+              RELEASE_NOTES="${RELEASE_NOTES}..."
+            fi
+          fi
+
+          # Build notification content for packages
           NOTIFICATION_CONTENT=""
           RELEASE_URLS=""
 
@@ -88,30 +128,43 @@ jobs:
             fi
           done
 
+          # Properly escape release notes for JSON
+          RELEASE_NOTES_ESCAPED=$(echo "$RELEASE_NOTES" | jq -Rs .)
+
           # Create Discord payload
           cat << EOF > /tmp/discord_payload.json
           {
             "embeds": [{
               "title": "🎉 New Release Published!",
               "description": "**${{ github.repository }}** has published new packages!",
-              "url": "https://github.com/${{ github.repository }}/releases",
+              "url": "${RELEASE_URL:-https://github.com/${{ github.repository }}/releases}",
               "color": 48253,
               "fields": [
                 {
-                  "name": "Published Packages",
+                  "name": "📦 Published Packages",
                   "value": "$NOTIFICATION_CONTENT",
                   "inline": false
                 },
                 {
-                  "name": "Release Links",
+                  "name": "🔗 Release Links",
                   "value": "$RELEASE_URLS",
                   "inline": false
-                },
+                }$(if [ -n "$RELEASE_NOTES" ] && [ "$RELEASE_NOTES" != "No release notes available" ]; then echo ",
                 {
-                  "name": "Repository",
+                  \"name\": \"📝 Release Notes\",
+                  \"value\": $RELEASE_NOTES_ESCAPED,
+                  \"inline\": false
+                }"; fi),
+                {
+                  "name": "📂 Repository",
                   "value": "[${{ github.repository }}](https://github.com/${{ github.repository }})",
                   "inline": true
-                }
+                }$(if [ -n "$LATEST_TAG" ]; then echo ",
+                {
+                  \"name\": \"🏷️ Version\",
+                  \"value\": \"\\\`$LATEST_TAG\\\`\",
+                  \"inline\": true
+                }"; fi)
               ],
               "footer": {
                 "text": "GitHub Actions",

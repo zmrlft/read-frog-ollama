@@ -4,9 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: Release tag to notify about (leave empty for latest)
+        description: 'Release tag to notify about (e.g., @read-frog/extension@0.10.4, or leave empty for latest)'
         required: false
         type: string
+      force_notify:
+        description: Force notification even if no release notes found
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   notify:
@@ -15,6 +20,8 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch all history for tags
 
       - name: Get target tag
         id: tag
@@ -23,13 +30,13 @@ jobs:
             TAG="${{ github.event.inputs.tag }}"
             echo "Using input tag: $TAG"
           else
-            # Get latest release tag from GitHub API instead of git describe
+            # Get latest release tag from GitHub API
             TAG=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
               "https://api.github.com/repos/${{ github.repository }}/releases/latest" \
               | jq -r '.tag_name // ""')
 
             if [ -z "$TAG" ] || [ "$TAG" = "null" ]; then
-              echo "No releases found, trying git describe..."
+              echo "No releases found via API, trying git describe..."
               TAG=$(git describe --abbrev=0 --tags 2>/dev/null || echo "")
             fi
 
@@ -38,10 +45,13 @@ jobs:
 
           if [ -z "$TAG" ]; then
             echo "Error: No tag found!"
+            echo "Available tags:"
+            git tag --list --sort=-version:refname | head -10
             exit 1
           fi
 
           echo "TAG=$TAG" >> $GITHUB_OUTPUT
+          echo "Final tag to use: $TAG"
 
       - name: Get Release Info
         id: release_info
@@ -55,41 +65,62 @@ jobs:
           # Check if API call was successful
           if echo "$RELEASE_DATA" | jq -e '.message' > /dev/null 2>&1; then
             echo "API Error: $(echo "$RELEASE_DATA" | jq -r '.message')"
-            echo "Trying to use latest release instead..."
-            RELEASE_DATA=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              "https://api.github.com/repos/${{ github.repository }}/releases/latest")
+
+            if [ "${{ github.event.inputs.force_notify }}" = "true" ]; then
+              echo "Force notify enabled, using minimal release info..."
+              RELEASE_NOTES="Manual notification for tag ${{ steps.tag.outputs.TAG }}"
+              RELEASE_URL="https://github.com/${{ github.repository }}/releases/tag/${{ steps.tag.outputs.TAG }}"
+            else
+              echo "Trying to use latest release instead..."
+              RELEASE_DATA=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                "https://api.github.com/repos/${{ github.repository }}/releases/latest")
+
+              if echo "$RELEASE_DATA" | jq -e '.message' > /dev/null 2>&1; then
+                echo "Failed to get any release data"
+                exit 1
+              fi
+            fi
           fi
 
-          # Extract release notes and remove HTML comments
-          RELEASE_NOTES=$(echo "$RELEASE_DATA" | jq -r '.body // "No release notes available"')
-
-          # Remove HTML comments (<!-- ... -->)
-          RELEASE_NOTES=$(echo "$RELEASE_NOTES" | sed 's/<!--[^>]*-->//g')
-
-          # Simply replace markdown headers with better formatting, preserve all original spacing
-          RELEASE_NOTES=$(echo "$RELEASE_NOTES" | \
-            sed 's/^## \(.*\)$/**\1**/g' | \
-            sed 's/^### \(.*\)$/▸ **\1**/g' | \
-            sed 's/^#### \(.*\)$/  • **\1**/g' | \
-            sed 's/^##### \(.*\)$/    ◦ **\1**/g')
-
-          # Only remove leading/trailing whitespace from the entire text
-          RELEASE_NOTES=$(echo "$RELEASE_NOTES" | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
-
-          # Limit to first 900 characters for Discord embed limit (leaving room for truncation text)
-          if [ ${#RELEASE_NOTES} -gt 900 ]; then
-            RELEASE_NOTES=$(echo "$RELEASE_NOTES" | head -c 900)
-            RELEASE_NOTES="${RELEASE_NOTES}..."
+          # Extract release notes and URL if we have valid release data
+          if [ "${{ github.event.inputs.force_notify }}" != "true" ]; then
+            RELEASE_NOTES=$(echo "$RELEASE_DATA" | jq -r '.body // "No release notes available"')
+            RELEASE_URL=$(echo "$RELEASE_DATA" | jq -r '.html_url // ""')
           fi
 
-          # Save to file to avoid shell escaping issues (Discord strips leading whitespace anyway)
+          # Clean up release notes
+          if [ -n "$RELEASE_NOTES" ]; then
+            # Remove HTML comments (<!-- ... -->)
+            RELEASE_NOTES=$(echo "$RELEASE_NOTES" | sed 's/<!--[^>]*-->//g')
+
+            # Format markdown headers for Discord
+            RELEASE_NOTES=$(echo "$RELEASE_NOTES" | \
+              sed 's/^## \(.*\)$/**\1**/g' | \
+              sed 's/^### \(.*\)$/▸ **\1**/g' | \
+              sed 's/^#### \(.*\)$/  • **\1**/g' | \
+              sed 's/^##### \(.*\)$/    ◦ **\1**/g')
+
+            # Remove leading/trailing whitespace
+            RELEASE_NOTES=$(echo "$RELEASE_NOTES" | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
+
+            # Limit to Discord embed limit (leaving room for other content)
+            if [ ${#RELEASE_NOTES} -gt 900 ]; then
+              RELEASE_NOTES=$(echo "$RELEASE_NOTES" | head -c 900)
+              RELEASE_NOTES="${RELEASE_NOTES}..."
+            fi
+          fi
+
+          # Save to file to avoid shell escaping issues
           echo "$RELEASE_NOTES" > /tmp/release_notes.txt
 
-          # Get release URL
-          RELEASE_URL=$(echo "$RELEASE_DATA" | jq -r '.html_url // ""')
+          # Set outputs
+          if [ -z "$RELEASE_URL" ]; then
+            RELEASE_URL="https://github.com/${{ github.repository }}/releases/tag/${{ steps.tag.outputs.TAG }}"
+          fi
           echo "RELEASE_URL=$RELEASE_URL" >> $GITHUB_OUTPUT
 
           echo "Release URL: $RELEASE_URL"
+          echo "Release notes length: ${#RELEASE_NOTES}"
 
       - name: Send Discord Notification
         run: |
@@ -98,45 +129,99 @@ jobs:
           # Read release notes from file and properly escape for JSON
           RELEASE_NOTES=$(cat /tmp/release_notes.txt | jq -Rs .)
 
-          # Create the JSON payload
-          cat << EOF > /tmp/discord_payload.json
-          {
-            "embeds": [{
-              "title": "🎉 Release Notification",
-              "description": "**${{ github.repository }}** has published a new release!",
-              "url": "${{ steps.release_info.outputs.RELEASE_URL }}",
-              "color": 48253,
-              "fields": [
-                {
-                  "name": "Version",
-                  "value": "\`${{ steps.tag.outputs.TAG }}\`",
-                  "inline": true
+          # Determine if this is a package-specific release or general release
+          TAG="${{ steps.tag.outputs.TAG }}"
+          if [[ "$TAG" == *"@"* ]]; then
+            # Package-specific release (e.g., @read-frog/extension@0.10.4)
+            PACKAGE_NAME=$(echo "$TAG" | sed 's/@[^@]*$//')
+            PACKAGE_VERSION=$(echo "$TAG" | sed 's/.*@//')
+
+            # Get package emoji
+            case "$PACKAGE_NAME" in
+              *"extension"*) EMOJI="📱" ;;
+              *"website"*) EMOJI="🌐" ;;
+              *"cli"*) EMOJI="⚡" ;;
+              *"api"*) EMOJI="🔌" ;;
+              *"core"*) EMOJI="⚙️" ;;
+              *"sdk"*) EMOJI="🛠️" ;;
+              *) EMOJI="📦" ;;
+            esac
+
+            PACKAGE_DISPLAY_NAME=$(echo "$PACKAGE_NAME" | sed 's/.*\///g' | sed 's/\b\w/\U&/g')
+            TITLE="🎉 $EMOJI $PACKAGE_DISPLAY_NAME Release!"
+            DESCRIPTION="**$PACKAGE_DISPLAY_NAME** version \`$PACKAGE_VERSION\` has been released!"
+
+            # Build fields JSON for package release
+            FIELDS_JSON="["
+            FIELDS_JSON="$FIELDS_JSON{\"name\":\"📦 Package\",\"value\":\"$EMOJI **$PACKAGE_DISPLAY_NAME** \\\`$PACKAGE_VERSION\\\`\",\"inline\":true},"
+            FIELDS_JSON="$FIELDS_JSON{\"name\":\"🏷️ Tag\",\"value\":\"\\\`$TAG\\\`\",\"inline\":true},"
+            FIELDS_JSON="$FIELDS_JSON{\"name\":\"📂 Repository\",\"value\":\"[${{ github.repository }}](https://github.com/${{ github.repository }})\",\"inline\":true}"
+
+            # Add release notes if available
+            if [ -n "$(cat /tmp/release_notes.txt)" ] && [ "$(cat /tmp/release_notes.txt)" != "No release notes available" ]; then
+              FIELDS_JSON="$FIELDS_JSON,{\"name\":\"📝 Release Notes\",\"value\":$RELEASE_NOTES,\"inline\":false}"
+            fi
+            FIELDS_JSON="$FIELDS_JSON]"
+          else
+            # General release
+            TITLE="🎉 New Release Published!"
+            DESCRIPTION="**${{ github.repository }}** has published a new release!"
+
+            # Build fields JSON for general release
+            FIELDS_JSON="["
+            FIELDS_JSON="$FIELDS_JSON{\"name\":\"🏷️ Version\",\"value\":\"\\\`$TAG\\\`\",\"inline\":true},"
+            FIELDS_JSON="$FIELDS_JSON{\"name\":\"📂 Repository\",\"value\":\"[${{ github.repository }}](https://github.com/${{ github.repository }})\",\"inline\":true}"
+
+            # Add release notes if available
+            if [ -n "$(cat /tmp/release_notes.txt)" ] && [ "$(cat /tmp/release_notes.txt)" != "No release notes available" ]; then
+              FIELDS_JSON="$FIELDS_JSON,{\"name\":\"📝 Release Notes\",\"value\":$RELEASE_NOTES,\"inline\":false}"
+            fi
+            FIELDS_JSON="$FIELDS_JSON]"
+          fi
+
+          # Create the JSON payload using jq to ensure proper formatting
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%S.000Z)
+          jq -n \
+            --arg title "$TITLE" \
+            --arg description "$DESCRIPTION" \
+            --arg url "${{ steps.release_info.outputs.RELEASE_URL }}" \
+            --argjson fields "$FIELDS_JSON" \
+            --arg timestamp "$TIMESTAMP" \
+            '{
+              embeds: [{
+                title: $title,
+                description: $description,
+                url: $url,
+                color: 48253,
+                fields: $fields,
+                footer: {
+                  text: "Manual notification via GitHub Actions",
+                  icon_url: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
                 },
-                {
-                  "name": "Repository",
-                  "value": "[${{ github.repository }}](https://github.com/${{ github.repository }})",
-                  "inline": true
-                },
-                {
-                  "name": "Release Notes",
-                  "value": $RELEASE_NOTES,
-                  "inline": false
-                }
-              ],
-              "footer": {
-                "text": "GitHub Actions",
-                "icon_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
-              },
-              "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)"
-            }]
-          }
-          EOF
+                timestamp: $timestamp
+              }]
+            }' > /tmp/discord_payload.json
 
           echo "Discord payload:"
           cat /tmp/discord_payload.json
 
+          # Validate JSON before sending
+          if ! jq empty /tmp/discord_payload.json 2>/dev/null; then
+            echo "Error: Generated invalid JSON payload"
+            exit 1
+          fi
+
           # Send to Discord
-          curl -H "Content-Type: application/json" \
+          RESPONSE=$(curl -s -w "%{http_code}" -H "Content-Type: application/json" \
                -X POST \
                -d @/tmp/discord_payload.json \
-               ${{ secrets.DISCORD_WEBHOOK_URL }}
+               ${{ secrets.DISCORD_WEBHOOK_URL }})
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -c 4)
+          if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+            echo "✅ Successfully sent Discord notification (HTTP $HTTP_CODE)"
+          else
+            echo "❌ Failed to send Discord notification (HTTP $HTTP_CODE)"
+            echo "Response: $RESPONSE"
+            exit 1
+          fi
