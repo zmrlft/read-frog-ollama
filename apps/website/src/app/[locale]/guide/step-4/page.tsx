@@ -21,14 +21,14 @@ export default function GuidePage() {
               <Link href="/">
                 {t('guide.finish')}
                 {' '}
-                <ArrowRight />
+                <ArrowRight size={16} />
               </Link>
             </Button>
             <Button asChild variant="outline" className="border-primary">
               <Link href="/tutorial/api-key">
                 {t('guide.step4.tutorial')}
                 {' '}
-                <ArrowRight />
+                <ArrowRight size={16} />
               </Link>
             </Button>
           </div>

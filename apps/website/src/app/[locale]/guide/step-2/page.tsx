@@ -24,7 +24,7 @@ export default function GuidePage() {
                   <Link href="/guide/step-3">
                     {t('guide.continue')}
                     {' '}
-                    <ArrowRight />
+                    <ArrowRight size={16} />
                   </Link>
                 </Button>
               )
@@ -32,7 +32,7 @@ export default function GuidePage() {
                 <Button disabled>
                   {t('guide.continue')}
                   {' '}
-                  <ArrowRight />
+                  <ArrowRight size={16} />
                 </Button>
               )}
           <div className="text-xs text-muted-foreground mt-2">

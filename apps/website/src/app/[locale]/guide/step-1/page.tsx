@@ -58,7 +58,7 @@ export default function Step1Page() {
             <Link href="/guide/step-2">
               {t('guide.continue')}
               {' '}
-              <ArrowRight />
+              <ArrowRight size={16} />
             </Link>
           </Button>
         </div>
