@@ -9,6 +9,7 @@ fi
 
 pnpm syncpack:lint
 pnpm type-check
+pnpm build
 
 # Check if SKIP_FREE_API environment variable is set
 if [ "$SKIP_FREE_API" = "true" ]; then
