@@ -1,6 +1,7 @@
 import type { Translations } from 'fumadocs-ui/i18n'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
+import { Analytics } from '@vercel/analytics/next'
 import { RootProvider } from 'fumadocs-ui/provider'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
@@ -107,6 +108,7 @@ export default async function RootLayout({
             {children}
           </RootProvider>
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   )
