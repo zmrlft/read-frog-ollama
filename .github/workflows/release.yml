@@ -65,52 +65,40 @@ jobs:
           echo "Latest tag: $LATEST_TAG"
 
           # Get release info and notes from GitHub API
-          RELEASE_NOTES=""
+          RELEASE_NOTES_RAW=""
           RELEASE_URL=""
           if [ -n "$LATEST_TAG" ] && [ "$LATEST_TAG" != "null" ]; then
             RELEASE_DATA=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
               "https://api.github.com/repos/${{ github.repository }}/releases/tags/$LATEST_TAG")
 
             # Extract release notes and clean them up
-            RELEASE_NOTES=$(echo "$RELEASE_DATA" | jq -r '.body // "No release notes available"')
+            RELEASE_NOTES_RAW=$(echo "$RELEASE_DATA" | jq -r '.body // "No release notes available"')
             RELEASE_URL=$(echo "$RELEASE_DATA" | jq -r '.html_url // ""')
 
             # Remove HTML comments and format headers
-            RELEASE_NOTES=$(echo "$RELEASE_NOTES" | sed 's/<!--[^>]*-->//g')
-            RELEASE_NOTES=$(echo "$RELEASE_NOTES" | \
-              sed 's/^## \(.*\)$/**\1**/g' | \
-              sed 's/^### \(.*\)$/▸ **\1**/g' | \
-              sed 's/^#### \(.*\)$/  • **\1**/g' | \
-              sed 's/^##### \(.*\)$/    ◦ **\1**/g')
+            if [ -n "$RELEASE_NOTES_RAW" ]; then
+              RELEASE_NOTES_RAW=$(echo "$RELEASE_NOTES_RAW" | sed 's/<!--[^>]*-->//g')
+              RELEASE_NOTES_RAW=$(echo "$RELEASE_NOTES_RAW" | \
+                sed 's/^## \(.*\)$/**\1**/g' | \
+                sed 's/^### \(.*\)$/▸ **\1**/g' | \
+                sed 's/^#### \(.*\)$/  • **\1**/g' | \
+                sed 's/^##### \(.*\)$/    ◦ **\1**/g')
 
-            # Remove leading/trailing whitespace
-            RELEASE_NOTES=$(echo "$RELEASE_NOTES" | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
+              # Remove leading/trailing whitespace
+              RELEASE_NOTES_RAW=$(echo "$RELEASE_NOTES_RAW" | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//')
 
-            # Limit to Discord embed limit (leaving room for other content)
-            if [ ${#RELEASE_NOTES} -gt 800 ]; then
-              RELEASE_NOTES=$(echo "$RELEASE_NOTES" | head -c 800)
-              RELEASE_NOTES="${RELEASE_NOTES}..."
+              # Limit to Discord embed limit (leaving room for other content)
+              if [ ${#RELEASE_NOTES_RAW} -gt 800 ]; then
+                RELEASE_NOTES_RAW=$(echo "$RELEASE_NOTES_RAW" | head -c 800)
+                RELEASE_NOTES_RAW="${RELEASE_NOTES_RAW}..."
+              fi
             fi
           fi
 
-          # Build notification content for packages
-          NOTIFICATION_CONTENT=""
-          RELEASE_URLS=""
+          # Process each published package
+          NOTIFICATION_EMBEDS="["
+          FIRST_PACKAGE=true
 
-          # Get package emoji based on name
-          get_package_emoji() {
-            case "$1" in
-              *"extension"*) echo "📱" ;;
-              *"website"*) echo "🌐" ;;
-              *"cli"*) echo "⚡" ;;
-              *"api"*) echo "🔌" ;;
-              *"core"*) echo "⚙️" ;;
-              *"sdk"*) echo "🛠️" ;;
-              *) echo "📦" ;;
-            esac
-          }
-
-          # Parse published packages JSON
           echo "$PUBLISHED_PACKAGES" | jq -c '.[]' | while read -r package_info; do
             if [ -n "$package_info" ]; then
               PACKAGE_NAME=$(echo "$package_info" | jq -r '.name')
@@ -119,67 +107,123 @@ jobs:
               # Generate tag name based on changesets convention
               PACKAGE_TAG="$PACKAGE_NAME@$PACKAGE_VERSION"
 
-              EMOJI=$(get_package_emoji "$PACKAGE_NAME")
+              # Get package emoji
+              case "$PACKAGE_NAME" in
+                *"extension"*) EMOJI="🐸" ;;
+                *"website"*) EMOJI="🌐" ;;
+                *"cli"*) EMOJI="⚡" ;;
+                *"api"*) EMOJI="🔌" ;;
+                *"core"*) EMOJI="⚙️" ;;
+                *"sdk"*) EMOJI="🛠️" ;;
+                *) EMOJI="📦" ;;
+              esac
+
               # Extract display name (e.g., @read-frog/extension -> Extension)
               PACKAGE_DISPLAY_NAME=$(echo "$PACKAGE_NAME" | sed 's/.*\///g' | sed 's/\b\w/\U&/g')
 
-              NOTIFICATION_CONTENT="$NOTIFICATION_CONTENT\n$EMOJI **$PACKAGE_DISPLAY_NAME** \`$PACKAGE_VERSION\`"
-              RELEASE_URLS="$RELEASE_URLS\n[$PACKAGE_DISPLAY_NAME Release](https://github.com/${{ github.repository }}/releases/tag/$PACKAGE_TAG)"
+              TITLE="$EMOJI $PACKAGE_DISPLAY_NAME Release! 🎉"
+              DESCRIPTION="**$PACKAGE_DISPLAY_NAME** version \`$PACKAGE_VERSION\` has been released!"
+
+              # Build fields using jq
+              if [ -n "$RELEASE_NOTES_RAW" ] && [ "$RELEASE_NOTES_RAW" != "No release notes available" ]; then
+                FIELDS_JSON=$(jq -n \
+                  --arg package_name "$PACKAGE_DISPLAY_NAME" \
+                  --arg package_version "$PACKAGE_VERSION" \
+                  --arg tag "$PACKAGE_TAG" \
+                  --arg release_notes "$RELEASE_NOTES_RAW" \
+                  '[
+                    {
+                      "name": "📦 Package",
+                      "value": ("**" + $package_name + "** `" + $package_version + "`"),
+                      "inline": true
+                    },
+                    {
+                      "name": "🏷️ Tag",
+                      "value": ("`" + $tag + "`"),
+                      "inline": true
+                    },
+                    {
+                      "name": "📝 Release Notes",
+                      "value": $release_notes,
+                      "inline": false
+                    }
+                  ]')
+              else
+                FIELDS_JSON=$(jq -n \
+                  --arg package_name "$PACKAGE_DISPLAY_NAME" \
+                  --arg package_version "$PACKAGE_VERSION" \
+                  --arg tag "$PACKAGE_TAG" \
+                  '[
+                    {
+                      "name": "📦 Package",
+                      "value": ("**" + $package_name + "** `" + $package_version + "`"),
+                      "inline": true
+                    },
+                    {
+                      "name": "🏷️ Tag",
+                      "value": ("`" + $tag + "`"),
+                      "inline": true
+                    }
+                  ]')
+              fi
+
+              # Create individual embed
+              TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%S.000Z)
+              EMBED_JSON=$(jq -n \
+                --arg title "$TITLE" \
+                --arg description "$DESCRIPTION" \
+                --arg url "${RELEASE_URL:-https://github.com/${{ github.repository }}/releases/tag/$PACKAGE_TAG}" \
+                --argjson fields "$FIELDS_JSON" \
+                --arg timestamp "$TIMESTAMP" \
+                '{
+                  title: $title,
+                  description: $description,
+                  url: $url,
+                  color: 48253,
+                  fields: $fields,
+                  footer: {
+                    text: "GitHub Actions",
+                    icon_url: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                  },
+                  timestamp: $timestamp
+                }')
+
+              # Add to embeds array (Discord supports up to 10 embeds)
+              if [ "$FIRST_PACKAGE" = true ]; then
+                NOTIFICATION_EMBEDS="[$EMBED_JSON"
+                FIRST_PACKAGE=false
+              else
+                NOTIFICATION_EMBEDS="$NOTIFICATION_EMBEDS,$EMBED_JSON"
+              fi
             fi
           done
 
-          # Properly escape release notes for JSON
-          RELEASE_NOTES_ESCAPED=$(echo "$RELEASE_NOTES" | jq -Rs .)
+          # Close the embeds array
+          NOTIFICATION_EMBEDS="$NOTIFICATION_EMBEDS]"
 
-          # Create Discord payload
-          cat << EOF > /tmp/discord_payload.json
-          {
-            "embeds": [{
-              "title": "🎉 New Release Published!",
-              "description": "**${{ github.repository }}** has published new packages!",
-              "url": "${RELEASE_URL:-https://github.com/${{ github.repository }}/releases}",
-              "color": 48253,
-              "fields": [
-                {
-                  "name": "📦 Published Packages",
-                  "value": "$NOTIFICATION_CONTENT",
-                  "inline": false
-                },
-                {
-                  "name": "🔗 Release Links",
-                  "value": "$RELEASE_URLS",
-                  "inline": false
-                }$(if [ -n "$RELEASE_NOTES" ] && [ "$RELEASE_NOTES" != "No release notes available" ]; then echo ",
-                {
-                  \"name\": \"📝 Release Notes\",
-                  \"value\": $RELEASE_NOTES_ESCAPED,
-                  \"inline\": false
-                }"; fi),
-                {
-                  "name": "📂 Repository",
-                  "value": "[${{ github.repository }}](https://github.com/${{ github.repository }})",
-                  "inline": true
-                }$(if [ -n "$LATEST_TAG" ]; then echo ",
-                {
-                  \"name\": \"🏷️ Version\",
-                  \"value\": \"\\\`$LATEST_TAG\\\`\",
-                  \"inline\": true
-                }"; fi)
-              ],
-              "footer": {
-                "text": "GitHub Actions",
-                "icon_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
-              },
-              "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)"
-            }]
-          }
-          EOF
+          # Create final Discord payload
+          echo "$NOTIFICATION_EMBEDS" | jq '{embeds: .}' > /tmp/discord_payload.json
 
           echo "Discord payload:"
           cat /tmp/discord_payload.json
 
+          # Validate JSON before sending
+          if ! jq empty /tmp/discord_payload.json 2>/dev/null; then
+            echo "Error: Generated invalid JSON payload"
+            exit 1
+          fi
+
           # Send to Discord
-          curl -H "Content-Type: application/json" \
+          RESPONSE=$(curl -s -w "%{http_code}" -H "Content-Type: application/json" \
                -X POST \
                -d @/tmp/discord_payload.json \
-               ${{ secrets.DISCORD_WEBHOOK_URL }}
+               ${{ secrets.DISCORD_WEBHOOK_URL }})
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -c 4)
+          if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+            echo "✅ Successfully sent Discord notification (HTTP $HTTP_CODE)"
+          else
+            echo "❌ Failed to send Discord notification (HTTP $HTTP_CODE)"
+            echo "Response: $RESPONSE"
+            exit 1
+          fi
