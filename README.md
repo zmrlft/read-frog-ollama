@@ -32,6 +32,8 @@ Master languages effortlessly and deeply with AI, right in your browser.
 
 - [📺 Demo](#-demo)
 - [👋🏻 Getting Started \& Join Our Community](#-getting-started--join-our-community)
+  - [Download](#download)
+  - [Community](#community)
 - [📖 Introduction](#-introduction)
 - [🤝 Contribute](#-contribute)
   - [Contribute Code](#contribute-code)
@@ -56,10 +58,14 @@ Read Frog's vision is to provide an easy-to-use, intelligent, and personalized l
 
 Whether you are a user or a developer, Read Frog will be an important part of your journey toward this vision. Please be aware that Read Frog is currently under active development, and feedback is welcome for any [issues][issues-link] encountered.
 
+### Download
+
 | Browser | Version                                         | Download                                                          |
 | ------- | ----------------------------------------------- | ----------------------------------------------------------------- |
 | Chrome  | [![][chrome-version-shield]][chrome-store-link] | [Chrome Web Store](chrome-store-link) or [中国镜像](crxsoso-link) |
 | Edge    | [![][edge-version-shield]][edge-store-link]     | [Microsoft Edge Addons](edge-store-link)                          |
+
+### Community
 
 | [![][discord-shield-badge]][discord-link] | In Discord ask questions, and connect with developers.                                 |
 | :---------------------------------------- | :------------------------------------------------------------------------------------- |
