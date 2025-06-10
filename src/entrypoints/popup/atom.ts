@@ -1,6 +1,9 @@
+import type { Config } from '@/types/config/config'
 import { atom } from 'jotai'
 import { configFields } from '@/utils/atoms/config'
 import { getActiveTabUrl } from '@/utils/utils'
+
+type TranslateConfig = Config['translate']
 
 const EMPTY_TAB_URLS = [
   'about:blank',
@@ -45,22 +48,21 @@ export const initIsIgnoreTabAtom = atom(null, async (get, set) => {
 // Sync atom to store the checked state
 export const isCurrentSiteInPatternsAtom = atom<boolean>(false)
 
+export async function getIsInPatterns(translateConfig: TranslateConfig) {
+  const activeTabUrl = await getActiveTabUrl()
+  if (!activeTabUrl)
+    return false
+  return translateConfig.page.autoTranslatePatterns.some(pattern =>
+    activeTabUrl.includes(pattern),
+  )
+}
+
 // Async atom to initialize the checked state
 export const initIsCurrentSiteInPatternsAtom = atom(
   null,
   async (get, set) => {
     const translateConfig = get(configFields.translate)
-    const activeTabUrl = await getActiveTabUrl()
-
-    if (!activeTabUrl) {
-      set(isCurrentSiteInPatternsAtom, false)
-      return
-    }
-
-    const isInPatterns = translateConfig.page.autoTranslatePatterns.some(pattern =>
-      activeTabUrl.includes(pattern),
-    )
-    set(isCurrentSiteInPatternsAtom, isInPatterns)
+    set(isCurrentSiteInPatternsAtom, await getIsInPatterns(translateConfig))
   },
 )
 
