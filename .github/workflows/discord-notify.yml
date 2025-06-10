@@ -148,7 +148,7 @@ jobs:
             esac
 
             PACKAGE_DISPLAY_NAME=$(echo "$PACKAGE_NAME" | sed 's/.*\///g' | sed 's/\b\w/\U&/g')
-            TITLE="$EMOJI $PACKAGE_DISPLAY_NAME Release! 🎉"
+            TITLE="$EMOJI $PACKAGE_DISPLAY_NAME Release!"
             DESCRIPTION="**$PACKAGE_DISPLAY_NAME** version \`$PACKAGE_VERSION\` has been released!"
 
             # Build fields using jq for package release
