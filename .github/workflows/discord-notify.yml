@@ -138,7 +138,7 @@ jobs:
 
             # Get package emoji
             case "$PACKAGE_NAME" in
-              *"extension"*) EMOJI="📱" ;;
+              *"extension"*) EMOJI="🐸" ;;
               *"website"*) EMOJI="🌐" ;;
               *"cli"*) EMOJI="⚡" ;;
               *"api"*) EMOJI="🔌" ;;
@@ -158,7 +158,6 @@ jobs:
                 --arg package_name "$PACKAGE_DISPLAY_NAME" \
                 --arg package_version "$PACKAGE_VERSION" \
                 --arg tag "$TAG" \
-                --arg repo "${{ github.repository }}" \
                 --arg release_notes "$RELEASE_NOTES_RAW" \
                 '[
                   {
@@ -169,11 +168,6 @@ jobs:
                   {
                     "name": "🏷️ Tag",
                     "value": ("`" + $tag + "`"),
-                    "inline": true
-                  },
-                  {
-                    "name": "📂 Repository",
-                    "value": ("[" + $repo + "](https://github.com/" + $repo + ")"),
                     "inline": true
                   },
                   {
@@ -188,7 +182,6 @@ jobs:
                 --arg package_name "$PACKAGE_DISPLAY_NAME" \
                 --arg package_version "$PACKAGE_VERSION" \
                 --arg tag "$TAG" \
-                --arg repo "${{ github.repository }}" \
                 '[
                   {
                     "name": "📦 Package",
@@ -198,11 +191,6 @@ jobs:
                   {
                     "name": "🏷️ Tag",
                     "value": ("`" + $tag + "`"),
-                    "inline": true
-                  },
-                  {
-                    "name": "📂 Repository",
-                    "value": ("[" + $repo + "](https://github.com/" + $repo + ")"),
                     "inline": true
                   }
                 ]')
@@ -216,17 +204,11 @@ jobs:
             if [ -n "$RELEASE_NOTES_RAW" ] && [ "$RELEASE_NOTES_RAW" != "No release notes available" ]; then
               FIELDS_JSON=$(jq -n \
                 --arg tag "$TAG" \
-                --arg repo "${{ github.repository }}" \
                 --arg release_notes "$RELEASE_NOTES_RAW" \
                 '[
                   {
                     "name": "🏷️ Version",
                     "value": ("`" + $tag + "`"),
-                    "inline": true
-                  },
-                  {
-                    "name": "📂 Repository",
-                    "value": ("[" + $repo + "](https://github.com/" + $repo + ")"),
                     "inline": true
                   },
                   {
@@ -238,16 +220,10 @@ jobs:
             else
               FIELDS_JSON=$(jq -n \
                 --arg tag "$TAG" \
-                --arg repo "${{ github.repository }}" \
                 '[
                   {
                     "name": "🏷️ Version",
                     "value": ("`" + $tag + "`"),
-                    "inline": true
-                  },
-                  {
-                    "name": "📂 Repository",
-                    "value": ("[" + $repo + "](https://github.com/" + $repo + ")"),
                     "inline": true
                   }
                 ]')
