@@ -1,7 +1,10 @@
+import type { Config } from '@/types/config/config'
 import { defineExtensionMessaging } from '@webext-core/messaging'
 
 interface ProtocolMap {
   openOptionsPage: () => void
+  // config
+  getInitialConfig: () => Config | null
   // translation state
   getEnablePageTranslation: (data: { tabId: number }) => boolean | undefined
   setEnablePageTranslation: (data: { tabId: number, enabled: boolean }) => void
