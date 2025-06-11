@@ -1,5 +1,11 @@
 # @read-frog/extension
 
+## 0.10.6
+
+### Patch Changes
+
+- [#144](https://github.com/mengxi-ream/read-frog/pull/144) [`5d3ac93`](https://github.com/mengxi-ream/read-frog/commit/5d3ac93d84fc501b6c2af3ced5000fb877067e1d) Thanks [@mengxi-ream](https://github.com/mengxi-ream)! - chore: add neat reader url on popup
+
 ## 0.10.5
 
 ### Patch Changes
