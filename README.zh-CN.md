@@ -144,7 +144,9 @@ Read Frog 的愿景是为各个级别的语言学习者提供易于使用、智�
   <table>
     <tr>
       <th colspan="2">
+        <br>
         <img src="https://contrib.rocks/image?repo=mengxi-ream/read-frog"><br>
+        <br>
       </th>
     </tr>
     <tr>

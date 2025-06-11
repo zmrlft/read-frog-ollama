@@ -144,7 +144,9 @@ Check out the [Contribution Guide](https://readfrog.app/en/tutorial/contribution
   <table>
     <tr>
       <th colspan="2">
+        <br>
         <img src="https://contrib.rocks/image?repo=mengxi-ream/read-frog"><br>
+        <br>
       </th>
     </tr>
     <tr>
