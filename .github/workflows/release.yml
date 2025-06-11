@@ -95,11 +95,11 @@ jobs:
             fi
           fi
 
-          # Process each published package
-          NOTIFICATION_EMBEDS="["
-          FIRST_PACKAGE=true
+          # Save release notes to file to avoid shell escaping issues
+          echo "$RELEASE_NOTES_RAW" > /tmp/release_notes.txt
 
-          echo "$PUBLISHED_PACKAGES" | jq -c '.[]' | while read -r package_info; do
+          # Process each published package and build embeds array using jq
+          EMBEDS_JSON=$(echo "$PUBLISHED_PACKAGES" | jq -c '.[]' | while read -r package_info; do
             if [ -n "$package_info" ]; then
               PACKAGE_NAME=$(echo "$package_info" | jq -r '.name')
               PACKAGE_VERSION=$(echo "$package_info" | jq -r '.version')
@@ -124,11 +124,14 @@ jobs:
               TITLE="$EMOJI $PACKAGE_DISPLAY_NAME Release!"
               DESCRIPTION="**$PACKAGE_DISPLAY_NAME** version \`$PACKAGE_VERSION\` has been released!"
 
+              # Read release notes from file
+              RELEASE_NOTES_FROM_FILE=$(cat /tmp/release_notes.txt)
+
               # Build fields using jq
-              if [ -n "$RELEASE_NOTES_RAW" ] && [ "$RELEASE_NOTES_RAW" != "No release notes available" ]; then
+              if [ -n "$RELEASE_NOTES_FROM_FILE" ] && [ "$RELEASE_NOTES_FROM_FILE" != "No release notes available" ]; then
                 FIELDS_JSON=$(jq -n \
                   --arg tag "$PACKAGE_TAG" \
-                  --arg release_notes "$RELEASE_NOTES_RAW" \
+                  --arg release_notes "$RELEASE_NOTES_FROM_FILE" \
                   '[
                     {
                       "name": "🏷️ Tag",
@@ -155,7 +158,7 @@ jobs:
 
               # Create individual embed
               TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%S.000Z)
-              EMBED_JSON=$(jq -n \
+              jq -n \
                 --arg title "$TITLE" \
                 --arg description "$DESCRIPTION" \
                 --arg url "${RELEASE_URL:-https://github.com/${{ github.repository }}/releases/tag/$PACKAGE_TAG}" \
@@ -172,23 +175,12 @@ jobs:
                     icon_url: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
                   },
                   timestamp: $timestamp
-                }')
-
-              # Add to embeds array (Discord supports up to 10 embeds)
-              if [ "$FIRST_PACKAGE" = true ]; then
-                NOTIFICATION_EMBEDS="[$EMBED_JSON"
-                FIRST_PACKAGE=false
-              else
-                NOTIFICATION_EMBEDS="$NOTIFICATION_EMBEDS,$EMBED_JSON"
-              fi
+                }'
             fi
-          done
-
-          # Close the embeds array
-          NOTIFICATION_EMBEDS="$NOTIFICATION_EMBEDS]"
+          done | jq -s '.')
 
           # Create final Discord payload
-          echo "$NOTIFICATION_EMBEDS" | jq '{embeds: .}' > /tmp/discord_payload.json
+          echo "$EMBEDS_JSON" | jq '{embeds: .}' > /tmp/discord_payload.json
 
           echo "Discord payload:"
           cat /tmp/discord_payload.json
@@ -196,6 +188,13 @@ jobs:
           # Validate JSON before sending
           if ! jq empty /tmp/discord_payload.json 2>/dev/null; then
             echo "Error: Generated invalid JSON payload"
+            exit 1
+          fi
+
+          # Check if payload has any embeds
+          EMBED_COUNT=$(echo "$EMBEDS_JSON" | jq 'length')
+          if [ "$EMBED_COUNT" -eq 0 ]; then
+            echo "Error: No embeds generated"
             exit 1
           fi
 
