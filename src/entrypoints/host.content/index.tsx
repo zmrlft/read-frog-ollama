@@ -1,5 +1,5 @@
 // import eruda from 'eruda'
-import { globalConfig, loadGlobalConfigPromise } from '@/utils/config/config'
+import { globalConfig, loadGlobalConfig } from '@/utils/config/config'
 import { shouldAutoEnable } from '@/utils/host/translate/auto-translation'
 import { registerTranslationTriggers } from './translation-trigger'
 import { PageTranslationManager } from './translation-trigger/page-translation'
@@ -9,7 +9,7 @@ import './style.css'
 export default defineContentScript({
   matches: ['*://*/*'],
   async main() {
-    await loadGlobalConfigPromise
+    await loadGlobalConfig()
     // eruda.init()
     registerTranslationTriggers()
 

@@ -1,5 +1,4 @@
-import { initializeConfig, loadAPIKeyFromEnv } from '@/utils/config/config'
-import { CONFIG_SCHEMA_VERSION } from '@/utils/constants/config'
+import { ensureConfig } from './config'
 import { newUserGuide } from './new-user-guide'
 import { setUpRequestQueue } from './request-queue'
 import { translationMessage } from './translation'
@@ -8,20 +7,17 @@ export default defineBackground(() => {
   logger.info('Hello background!', { id: browser.runtime.id })
 
   browser.runtime.onInstalled.addListener(async (details) => {
-    if (details.reason === 'install') {
-      await storage.setItem<number>(
-        'local:__configSchemaVersion',
-        CONFIG_SCHEMA_VERSION,
-      )
-    }
-    await initializeConfig()
-    await loadAPIKeyFromEnv()
+    await ensureConfig()
     // Open tutorial page when extension is installed
     if (details.reason === 'install') {
       await browser.tabs.create({
         url: 'https://readfrog.app/guide/step-1',
       })
     }
+  })
+
+  onMessage('getInitialConfig', async () => {
+    return await ensureConfig()
   })
 
   onMessage('openOptionsPage', () => {

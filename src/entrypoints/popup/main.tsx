@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom/client'
 import { TooltipProvider } from '@/components/ui/tooltip.tsx'
 import { configAtom } from '@/utils/atoms/config.ts'
 import { isPageTranslatedAtom } from '@/utils/atoms/translation.ts'
-import { globalConfig, loadGlobalConfigPromise } from '@/utils/config/config.ts'
+import { globalConfig, loadGlobalConfig } from '@/utils/config/config.ts'
 import { DEFAULT_CONFIG } from '@/utils/constants/config.ts'
 import App from './app.tsx'
 import { getIsInPatterns, isCurrentSiteInPatternsAtom } from './atom.ts'
@@ -39,7 +39,7 @@ function HydrateAtoms({
 }
 
 async function initApp() {
-  await loadGlobalConfigPromise
+  await loadGlobalConfig()
   const root = document.getElementById('root')!
   root.className = 'text-base antialiased w-[320px] bg-background'
   const config = globalConfig ?? DEFAULT_CONFIG
