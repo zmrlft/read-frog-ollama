@@ -125,6 +125,17 @@ Summary >> ....
 
 我们使用 [Conventional Commits](https://www.conventionalcommits.org/) 规范来编写 commit message。
 
+## 设置环境变量
+
+在开发扩展时，为了自动加载环境变量，例如开发环境的 API 密钥，您可以在 `apps/extension` 目录中创建一个 `.env.local` 文件。
+
+```bash
+# apps/extension/.env.local
+WXT_OPENAI_API_KEY=xxx
+WXT_DEEPSEEK_API_KEY=xxx
+WXT_OPENROUTER_API_KEY=xxx
+```
+
 ## 在中国大陆跳过谷歌测试
 
 如果你是中国大陆贡献者，那么当你要 push 代码的时候你得用

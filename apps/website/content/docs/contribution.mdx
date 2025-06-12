@@ -130,6 +130,17 @@ Then create a Pull Request and wait for it to be merged.
 
 We use the [Conventional Commits](https://www.conventionalcommits.org/) specification for writing commit messages.
 
+## Set environment variables
+
+To automatically load environment variables while developing the extension, such as API keys for the development environment, you can create a `.env.local` file in the `apps/extension` directory.
+
+```bash
+# apps/extension/.env.local
+WXT_OPENAI_API_KEY=xxx
+WXT_DEEPSEEK_API_KEY=xxx
+WXT_OPENROUTER_API_KEY=xxx
+```
+
 ## Skip Google API Tests in China
 
 If you are a contributor from mainland China, when you need to push code, use the following command:
