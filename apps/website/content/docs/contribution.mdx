@@ -19,6 +19,22 @@ cd read-frog
 pnpm dev
 ```
 
+<Callout title="Windows environment variable configuration">
+  If you are currently in a Windows environment, you need to add a `web-ext.config.ts` file in the `apps/extension` directory to explicitly specify the browser path.  
+  ```javascript
+  // apps/extension/web-ext.config.ts
+  import { defineWebExtConfig } from 'wxt';
+
+  export default defineWebExtConfig({
+    binaries: {
+        chrome: "path/to/your/chrome.exe",
+        firefox: "path/to/your/firefox.exe",
+        edge: "path/to/your/edge.exe"
+	  }
+  });
+  ```
+</Callout>
+
 <Callout title="pnpm dev can't load the extension automatically">
   If you use Chrome version 137 or higher, you need to download [Chrome for
   Testing](https://developer.chrome.com/blog/chrome-for-testing/) for
@@ -28,7 +44,7 @@ pnpm dev
 
 ## Submitting Code
 
-Create a new branch
+### Create a new branch
 
 ```bash
 # For new features
@@ -36,9 +52,79 @@ git checkout -b feat/the-feature
 
 # For bug fixes
 git checkout -b fix/the-bug
+
+# For docs modify
+git checkout -b docs/the-docs
 ```
 
-Create a Pull Request and wait for it to be merged.
+### Merge Branch
+
+If the remote main branch gets updated and creates conflicts in our PR, you can resolve it by merging the remote branch in advance
+.
+
+```bash 
+# Switch to the main branch
+git checkout main
+
+# Pull the latest code from upstream
+git pull upstream main
+
+# Switch back to your local branch
+git checkout docs/xxxx
+
+# Merge the main branch into your local branch
+git rebase main
+
+# After manually resolving the conflicts, push the code again
+git push origin docs/xxxx
+```
+
+<Callout title="Fatal in syncing the upstream repository">
+  If you encounter this error while syncing the upstream repository
+  ```bash
+  fatal: 'upstream' does not appear to be a git repository
+  fatal: Could not read from remote repository.
+  ```
+  Please try to manually add an upstream repository 
+  ```bash
+  git remote add upstream https://github.com/mengxi-ream/read-frog
+  ```
+</Callout>
+
+## Generating Pull Request
+
+Before generating a Pull Request, you need to add a changeset
+
+```bash
+# Add Changeset
+pnpm changeset
+
+# Choose Packages
+# Which packages would you like to include?...
+[] @read-frog/website
+[] @read-frog/extension
+
+# Select a appropriate bump type for above packages
+# Which packages should have a major bump? (major)
+( ) all packages
+  ( ) @read-frog/website@0.1.0
+  ( ) @read-frog/extension@0.1.0
+# Which packages should have a minor bump? (minor)
+( ) all packages
+  ( ) @read-frog/website@0.1.0
+  ( ) @read-frog/extension@0.1.0
+# The following packages will be patch bumped (patch)
+( ) all packages
+  ( ) @read-frog/website@0.1.0
+  ( ) @read-frog/extension@0.1.0
+
+# Commit Summary
+Summary >> ....
+```
+
+`pnpm changeset` will generate `[uniqId].md` in the `.changeset` file, and the description of this changeset can be adjusted again after the generation is completed.
+
+Then create a Pull Request and wait for it to be merged.
 
 ## Commit Convention
 
@@ -49,7 +135,12 @@ We use the [Conventional Commits](https://www.conventionalcommits.org/) specific
 If you are a contributor from mainland China, when you need to push code, use the following command:
 
 ```bash
+# MAC
 SKIP_FREE_API=true git push
+
+# WINDOWS
+$env:SKIP_FREE_API='true'
+git push
 ```
 
 Why is this necessary? Because code tests are performed during the push process, but Google's free API is inaccessible in mainland China. This would cause the tests to fail and the push to be rejected. By setting the `SKIP_FREE_API` environment variable, we skip the Google tests.

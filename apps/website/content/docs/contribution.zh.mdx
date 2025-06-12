@@ -18,6 +18,21 @@ cd read-frog
 # 启动项目
 pnpm dev
 ```
+<Callout title="Windows 环境变量配置">
+  如果你当前在 Windows 环境，需要在 `apps/extension` 目录下添加 `web-ext.config.ts` 文件，显式指定浏览器路径。
+  ```javascript
+  // apps/extension/web-ext.config.ts
+  import { defineWebExtConfig } from 'wxt';
+
+  export default defineWebExtConfig({
+    binaries: {
+        chrome: "path/to/your/chrome.exe",
+        firefox: "path/to/your/firefox.exe",
+        edge: "path/to/your/edge.exe"
+	  }
+  });
+  ```
+</Callout>
 
 <Callout title="pnpm dev 无法自动加载扩展">
   如果你使用 Chrome 137 或更高版本，你需要下载 [Chrome for
@@ -27,7 +42,7 @@ pnpm dev
 
 ## 提交代码
 
-创建新的分支
+### 创建新的分支
 
 ```bash
 # 如果是新功能
@@ -35,9 +50,76 @@ git checkout -b feat/the-feature
 
 # 如果是修复 bug
 git checkout -b fix/the-bug
+
+# 如果是文档调整
+git checkout -b docs/the-docs
 ```
 
-发起 Pull Request，然后等待合并。
+### 分支合并
+
+当远程分支(main)更新时，会导致我们的 Pull Request 存在冲突，你可以通过提前合并远程分支来解决
+```bash 
+# 切到 main 分支 
+git checkout main
+
+# 同步上游仓库
+git pull upstream main
+
+# 切回开发分支
+git checkout docs/xxxx
+
+# 同步远程分支
+git rebase main
+
+# 手动解决完冲突后，再推送代码
+git push origin docs/xxxx
+```
+
+<Callout title="git 同步上游仓库">
+  如果你在同步上游仓库时遇到该错误
+  ```bash
+  fatal: 'upstream' does not appear to be a git repository
+  fatal: Could not read from remote repository.
+  ```
+  请尝试手动添加上游仓库
+  ```bash
+  git remote add upstream https://github.com/mengxi-ream/read-frog
+  ```
+</Callout>
+
+## 发起 Pull Request
+
+发起 Pull Request 前，需要先添加 changeset
+```bash
+# 添加 changeset
+pnpm changeset
+
+# 选择本次调整的 packages
+# Which packages would you like to include?...
+[] @read-frog/website
+[] @read-frog/extension
+
+# 为 packages 选择需要变更的版本类型
+# Which packages should have a major bump? (主版本)
+( ) all packages
+  ( ) @read-frog/website@0.1.0
+  ( ) @read-frog/extension@0.1.0
+# Which packages should have a minor bump? (次要版本)
+( ) all packages
+  ( ) @read-frog/website@0.1.0
+  ( ) @read-frog/extension@0.1.0
+# The following packages will be patch bumped (补丁版本)
+( ) all packages
+  ( ) @read-frog/website@0.1.0
+  ( ) @read-frog/extension@0.1.0
+
+# 提供 summary
+Summary >> ....
+```
+
+`pnpm changeset` 会在 `.changeset` 文件中生成 `[uniqId].md`，可在生成完成后再次调整本次变更的描述。
+
+生成完成后再发起 Pull Request，然后等待合并。
 
 ## Commit 规范
 
@@ -48,7 +130,12 @@ git checkout -b fix/the-bug
 如果你是中国大陆贡献者，那么当你要 push 代码的时候你得用
 
 ```bash
+# MAC
 SKIP_FREE_API=true git push
+
+# WINDOWS
+$env:SKIP_FREE_API='true'
+git push
 ```
 
 为什么要这样做呢？因为在你 push 代码的时候会做代码测试，但是谷歌的免费 API 在国内无法访问，这会导致测试失败，从而 push 失败，我们通过设置 `SKIP_FREE_API` 环境变量来跳过谷歌测试。
