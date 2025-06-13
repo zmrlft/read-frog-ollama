@@ -207,7 +207,7 @@ Read Frog 的愿景是为各个级别的语言学习者提供易于使用、智�
 [image-star]: ./docs/star.png
 [issues-link]: https://github.com/mengxi-ream/read-frog/issues
 [issues-shield]: https://img.shields.io/github/issues/mengxi-ream/read-frog?style=flat-square&labelColor=black
-[last-commit-shield]: https://img.shields.io/github/last-commit/mengxi-ream/read-frog?style=flat-square&labelColor=black
+[last-commit-shield]: https://img.shields.io/github/last-commit/mengxi-ream/read-frog?style=flat-square&label=commit&labelColor=black
 [sponsor-link]: https://github.com/sponsors/mengxi-ream
 [sponsor-shield]: https://img.shields.io/github/sponsors/mengxi-ream?style=flat-square&label=赞助&color=EA4AAA&labelColor=black
 [star-history-link]: https://www.star-history.com/#mengxi-ream/read-frog&Timeline

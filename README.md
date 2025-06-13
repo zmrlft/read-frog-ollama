@@ -206,7 +206,7 @@ Every donation helps us build a better language learning experience. Thank you f
 [image-star]: ./docs/star.png
 [issues-link]: https://github.com/mengxi-ream/read-frog/issues
 [issues-shield]: https://img.shields.io/github/issues/mengxi-ream/read-frog?style=flat-square&labelColor=black
-[last-commit-shield]: https://img.shields.io/github/last-commit/mengxi-ream/read-frog?style=flat-square&labelColor=black
+[last-commit-shield]: https://img.shields.io/github/last-commit/mengxi-ream/read-frog?style=flat-square&label=commit&labelColor=black
 [sponsor-image]: ./docs/sponsorkit/sponsors.svg
 [sponsor-link]: https://github.com/sponsors/mengxi-ream
 [sponsor-shield]: https://img.shields.io/github/sponsors/mengxi-ream?style=flat-square&label=Sponsor&color=EA4AAA&labelColor=black
