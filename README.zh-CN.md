@@ -62,8 +62,8 @@ Read Frog 的愿景是为各个级别的语言学习者提供易于使用、智�
 
 | 浏览器 | 版本                                            | 下载                                                             |
 | ------ | ----------------------------------------------- | ---------------------------------------------------------------- |
-| Chrome | [![][chrome-version-shield]][chrome-store-link] | [Chrome 应用商店](chrome-store-link) 或 [中国镜像](crxsoso-link) |
-| Edge   | [![][edge-version-shield]][edge-store-link]     | [Microsoft Edge 插件商店](edge-store-link)                       |
+| Chrome | [![][chrome-version-shield]][chrome-store-link] | [Chrome 应用商店][chrome-store-link] 或 [中国镜像][crxsoso-link] |
+| Edge   | [![][edge-version-shield]][edge-store-link]     | [Microsoft Edge 插件商店][edge-store-link]                       |
 
 ### 社区
 

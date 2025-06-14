@@ -62,8 +62,8 @@ Whether you are a user or a developer, Read Frog will be an important part of yo
 
 | Browser | Version                                         | Download                                                          |
 | ------- | ----------------------------------------------- | ----------------------------------------------------------------- |
-| Chrome  | [![][chrome-version-shield]][chrome-store-link] | [Chrome Web Store](chrome-store-link) or [中国镜像](crxsoso-link) |
-| Edge    | [![][edge-version-shield]][edge-store-link]     | [Microsoft Edge Addons](edge-store-link)                          |
+| Chrome  | [![][chrome-version-shield]][chrome-store-link] | [Chrome Web Store][chrome-store-link] or [中国镜像][crxsoso-link] |
+| Edge    | [![][edge-version-shield]][edge-store-link]     | [Microsoft Edge Addons][edge-store-link]                          |
 
 ### Community
 
