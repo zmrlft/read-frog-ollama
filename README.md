@@ -14,13 +14,13 @@ Master languages effortlessly and deeply with AI, right in your browser.
 [![][chrome-version-shield]][chrome-store-link]
 [![][edge-version-shield]][edge-store-link]
 [![][website-release-shield]][github-release-link]<br/>
+[![][discord-shield]][discord-link]
+[![][chrome-users-shield]][chrome-store-link]
+[![][edge-users-shield]][edge-store-link]<br/>
 [![][star-history-shield]][star-history-link]
 [![][contributors-shield]][contributors-link]
 ![][last-commit-shield]
 [![][issues-shield]][issues-link]<br/>
-[![][discord-shield]][discord-link]
-[![][chrome-users-shield]][chrome-store-link]
-[![][edge-users-shield]][edge-store-link]<br/>
 [![][sponsor-shield]][sponsor-link]
 
 </div>
