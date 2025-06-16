@@ -1,6 +1,6 @@
 // import eruda from 'eruda'
 import { globalConfig, loadGlobalConfig } from '@/utils/config/config'
-import { shouldAutoEnable } from '@/utils/host/translate/auto-translation'
+import { shouldEnableAutoTranslation } from '@/utils/host/translate/auto-translation'
 import { registerNodeTranslationTriggers } from './translation-control/node-translation'
 import { PageTranslationManager } from './translation-control/page-translation'
 import './listen'
@@ -29,14 +29,13 @@ export default defineContentScript({
         if (manager.isActive) {
           manager.stop()
         }
-        // 通知 background script URL 已变化，让它决定是否自动启用翻译
+        // Notify background script that URL has changed, let it decide whether to automatically enable translation
         sendMessage('resetPageTranslationOnNavigation', { url: to })
       }
     }
 
-    window.addEventListener('extension:urlchange', (e: any) => {
-      const { from, to, reason } = e.detail
-      logger.info('URL changed from', from, 'to', to, 'reason', reason)
+    window.addEventListener('extension:URLChange', (e: any) => {
+      const { from, to } = e.detail
       handleUrlChange(from, to)
     })
 
@@ -48,7 +47,7 @@ export default defineContentScript({
     })
 
     // ! Temporary code for browser has no port.onMessage.addListener api like Orion
-    const autoEnable = globalConfig && await shouldAutoEnable(window.location.href, globalConfig)
+    const autoEnable = globalConfig && await shouldEnableAutoTranslation(window.location.href, globalConfig)
     if (autoEnable && !manager.isActive)
       manager.start()
   },

@@ -1,4 +1,4 @@
-import type { Point, TransNode } from '@/types/dom'
+import type { TransNode } from '@/types/dom'
 import { globalConfig } from '@/utils/config/config'
 import {
   BLOCK_ATTRIBUTE,
@@ -12,7 +12,7 @@ import {
   MAIN_CONTENT_IGNORE_TAGS,
 } from '@/utils/constants/dom-tags'
 
-import { translateConsecutiveInlineNodes, translateNode } from '../translate/node-manipulation'
+import { translateNodes } from '../translate/node-manipulation'
 import {
   isDontWalkIntoElement,
   isHTMLElement,
@@ -22,79 +22,6 @@ import {
   isShallowInlineHTMLElement,
   isTextNode,
 } from './filter'
-import { smashTruncationStyle } from './style'
-
-/**
- * Find the deepest element at the given point, including inside shadow roots
- * @param root - The root element (Document or ShadowRoot)
- * @param point - The point to find the deepest element
- */
-function findElementAt(root: Document | ShadowRoot, point: Point): Element | null {
-  const { x, y } = point
-
-  // First, try to get the element at the point from the root
-  const initialElement = root.elementFromPoint(x, y)
-  if (!initialElement) {
-    return null
-  }
-
-  // If the initial element has a shadow root, check if the point is actually inside the shadow content
-  if (initialElement.shadowRoot) {
-    const shadowElement = findElementAt(initialElement.shadowRoot, point)
-    if (shadowElement) {
-      return shadowElement
-    }
-  }
-
-  // Find the deepest element by traversing children
-  function findDeepestElement(element: Element): Element {
-    let deepestElement = element
-
-    for (const child of element.children) {
-      if (isHTMLElement(child)) {
-        const rect = child.getBoundingClientRect()
-        const isPointInChild = x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom
-
-        if (isPointInChild) {
-          // If child has shadow root, recursively search within it
-          if (child.shadowRoot) {
-            const shadowResult = findElementAt(child.shadowRoot, point)
-            if (shadowResult) {
-              return shadowResult
-            }
-          }
-
-          // Continue searching deeper in this child
-          deepestElement = findDeepestElement(child)
-          if (deepestElement.textContent?.trim())
-            return deepestElement
-        }
-      }
-    }
-
-    return deepestElement
-  }
-
-  return findDeepestElement(initialElement)
-}
-
-/**
- * Find the nearest block node from the point
- * @param point - The point to find the nearest block node
- */
-export function findNearestBlockNodeAt(point: Point) {
-  let currentNode = findElementAt(document, point)
-
-  // TODO: support SVGElement in the future
-  while (
-    currentNode && isHTMLElement(currentNode)
-    && isShallowInlineHTMLElement(currentNode)
-  ) {
-    currentNode = currentNode.parentElement
-  }
-
-  return currentNode
-}
 
 export function extractTextContent(node: TransNode): string {
   if (isTextNode(node)) {
@@ -225,7 +152,7 @@ export async function translateWalkedElement(
     }
 
     if (!hasBlockNodeChild) {
-      promises.push(translateNode(element, toggle))
+      promises.push(translateNodes([element], toggle))
     }
     else {
       // prevent children change during iteration
@@ -279,27 +206,6 @@ export async function translateWalkedElement(
   await Promise.all(promises)
 }
 
-export function unwrapDeepestOnlyHTMLChild(element: HTMLElement) {
-  let currentElement = element
-  while (currentElement) {
-    smashTruncationStyle(currentElement)
-
-    const onlyChild
-      = currentElement.childNodes.length === 1
-        && currentElement.children.length === 1
-    if (!onlyChild)
-      break
-
-    const onlyChildElement = currentElement.children[0]
-    if (!isHTMLElement(onlyChildElement))
-      break
-
-    currentElement = onlyChildElement
-  }
-
-  return currentElement
-}
-
 async function dealWithConsecutiveInlineNodes(nodes: TransNode[], toggle: boolean = false) {
   if (nodes.length > 1) {
     // give attribute to the last node
@@ -307,52 +213,6 @@ async function dealWithConsecutiveInlineNodes(nodes: TransNode[], toggle: boolea
     if (isHTMLElement(lastNode)) {
       lastNode.setAttribute(CONSECUTIVE_INLINE_END_ATTRIBUTE, '')
     }
-    await translateConsecutiveInlineNodes(nodes, toggle)
   }
-  else if (nodes.length === 1) {
-    await translateNode(nodes[0], toggle)
-  }
-}
-
-export function deepQueryTopLevelSelector(element: HTMLElement | ShadowRoot | Document, selectorFn: (element: HTMLElement) => boolean): HTMLElement[] {
-  if (element instanceof Document) {
-    return deepQueryTopLevelSelector(element.body, selectorFn)
-  }
-
-  const result: HTMLElement[] = []
-  if (element instanceof ShadowRoot) {
-    for (const child of element.children) {
-      if (isHTMLElement(child)) {
-        result.push(...deepQueryTopLevelSelector(child, selectorFn))
-      }
-    }
-    return result
-  }
-
-  if (selectorFn(element)) {
-    return [element]
-  }
-
-  if (element.shadowRoot) {
-    for (const child of element.shadowRoot.children) {
-      if (isHTMLElement(child)) {
-        result.push(...deepQueryTopLevelSelector(child, selectorFn))
-      }
-    }
-  }
-
-  if (isIFrameElement(element)) {
-    const iframeDocument = element.contentDocument
-    if (iframeDocument && iframeDocument.body) {
-      result.push(...deepQueryTopLevelSelector(iframeDocument.body, selectorFn))
-    }
-  }
-
-  for (const child of element.children) {
-    if (isHTMLElement(child)) {
-      result.push(...deepQueryTopLevelSelector(child, selectorFn))
-    }
-  }
-
-  return result
+  await translateNodes(nodes, toggle)
 }

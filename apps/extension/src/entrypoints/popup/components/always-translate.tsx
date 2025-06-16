@@ -1,6 +1,7 @@
 import { useAtom, useAtomValue } from 'jotai'
 import { Switch } from '@/components/ui/switch'
-import { isCurrentSiteInPatternsAtom, isIgnoreTabAtom, toggleCurrentSiteAtom } from '../atom'
+import { isCurrentSiteInPatternsAtom, toggleCurrentSiteAtom } from '../atoms/auto-translate'
+import { isIgnoreTabAtom } from '../atoms/ignore'
 
 export function AlwaysTranslate() {
   const isCurrentSiteInPatterns = useAtomValue(isCurrentSiteInPatternsAtom)

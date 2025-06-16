@@ -19,18 +19,18 @@ export function createReactShadowHost(
 ) {
   const { className, position, inheritStyles, cssContent, style } = options
 
-  const container = document.createElement('div')
+  const shadowHost = document.createElement('div')
   if (className)
-    container.className = className
+    shadowHost.className = className
 
-  container.classList.add(REACT_SHADOW_HOST_CLASS)
-  container.style.display = position
+  shadowHost.classList.add(REACT_SHADOW_HOST_CLASS)
+  shadowHost.style.display = position
 
   if (style) {
-    Object.assign(container.style, style)
+    Object.assign(shadowHost.style, style)
   }
 
-  const shadowRoot = container.attachShadow({ mode: 'open' })
+  const shadowRoot = shadowHost.attachShadow({ mode: 'open' })
   const hostBuilder = new ShadowHostBuilder(shadowRoot, {
     position,
     cssContent,
@@ -49,15 +49,18 @@ export function createReactShadowHost(
 
   root.render(wrappedComponent)
 
-  ;(container as any).__reactShadowContainerCleanup = () => {
+  ;(shadowHost as any).__reactShadowContainerCleanup = () => {
     root.unmount()
     hostBuilder.cleanup()
   }
 
-  return container
+  return shadowHost
 }
 
 export function removeReactShadowHost(shadowHost: HTMLElement) {
-  ;(shadowHost as any).__reactShadowContainerCleanup?.()
+  if (!(shadowHost as any).__reactShadowContainerCleaned) {
+    ;(shadowHost as any).__reactShadowContainerCleanup?.()
+    ;(shadowHost as any).__reactShadowContainerCleaned = true
+  }
   shadowHost.remove()
 }

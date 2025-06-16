@@ -7,11 +7,11 @@ import ReactDOM from 'react-dom/client'
 
 import { TooltipProvider } from '@/components/ui/tooltip.tsx'
 import { configAtom } from '@/utils/atoms/config.ts'
-import { isPageTranslatedAtom } from '@/utils/atoms/translation.ts'
 import { globalConfig, loadGlobalConfig } from '@/utils/config/config.ts'
 import { DEFAULT_CONFIG } from '@/utils/constants/config.ts'
 import App from './app.tsx'
-import { getIsInPatterns, isCurrentSiteInPatternsAtom } from './atom.ts'
+import { isPageTranslatedAtom } from './atoms/auto-translate.ts'
+import { getIsInPatterns, isCurrentSiteInPatternsAtom } from './atoms/auto-translate.ts'
 
 import '@/assets/tailwind/text-small.css'
 import '@/assets/tailwind/theme.css'

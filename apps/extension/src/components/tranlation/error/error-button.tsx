@@ -12,7 +12,7 @@ export function ErrorButton({ error }: { error: Error }) {
       <HoverCardTrigger asChild>
         <AlertCircle className="size-3.5 text-red-500 hover:text-red-600 dark:hover:text-red-500" />
       </HoverCardTrigger>
-      <HoverCardContent className="w-64" container={shadowWrapper} asChild>
+      <HoverCardContent className="w-64 notranslate" container={shadowWrapper} asChild>
         <Alert variant="destructive">
           <AlertCircle className="size-4" />
           <AlertTitle>Translation Error</AlertTitle>

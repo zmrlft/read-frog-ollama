@@ -1,14 +1,11 @@
 (() => {
-  /** 向外抛出的统一事件名 */
-  const EVENT_NAME = 'extension:urlchange'
+  const EVENT_NAME = 'extension:URLChange'
 
-  /** 检查两个URL的核心路径是否相同（只比较origin和pathname） */
   const isSamePage = (from: string, to: string) => {
     try {
       const fromUrl = new URL(from)
       const toUrl = new URL(to)
 
-      // 只比较origin和pathname，忽略search和hash
       return fromUrl.origin === toUrl.origin
         && fromUrl.pathname === toUrl.pathname
     }
@@ -17,12 +14,10 @@
     }
   }
 
-  /** 触发自定义事件并携带前后 URL */
   const fire = (from: string, to: string, reason: string) => {
     if (from === to)
-      return // 无变化
+      return
 
-    // 如果是同一个页面（只有search或hash变化），则不触发事件
     if (isSamePage(from, to))
       return
 
@@ -30,7 +25,7 @@
     window.dispatchEvent(ev)
   }
 
-  /* ---------- 1. 补丁 pushState / replaceState ---------- */
+  /* ---------- 1. pushState / replaceState ---------- */
   let prev = location.href;
   ['pushState', 'replaceState'].forEach((fn) => {
     const orig = history[fn as 'pushState']
@@ -54,8 +49,7 @@
     prev = now
   })
 
-  /* ---------- 3. 现代 Navigation API（仅 Chrome/Edge） ---------- */
-  // 不拦截浏览器默认行为，只用于侦听
+  /* ---------- 3. Modern Navigation API (only Chrome/Edge) ---------- */
   if ('navigation' in window) {
     (window as any).navigation.addEventListener('navigate', (e: any) => {
       const now = e.destination?.url ?? location.href
@@ -64,7 +58,7 @@
     })
   }
 
-  /* ---------- 4. 兜底轮询（可选，保证万无一失） ---------- */
+  /* ---------- 4. Fallback polling (optional, to ensure 100% coverage) ---------- */
   if (!['chrome', 'edge'].includes(import.meta.env.BROWSER)) {
     setInterval(() => {
       const now = location.href

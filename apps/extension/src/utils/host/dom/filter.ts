@@ -1,6 +1,7 @@
 import type { TransNode } from '@/types/dom'
 import {
   BLOCK_ATTRIBUTE,
+  CONTENT_WRAPPER_CLASS,
   INLINE_ATTRIBUTE,
   NOTRANSLATE_CLASS,
 } from '@/utils/constants/dom-labels'
@@ -120,4 +121,8 @@ export function isTextNode(node: Node): node is Text {
 export function isIFrameElement(node: Node): node is HTMLIFrameElement {
   return node.nodeType === Node.ELEMENT_NODE
     && node.nodeName === 'IFRAME'
+}
+
+export function isTranslatedWrapperNode(node: Node) {
+  return isHTMLElement(node) && node.classList.contains(CONTENT_WRAPPER_CLASS)
 }

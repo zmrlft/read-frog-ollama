@@ -6,9 +6,9 @@ import { Button } from '@/components/ui/button'
 import { pureTranslateProvider } from '@/types/config/provider'
 import { configFields } from '@/utils/atoms/config'
 
-import { isPageTranslatedAtom } from '@/utils/atoms/translation'
 import { hasSetAPIKey } from '@/utils/config/config'
-import { isIgnoreTabAtom } from '../atom'
+import { isPageTranslatedAtom } from '../atoms/auto-translate'
+import { isIgnoreTabAtom } from '../atoms/ignore'
 
 export default function TranslateButton({ className }: { className?: string }) {
   const [isPageTranslated, setIsPageTranslated] = useAtom(isPageTranslatedAtom)

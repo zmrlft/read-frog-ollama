@@ -2,19 +2,14 @@ import type { TransNode } from '@/types/dom'
 import { RotateCcw } from 'lucide-react'
 import { use } from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { translateConsecutiveInlineNodes, translateNode } from '@/utils/host/translate/node-manipulation'
+import { translateNodes } from '@/utils/host/translate/node-manipulation'
 import { ShadowWrapperContext } from '@/utils/react-shadow-host/create-shadow-host'
 
-export function RetryButton({ node }: { node: TransNode | TransNode[] }) {
+export function RetryButton({ nodes }: { nodes: TransNode[] }) {
   const shadowWrapper = use(ShadowWrapperContext)
 
   const handleRetry = async () => {
-    if (Array.isArray(node)) {
-      await translateConsecutiveInlineNodes(node)
-    }
-    else {
-      await translateNode(node)
-    }
+    await translateNodes(nodes)
   }
 
   return (
@@ -29,7 +24,7 @@ export function RetryButton({ node }: { node: TransNode | TransNode[] }) {
           />
         </button>
       </TooltipTrigger>
-      <TooltipContent container={shadowWrapper} side="bottom">
+      <TooltipContent container={shadowWrapper} side="bottom" className="notranslate">
         Retry translation
       </TooltipContent>
     </Tooltip>

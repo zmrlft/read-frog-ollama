@@ -1,6 +1,6 @@
 import type { Config } from '@/types/config/config'
 import { CONFIG_STORAGE_KEY } from '@/utils/constants/config'
-import { shouldAutoEnable } from '@/utils/host/translate/auto-translation'
+import { shouldEnableAutoTranslation } from '@/utils/host/translate/auto-translation'
 
 export function translationMessage() {
   const tabPageTranslationState = new Map<number, { enabled: boolean, ports: Browser.runtime.Port[] }>()
@@ -21,7 +21,7 @@ export function translationMessage() {
     }))
 
     const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`)
-    const autoEnable = config && tabUrl && await shouldAutoEnable(tabUrl, config)
+    const autoEnable = config && tabUrl && await shouldEnableAutoTranslation(tabUrl, config)
     if (entry.ports.length === 0 && autoEnable) {
       entry.enabled = true
     }
@@ -75,7 +75,7 @@ export function translationMessage() {
       const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`)
       if (!config)
         return
-      const shouldEnable = await shouldAutoEnable(url, config)
+      const shouldEnable = await shouldEnableAutoTranslation(url, config)
       setEnabled(tabId, shouldEnable)
     }
   })
@@ -88,7 +88,7 @@ export function translationMessage() {
 
     entry.enabled = enabled
 
-    // 广播给本 tab 所有 content scripts
+    // broadcast to all content scripts in this tab
     entry.ports.forEach(p => p.postMessage({ type: 'STATUS_PUSH', enabled }))
   }
 }
