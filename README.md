@@ -34,7 +34,7 @@ Master languages effortlessly and deeply with AI, right in your browser.
 - [👋🏻 Getting Started \& Join Our Community](#-getting-started--join-our-community)
   - [Download](#download)
   - [Community](#community)
-- [📖 Introduction](#-introduction)
+- [✨ Features](#-features)
 - [🤝 Contribute](#-contribute)
   - [Contribute Code](#contribute-code)
 - [❤️ Sponsors](#️-sponsors)
@@ -98,11 +98,9 @@ Whether you are a user or a developer, Read Frog will be an important part of yo
 
 </div>
 
-## 📖 Introduction
+## ✨ Features
 
 Transform your everyday web reading into an immersive language learning journey! Read Frog is your intelligent companion that makes language learning natural and enjoyable.
-
-✨ Key Features:
 
 - Immersive Translation: Translate elements directly adjacent to the original elements on the webpage
 - Smart Content Extraction: Automatically identifies and extracts the main content from articles
