@@ -221,13 +221,15 @@ function FileExport() {
   })
 
   const allow = !!explainDataList.length && explainDataList.every(explainData => !!explainData)
+  if (!allow) {
+    return null
+  }
   return (
     <Select
       value=""
       onValueChange={async (fileType: DOWNLOAD_FILE_TYPES) => {
         downloader.download(explainDataList, fileType)
       }}
-      disabled={!allow}
     >
       <SelectTrigger
         hideChevron
