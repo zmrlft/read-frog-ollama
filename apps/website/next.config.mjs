@@ -25,10 +25,7 @@ const config = {
     // Optimized image sizes based on actual usage (reduced from 8 to 3)
     // 实际使用: width={20,24,28,32} 都会选择 32
     // 保留 64 用于可能的较大图标，128 用于头像类图片
-    imageSizes: [32, 64, 128],
-
-    // Configure lower quality options to reduce cache usage
-    quality: 75, // Default quality, can be overridden per image
+    imageSizes: [32, 64, 128, 256, 384],
   },
 }
 
