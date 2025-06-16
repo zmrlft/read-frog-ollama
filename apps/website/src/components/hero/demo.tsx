@@ -26,8 +26,8 @@ export function Demo() {
         <Image
           src="/images/demo.png"
           alt="hero"
-          height={1823}
-          width={2530}
+          height={720}
+          width={1280}
           className="mx-auto rounded-2xl object-fill w-full h-full"
           draggable={false}
         />
@@ -44,6 +44,7 @@ export function Demo() {
               width={28}
               height={28}
               className="object-contain rounded-full"
+              unoptimized
             />
             <span className="font-medium">OpenAI</span>
           </div>
@@ -54,6 +55,7 @@ export function Demo() {
               width={32}
               height={32}
               className="object-contain rounded-full"
+              unoptimized
             />
             <span className="font-medium">DeepSeek</span>
           </div>
