@@ -1,6 +1,6 @@
 import type { Config } from '@/types/config/config'
 
-export async function shouldAutoEnable(url: string, config: Config): Promise<boolean> {
+export async function shouldEnableAutoTranslation(url: string, config: Config): Promise<boolean> {
   const autoTranslatePatterns = config?.translate.page.autoTranslatePatterns
   if (!autoTranslatePatterns)
     return false

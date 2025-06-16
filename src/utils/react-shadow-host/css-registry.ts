@@ -30,6 +30,7 @@ export class CSSRegistry {
       return
 
     entry.count -= 1
+
     if (entry.count === 0) {
       entry.node.remove()
       this.registry.delete(key)

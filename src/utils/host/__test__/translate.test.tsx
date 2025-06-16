@@ -9,12 +9,20 @@ import {
   INLINE_CONTENT_CLASS,
 } from '@/utils/constants/dom-labels'
 
-import { hideOrShowPageTranslation, translateNode } from '../translate/node-manipulation'
+import { translateWalkedElement, walkAndLabelElement } from '../dom/traversal'
+import { translateNodes } from '../translate/node-manipulation'
 import { translateText } from '../translate/translate-text'
 
 vi.mock('../translate/translate-text', () => ({
   translateText: vi.fn(() => Promise.resolve('translation')),
 }))
+
+async function hideOrShowPageTranslation(toggle: boolean = false) {
+  const id = crypto.randomUUID()
+
+  walkAndLabelElement(document.body, id)
+  await translateWalkedElement(document.body, id, toggle)
+}
 
 describe('translateText stub', () => {
   it('translateText should be mocked', async () => {
@@ -39,7 +47,7 @@ describe('translateNode', () => {
       </div>,
     )
     const node = screen.getByTestId('test-node')
-    await translateNode(node, false)
+    await translateNodes([node], false)
     expect(node.childNodes[1]).toHaveClass(CONTENT_WRAPPER_CLASS)
     expect(node.childNodes[1].childNodes[1]).toHaveClass(BLOCK_CONTENT_CLASS)
   })
@@ -53,7 +61,7 @@ describe('translateNode', () => {
     )
     const node = screen.getByTestId('test-node')
     const textNode = node.firstChild as Text
-    await translateNode(textNode, false)
+    await translateNodes([textNode], false)
     expect(node.childNodes[1]).toHaveClass(CONTENT_WRAPPER_CLASS)
     expect(node.childNodes[1].childNodes[1]).toHaveClass(INLINE_CONTENT_CLASS)
   })

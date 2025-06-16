@@ -3,7 +3,7 @@ import { Bolt, Star } from 'lucide-react'
 import { Toaster } from 'sonner'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { version } from '../../../package.json'
-import { initIsIgnoreTabAtom } from './atom'
+import { initIsIgnoreTabAtom } from './atoms/ignore'
 import { AlwaysTranslate } from './components/always-translate'
 import FloatingButton from './components/floating-button'
 import Hotkey from './components/hotkey-selector'
@@ -17,6 +17,7 @@ import TranslateProviderSelector from './components/translate-provider-selector'
 
 function App() {
   const initIsIgnoreTab = useSetAtom(initIsIgnoreTabAtom)
+
   useEffect(() => {
     initIsIgnoreTab()
   }, [initIsIgnoreTab])
