@@ -19,8 +19,12 @@ const navigation = {
   community: [
     { name: 'github', href: 'https://github.com/mengxi-ream/read-frog' },
     {
+      name: 'wechat',
+      href: '/images/wechat-account.jpg',
+    },
+    {
       name: 'discord',
-      href: 'https://discord.gg/nmhvb6u2T7',
+      href: 'https://discord.gg/ej45e3PezJ',
     },
   ],
 }
