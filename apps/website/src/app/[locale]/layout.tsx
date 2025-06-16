@@ -2,7 +2,6 @@ import type { Translations } from 'fumadocs-ui/i18n'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import { Analytics } from '@vercel/analytics/next'
-import { SpeedInsights } from '@vercel/speed-insights/next'
 import { RootProvider } from 'fumadocs-ui/provider'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
@@ -110,7 +109,7 @@ export default async function RootLayout({
           </RootProvider>
         </NextIntlClientProvider>
         <Analytics />
-        <SpeedInsights />
+        {/* <SpeedInsights /> */}
       </body>
     </html>
   )
