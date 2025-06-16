@@ -8,12 +8,10 @@ import openaiLogo from '@/assets/provider/openai.jpg'
 import openrouterLogo from '@/assets/provider/openrouter.png'
 import { apiProviderNames, pureTranslateProvider, readProviderNames, translateProviderNames } from '@/types/config/provider'
 import { omit, pick } from '@/types/utils'
+import { DEFAULT_SIDE_CONTENT_WIDTH } from './side'
 
 export const CONFIG_STORAGE_KEY = 'config'
 export const CONFIG_SCHEMA_VERSION = 7
-
-export const MIN_SIDE_CONTENT_WIDTH = 400 // px
-export const DEFAULT_SIDE_CONTENT_WIDTH = 400 // px
 
 export const DEFAULT_PROVIDER_CONFIG: ProvidersConfig = {
   openai: {
