@@ -1,0 +1,91 @@
+name: Read Frog
+extName: Read Frog - 오픈 소스 몰입형 번역
+extDescription: Read Frog는 모든 웹사이트에서 언어를 깊이 있게 학습할 수 있도록 도와주는 오픈 소스 브라우저 확장 프로그램입니다.
+popup:
+  autoLang: 자동
+  sourceLang: 원본
+  targetLang: 대상
+  read: 기사 읽기
+  translate: 번역
+  showOriginal: 원문 보기
+  enabledFloatingButton: 플로팅 버튼 표시
+  alwaysTranslate: 이 사이트 항상 번역
+  options: 옵션
+  hover: 마우스 오버
+  translateParagraph: 단락 번역
+  help:
+    title: 도움말
+    description: 더 많은 팁과 트릭 발견하기
+  book:
+    title: 전자책
+    description: Neat Reader에서 ePub 책을 읽어보세요. (Neat Reader와 Read Frog는 독립적입니다. Neat Reader의 구매는 Read Frog와 관련이 없습니다.)
+  discord:
+    title: Discord
+    description: Discord 서버에 참여하여 개발자 및 다른 사용자들과 소통하세요
+  github:
+    description: ⭐️ 새로운 릴리스 알림을 지체 없이 받으려면 별표를 눌러주세요!
+options:
+  setAPIKeyWarning:
+    please: API Key를 설정해 주세요
+    page: 페이지에서
+  apiKeys:
+    title: API Keys
+    description:
+      openai: GPT-4o 같은 모델을 제공합니다
+      deepseek: 중국에서 사용을 권장합니다
+      openrouter: 여러 LLM 제공업체를 위한 통합 인터페이스
+      ollama: 로컬 LLM
+    apiKey:
+      showAPIKey: API Key 표시
+    advancedConfig:
+      show: 고급 설정 표시
+      hide: 고급 설정 숨기기
+  general:
+    title: 일반
+    readConfig:
+      title: 읽기 설정
+      description:
+        심층 기사 설명 및 키워드 추출과 같은 모든 고급 AI 기능에 사용됩니다.
+      provider: 제공업체
+      model:
+        title: 모델
+        enterCustomModel: 사용자 정의 모델 이름 입력
+    translationConfig:
+      title: 번역 설정
+      description: 이중 언어 단락 번역과 같은 웹 페이지 내 번역에만 사용됩니다.
+      provider: 제공업체
+      model:
+        title: 모델
+        enterCustomModel: 사용자 정의 모델 이름 입력
+      translateRange:
+        title: 번역 범위
+        range:
+          main: 주요 내용
+          all: 전체 내용
+  translation:
+    title: 번역
+side:
+  sourceLang: 원본 언어
+  targetLang: 대상 언어
+  fileExport: 파일 내보내기
+readService:
+  title: 읽기 서비스
+  description: 기사 읽기 및 설명
+translateService:
+  title: 번역 서비스
+  description: 웹페이지 번역 전용
+  normalTranslator: 일반 번역기
+  aiTranslator: AI 번역기
+languageLevel: 원본 언어 수준
+languageLevels:
+  beginner: 초급
+  intermediate: 중급
+  advanced: 고급
+noConfig:
+  warning: AI 모델을 사용하려면 먼저 옵션 페이지에서 API 키를 설정해 주세요
+  warningWithLink:
+    youMust: 반드시
+    setTheAPIKey: API 키를 설정해야 합니다
+    firstOnThe: 먼저
+    optionsPage: 옵션
+    page: 페이지에서
