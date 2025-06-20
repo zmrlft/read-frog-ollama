@@ -142,7 +142,7 @@ export default function FloatingButton() {
             sendMessage('openOptionsPage', undefined)
           }}
         />
-        <Toaster richColors className="z-[2147483647]" duration={10000} />
+        <Toaster richColors className="z-[2147483647] notranslate" duration={10000} />
       </div>
     )
   )
