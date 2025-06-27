@@ -11,7 +11,11 @@ export async function translateText(sourceText: string) {
   }
   const provider = globalConfig.translate.provider
   const modelConfig = globalConfig.translate.models[provider]
-  const modelString = modelConfig?.isCustomModel ? modelConfig.customModel : modelConfig?.model
+  if (!modelConfig) {
+    throw new Error(`No configuration found for provider: ${provider}`)
+  }
+  const modelString = modelConfig.isCustomModel ? modelConfig.customModel : modelConfig.model
+
 
   // replace /\u200B/g is for Feishu, it's a zero-width space
   const cleanSourceText = sourceText.replace(/\u200B/g, '').trim()
