@@ -1,7 +1,6 @@
 import type { Point } from '@/types/dom'
 
-import { isIFrameElement } from './filter'
-import { isHTMLElement, isShallowInlineHTMLElement } from './filter'
+import { isHTMLElement, isIFrameElement, isShallowInlineHTMLElement, isTranslatedContentNode, isTranslatedWrapperNode } from './filter'
 import { smashTruncationStyle } from './style'
 
 export function getOwnerDocument(node: Node): Document {
@@ -141,4 +140,22 @@ export function unwrapDeepestOnlyHTMLChild(element: HTMLElement) {
   }
 
   return currentElement
+}
+
+/**
+ * Find the nearest translated content wrapper ancestor
+ * @param node - The node should be a translated content node
+ */
+export function findTranslatedContentWrapper(node: HTMLElement): HTMLElement | null {
+  if (!isTranslatedContentNode(node))
+    return null
+
+  let currentElement = node.parentElement
+  while (currentElement) {
+    if (isTranslatedWrapperNode(currentElement)) {
+      return currentElement
+    }
+    currentElement = currentElement.parentElement
+  }
+  return null
 }
