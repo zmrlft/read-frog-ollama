@@ -48,7 +48,7 @@ export async function translateText(sourceText: string) {
         prompt,
       },
       scheduleAt: Date.now(),
-      hash: Sha256Hex(cleanSourceText, provider, modelString, targetLang),
+      hash: Sha256Hex(cleanSourceText, provider, modelString, targetLang, prompt),
     })
     // Some deep thinking models, such as deepseek, return the thinking process. Therefore,
     // the thinking process in the <think></think> tag needs to be filtered out and only the result is returned
