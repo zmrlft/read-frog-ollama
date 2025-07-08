@@ -1,3 +1,4 @@
+import { setupCacheCleanup } from './cache-cleanup'
 import { ensureConfig } from './config'
 import { newUserGuide } from './new-user-guide'
 import { setUpRequestQueue } from './request-queue'
@@ -33,4 +34,5 @@ export default defineBackground(() => {
   translationMessage()
 
   setUpRequestQueue()
+  setupCacheCleanup()
 })

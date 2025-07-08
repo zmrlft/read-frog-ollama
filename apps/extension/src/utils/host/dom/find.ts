@@ -3,10 +3,6 @@ import type { Point } from '@/types/dom'
 import { isHTMLElement, isIFrameElement, isShallowInlineHTMLElement, isTranslatedContentNode, isTranslatedWrapperNode } from './filter'
 import { smashTruncationStyle } from './style'
 
-export function getOwnerDocument(node: Node): Document {
-  return node.ownerDocument || document
-}
-
 /**
  * Find the deepest element at the given point, including inside shadow roots
  * @param root - The root element (Document or ShadowRoot)

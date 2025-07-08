@@ -197,7 +197,6 @@ export class RequestQueue {
     const now = Date.now()
     const timeSinceLastRefill = now - this.lastRefill
     const tokensToAdd = (timeSinceLastRefill / 1000) * this.options.rate
-    // const oldTokens = this.bucketTokens
     this.bucketTokens = Math.min(this.bucketTokens + tokensToAdd, this.options.capacity)
 
     // if (tokensToAdd > 0.01) { // Only log if meaningful tokens were added
