@@ -25,7 +25,7 @@ export function ResetConfig() {
     <ConfigCard title={i18n.t('options.general.resetConfig.title')} description={i18n.t('options.general.resetConfig.description')}>
       <AlertDialog>
         <AlertDialogTrigger className="w-full flex items-center justify-end">
-          <Button>{i18n.t('options.general.resetConfig.dialog.trigger')}</Button>
+          <Button variant="destructive">{i18n.t('options.general.resetConfig.dialog.trigger')}</Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -36,7 +36,9 @@ export function ResetConfig() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{i18n.t('options.general.resetConfig.dialog.cancel')}</AlertDialogCancel>
-            <AlertDialogAction onClick={resetToDefaultConfig}>{i18n.t('options.general.resetConfig.dialog.confirm')}</AlertDialogAction>
+            <AlertDialogAction variant="destructive" onClick={resetToDefaultConfig}>
+              {i18n.t('options.general.resetConfig.dialog.confirm')}
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
