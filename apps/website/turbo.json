@@ -1,8 +1,12 @@
 {
-  "$schema": "https://turborepo.com/schema.json",
+  "extends": ["//"],
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
+      "env": [
+        "BETTER_AUTH_SECRET",
+        "BETTER_AUTH_URL",
+        "DATABASE_URL"
+      ],
       "outputs": [".next/**", "!.next/cache/**", ".source/**"]
     },
     "start": {
@@ -10,6 +14,5 @@
       "persistent": true,
       "dependsOn": ["build"]
     }
-  },
-  "extends": ["//"]
+  }
 }

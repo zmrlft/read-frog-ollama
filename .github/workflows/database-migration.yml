@@ -1,0 +1,51 @@
+name: Database Migration
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false # Don't cancel in progress migrations
+
+jobs:
+  migrate:
+    name: Database Migration
+    runs-on: ubuntu-latest
+    environment: Production
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: pnpm
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+        shell: bash
+
+      - name: Build Database Package
+        run: pnpm build --filter=@repo/db
+
+      - name: Run Database Migration
+        run: pnpm --filter=@repo/db db:migrate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Notify on Success
+        if: success()
+        run: |
+          echo "::notice title=Database Migration Success::Database migration completed successfully at $(date -u +%Y-%m-%dT%H:%M:%S.000Z)"
+
+      - name: Notify on Failure
+        if: failure()
+        run: |
+          echo "::error title=Database Migration Failed::Database migration failed. Please check the logs and fix any issues before retrying."
