@@ -3,7 +3,7 @@ import { kebabCase } from 'case-anything'
 import { globalConfig, loadGlobalConfig } from '@/utils/config/config'
 import { APP_NAME } from '@/utils/constants/app'
 import { CONFIG_STORAGE_KEY } from '@/utils/constants/config'
-import { OFFICIAL_SITE_URL_PATTERNS } from '@/utils/constants/site'
+import { OFFICIAL_SITE_URL_PATTERNS } from '@/utils/constants/url'
 
 export default defineContentScript({
   matches: OFFICIAL_SITE_URL_PATTERNS,

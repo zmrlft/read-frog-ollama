@@ -1,6 +1,6 @@
-import bookIcon from '@/assets/icon/book.svg'
-import discordIcon from '@/assets/icon/discord.svg'
-import helpIcon from '@/assets/icon/help.svg'
+import bookIcon from '@/assets/icons/book.svg'
+import discordIcon from '@/assets/icons/discord.svg'
+import helpIcon from '@/assets/icons/help.svg'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 const LINKS: {

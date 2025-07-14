@@ -1,4 +1,4 @@
-import { OFFICIAL_SITE_URL_PATTERNS } from '@/utils/constants/site'
+import { OFFICIAL_SITE_URL_PATTERNS } from '@/utils/constants/url'
 
 let lastIsPinned = false
 
@@ -23,7 +23,7 @@ export async function guidePinExtension() {
 }
 
 async function checkPinnedAndNotify() {
-  const { isOnToolbar } = await browser.action.getUserSettings() // Chrome 91+:contentReference[oaicite:0]{index=0}
+  const { isOnToolbar } = await browser.action.getUserSettings()
   if (isOnToolbar === lastIsPinned)
     return
   lastIsPinned = isOnToolbar

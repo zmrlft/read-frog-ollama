@@ -2,6 +2,7 @@ import { useSetAtom } from 'jotai'
 import { Bolt, Star } from 'lucide-react'
 import { Toaster } from 'sonner'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { UserAccount } from '@/components/user-account'
 import { version } from '../../../package.json'
 import { initIsIgnoreTabAtom } from './atoms/ignore'
 import { AlwaysTranslate } from './components/always-translate'
@@ -26,6 +27,7 @@ function App() {
   return (
     <>
       <div className="bg-background flex flex-col gap-4 px-6 pt-5 pb-4">
+        <UserAccount />
         <LanguageOptionsSelector />
         <LanguageLevelSelector />
         <ReadProviderSelector />
