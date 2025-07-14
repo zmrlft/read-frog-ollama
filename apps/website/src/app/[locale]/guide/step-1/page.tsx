@@ -54,7 +54,7 @@ export default function Step1Page() {
           </SelectContent>
         </Select>
         <div className="mt-6">
-          <Button asChild>
+          <Button asChild variant="primary">
             <Link href="/guide/step-2">
               {t('guide.continue')}
               {' '}

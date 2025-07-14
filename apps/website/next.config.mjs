@@ -1,5 +1,13 @@
+import { fileURLToPath } from 'node:url'
 import { createMDX } from 'fumadocs-mdx/next'
+import createJiti from 'jiti'
 import createNextIntlPlugin from 'next-intl/plugin'
+
+const jiti = createJiti(fileURLToPath(import.meta.url))
+// Import env here to validate during build. Using jiti@^1 we can import .ts files :)
+jiti('./src/env')
+
+// import './src/env.js'
 
 const withMDX = createMDX()
 const withNextIntl = createNextIntlPlugin()
@@ -13,6 +21,15 @@ const config = {
 
     // Use only WebP format to reduce number of transformations
     formats: ['image/webp'],
+
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
 
     // Other possible configurations:
     // formats: ['image/avif', 'image/webp'], // Default: supports two modern formats, but increases cache

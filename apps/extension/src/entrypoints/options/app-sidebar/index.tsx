@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import readFrogLogo from '@/assets/icon/read-frog.png'
+import readFrogLogo from '@/assets/icons/read-frog.png'
 import {
   Sidebar,
   SidebarContent,

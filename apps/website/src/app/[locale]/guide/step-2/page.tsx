@@ -20,7 +20,7 @@ export default function GuidePage() {
         <div className="mt-6">
           {isPinned === true
             ? (
-                <Button asChild disabled>
+                <Button asChild variant="primary" disabled>
                   <Link href="/guide/step-3">
                     {t('guide.continue')}
                     {' '}

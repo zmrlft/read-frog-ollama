@@ -2,6 +2,7 @@ import type { BaseLayoutProps, LinkItemType } from 'fumadocs-ui/layouts/shared'
 import type { Locale } from '@/i18n/routing'
 import { GithubInfo } from 'fumadocs-ui/components/github-info'
 import Image from 'next/image'
+import { UserAccount } from '@/components/user-account'
 import { APP_NAME_LOCALE, NAV_ITEMS_LOCALE } from '@/lib/constants'
 import { i18n } from '@/lib/i18n'
 
@@ -33,6 +34,11 @@ export function homeLinks(locale: Locale): LinkItemType[] {
       text: NAV_ITEMS_LOCALE.tutorial[locale],
       url: `/${locale}/tutorial`,
       active: 'nested-url',
+    },
+    {
+      type: 'custom',
+      children: <UserAccount />,
+      secondary: true,
     },
   ]
 }

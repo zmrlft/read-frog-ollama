@@ -7,10 +7,14 @@ export default defineConfig({
   vite: () => ({
     plugins: [],
   }),
-  manifest: {
+  manifest: ({ mode }) => ({
     name: '__MSG_extName__',
     description: '__MSG_extDescription__',
     default_locale: 'en',
     permissions: ['storage', 'tabs', 'alarms'],
-  },
+    host_permissions:
+      mode === 'development'
+        ? ['http://localhost:8888/*']
+        : ['https://www.readfrog.app/*'],
+  }),
 })

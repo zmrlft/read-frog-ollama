@@ -5,7 +5,10 @@
       "env": [
         "BETTER_AUTH_SECRET",
         "BETTER_AUTH_URL",
-        "DATABASE_URL"
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "DATABASE_URL",
+        "SKIP_ENV_VALIDATION"
       ],
       "outputs": [".next/**", "!.next/cache/**", ".source/**"]
     },

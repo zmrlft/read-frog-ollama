@@ -2,7 +2,7 @@ import { useAtom, useAtomValue } from 'jotai'
 import { Bolt, X } from 'lucide-react'
 import { Toaster } from 'sonner'
 
-import readFrogLogo from '@/assets/icon/read-frog.png'
+import readFrogLogo from '@/assets/icons/read-frog.png'
 import { configFields } from '@/utils/atoms/config'
 import { APP_NAME } from '@/utils/constants/app'
 

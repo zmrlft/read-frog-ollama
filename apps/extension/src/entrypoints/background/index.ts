@@ -1,3 +1,4 @@
+import { WEBSITE_URL } from '@/utils/constants/url'
 import { setupCacheCleanup } from './cache-cleanup'
 import { ensureConfig } from './config'
 import { newUserGuide } from './new-user-guide'
@@ -12,7 +13,7 @@ export default defineBackground(() => {
     // Open tutorial page when extension is installed
     if (details.reason === 'install') {
       await browser.tabs.create({
-        url: 'https://readfrog.app/guide/step-1',
+        url: `${WEBSITE_URL}/guide/step-1`,
       })
     }
   })

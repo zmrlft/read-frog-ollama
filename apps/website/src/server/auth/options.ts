@@ -1,4 +1,5 @@
 import type { BetterAuthOptions } from 'better-auth'
+import { env } from '@/env'
 import { APP_NAME } from '@/lib/constants'
 
 /**
@@ -26,6 +27,13 @@ export const betterAuthOptions: BetterAuthOptions = {
     minPasswordLength: 8,
     maxPasswordLength: 128,
   },
-
+  socialProviders: {
+    google: {
+      prompt: 'select_account',
+      // TODO: typesafe way to get GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    },
+  },
   // .... More options
 }

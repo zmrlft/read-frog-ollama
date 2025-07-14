@@ -39,7 +39,7 @@ export function Demo() {
         <div className="flex items-center justify-center gap-8">
           <div className="flex items-center gap-2">
             <Image
-              src="/images/icons/openai.jpg"
+              src="/icons/openai.jpg"
               alt="OpenAI"
               width={28}
               height={28}
@@ -50,7 +50,7 @@ export function Demo() {
           </div>
           <div className="flex items-center gap-2">
             <Image
-              src="/images/icons/deepseek.png"
+              src="/icons/deepseek.png"
               alt="DeepSeek"
               width={32}
               height={32}

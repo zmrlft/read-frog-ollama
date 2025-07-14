@@ -44,25 +44,17 @@ function Install() {
       <div className="flex items-center gap-4">
         <InstallLink
           href="https://chromewebstore.google.com/detail/read-frog/modkelfkcfjpgbfmnbnllalkiogfofhb?utm_source=official"
-          icon="/images/icons/chrome.png"
+          icon="/icons/chrome.png"
         >
           {t('install.chrome')}
         </InstallLink>
         <InstallLink
           href="https://microsoftedge.microsoft.com/addons/detail/read-frog-open-source-a/cbcbomlgikfbdnoaohcjfledcoklcjbo"
-          icon="/images/icons/edge.png"
+          icon="/icons/edge.png"
         >
           {t('install.edge')}
         </InstallLink>
 
-        {/* <Link
-          href="https://chromewebstore.google.com/detail/read-frog/modkelfkcfjpgbfmnbnllalkiogfofhb?utm_source=official"
-          target="_blank"
-          className="bg-black dark:bg-white rounded-full w-fit text-white dark:text-black px-4 py-2 flex items-center gap-2"
-        >
-          <img src="/images/icons/chrome.png" alt="Chrome" className="size-5" />
-          {t("install")}
-        </Link> */}
       </div>
     </div>
   )

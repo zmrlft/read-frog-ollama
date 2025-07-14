@@ -71,7 +71,7 @@ export default function GuidePage() {
                 </Button>
               )
             : (
-                <Button disabled>
+                <Button variant="primary" disabled>
                   {t('guide.continue')}
                   {' '}
                   <ArrowRight size={16} />

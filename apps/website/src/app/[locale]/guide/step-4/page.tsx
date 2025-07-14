@@ -17,7 +17,7 @@ export default function GuidePage() {
         </p>
         <div className="mt-6">
           <div className="flex gap-2">
-            <Button asChild disabled>
+            <Button asChild variant="primary" disabled>
               <Link href="/">
                 {t('guide.finish')}
                 {' '}
