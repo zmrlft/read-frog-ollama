@@ -45,11 +45,11 @@ Master languages effortlessly and deeply with AI, right in your browser.
 
 ## 📺 Demo
 
-![Read Frog](/docs/read-demo.gif)
+![Read Frog](/assets/read-demo.gif)
 
 <div align="center">
-  <img src="docs/node-translation-demo.gif" width="38%" alt="Read Frog Popup Interface" />
-  <img src="docs/page-translation-demo.gif" width="60%" alt="Read Frog Translation Interface" />
+  <img src="assets/node-translation-demo.gif" width="38%" alt="Read Frog Popup Interface" />
+  <img src="assets/page-translation-demo.gif" width="60%" alt="Read Frog Translation Interface" />
 </div>
 
 ## 👋🏻 Getting Started & Join Our Community
@@ -200,17 +200,17 @@ Every donation helps us build a better language learning experience. Thank you f
 [extension-release-shield]: https://img.shields.io/github/package-json/v/mengxi-ream/read-frog?filename=apps%2Fextension%2Fpackage.json&style=flat-square&label=extension&color=brightgreen&labelColor=black
 [github-release-link]: https://github.com/mengxi-ream/read-frog/releases
 [github-star-link]: https://github.com/mengxi-ream/read-frog/stargazers
-[image-banner]: /docs/store/large-promo-tile.png
-[image-star]: ./docs/star.png
+[image-banner]: /assets/store/large-promo-tile.png
+[image-star]: ./assets/star.png
 [issues-link]: https://github.com/mengxi-ream/read-frog/issues
 [issues-shield]: https://img.shields.io/github/issues/mengxi-ream/read-frog?style=flat-square&labelColor=black
 [last-commit-shield]: https://img.shields.io/github/last-commit/mengxi-ream/read-frog?style=flat-square&label=commit&labelColor=black
-[sponsor-image]: ./docs/sponsorkit/sponsors.svg
+[sponsor-image]: ./assets/sponsorkit/sponsors.svg
 [sponsor-link]: https://github.com/sponsors/mengxi-ream
 [sponsor-shield]: https://img.shields.io/github/sponsors/mengxi-ream?style=flat-square&label=Sponsor&color=EA4AAA&labelColor=black
 [star-history-link]: https://www.star-history.com/#mengxi-ream/read-frog&Timeline
 [star-history-shield]: https://img.shields.io/github/stars/mengxi-ream/read-frog?style=flat-square&label=stars&color=yellow&labelColor=black
 [website]: https://readfrog.app
 [website-release-shield]: https://img.shields.io/github/package-json/v/mengxi-ream/read-frog?filename=apps%2Fwebsite%2Fpackage.json&style=flat-square&label=website&color=success&labelColor=black
-[wechat-link]: ./docs/wechat-account.jpg
+[wechat-link]: ./assets/wechat-account.jpg
 [wechat-shield-badge]: https://img.shields.io/badge/chat-WeChat-07C160?style=for-the-badge&logo=wechat&logoColor=white&labelColor=black

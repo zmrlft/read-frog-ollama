@@ -45,11 +45,11 @@
 
 ## 📺 演示
 
-![Read Frog](/docs/read-demo.gif)
+![Read Frog](/assets/read-demo.gif)
 
 <div align="center">
-  <img src="docs/node-translation-demo.gif" width="38%" alt="Read Frog 弹窗界面" />
-  <img src="docs/page-translation-demo.gif" width="60%" alt="Read Frog 翻译界面" />
+  <img src="assets/node-translation-demo.gif" width="38%" alt="Read Frog 弹窗界面" />
+  <img src="assets/page-translation-demo.gif" width="60%" alt="Read Frog 翻译界面" />
 </div>
 
 ## 👋🏻 快速开始 & 加入我们的社区
@@ -200,9 +200,9 @@ Read Frog 的愿景是为各个级别的语言学习者提供易于使用、智�
 [extension-release-shield]: https://img.shields.io/github/package-json/v/mengxi-ream/read-frog?filename=apps%2Fextension%2Fpackage.json&style=flat-square&label=扩展&color=brightgreen&labelColor=black
 [github-release-link]: https://github.com/mengxi-ream/read-frog/releases
 [github-star-link]: https://github.com/mengxi-ream/read-frog/stargazers
-[image-banner]: /docs/store/large-promo-tile.png
-[sponsor-image]: ./docs/sponsorkit/sponsors.svg
-[image-star]: ./docs/star.png
+[image-banner]: /assets/store/large-promo-tile.png
+[sponsor-image]: ./assets/sponsorkit/sponsors.svg
+[image-star]: ./assets/star.png
 [issues-link]: https://github.com/mengxi-ream/read-frog/issues
 [issues-shield]: https://img.shields.io/github/issues/mengxi-ream/read-frog?style=flat-square&labelColor=black
 [last-commit-shield]: https://img.shields.io/github/last-commit/mengxi-ream/read-frog?style=flat-square&label=commit&labelColor=black
@@ -212,5 +212,5 @@ Read Frog 的愿景是为各个级别的语言学习者提供易于使用、智�
 [star-history-shield]: https://img.shields.io/github/stars/mengxi-ream/read-frog?style=flat-square&label=stars&color=yellow&labelColor=black
 [website]: https://readfrog.app
 [website-release-shield]: https://img.shields.io/github/package-json/v/mengxi-ream/read-frog?filename=apps%2Fwebsite%2Fpackage.json&style=flat-square&label=网站&color=success&labelColor=black
-[wechat-link]: ./docs/wechat-account.jpg
+[wechat-link]: ./assets/wechat-account.jpg
 [wechat-shield-badge]: https://img.shields.io/badge/聊天-微信-07C160?style=for-the-badge&logo=wechat&logoColor=white&labelColor=black
