@@ -1,4 +1,3 @@
-import { GithubInfo } from 'fumadocs-ui/components/github-info'
 import { Step, Steps } from 'fumadocs-ui/components/steps'
 import { createRelativeLink } from 'fumadocs-ui/mdx'
 import {
@@ -8,8 +7,14 @@ import {
   DocsTitle,
 } from 'fumadocs-ui/page'
 import { notFound } from 'next/navigation'
+import { GithubInfo } from '@/components/github-info'
+import { env } from '@/env'
 import { source } from '@/lib/source'
 import { getMDXComponents } from '@/mdx-components'
+
+function GithubInfoWithToken(props: { owner: string, repo: string }) {
+  return <GithubInfo {...props} token={env.GITHUB_INFO_TOKEN} />
+}
 
 export default async function Page(props: {
   params: Promise<{ slug?: string[], locale: string }>
@@ -30,7 +35,7 @@ export default async function Page(props: {
           components={getMDXComponents({
             // this allows you to link to other pages with relative file paths
             a: createRelativeLink(source, page),
-            GithubInfo,
+            GithubInfo: GithubInfoWithToken,
             Step,
             Steps,
           })}
