@@ -16,7 +16,7 @@
     "db:studio": "turbo db:studio",
     "dev": "turbo dev",
     "dev:extension": "turbo dev --filter=@read-frog/extension",
-    "dev:website": "turbo dev --filter=@read-frog/website",
+    "dev:website": "turbo dev --filter=@read-frog/website --filter=@repo/db",
     "lint": "eslint . && turbo lint",
     "lint:fix": "eslint . --fix && turbo lint:fix",
     "syncpack:lint": "syncpack lint",
@@ -39,10 +39,5 @@
     "syncpack": "^13.0.4",
     "turbo": "^2.5.4",
     "typescript": "^5.8.3"
-  },
-  "pnpm": {
-    "overrides": {
-      "rollup": "4.43.0"
-    }
   }
 }
