@@ -62,7 +62,7 @@ export default function GuidePage() {
         <div className="mt-6">
           {hasTranslated === true
             ? (
-                <Button asChild className="notranslate">
+                <Button variant="primary" asChild className="notranslate">
                   <Link href="/guide/step-4">
                     {t('guide.continue')}
                     {' '}
