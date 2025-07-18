@@ -13,7 +13,7 @@ import { source } from '@/lib/source'
 import { getMDXComponents } from '@/mdx-components'
 
 function GithubInfoWithToken(props: { owner: string, repo: string }) {
-  return <GithubInfo {...props} token={env.GITHUB_INFO_TOKEN} />
+  return <GithubInfo {...props} token={env.PUBLIC_REPO_GITHUB_TOKEN} />
 }
 
 export default async function Page(props: {

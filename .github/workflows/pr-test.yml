@@ -46,6 +46,7 @@ jobs:
         run: pnpm build
         env:
           SKIP_ENV_VALIDATION: true
+          PUBLIC_REPO_GITHUB_TOKEN: ${{ secrets.PUBLIC_REPO_GITHUB_TOKEN }}
 
       - name: Run tests
         run: pnpm test

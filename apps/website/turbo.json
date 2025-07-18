@@ -8,7 +8,7 @@
         "GOOGLE_CLIENT_ID",
         "GOOGLE_CLIENT_SECRET",
         "DATABASE_URL",
-        "GITHUB_INFO_TOKEN",
+        "PUBLIC_REPO_GITHUB_TOKEN",
         "SKIP_ENV_VALIDATION"
       ],
       "outputs": [".next/**", "!.next/cache/**", ".source/**"]

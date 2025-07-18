@@ -3,6 +3,7 @@ import type { Locale } from '@/i18n/routing'
 import { GithubInfo } from 'fumadocs-ui/components/github-info'
 import Image from 'next/image'
 import { UserAccount } from '@/components/user-account'
+import { env } from '@/env'
 import { APP_NAME_LOCALE, NAV_ITEMS_LOCALE } from '@/lib/constants'
 import { i18n } from '@/lib/i18n'
 
@@ -47,7 +48,7 @@ export const docsLinks: LinkItemType[] = [
   {
     type: 'custom',
     children: (
-      <GithubInfo owner="mengxi-ream" repo="read-frog" className="lg:-mx-2" />
+      <GithubInfo owner="mengxi-ream" repo="read-frog" className="lg:-mx-2" token={env.PUBLIC_REPO_GITHUB_TOKEN} />
     ),
   },
 ]
