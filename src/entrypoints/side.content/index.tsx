@@ -8,10 +8,8 @@ import {
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { kebabCase } from 'case-anything'
 import { Provider as JotaiProvider } from 'jotai/react'
-
 import { useHydrateAtoms } from 'jotai/utils'
 import ReactDOM from 'react-dom/client'
-
 import { toast } from 'sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { configAtom } from '@/utils/atoms/config'
@@ -21,11 +19,9 @@ import { DEFAULT_CONFIG } from '@/utils/constants/config'
 import { protectSelectAllShadowRoot } from '@/utils/select-all'
 import { addStyleToShadow, mirrorDynamicStyles } from '../../utils/styles'
 import App from './app'
-
 import { enablePageTranslationAtom, store, translationPortAtom } from './atoms'
-import '@/assets/tailwind/text-small.css'
 import '@/assets/tailwind/theme.css'
-import '@/entrypoints/host.content/style.css'
+import '@/assets/tailwind/text-small.css'
 
 // eslint-disable-next-line import/no-mutable-exports
 export let shadowWrapper: HTMLElement | null = null
