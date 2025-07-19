@@ -221,7 +221,6 @@ describe('requestQueue – high volume', () => {
     // Advance time enough: 100 tasks, initial 5 tokens, then 5 per sec
     // First 5 tasks execute immediately, remaining 95 tasks need 95/5 = 19 seconds
     vi.advanceTimersByTime(19_000)
-    await Promise.resolve()
     expect(completed).toHaveLength(count)
   })
 })
@@ -424,5 +423,261 @@ describe('requestQueue – retry with timeout combined', () => {
 
     // Should reject with timeout error
     await expect(promise).rejects.toThrow('timed out after 100ms')
+  })
+})
+
+// 11. Reconfigure the request queue
+describe('requestQueue – reconfigure the request queue', () => {
+  it('increase the request rate', async () => {
+    vi.useFakeTimers()
+    const q = new RequestQueue({
+      ...baseConfig,
+      rate: 5,
+      capacity: 5,
+    }) // 5 / sec
+    const count = 50
+    const completed: number[] = []
+
+    q.setQueueOptions({ rate: 10 })
+
+    const trackingThunk = (id: number) => () => {
+      return new Promise((resolve) => {
+        completed.push(id)
+        resolve(id)
+      })
+    }
+
+    for (let i = 0; i < count; i++) {
+      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+    }
+
+    vi.advanceTimersByTime(1_500)
+    expect(completed).toHaveLength(20)
+
+    // Advance time enough: 50 tasks, initial 5 tokens, then 10 per sec
+    // First 5 tasks execute immediately, remaining 45 tasks need 45/10 = 4.5 seconds
+    vi.advanceTimersByTime(3_000)
+    expect(completed).toHaveLength(count)
+  })
+
+  it('decrease the request rate', async () => {
+    vi.useFakeTimers()
+    const q = new RequestQueue({
+      ...baseConfig,
+      rate: 10,
+      capacity: 10,
+    }) // 10 / sec
+    const count = 40
+    const completed: number[] = []
+
+    q.setQueueOptions({ rate: 5 })
+
+    const trackingThunk = (id: number) => () => {
+      return new Promise((resolve) => {
+        completed.push(id)
+        resolve(id)
+      })
+    }
+
+    for (let i = 0; i < count; i++) {
+      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+    }
+
+    vi.advanceTimersByTime(3_000)
+    expect(completed).toHaveLength(25)
+
+    // Advance time enough: 40 tasks, initial 10 tokens, then 5 per sec
+    // First 10 tasks execute immediately, remaining 30 tasks need 30/5 = 6 seconds
+    vi.advanceTimersByTime(3_000)
+    expect(completed).toHaveLength(count)
+  })
+
+  it('increase the request capacity', async () => {
+    vi.useFakeTimers()
+    const q = new RequestQueue({
+      ...baseConfig,
+      rate: 5,
+      capacity: 5,
+    }) // 5 / sec
+    const count = 50
+    const completed: number[] = []
+
+    q.setQueueOptions({ capacity: 30 })
+
+    const trackingThunk = (id: number) => () => {
+      return new Promise((resolve) => {
+        completed.push(id)
+        resolve(id)
+      })
+    }
+
+    for (let i = 0; i < count; i++) {
+      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+    }
+
+    vi.advanceTimersByTime(2_000)
+    expect(completed).toHaveLength(40)
+
+    // Advance time enough: 50 tasks, initial 30 tokens, then 5 per sec
+    // First 20 tasks execute immediately, remaining 5 tasks need 20/5 = 4 seconds
+    vi.advanceTimersByTime(2_000)
+    expect(completed).toHaveLength(count)
+  })
+
+  it('decrease the request capacity', async () => {
+    vi.useFakeTimers()
+    const q = new RequestQueue({
+      ...baseConfig,
+      rate: 10,
+      capacity: 10,
+    }) // 10/ sec
+    const count = 50
+    const completed: number[] = []
+
+    q.setQueueOptions({ capacity: 5 })
+
+    const trackingThunk = (id: number) => () => {
+      return new Promise((resolve) => {
+        completed.push(id)
+        resolve(id)
+      })
+    }
+
+    for (let i = 0; i < count; i++) {
+      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+    }
+
+    vi.advanceTimersByTime(2_000)
+    expect(completed).toHaveLength(25)
+
+    // Advance time enough: 50 tasks, initial 5 tokens, then 10 per sec
+    // First 5 tasks execute immediately, remaining 45 tasks need 45/10 = 4.5 seconds
+    vi.advanceTimersByTime(2_500)
+    expect(completed).toHaveLength(count)
+  })
+
+  it('update the request queue', async () => {
+    vi.useFakeTimers()
+    const q = new RequestQueue({
+      ...baseConfig,
+      rate: 5,
+      capacity: 10,
+    })
+    const count = 50
+    const completed: number[] = []
+
+    q.setQueueOptions({ rate: 10, capacity: 5 })
+
+    const trackingThunk = (id: number) => () => {
+      return new Promise((resolve) => {
+        completed.push(id)
+        resolve(id)
+      })
+    }
+
+    for (let i = 0; i < count; i++) {
+      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+    }
+
+    // Advance time enough: 50 tasks, initial 5 tokens, then 10 per sec
+    // First 5 tasks execute immediately, remaining 45 tasks need 45/10 = 4.5 seconds
+    vi.advanceTimersByTime(4_500)
+    expect(completed).toHaveLength(count)
+
+    vi.useFakeTimers()
+
+    q.setQueueOptions({ rate: 5, capacity: 10 })
+
+    for (let i = count; i < count * 2; i++) {
+      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+    }
+
+    // Advance time enough: 50 tasks, initial 10 tokens, then 5 per sec
+    // First 10 tasks execute immediately, remaining 40 tasks need 40/5 = 8 seconds
+    vi.advanceTimersByTime(8_000)
+
+    expect(completed).toHaveLength(count * 2)
+  })
+
+  it('update rate when handle queue', () => {
+    const q = new RequestQueue({ ...baseConfig, rate: 5, capacity: 10 })
+    vi.useFakeTimers()
+    const count = 50
+    const completed: number[] = []
+
+    const trackingThunk = (id: number) => () => {
+      return new Promise((resolve) => {
+        completed.push(id)
+        resolve(id)
+      })
+    }
+
+    const abortIndex = count / 2
+    // time = 0 + (25 - 10) / 10 = 1.5
+    for (let i = 0; i < abortIndex; i++) {
+      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+    }
+
+    // Reset rate. All task apply last rate
+    q.setQueueOptions({ rate: 10 })
+
+    // time = (50 - 25) / 10 = 2.5
+    for (let i = abortIndex; i < count; i++) {
+      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+    }
+
+    vi.advanceTimersByTime(4_000)
+
+    expect(completed).toHaveLength(count)
+  })
+
+  it('update capacity when handle queue', () => {
+    const q = new RequestQueue({ ...baseConfig, rate: 5, capacity: 10 })
+    vi.useFakeTimers()
+    const count = 50
+    const completed: number[] = []
+
+    const trackingThunk = (id: number) => () => {
+      return new Promise((resolve) => {
+        completed.push(id)
+        resolve(id)
+      })
+    }
+
+    const abortIndex = count / 2
+
+    // immediately run 10 tasks
+    for (let i = 0; i < abortIndex; i++) {
+      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+    }
+
+    // reset bucket tokens to 20
+    q.setQueueOptions({ capacity: 20 })
+
+    // immediately run 20 tasks
+    for (let i = abortIndex; i < count; i++) {
+      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+    }
+
+    // immediately 30 tasks , remaining 20 tasks need 20 / 5 = 4 seconds
+    vi.advanceTimersByTime(4_000)
+
+    expect(completed).toHaveLength(count)
+  })
+
+  it('should throw error when options are invalid', () => {
+    const q = new RequestQueue({ ...baseConfig, rate: 5, capacity: 10 })
+
+    expect(() => q.setQueueOptions({ rate: 0, capacity: 0 })).toThrow()
+
+    expect(() => q.setQueueOptions({ rate: -1, capacity: -1 })).toThrow()
+
+    expect(() => q.setQueueOptions({ rate: 0 })).toThrow()
+
+    expect(() => q.setQueueOptions({ capacity: 0 })).toThrow()
+
+    expect(() => q.setQueueOptions({ rate: -1 })).toThrow()
+
+    expect(() => q.setQueueOptions({ capacity: -1 })).toThrow()
   })
 })

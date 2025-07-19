@@ -1,3 +1,5 @@
+import deepmerge from 'deepmerge'
+import { requestQueueConfigSchema } from '@/types/config/provider'
 import { BinaryHeapPQ } from './priority-queue'
 
 export interface RequestTask {
@@ -68,6 +70,18 @@ export class RequestQueue {
 
     this.schedule()
     return promise
+  }
+
+  setQueueOptions(options: Partial<QueueOptions>) {
+    const parseConfigStatus = requestQueueConfigSchema.partial().safeParse(options)
+    if (parseConfigStatus.error) {
+      throw new Error(parseConfigStatus.error.issues[0].message)
+    }
+    this.options = deepmerge(this.options, options)
+    if (options.capacity) {
+      this.bucketTokens = options.capacity
+      this.lastRefill = Date.now()
+    }
   }
 
   private schedule() {
