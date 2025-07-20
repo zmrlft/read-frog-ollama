@@ -46,10 +46,6 @@ export function TopBar({ className }: { className?: string }) {
         <SourceLangSelect />
         <ArrowRight size={12} strokeWidth={1} className="-mx-1" />
         <TargetLangSelect />
-        {/* <div className="flex items-center h-7 gap-2 px-2 border rounded-md border-border hover:bg-muted">
-          <div className="w-1 h-1 rounded-full bg-orange-500"></div>
-          <span className="">{i18n.t(`languageLevels.${langLevel}`)}</span>
-        </div> */}
         <LangLevelSelect />
         <ProviderSelect />
         <FileExport />
@@ -122,7 +118,7 @@ function LangLevelSelect() {
         className="border-border flex !h-7 w-auto items-center gap-2 rounded-md border px-2"
       >
         <div className="h-1 w-1 shrink-0 rounded-full bg-orange-500"></div>
-        <div className="max-w-16 min-w-0 truncate">
+        <div className="max-w-15 min-w-0 truncate">
           {i18n.t(`languageLevels.${language.level}`)}
         </div>
       </SelectTrigger>
@@ -154,7 +150,7 @@ function TargetLangSelect() {
         className="border-border flex !h-7 w-auto items-center gap-2 rounded-md border px-2"
       >
         <div className="h-1 w-1 shrink-0 rounded-full bg-blue-500"></div>
-        <div className="max-w-16 min-w-0 truncate">
+        <div className="max-w-15 min-w-0 truncate">
           {`${LANG_CODE_TO_EN_NAME[language.targetCode]} (${LANG_CODE_TO_LOCALE_NAME[language.targetCode]})`}
         </div>
       </SelectTrigger>
@@ -186,7 +182,7 @@ function SourceLangSelect() {
         className="border-border flex !h-7 w-auto items-center gap-2 rounded-md border px-2"
       >
         <div className="h-1 w-1 shrink-0 rounded-full bg-blue-500"></div>
-        <div className="max-w-16 min-w-0 truncate">
+        <div className="max-w-15 min-w-0 truncate">
           {language.sourceCode === 'auto'
             ? LANG_CODE_TO_EN_NAME[language.detectedCode]
             : LANG_CODE_TO_EN_NAME[language.sourceCode]}
