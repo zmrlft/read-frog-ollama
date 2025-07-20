@@ -1,5 +1,5 @@
-export const MIN_SIDE_CONTENT_WIDTH = 410 // px
-export const DEFAULT_SIDE_CONTENT_WIDTH = 410 // px
+export const MIN_SIDE_CONTENT_WIDTH = 420 // px
+export const DEFAULT_SIDE_CONTENT_WIDTH = 420 // px
 
 export const DOWNLOAD_FILE_ITEMS = {
   md: {
@@ -7,7 +7,6 @@ export const DOWNLOAD_FILE_ITEMS = {
   },
 }
 
-// 段落深度
 export const PARAGRAPH_DEPTH = 3
 
 export enum MARKDOWN_TEMPLATE_TOKEN {
