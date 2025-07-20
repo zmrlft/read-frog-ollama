@@ -31,7 +31,7 @@ export default function FloatingButton() {
       const newY = Math.max(
         30,
         Math.min(
-          window.innerHeight - 100,
+          window.innerHeight - 200,
           initialY + e.clientY - initialClientY,
         ),
       )
