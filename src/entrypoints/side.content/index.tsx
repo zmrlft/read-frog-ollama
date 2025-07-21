@@ -17,6 +17,7 @@ import { globalConfig, loadGlobalConfig } from '@/utils/config/config'
 import { APP_NAME } from '@/utils/constants/app'
 import { DEFAULT_CONFIG } from '@/utils/constants/config'
 import { protectSelectAllShadowRoot } from '@/utils/select-all'
+import { insertShadowRootUIWrapperInto } from '@/utils/shadow-root'
 import { addStyleToShadow, mirrorDynamicStyles } from '../../utils/styles'
 import App from './app'
 import { enablePageTranslationAtom, store, translationPortAtom } from './atoms'
@@ -39,15 +40,8 @@ export default defineContentScript({
       append: 'last',
       onMount: (container, shadow, shadowHost) => {
         // Store shadow root reference
-        const wrapper = document.createElement('div')
-        wrapper.className = cn(
-          'text-base antialiased font-sans z-[2147483647]',
-          isDarkMode() && 'dark',
-        )
+        const wrapper = insertShadowRootUIWrapperInto(container)
         shadowWrapper = wrapper
-        container.appendChild(wrapper)
-
-        const root = ReactDOM.createRoot(wrapper)
 
         addStyleToShadow(shadow)
         mirrorDynamicStyles('#_goober', shadow)
@@ -56,7 +50,6 @@ export default defineContentScript({
         //   shadow,
         //   ".with-scroll-bars-hidden22"
         // );
-
         protectSelectAllShadowRoot(shadowHost, wrapper)
 
         const queryClient = new QueryClient({
@@ -89,6 +82,7 @@ export default defineContentScript({
 
         buildTranslationPort()
 
+        const root = ReactDOM.createRoot(wrapper)
         root.render(
           <QueryClientProvider client={queryClient}>
             <JotaiProvider store={store}>

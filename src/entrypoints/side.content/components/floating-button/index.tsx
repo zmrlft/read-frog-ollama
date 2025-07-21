@@ -94,56 +94,58 @@ export default function FloatingButton() {
     }
   }
 
+  if (!floatingButton.enabled) {
+    return null
+  }
+
   return (
-    floatingButton.enabled && (
+    <div
+      className="group fixed z-[2147483647] flex flex-col items-end gap-2"
+      style={{
+        right: isSideOpen
+          ? `calc(${sideContent.width}px + var(--removed-body-scroll-bar-size, 0px))`
+          : 'var(--removed-body-scroll-bar-size, 0px)',
+        top: `${floatingButton.position * 100}vh`,
+      }}
+    >
+      <FloatingReadButton />
+      <TranslateButton />
       <div
-        className="group fixed z-[2147483647] flex flex-col items-end gap-2"
-        style={{
-          right: isSideOpen
-            ? `calc(${sideContent.width}px + var(--removed-body-scroll-bar-size, 0px))`
-            : 'var(--removed-body-scroll-bar-size, 0px)',
-          top: `${floatingButton.position * 100}vh`,
-        }}
+        className={cn(
+          'border-border flex h-10 w-15 items-center rounded-l-full border border-r-0 bg-white opacity-60 shadow-lg group-hover:opacity-100 dark:bg-neutral-900',
+          'translate-x-5 transition-transform duration-300 group-hover:translate-x-0',
+          isSideOpen && 'opacity-100',
+          isDraggingButton ? 'cursor-move' : 'cursor-pointer',
+        )}
+        onMouseDown={handleButtonDragStart}
       >
-        <FloatingReadButton />
-        <TranslateButton />
         <div
+          title="Close floating button"
           className={cn(
-            'border-border flex h-10 w-15 items-center rounded-l-full border border-r-0 bg-white opacity-60 shadow-lg group-hover:opacity-100 dark:bg-neutral-900',
-            'translate-x-5 transition-transform duration-300 group-hover:translate-x-0',
-            isSideOpen && 'opacity-100',
-            isDraggingButton ? 'cursor-move' : 'cursor-pointer',
+            'border-border absolute -top-1 -left-1 hidden cursor-pointer rounded-full border bg-neutral-100 dark:bg-neutral-900',
+            'group-hover:block',
           )}
-          onMouseDown={handleButtonDragStart}
-        >
-          <div
-            title="Close floating button"
-            className={cn(
-              'border-border absolute -top-1 -left-1 hidden cursor-pointer rounded-full border bg-neutral-100 dark:bg-neutral-900',
-              'group-hover:block',
-            )}
-            onMouseDown={e => e.stopPropagation()} // 父级不会收到 mousedown
-            onClick={(e) => {
-              e.stopPropagation() // 父级不会收到 click
-              setFloatingButton({ enabled: false })
-            }}
-          >
-            <X className="h-3 w-3 text-neutral-400 dark:text-neutral-600" />
-          </div>
-          <img
-            src={readFrogLogo}
-            alt={APP_NAME}
-            className="ml-[5px] h-8 w-8 rounded-full"
-          />
-        </div>
-        <HiddenButton
-          Icon={Bolt}
-          onClick={() => {
-            sendMessage('openOptionsPage', undefined)
+          onMouseDown={e => e.stopPropagation()} // 父级不会收到 mousedown
+          onClick={(e) => {
+            e.stopPropagation() // 父级不会收到 click
+            setFloatingButton({ enabled: false })
           }}
+        >
+          <X className="h-3 w-3 text-neutral-400 dark:text-neutral-600" />
+        </div>
+        <img
+          src={readFrogLogo}
+          alt={APP_NAME}
+          className="ml-[5px] h-8 w-8 rounded-full"
         />
-        <Toaster richColors className="z-[2147483647] notranslate" duration={10000} />
       </div>
-    )
+      <HiddenButton
+        Icon={Bolt}
+        onClick={() => {
+          sendMessage('openOptionsPage', undefined)
+        }}
+      />
+      <Toaster richColors className="z-[2147483647] notranslate" duration={10000} />
+    </div>
   )
 }
