@@ -1,4 +1,5 @@
 import { NOTRANSLATE_CLASS } from '@/utils/constants/dom-labels'
+import { cn } from '@/utils/tailwind'
 import FloatingButton from './components/floating-button'
 import SideContent from './components/side-content'
 

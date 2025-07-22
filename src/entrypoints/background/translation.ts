@@ -1,6 +1,11 @@
+import type { Browser } from '#imports'
 import type { Config } from '@/types/config/config'
+import { browser, storage } from '#imports'
 import { CONFIG_STORAGE_KEY } from '@/utils/constants/config'
 import { shouldEnableAutoTranslation } from '@/utils/host/translate/auto-translation'
+import { logger } from '@/utils/logger'
+import { onMessage } from '@/utils/message'
+import { ensureKeyInMap } from '@/utils/utils'
 
 export function translationMessage() {
   const tabPageTranslationState = new Map<number, { enabled: boolean, ports: Browser.runtime.Port[] }>()

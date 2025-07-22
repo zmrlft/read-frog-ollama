@@ -1,6 +1,8 @@
 import type { Config } from '@/types/config/config'
+import { storage } from '#imports'
 import { initializeConfig } from '@/utils/config/init'
 import { CONFIG_STORAGE_KEY } from '@/utils/constants/config'
+import { onMessage } from '@/utils/message'
 
 let configPromise: Promise<void> | null = null
 

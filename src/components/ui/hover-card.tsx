@@ -2,6 +2,7 @@
 
 import * as HoverCardPrimitive from '@radix-ui/react-hover-card'
 import * as React from 'react'
+import { cn } from '@/utils/tailwind'
 
 function HoverCard({
   ...props

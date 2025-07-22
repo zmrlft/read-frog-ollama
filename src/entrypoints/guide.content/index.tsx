@@ -1,9 +1,11 @@
 import type { Config } from '@/types/config/config'
+import { defineContentScript, storage } from '#imports'
 import { kebabCase } from 'case-anything'
 import { globalConfig, loadGlobalConfig } from '@/utils/config/config'
 import { APP_NAME } from '@/utils/constants/app'
 import { CONFIG_STORAGE_KEY } from '@/utils/constants/config'
 import { OFFICIAL_SITE_URL_PATTERNS } from '@/utils/constants/url'
+import { onMessage, sendMessage } from '@/utils/message'
 
 export default defineContentScript({
   matches: OFFICIAL_SITE_URL_PATTERNS,

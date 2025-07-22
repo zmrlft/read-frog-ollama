@@ -1,5 +1,7 @@
+import { browser, i18n } from '#imports'
 import { useSetAtom } from 'jotai'
 import { Bolt, Star } from 'lucide-react'
+import { useEffect } from 'react'
 import { Toaster } from 'sonner'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { UserAccount } from '@/components/user-account'

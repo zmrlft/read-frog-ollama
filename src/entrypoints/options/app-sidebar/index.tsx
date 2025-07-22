@@ -1,3 +1,4 @@
+import { i18n } from '#imports'
 import { Link } from 'react-router'
 import readFrogLogo from '@/assets/icons/read-frog.png'
 import {

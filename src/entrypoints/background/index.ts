@@ -1,4 +1,7 @@
+import { browser, defineBackground } from '#imports'
 import { WEBSITE_URL } from '@/utils/constants/url'
+import { logger } from '@/utils/logger'
+import { onMessage, sendMessage } from '@/utils/message'
 import { setupCacheCleanup } from './cache-cleanup'
 import { ensureConfig } from './config'
 import { newUserGuide } from './new-user-guide'

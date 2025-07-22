@@ -1,3 +1,5 @@
+import { storage } from '#imports'
+
 export const storageAdapter = {
   async get<T>(key: string, fallback: T): Promise<T> {
     const value = await storage.getItem<T>(`local:${key}`)

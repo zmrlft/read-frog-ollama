@@ -1,12 +1,13 @@
 import type { translateProviderModels } from '@/types/config/provider'
+import { browser, i18n } from '#imports'
 import { useAtom, useAtomValue } from 'jotai'
-
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { pureTranslateProvider } from '@/types/config/provider'
 import { configFields } from '@/utils/atoms/config'
-
 import { hasSetAPIKey } from '@/utils/config/config'
+import { sendMessage } from '@/utils/message'
+import { cn } from '@/utils/tailwind'
 import { isPageTranslatedAtom } from '../atoms/auto-translate'
 import { isIgnoreTabAtom } from '../atoms/ignore'
 

@@ -1,6 +1,7 @@
 import type { PageTranslateRange, TranslateProviderNames } from '@/types/config/provider'
-import deepmerge from 'deepmerge'
+import { i18n } from '#imports'
 
+import deepmerge from 'deepmerge'
 import { useAtom, useAtomValue } from 'jotai'
 import ProviderIcon from '@/components/provider-icon'
 import { Checkbox } from '@/components/ui/checkbox'

@@ -9,6 +9,7 @@ import { useSetAtom } from 'jotai'
 import { flattenToParagraphs } from '@/entrypoints/side.content/utils/article'
 import { configFields } from '@/utils/atoms/config'
 import { isDontWalkIntoElement } from '@/utils/host/dom/filter'
+import { logger } from '@/utils/logger'
 
 function removeDummyNodes(root: Document) {
   const elements = root.querySelectorAll('*')

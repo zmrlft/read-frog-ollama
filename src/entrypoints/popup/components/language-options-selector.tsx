@@ -1,8 +1,9 @@
 import type {
   LangCodeISO6393,
 } from '@/types/config/languages'
-import { useAtom } from 'jotai'
+import { i18n } from '#imports'
 
+import { useAtom } from 'jotai'
 import { ArrowRight, ChevronDown } from 'lucide-react'
 import {
   LANG_CODE_TO_EN_NAME,
@@ -10,6 +11,7 @@ import {
   langCodeISO6393Schema,
 } from '@/types/config/languages'
 import { configFields } from '@/utils/atoms/config'
+import { logger } from '@/utils/logger'
 
 export default function LanguageOptionsSelector() {
   const [language, setLanguage] = useAtom(configFields.language)

@@ -1,5 +1,6 @@
 import type { LangLevel } from '@/types/config/languages'
 
+import { i18n } from '#imports'
 import { useAtom } from 'jotai'
 import {
   Select,

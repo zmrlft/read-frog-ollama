@@ -1,4 +1,6 @@
+import { browser } from '#imports'
 import { OFFICIAL_SITE_URL_PATTERNS } from '@/utils/constants/url'
+import { onMessage, sendMessage } from '@/utils/message'
 
 let lastIsPinned = false
 

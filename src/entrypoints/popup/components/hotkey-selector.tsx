@@ -1,3 +1,4 @@
+import { i18n } from '#imports'
 import deepmerge from 'deepmerge'
 import { useAtom } from 'jotai'
 import {

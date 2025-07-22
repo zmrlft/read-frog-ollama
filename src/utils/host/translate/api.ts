@@ -1,5 +1,6 @@
 import type { LLMTranslateProviderNames } from '@/types/config/provider'
 import { generateText } from 'ai'
+import { getTranslateModel } from '@/utils/provider'
 
 export async function aiTranslate(provider: LLMTranslateProviderNames, modelString: string, prompt: string) {
   const model = await getTranslateModel(provider, modelString)

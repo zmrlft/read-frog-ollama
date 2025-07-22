@@ -5,6 +5,7 @@ import type {
 } from '@/types/config/languages'
 import type { ReadProviderNames } from '@/types/config/provider'
 import type { ArticleExplanation } from '@/types/content'
+import { i18n } from '#imports'
 import { SelectGroup } from '@radix-ui/react-select'
 import { useMutationState } from '@tanstack/react-query'
 // import { onMessage } from "@/utils/message";

@@ -1,6 +1,8 @@
 import type { Config } from '@/types/config/config'
+import { storage } from '#imports'
 import { configSchema } from '@/types/config/config'
 import { CONFIG_SCHEMA_VERSION, CONFIG_STORAGE_KEY, DEFAULT_CONFIG } from '../constants/config'
+import { logger } from '../logger'
 import { runMigration } from './migration'
 
 /**

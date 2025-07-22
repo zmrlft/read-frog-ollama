@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { CONFIG_SCHEMA_VERSION } from '@/utils/constants/config'
+import { logger } from '@/utils/logger'
 import { getMigrations, LATEST_SCHEMA_VERSION, runMigration } from '../../migration'
 
 describe('all Config Migrations', () => {

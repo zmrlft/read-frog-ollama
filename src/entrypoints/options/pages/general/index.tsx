@@ -1,3 +1,4 @@
+import { i18n } from '#imports'
 import { PageLayout } from '../../components/page-layout'
 import { ReadConfig } from './read-config'
 import { ResetConfig } from './reset-config'

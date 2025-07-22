@@ -1,12 +1,12 @@
 import { kebabCase } from 'case-anything'
 import { useAtom, useAtomValue } from 'jotai'
+import { useEffect, useState } from 'react'
 import { Toaster } from 'sonner'
-
 import { APIConfigWarning } from '@/components/api-config-warning'
 import { configFields } from '@/utils/atoms/config'
 import { isAnyAPIKey } from '@/utils/config/config'
 import { APP_NAME } from '@/utils/constants/app'
-
+import { cn } from '@/utils/tailwind'
 import { MIN_SIDE_CONTENT_WIDTH } from '../../../../utils/constants/side'
 import { isSideOpenAtom } from '../../atoms'
 import Content from './content'

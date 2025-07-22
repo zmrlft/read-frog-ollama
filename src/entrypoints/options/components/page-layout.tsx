@@ -1,6 +1,7 @@
 import Container from '@/components/container'
 import { Separator } from '@/components/ui/separator'
 import { SidebarTrigger } from '@/components/ui/sidebar'
+import { cn } from '@/utils/tailwind'
 
 export function PageLayout({ title, children, className, innerClassName }: { title: string, children: React.ReactNode, className?: string, innerClassName?: string }) {
   return (

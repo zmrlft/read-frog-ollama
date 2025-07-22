@@ -1,4 +1,5 @@
 import type { Config } from '@/types/config/config'
+import { browser, createShadowRootUi, defineContentScript } from '#imports'
 import {
   MutationCache,
   QueryCache,
