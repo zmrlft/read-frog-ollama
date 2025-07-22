@@ -1,3 +1,4 @@
+import { browser } from '#imports'
 import { atom } from 'jotai'
 
 const EMPTY_TAB_URLS = [

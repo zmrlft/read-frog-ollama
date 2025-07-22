@@ -1,3 +1,5 @@
+import { cn, isDarkMode } from './tailwind'
+
 export function insertShadowRootUIWrapperInto(container: HTMLElement) {
   const wrapper = document.createElement('div')
   wrapper.className = cn(

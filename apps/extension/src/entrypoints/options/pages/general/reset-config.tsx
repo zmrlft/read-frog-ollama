@@ -1,3 +1,4 @@
+import { i18n } from '#imports'
 import { useSetAtom } from 'jotai'
 import {
   AlertDialog,

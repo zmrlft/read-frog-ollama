@@ -1,3 +1,5 @@
+import { cn } from '@/utils/tailwind'
+
 export default function ProviderIcon({ logo, name, className }: { logo: string, name?: string, className?: string }) {
   return (
     <div className={cn('flex items-center gap-1.5', className)}>

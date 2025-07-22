@@ -1,4 +1,5 @@
 import type { RequestQueueConfig } from '@/types/config/provider'
+import { i18n } from '#imports'
 import { useAtom } from 'jotai'
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'

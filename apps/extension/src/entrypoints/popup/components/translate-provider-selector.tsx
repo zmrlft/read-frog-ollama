@@ -1,7 +1,9 @@
 import type { TranslateProviderNames } from '@/types/config/provider'
+import { i18n } from '#imports'
 import { useAtom } from 'jotai'
 import { CircleHelp } from 'lucide-react'
 import ProviderIcon from '@/components/provider-icon'
+
 import {
   Select,
   SelectContent,
@@ -11,7 +13,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { configFields } from '@/utils/atoms/config'
 import { LLM_TRANSLATE_PROVIDER_ITEMS, PURE_TRANSLATE_PROVIDER_ITEMS } from '@/utils/constants/config'

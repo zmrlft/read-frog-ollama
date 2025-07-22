@@ -1,4 +1,5 @@
 import type { TranslatePrompt } from '@/types/config/provider'
+import { i18n } from '#imports'
 import { useAtom } from 'jotai'
 import { CircleHelp } from 'lucide-react'
 import {

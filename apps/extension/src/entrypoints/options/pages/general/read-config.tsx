@@ -1,4 +1,5 @@
 import type { ReadProviderNames } from '@/types/config/provider'
+import { i18n } from '#imports'
 import deepmerge from 'deepmerge'
 import { useAtom, useAtomValue } from 'jotai'
 import ProviderIcon from '@/components/provider-icon'

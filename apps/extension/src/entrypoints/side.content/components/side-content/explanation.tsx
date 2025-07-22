@@ -1,5 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import type { ArticleExplanation } from '../../../../types/content'
+import { cn } from '@/utils/tailwind'
 
 function createCumulativeIndexMap(articleExplanation: ArticleExplanation['paragraphs']): number[] {
   const cumulativeIndexes: number[] = []

@@ -1,6 +1,7 @@
 import { DEFAULT_CONFIG } from '@/utils/constants/config'
 import { db } from '@/utils/db/dexie/db'
 import { aiTranslate, googleTranslate, microsoftTranslate } from '@/utils/host/translate/api'
+import { onMessage } from '@/utils/message'
 import { RequestQueue } from '@/utils/request/request-queue'
 import { ensureConfig } from './config'
 

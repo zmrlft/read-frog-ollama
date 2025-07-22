@@ -3,6 +3,7 @@ import { defineConfig } from 'wxt'
 // See https://wxt.dev/api/config.html
 export default defineConfig({
   srcDir: 'src',
+  imports: false,
   modules: ['@wxt-dev/module-react', '@wxt-dev/i18n/module'],
   vite: () => ({
     plugins: [],
@@ -17,4 +18,9 @@ export default defineConfig({
         ? ['http://localhost:8888/*']
         : ['https://www.readfrog.app/*'],
   }),
+  dev: {
+    server: {
+      port: 3333,
+    },
+  },
 })

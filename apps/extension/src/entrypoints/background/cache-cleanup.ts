@@ -1,4 +1,6 @@
+import { browser } from '#imports'
 import { db } from '@/utils/db/dexie/db'
+import { logger } from '@/utils/logger'
 
 const CACHE_CLEANUP_ALARM = 'cache-cleanup'
 const CLEANUP_INTERVAL_MINUTES = 7 * 24 * 60

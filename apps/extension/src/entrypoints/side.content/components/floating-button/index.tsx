@@ -1,11 +1,12 @@
 import { useAtom, useAtomValue } from 'jotai'
 import { Bolt, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { Toaster } from 'sonner'
-
 import readFrogLogo from '@/assets/icons/read-frog.png'
 import { configFields } from '@/utils/atoms/config'
 import { APP_NAME } from '@/utils/constants/app'
-
+import { sendMessage } from '@/utils/message'
+import { cn } from '@/utils/tailwind'
 import { isSideOpenAtom } from '../../atoms'
 import HiddenButton from './components/hidden-button'
 import FloatingReadButton from './floating-read-button'

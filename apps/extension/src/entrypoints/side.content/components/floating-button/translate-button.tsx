@@ -1,13 +1,14 @@
 import type { translateProviderModels } from '@/types/config/provider'
+import { i18n } from '#imports'
 import { useAtomValue } from 'jotai'
 import { Check, Languages } from 'lucide-react'
-
 import { toast } from 'sonner'
 import { pureTranslateProvider } from '@/types/config/provider'
 import { configFields } from '@/utils/atoms/config'
-
 import { hasSetAPIKey } from '@/utils/config/config'
 import { removeAllTranslatedWrapperNodes } from '@/utils/host/translate/node-manipulation'
+import { sendMessage } from '@/utils/message'
+import { cn } from '@/utils/tailwind'
 import { enablePageTranslationAtom } from '../../atoms'
 import HiddenButton from './components/hidden-button'
 

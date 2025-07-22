@@ -1,3 +1,4 @@
+import type { Browser } from '#imports'
 import { atom, createStore } from 'jotai'
 
 export const store = createStore()

@@ -4,10 +4,9 @@ import type {
   ArticleExplanation,
   ExtractedContent,
 } from '@/types/content'
+import { i18n } from '#imports'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-
 import { generateObject } from 'ai'
-
 import { useAtomValue, useSetAtom } from 'jotai'
 import { toast } from 'sonner'
 import {
@@ -20,11 +19,13 @@ import {
   articleAnalysisSchema,
   articleExplanationSchema,
 } from '@/types/content'
+import { sendInBatchesWithFixedDelay } from '@/utils/ai-request'
 import { configAtom, configFields } from '@/utils/atoms/config'
 import { isAnyAPIKey } from '@/utils/config/config'
+import { logger } from '@/utils/logger'
 import { getAnalyzePrompt } from '@/utils/prompts/analyze'
 import { getExplainPrompt } from '@/utils/prompts/explain'
-import { getTranslateModel as getReadModel } from '@/utils/provider'
+import { getReadModel } from '@/utils/provider'
 
 interface ExplainArticleParams {
   extractedContent: ExtractedContent

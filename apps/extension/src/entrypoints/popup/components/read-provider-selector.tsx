@@ -1,5 +1,6 @@
 import type { ReadProviderNames } from '@/types/config/provider'
 
+import { i18n } from '#imports'
 import { useAtom } from 'jotai'
 import { CircleHelp } from 'lucide-react'
 import ProviderIcon from '@/components/provider-icon'

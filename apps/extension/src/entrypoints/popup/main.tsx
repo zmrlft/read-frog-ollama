@@ -1,17 +1,16 @@
 import type { Config } from '@/types/config/config.ts'
+import { browser } from '#imports'
 import { Provider as JotaiProvider } from 'jotai'
 import { useHydrateAtoms } from 'jotai/utils'
 import React from 'react'
-
 import ReactDOM from 'react-dom/client'
-
 import { TooltipProvider } from '@/components/ui/tooltip.tsx'
 import { configAtom } from '@/utils/atoms/config.ts'
 import { globalConfig, loadGlobalConfig } from '@/utils/config/config.ts'
 import { DEFAULT_CONFIG } from '@/utils/constants/config.ts'
+import { sendMessage } from '@/utils/message.ts'
 import App from './app.tsx'
 import { getIsInPatterns, isCurrentSiteInPatternsAtom, isPageTranslatedAtom } from './atoms/auto-translate.ts'
-
 import '@/assets/tailwind/text-small.css'
 import '@/assets/tailwind/theme.css'
 

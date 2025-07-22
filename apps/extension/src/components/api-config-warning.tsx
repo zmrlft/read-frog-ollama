@@ -1,3 +1,7 @@
+import { i18n } from '#imports'
+import { sendMessage } from '@/utils/message'
+import { cn } from '@/utils/tailwind'
+
 export function APIConfigWarning({ className }: { className?: string }) {
   return (
     <div

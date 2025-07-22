@@ -1,5 +1,6 @@
 import type { PromptConfigList } from '../../utils/prompt-file'
 import type { TranslatePrompt } from '@/types/config/provider'
+import { i18n } from '#imports'
 import { useAtom, useAtomValue } from 'jotai'
 import { FileDown, FileUp, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'

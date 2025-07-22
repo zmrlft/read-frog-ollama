@@ -2,10 +2,13 @@ import type { Config } from '@/types/config/config'
 
 import type { APIProviderNames, ProvidersConfig } from '@/types/config/provider'
 
+import { storage } from '#imports'
 import { configSchema } from '@/types/config/config'
 import {
   CONFIG_STORAGE_KEY,
 } from '../constants/config'
+import { logger } from '../logger'
+import { sendMessage } from '../message'
 
 // eslint-disable-next-line import/no-mutable-exports
 export let globalConfig: Config | null = null

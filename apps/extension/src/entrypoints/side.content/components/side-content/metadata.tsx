@@ -2,13 +2,16 @@ import { useMutationState } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
 import { BookOpenText, RotateCcw } from 'lucide-react'
 
-import { toast } from 'sonner'
+import { useEffect } from 'react'
 
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { useExtractContent } from '@/hooks/read/extract'
 import { useReadArticle } from '@/hooks/read/read'
-import { cn } from '@/utils/tailwind'
 
+import { getFaviconUrl } from '@/utils/content'
+import { onMessage } from '@/utils/message'
+import { cn } from '@/utils/tailwind'
 import { isSideOpenAtom } from '../../atoms'
 
 export function Metadata({ className }: { className?: string }) {

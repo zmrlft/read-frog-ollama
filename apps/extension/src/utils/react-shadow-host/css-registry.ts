@@ -1,3 +1,5 @@
+import { Sha256Hex } from '../hash'
+
 export class CSSRegistry {
   private registry = new Map<string, { node: HTMLStyleElement, count: number }>()
 
