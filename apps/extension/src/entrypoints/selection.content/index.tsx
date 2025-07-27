@@ -1,6 +1,7 @@
 import { createShadowRootUi, defineContentScript } from '#imports'
 import { kebabCase } from 'case-anything'
 import ReactDOM from 'react-dom/client'
+import { loadGlobalConfig } from '@/utils/config/config'
 import { APP_NAME } from '@/utils/constants/app.ts'
 import { protectSelectAllShadowRoot } from '@/utils/select-all'
 import { insertShadowRootUIWrapperInto } from '@/utils/shadow-root'
@@ -12,6 +13,7 @@ export default defineContentScript({
   matches: ['*://*/*'],
   cssInjectionMode: 'ui',
   async main(ctx) {
+    await loadGlobalConfig()
     const ui = await createShadowRootUi(ctx, {
       name: `${kebabCase(APP_NAME)}-selection`,
       position: 'overlay',

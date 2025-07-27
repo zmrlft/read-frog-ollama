@@ -3,9 +3,7 @@ import type { AllProviderNames, PageTranslateRange, ProvidersConfig, ReadModels,
 import deepseekLogo from '@/assets/providers/deepseek.png'
 import googleLogo from '@/assets/providers/google.png'
 import microsoftLogo from '@/assets/providers/microsoft.png'
-import ollamaLogo from '@/assets/providers/ollama.png'
 import openaiLogo from '@/assets/providers/openai.jpg'
-import openrouterLogo from '@/assets/providers/openrouter.png'
 import { apiProviderNames, pureTranslateProvider, readProviderNames, translateProviderNames } from '@/types/config/provider'
 import { omit, pick } from '@/types/utils'
 import { DEFAULT_TRANSLATE_PROMPTS_CONFIG } from './prompt'
@@ -13,7 +11,7 @@ import { DEFAULT_SIDE_CONTENT_WIDTH } from './side'
 import { DEFAULT_REQUEST_CAPACITY, DEFAULT_REQUEST_RATE } from './translate'
 
 export const CONFIG_STORAGE_KEY = 'config'
-export const CONFIG_SCHEMA_VERSION = 9
+export const CONFIG_SCHEMA_VERSION = 10
 
 export const DEFAULT_PROVIDER_CONFIG: ProvidersConfig = {
   openai: {
@@ -23,14 +21,6 @@ export const DEFAULT_PROVIDER_CONFIG: ProvidersConfig = {
   deepseek: {
     apiKey: undefined,
     baseURL: 'https://api.deepseek.com/v1',
-  },
-  openrouter: {
-    apiKey: undefined,
-    baseURL: 'https://openrouter.ai/api/v1',
-  },
-  ollama: {
-    apiKey: undefined,
-    baseURL: 'http://localhost:11434/v1',
   },
 }
 
@@ -57,16 +47,6 @@ export const DEFAULT_TRANSLATE_MODELS: TranslateModels = {
   },
   deepseek: {
     model: 'deepseek-chat',
-    isCustomModel: false,
-    customModel: '',
-  },
-  openrouter: {
-    model: 'meta-llama/llama-4-maverick:free',
-    isCustomModel: false,
-    customModel: '',
-  },
-  ollama: {
-    model: 'gemma3:1b',
     isCustomModel: false,
     customModel: '',
   },
@@ -127,14 +107,6 @@ export const PROVIDER_ITEMS: Record<AllProviderNames, { logo: string, name: stri
     deepseek: {
       logo: deepseekLogo,
       name: 'DeepSeek',
-    },
-    openrouter: {
-      logo: openrouterLogo,
-      name: 'OpenRouter',
-    },
-    ollama: {
-      logo: ollamaLogo,
-      name: 'Ollama',
     },
   }
 

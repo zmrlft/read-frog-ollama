@@ -1,6 +1,8 @@
-export const description = 'Expose Translate Request Rate'
+import type { Config } from '@/types/config/config'
 
-export const configExample = {
+export const description = 'Deprecate OpenRouter and Ollama'
+
+export const configExample: Config = {
   language: {
     detectedCode: 'eng',
     sourceCode: 'auto',
@@ -15,14 +17,6 @@ export const configExample = {
     deepseek: {
       apiKey: undefined,
       baseURL: 'https://api.deepseek.com/v1',
-    },
-    openrouter: {
-      apiKey: undefined,
-      baseURL: 'https://openrouter.ai/api/v1',
-    },
-    ollama: {
-      apiKey: undefined,
-      baseURL: 'http://127.0.0.1:11434/v1',
     },
   },
   read: {
@@ -52,16 +46,6 @@ export const configExample = {
       },
       deepseek: {
         model: 'deepseek-chat',
-        isCustomModel: false,
-        customModel: '',
-      },
-      openrouter: {
-        model: 'meta-llama/llama-4-maverick:free',
-        isCustomModel: false,
-        customModel: '',
-      },
-      ollama: {
-        model: 'gemma3:1b',
         isCustomModel: false,
         customModel: '',
       },

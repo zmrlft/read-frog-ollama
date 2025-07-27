@@ -19,6 +19,9 @@ export const antfuConfig = {
      */
     markdown: 'prettier',
   },
+  rules: {
+    'unused-imports/no-unused-imports': 'error',
+  },
 }
 
 export const config = antfu(antfuConfig)

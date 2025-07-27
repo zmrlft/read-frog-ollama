@@ -14,7 +14,6 @@ export function SelectionTooltip() {
   const tooltipPositionRef = useRef({ x: 0, y: 0 }) // use ref to avoid re-rendering
   const mouseDownDocPositionRef = useRef({ x: 0, y: 0 }) // track mousedown position
   const pendingPositionRef = useRef<{ x: number, y: number, isDownwardSelection: boolean } | null>(null) // store pending position calculation
-  const previousSelectionTextRef = useRef<string | null>(null)
   const isDraggingFromTooltipRef = useRef(false) // track if dragging started from tooltip
   const [isTooltipVisible, setIsTooltipVisible] = useAtom(isTooltipVisibleAtom)
   const setSelectionContent = useSetAtom(selectionContentAtom)
@@ -64,26 +63,29 @@ export function SelectionTooltip() {
         return
       }
 
-      // check if there is text selected
-      const selection = window.getSelection()
-      const selectedText = selection?.toString().trim() || ''
+      // Use requestAnimationFrame to delay selection check
+      // This ensures selectionchange event fires first if text selection was cleared
+      requestAnimationFrame(() => {
+        // check if there is text selected
+        const selection = window.getSelection()
+        const selectedText = selection?.toString().trim() || ''
 
-      if (selection && selectedText.length > 0 && selectedText !== previousSelectionTextRef.current) {
-        previousSelectionTextRef.current = selectedText
-        setSelectionContent(selectedText)
-        // calculate the position relative to the document
-        const scrollY = window.scrollY
-        const scrollX = window.scrollX
+        if (selection && selectedText.length > 0) {
+          setSelectionContent(selectedText)
+          // calculate the position relative to the document
+          const scrollY = window.scrollY
+          const scrollX = window.scrollX
 
-        const docX = e.clientX + scrollX
-        const docY = e.clientY + scrollY
-        // allow a small threshold to avoid the selection direction is not downward
-        const isDownwardSelection = docY + SELECTION_DIRECTION_THRESHOLD >= mouseDownDocPositionRef.current.y
+          const docX = e.clientX + scrollX
+          const docY = e.clientY + scrollY
+          // allow a small threshold to avoid the selection direction is not downward
+          const isDownwardSelection = docY + SELECTION_DIRECTION_THRESHOLD >= mouseDownDocPositionRef.current.y
 
-        // Store pending position for useLayoutEffect to process
-        pendingPositionRef.current = { x: docX, y: docY, isDownwardSelection }
-        setIsTooltipVisible(true)
-      }
+          // Store pending position for useLayoutEffect to process
+          pendingPositionRef.current = { x: docX, y: docY, isDownwardSelection }
+          setIsTooltipVisible(true)
+        }
+      })
     }
 
     const handleMouseDown = (e: MouseEvent) => {
