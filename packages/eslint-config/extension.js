@@ -16,6 +16,10 @@ export const config = antfu(
       '@tanstack/query/exhaustive-deps': 'error',
       '@tanstack/query/no-rest-destructuring': 'warn',
       '@tanstack/query/stable-query-client': 'error',
+      // vitest rule - use antfu built-in test/* prefix
+      'test/consistent-test-it': 'error',
+      'test/no-identical-title': 'error',
+      'test/prefer-hooks-on-top': 'error',
     },
   },
 )
