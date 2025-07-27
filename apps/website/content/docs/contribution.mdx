@@ -6,7 +6,7 @@ icon: GitPullRequestArrow
 
 ## Getting Started
 
-Fork the repository and clone it to your local machine.
+### Step 1: Fork the repository and clone it to your local machine
 
 ```bash
 # Clone the repository from your fork
@@ -14,10 +14,77 @@ git clone https://github.com/xxxxx/read-frog.git
 
 # Enter the project directory
 cd read-frog
+```
 
-# Start the project
+### Step 2: Set up and initialize local database
+You can set up any Postgres database of your choice locally. It is recommended to use Supabase local development. Skip step 2.1 if using non-Supabase deployments.
+
+#### Step 2.1: Supabase local deployment
+To set up the database required by the project, go to the [Supabase local development set up guide](https://supabase.com/docs/guides/local-development?queryGroups=package-manager&package-manager=brew)
+to create a local Supabase instance for local development. After the step, a new folder `supabase` will be created under the project root. Never commit this folder as it is only for local development.
+
+After initialization, run the following command to check local instance running status:
+```bash
+supabase status
+```
+You'll see output like the following:
+```
+         API URL: http://xxxxxxx
+     GraphQL URL: http://xxxxxxx
+  S3 Storage URL: http://xxxxxxx
+          DB URL: postgresql://xxxxxxx
+      Studio URL: http://xxxxxxx
+    Inbucket URL: http://xxxxxxx
+      JWT secret: xxxxxxx
+        anon key: xxxxxxx
+service_role key: xxxxxxx
+   S3 Access Key: xxxxxxx
+   S3 Secret Key: xxxxxxx
+       S3 Region: xxxxxxx
+```
+Note down the value of `DB URL` for use in future steps.
+
+#### Step 2.2: Initialize local database schema
+Create a file `.env` under `<project_root>/packages/db/`. In that file, define a variable `DATABASE_URL` and fill in the full database connection URL.
+If using Supabase from step 2.1, fill in `DB URL` obtained in that step.
+
+Example `<project_root>/packages/db/.env`:
+```
+DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
+```
+
+Then, run the following command to initialize database schemas:
+```bash
+pnpm db:migrate
+```
+
+### Step 3: Set up environment
+Create a file `.env.local` under `<project_root>/apps/website/`. In that file, define values for all the environment variables declared in `<project_root>/apps/website/env.ts`. In particular:
+- `BETTER_AUTH_SECRET`: Setting any value is fine. It is being used as seed for encryption.
+- `BETTER_AUTH_URL`: Same as website URL.
+- `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`: Google SSO keys. Set with random values if no need to log in locally. Otherwise, apply one on Google.
+- `DATABASE_URL`: Complete URL to connect to the Postgres database. If using Supabase from step 2.1, fill in `DB URL` obtained in that step.
+- `PUBLIC_REPO_GITHUB_TOKEN`: For displaying Github starred count. Set up with some random values is fine.
+
+Example `<project_root>/apps/website/.env.local`:
+```
+BETTER_AUTH_SECRET=<SOME_BETTER_AUTH_SECRET>
+BETTER_AUTH_URL=http://localhost:8888
+
+GOOGLE_CLIENT_ID=<SOME_GOOGLE_CLIENT_ID>
+GOOGLE_CLIENT_SECRET=<SOME_GOOGLE_CLIENT_SECRET>
+
+DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
+
+PUBLIC_REPO_GITHUB_TOKEN=<SOME_PUBLIC_REPO_GITHUB_TOKEN>
+```
+
+### Step 4: Start dev server
+Run the following command to start local development server:
+```bash
 pnpm dev
 ```
+After startup, access the main website at: http://localhost:8888/.
 
 <Callout title="Windows environment variable configuration">
   If you are currently in a Windows environment, you need to add a `web-ext.config.ts` file in the `apps/extension` directory to explicitly specify the browser path.  
