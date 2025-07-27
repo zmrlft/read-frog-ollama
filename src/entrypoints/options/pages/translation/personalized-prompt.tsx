@@ -1,5 +1,5 @@
 import type { PromptConfigList } from '../../utils/prompt-file'
-import type { TranslatePrompt } from '@/types/config/provider'
+import type { TranslatePromptObj } from '@/types/config/provider'
 import { i18n } from '#imports'
 import { useAtom, useAtomValue } from 'jotai'
 import { FileDown, FileUp, Pencil, Plus, Trash2 } from 'lucide-react'
@@ -114,7 +114,7 @@ function PromptList() {
   )
 }
 
-function DeletePrompt({ originPrompt }: { originPrompt: TranslatePrompt }) {
+function DeletePrompt({ originPrompt }: { originPrompt: TranslatePromptObj }) {
   const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
   const { patterns, prompt } = translateConfig.promptsConfig
   const deletePrompt = () => {
@@ -159,12 +159,12 @@ function DeletePrompt({ originPrompt }: { originPrompt: TranslatePrompt }) {
   )
 }
 
-function ConfigurePrompt({ originPrompt }: { originPrompt?: TranslatePrompt }) {
+function ConfigurePrompt({ originPrompt }: { originPrompt?: TranslatePromptObj }) {
   const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
 
   const inEdit = !!originPrompt
 
-  const [prompt, setPrompt] = useState<TranslatePrompt>(originPrompt ?? { id: crypto.randomUUID(), name: '', prompt: '' })
+  const [prompt, setPrompt] = useState<TranslatePromptObj>(originPrompt ?? { id: crypto.randomUUID(), name: '', prompt: '' })
 
   const name = isDefaultPrompt(prompt.id)
     ? i18n.t('options.translation.personalizedPrompt.default')

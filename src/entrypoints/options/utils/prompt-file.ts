@@ -1,8 +1,8 @@
-import type { TranslatePrompt } from '@/types/config/provider'
+import type { TranslatePromptObj } from '@/types/config/provider'
 import { saveAs } from 'file-saver'
 import { APP_NAME } from '@/utils/constants/app'
 
-export type PromptConfig = Omit<TranslatePrompt, 'id'>
+export type PromptConfig = Omit<TranslatePromptObj, 'id'>
 export type PromptConfigList = PromptConfig[]
 
 const TRANSLATE_PROMPTS_FILE = `${APP_NAME}: translate_prompts`

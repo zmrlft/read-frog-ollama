@@ -3,7 +3,7 @@ import { isPureTranslateProvider } from '@/types/config/provider'
 import { globalConfig } from '../../config/config'
 import { Sha256Hex } from '../../hash'
 import { sendMessage } from '../../message'
-import { getTranslateLinePrompt } from '../../prompts/translate-line'
+import { getTranslatePrompt } from '../../prompts/translate'
 
 export async function translateText(sourceText: string) {
   if (!globalConfig) {
@@ -39,7 +39,7 @@ export async function translateText(sourceText: string) {
     if (!targetLang) {
       throw new Error('Invalid target language code')
     }
-    const prompt = getTranslateLinePrompt(targetLang, cleanSourceText)
+    const prompt = getTranslatePrompt(targetLang, cleanSourceText)
     const text = await sendMessage('enqueueRequest', {
       type: 'aiTranslate',
       params: {

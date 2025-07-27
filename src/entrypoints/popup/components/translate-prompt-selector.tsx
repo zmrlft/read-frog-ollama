@@ -1,4 +1,4 @@
-import type { TranslatePrompt } from '@/types/config/provider'
+import type { TranslatePromptObj } from '@/types/config/provider'
 import { i18n } from '#imports'
 import { useAtom } from 'jotai'
 import { CircleHelp } from 'lucide-react'
@@ -15,7 +15,7 @@ import { isLLMTranslateProvider } from '@/types/config/provider'
 import { configFields } from '@/utils/atoms/config'
 import { DEFAULT_TRANSLATE_PROMPT_ID } from '@/utils/constants/prompt'
 
-function name(prompt: TranslatePrompt) {
+function name(prompt: TranslatePromptObj) {
   return prompt.id === DEFAULT_TRANSLATE_PROMPT_ID ? i18n.t('options.translation.personalizedPrompt.default') : prompt.name
 }
 
