@@ -1,5 +1,5 @@
 import type { Config } from '@/types/config/config'
-import type { ReadProviderNames, translateProviderModels } from '@/types/config/provider'
+import type { LLMTranslateProviderNames, ReadProviderNames } from '@/types/config/provider'
 import { storage } from '#imports'
 import { createDeepSeek } from '@ai-sdk/deepseek'
 import { createOpenAI } from '@ai-sdk/openai'
@@ -21,7 +21,7 @@ export async function getProviderRegistry() {
   })
 }
 
-export async function getTranslateModel(provider: keyof typeof translateProviderModels, model: string) {
+export async function getTranslateModel(provider: LLMTranslateProviderNames, model: string) {
   const registry = await getProviderRegistry()
   return registry.languageModel(`${provider}:${model}`)
 }
