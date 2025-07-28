@@ -20,6 +20,7 @@ export function ContainerScroll({
 
   React.useEffect(() => {
     const checkMobile = () => {
+      // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
       setIsMobile(window.innerWidth <= 768)
     }
     checkMobile()
