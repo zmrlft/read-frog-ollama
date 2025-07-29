@@ -42,6 +42,18 @@ export default defineContentScript({
       handleUrlChange(from, to)
     })
 
+    window.addEventListener('keydown', (e: KeyboardEvent) => {
+      // Listen for Alt + Q for translation toggle
+      if (e.altKey && e.key === 'q' && !e.ctrlKey && !e.shiftKey && !e.metaKey) {
+        if (manager.isActive) {
+          manager.stop()
+        }
+        else {
+          manager.start()
+        }
+      }
+    })
+
     port.onMessage.addListener((msg) => {
       logger.info('onMessage', msg)
       if (msg.type !== 'STATUS_PUSH' || msg.enabled === manager.isActive)
