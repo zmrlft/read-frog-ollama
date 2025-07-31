@@ -4,9 +4,7 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./base": "./base.js",
-    "./extension": "./extension.js",
-    "./next": "./next.js"
+    "./*": "./*.js"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^5.0.0",

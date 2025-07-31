@@ -1,9 +1,8 @@
 import type { TextUIPart } from 'ai'
+import { Icon } from '@iconify/react'
 import { readUIMessageStream, streamText } from 'ai'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { Languages, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Spinner } from '@/components/tranlation/spinner'
 import { ISO6393_TO_6391, LANG_CODE_TO_EN_NAME } from '@/types/config/languages'
 import { isPureTranslateProvider } from '@/types/config/provider'
 import { globalConfig } from '@/utils/config/config'
@@ -23,18 +22,6 @@ export function TranslateButton() {
     const x = rect.left
     const y = rect.top
 
-    // const model = await getTranslateModel('openai', 'gpt-4o-mini')
-    // const result = streamText({
-    //   model,
-    //   prompt: 'Write a short story about a robot.',
-    // })
-
-    // for await (const uiMessage of readUIMessageStream({
-    //   stream: result.toUIMessageStream(),
-    // })) {
-    //   console.log('Current message state:', uiMessage)
-    // }
-
     setMousePosition({ x, y })
     setIsTooltipVisible(false)
     setIsTranslatePopoverVisible(true)
@@ -42,7 +29,7 @@ export function TranslateButton() {
 
   return (
     <button type="button" className="size-6 flex items-center justify-center hover:bg-zinc-300 dark:hover:bg-zinc-700 cursor-pointer" onClick={handleClick}>
-      <Languages className="size-4" />
+      <Icon icon="ri:translate" strokeWidth={0.8} className="size-4" />
     </button>
   )
 }
@@ -59,6 +46,12 @@ export function TranslatePopover() {
     setIsVisible(false)
     setTranslatedText(undefined)
   }, [setIsVisible])
+
+  const handleCopy = useCallback(() => {
+    if (translatedText) {
+      navigator.clipboard.writeText(translatedText)
+    }
+  }, [translatedText])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -131,50 +124,50 @@ export function TranslatePopover() {
     }
   }, [isVisible, selectionContent, handleClose])
 
-  if (!isVisible || !mouseClickPosition) {
+  if (!isVisible || !mouseClickPosition || !selectionContent) {
     return null
   }
 
   return (
     <div
       ref={popoverRef}
-      className="fixed z-[2147483647] bg-white dark:bg-zinc-800 border rounded-lg shadow-xl p-4 w-[300px]"
+      className="fixed z-[2147483647] bg-white dark:bg-zinc-800 border rounded-lg w-[300px] shadow-lg"
       style={{
         left: mouseClickPosition.x,
         top: mouseClickPosition.y,
       }}
     >
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Translation</h3>
+      <div className="flex items-center justify-between p-4 border-b">
+        <div className="flex items-center gap-2">
+          <Icon icon="ri:translate" strokeWidth={0.8} className="size-4.5 text-zinc-600 dark:text-zinc-400" />
+          <h2 className="text-base font-medium text-zinc-900 dark:text-zinc-100">Translation</h2>
+        </div>
         <button
           type="button"
           onClick={handleClose}
-          className="p-1 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded"
+          className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded"
         >
-          <X className="size-4 text-zinc-600 dark:text-zinc-400" />
+          <Icon icon="pajamas:close" strokeWidth={1} className="size-4 text-zinc-600 dark:text-zinc-400" />
         </button>
       </div>
-
-      <div className="space-y-3">
-        <div>
-          <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-            Original
-          </label>
-          <div className="p-2 bg-zinc-50 dark:bg-zinc-900 rounded border text-sm text-zinc-800 dark:text-zinc-200">
-            {selectionContent || 'No text selected'}
-          </div>
+      <div className="p-4 border-b">
+        <div className="border-b pb-4"><p className="text-sm text-zinc-600 dark:text-zinc-400">{selectionContent}</p></div>
+        <div className="pt-4">
+          <p className="text-sm">
+            {isTranslating && !translatedText && <Icon icon="svg-spinners:3-dots-bounce" />}
+            {translatedText}
+            {isTranslating && translatedText && ' ●'}
+          </p>
         </div>
-
-        <div>
-          <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-            Translation
-          </label>
-          <div className="p-2 bg-zinc-50 dark:bg-zinc-900 rounded border text-sm text-zinc-800 dark:text-zinc-200 min-h-[60px]">
-            {translatedText || 'Translation result will be displayed here...'}
-            {' '}
-            {isTranslating && <Spinner />}
-          </div>
-        </div>
+      </div>
+      <div className="p-4 flex justify-end items-center">
+        <button
+          type="button"
+          onClick={handleCopy}
+          className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded"
+        >
+          <Icon icon="tabler:copy" strokeWidth={1} className="size-4 text-zinc-600 dark:text-zinc-400" />
+        </button>
       </div>
     </div>
   )

@@ -64,7 +64,7 @@ Create a file `.env.local` under `<project_root>/apps/website/`. In that file, d
 - `BETTER_AUTH_URL`: Same as website URL.
 - `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`: Google SSO keys. Set with random values if no need to log in locally. Otherwise, apply one on Google.
 - `DATABASE_URL`: Complete URL to connect to the Postgres database. If using Supabase from step 2.1, fill in `DB URL` obtained in that step.
-- `PUBLIC_REPO_GITHUB_TOKEN`: For displaying Github starred count. Set up with some random values is fine.
+- `PUBLIC_REPO_GITHUB_TOKEN`: For displaying Github starred count. (Optional)
 
 Example `<project_root>/apps/website/.env.local`:
 ```
@@ -76,6 +76,7 @@ GOOGLE_CLIENT_SECRET=<SOME_GOOGLE_CLIENT_SECRET>
 
 DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
 
+# Optional – only needed if you want the deal with rate limit of Github API
 PUBLIC_REPO_GITHUB_TOKEN=<SOME_PUBLIC_REPO_GITHUB_TOKEN>
 ```
 

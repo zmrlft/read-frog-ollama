@@ -6,7 +6,7 @@ icon: GitPullRequestArrow
 
 ## 启动项目
 
-Fork 项目并克隆到本地。
+### 步骤 1: Fork 项目并克隆到本地
 
 ```bash
 # 从你的 fork 克隆项目
@@ -14,10 +14,78 @@ git clone https://github.com/xxxxx/read-frog.git
 
 # 进入项目目录
 cd read-frog
+```
 
-# 启动项目
+### 步骤 2: 设置并初始化本地数据库
+你可以在本地设置任何你选择的 Postgres 数据库。建议使用 Supabase 本地开发。如果使用非 Supabase 部署，请跳过步骤 2.1。
+
+#### 步骤 2.1: Supabase 本地部署
+要设置项目所需的数据库，请参考 [Supabase 本地开发设置指南](https://supabase.com/docs/guides/local-development?queryGroups=package-manager&package-manager=brew)
+来创建用于本地开发的 Supabase 实例。完成此步骤后，项目根目录下会创建一个新的 `supabase` 文件夹。请不要提交此文件夹，因为它仅用于本地开发。
+
+初始化后，运行以下命令检查本地实例运行状态：
+```bash
+supabase status
+```
+你会看到类似以下的输出：
+```
+         API URL: http://xxxxxxx
+     GraphQL URL: http://xxxxxxx
+  S3 Storage URL: http://xxxxxxx
+          DB URL: postgresql://xxxxxxx
+      Studio URL: http://xxxxxxx
+    Inbucket URL: http://xxxxxxx
+      JWT secret: xxxxxxx
+        anon key: xxxxxxx
+service_role key: xxxxxxx
+   S3 Access Key: xxxxxxx
+   S3 Secret Key: xxxxxxx
+       S3 Region: xxxxxxx
+```
+记下 `DB URL` 的值，以便在后续步骤中使用。
+
+#### 步骤 2.2: 初始化本地数据库模式
+在 `<项目根目录>/packages/db/` 下创建文件 `.env`。在该文件中，定义变量 `DATABASE_URL` 并填入完整的数据库连接 URL。
+如果使用步骤 2.1 中的 Supabase，请填入该步骤中获得的 `DB URL`。
+
+示例 `<项目根目录>/packages/db/.env`：
+```
+DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
+```
+
+然后，运行以下命令初始化数据库模式：
+```bash
+pnpm db:migrate
+```
+
+### 步骤 3: 设置环境变量
+在 `<项目根目录>/apps/website/` 下创建文件 `.env.local`。在该文件中，为 `<项目根目录>/apps/website/env.ts` 中声明的所有环境变量定义值。特别是：
+- `BETTER_AUTH_SECRET`: 设置任何值都可以。它被用作加密的种子。
+- `BETTER_AUTH_URL`: 与网站 URL 相同。
+- `GOOGLE_CLIENT_ID` 和 `GOOGLE_CLIENT_SECRET`: Google SSO 密钥。如果不需要本地登录，设置随机值即可。否则，在 Google 上申请一个。
+- `DATABASE_URL`: 连接到 Postgres 数据库的完整 URL。如果使用步骤 2.1 中的 Supabase，请填入该步骤中获得的 `DB URL`。
+- `PUBLIC_REPO_GITHUB_TOKEN`: 用于显示 Github 星标数。(可选)
+
+示例 `<项目根目录>/apps/website/.env.local`：
+```
+BETTER_AUTH_SECRET=<某个_BETTER_AUTH_SECRET>
+BETTER_AUTH_URL=http://localhost:8888
+
+GOOGLE_CLIENT_ID=<某个_GOOGLE_CLIENT_ID>
+GOOGLE_CLIENT_SECRET=<某个_GOOGLE_CLIENT_SECRET>
+
+DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
+
+PUBLIC_REPO_GITHUB_TOKEN=<某个_PUBLIC_REPO_GITHUB_TOKEN> (可选)
+```
+
+### 步骤 4: 启动开发服务器
+运行以下命令启动本地开发服务器：
+```bash
 pnpm dev
 ```
+启动后，在以下地址访问主网站：http://localhost:8888/。
+
 <Callout title="Windows 环境变量配置">
   如果你当前在 Windows 环境，需要在 `apps/extension` 目录下添加 `web-ext.config.ts` 文件，显式指定浏览器路径。
   ```javascript
