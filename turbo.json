@@ -2,7 +2,7 @@
   "extends": ["//"],
   "tasks": {
     "build": {
-      "inputs": ["$TURBO_DEFAULT$", "!coverage/**"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "!coverage/**"],
       "outputs": [".output/**", ".wxt/**"]
     },
     "zip": {
