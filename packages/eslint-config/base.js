@@ -1,6 +1,7 @@
 import antfu from '@antfu/eslint-config'
+import turboPlugin from 'eslint-plugin-turbo'
 
-export const antfuConfig = {
+const antfuConfig = {
   formatters: {
     /**
      * Format CSS, LESS, SCSS files, also the `<style>` blocks
@@ -24,6 +25,22 @@ export const antfuConfig = {
   },
 }
 
-export const config = antfu(antfuConfig)
+const userConfigs = [{
+  plugins: {
+    turbo: turboPlugin,
+  },
+  rules: {
+    'turbo/no-undeclared-env-vars': 'warn',
+  },
+}]
 
+// Default config without additional options
+export const config = antfu(antfuConfig, userConfigs)
 
+// Function to create config with additional antfu options
+export function createConfig(additionalOptions = {}) {
+  return antfu({
+    ...antfuConfig,
+    ...additionalOptions,
+  }, userConfigs)
+}

@@ -18,7 +18,7 @@ export default async function Layout({
     notFound()
   }
   return (
-    <DocsLayout tree={source.pageTree[locale]} {...baseOptions(locale)}>
+    <DocsLayout tree={source.pageTree[locale]!} {...baseOptions(locale)}>
       {children}
     </DocsLayout>
   )

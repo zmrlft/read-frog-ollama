@@ -1,7 +1,7 @@
 import process from 'node:process'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
-import * as schema from '@/schema/auth'
+import * as schema from './schema/auth'
 
 export function createDb() {
   // TODO: typesafe way to get DATABASE_URL

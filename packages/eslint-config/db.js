@@ -1,11 +1,5 @@
-import { antfuConfig as baseAntfuConfig } from './base.js'
-import antfu from '@antfu/eslint-config'
+import { config as baseConfig } from './base.js'
 
-export const config = antfu(
-  {
-    ...baseAntfuConfig,
-  },
-  {
-    ignores: ['migrations/**/*'],
-  },
-)
+export const config = baseConfig.append({
+  ignores: ['migrations/**/*'],
+})

@@ -1,4 +1,4 @@
-import { AlertCircle } from 'lucide-react'
+import { Icon } from '@iconify/react'
 import { use } from 'react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
@@ -10,13 +10,13 @@ export function ErrorButton({ error }: { error: Error }) {
   return (
     <HoverCard openDelay={0} closeDelay={0}>
       <HoverCardTrigger asChild>
-        <AlertCircle className="size-3.5 text-red-500 hover:text-red-600 dark:hover:text-red-500" />
+        <Icon icon="tabler:alert-circle" className="size-4 text-destructive hover:text-destructive/90 cursor-pointer" />
       </HoverCardTrigger>
       <HoverCardContent className="w-64 notranslate" container={shadowWrapper} asChild>
         <Alert variant="destructive">
-          <AlertCircle className="size-4" />
+          <Icon icon="tabler:alert-circle" className="size-4" />
           <AlertTitle>Translation Error</AlertTitle>
-          <AlertDescription>
+          <AlertDescription className="break-all">
             {error.message}
           </AlertDescription>
         </Alert>
