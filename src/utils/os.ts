@@ -30,7 +30,7 @@ export function formatHotkey(keys: Key[]): string {
     = os === 'MacOS'
       ? {
           // Option is the Mac equivalent of Alt
-          alt: 'Option',
+          alt: '⌥',
           ctrl: '⌘',
           shift: '⇧',
           enter: '↩︎',
