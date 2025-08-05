@@ -1,13 +1,6 @@
-import antfu from '@antfu/eslint-config'
+import { config } from '@repo/eslint-config/base'
 
-export default antfu(
-  {
-    formatters: {
-      css: true,
-      html: true,
-      markdown: 'prettier',
-    },
-  },
+export default config.append(
   {
     ignores: ['apps/**/*', 'packages/**/*', 'node_modules/**/*', 'dist/**/*', '.turbo/**/*'],
   },
