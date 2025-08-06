@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowRight } from 'lucide-react'
+import { Icon } from '@iconify/react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -24,7 +24,7 @@ export default function GuidePage() {
                   <Link href="/guide/step-3">
                     {t('guide.continue')}
                     {' '}
-                    <ArrowRight size={16} />
+                    <Icon icon="tabler:arrow-right" className="size-4" />
                   </Link>
                 </Button>
               )
@@ -32,7 +32,7 @@ export default function GuidePage() {
                 <Button variant="primary" disabled>
                   {t('guide.continue')}
                   {' '}
-                  <ArrowRight size={16} />
+                  <Icon icon="tabler:arrow-right" className="size-4" />
                 </Button>
               )}
           <div className="text-xs text-muted-foreground mt-2">

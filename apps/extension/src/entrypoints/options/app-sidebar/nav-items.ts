@@ -1,5 +1,4 @@
-import { Globe, Key, Settings } from 'lucide-react'
-import { ApiKeysPage } from '../pages/api-keys'
+import { ApiProvidersPage } from '../pages/api-providers'
 import { GeneralPage } from '../pages/general'
 import { TranslationPage } from '../pages/translation'
 
@@ -7,24 +6,24 @@ export const NAV_ITEMS = {
   '': {
     title: 'general',
     url: '/',
-    icon: Settings,
+    icon: 'tabler:settings',
     component: GeneralPage,
   },
-  'api-keys': {
-    title: 'apiKeys',
-    url: '/api-keys',
-    icon: Key,
-    component: ApiKeysPage,
+  'api-providers': {
+    title: 'apiProviders',
+    url: '/api-providers',
+    icon: 'tabler:api',
+    component: ApiProvidersPage,
   },
   'translation': {
     title: 'translation',
     url: '/translation',
-    icon: Globe,
+    icon: 'ri:translate',
     component: TranslationPage,
   },
 } as const satisfies Record<string, {
   title: string
   url: string
-  icon: React.ComponentType<{ className?: string }>
+  icon: string
   component: React.ComponentType
 }>

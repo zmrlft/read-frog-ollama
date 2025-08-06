@@ -147,7 +147,7 @@ export function TranslatePopover() {
           onClick={handleClose}
           className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded"
         >
-          <Icon icon="pajamas:close" strokeWidth={1} className="size-4 text-zinc-600 dark:text-zinc-400" />
+          <Icon icon="tabler:x" strokeWidth={1} className="size-4 text-zinc-600 dark:text-zinc-400" />
         </button>
       </div>
       <div className="p-4 border-b">

@@ -2,9 +2,8 @@ import type {
   LangCodeISO6393,
 } from '@/types/config/languages'
 import { i18n } from '#imports'
-
+import { Icon } from '@iconify/react'
 import { useAtom } from 'jotai'
-import { ArrowRight, ChevronDown } from 'lucide-react'
 import {
   LANG_CODE_TO_EN_NAME,
   LANG_CODE_TO_LOCALE_NAME,
@@ -36,7 +35,8 @@ export default function LanguageOptionsSelector() {
             ? i18n.t('popup.autoLang')
             : i18n.t('popup.sourceLang')}
         </span>
-        <ChevronDown
+        <Icon
+          icon="tabler:chevron-down"
           className="absolute right-2 h-5 w-5 text-neutral-400 dark:text-neutral-600"
           strokeWidth={1.5}
         />
@@ -57,12 +57,13 @@ export default function LanguageOptionsSelector() {
           ))}
         </select>
       </div>
-      <ArrowRight className="h-4 w-4 text-neutral-500" strokeWidth={2} />
+      <Icon icon="tabler:arrow-right" className="h-4 w-4 text-neutral-500" />
       <div className="bg-input/50 hover:bg-input border-input relative inline-flex h-13 w-32 items-center justify-between rounded-lg border shadow-xs">
         <span className="pt-5 pl-4 text-sm text-neutral-500">
           {i18n.t('popup.targetLang')}
         </span>
-        <ChevronDown
+        <Icon
+          icon="tabler:chevron-down"
           className="absolute right-2 h-5 w-5 text-neutral-400 dark:text-neutral-600"
           strokeWidth={1.5}
         />

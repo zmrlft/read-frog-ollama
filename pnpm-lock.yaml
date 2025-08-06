@@ -152,9 +152,6 @@ importers:
       jotai:
         specifier: ^2.12.3
         version: 2.12.5(@types/react@19.1.9)(react@19.1.1)
-      lucide-react:
-        specifier: ^0.507.0
-        version: 0.507.0(react@19.1.1)
       react:
         specifier: ^19.1.1
         version: 19.1.1

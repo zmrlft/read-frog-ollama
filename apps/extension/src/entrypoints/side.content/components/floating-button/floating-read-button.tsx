@@ -1,6 +1,5 @@
 import { i18n } from '#imports'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { BookOpenText } from 'lucide-react'
 
 import { toast } from 'sonner'
 import { useExtractContent } from '@/hooks/read/extract'
@@ -39,5 +38,5 @@ export default function FloatingReadButton() {
     readArticle()
   }
 
-  return <HiddenButton Icon={BookOpenText} onClick={startReadArticle} />
+  return <HiddenButton icon="tabler:book" onClick={startReadArticle} />
 }

@@ -1,5 +1,5 @@
+import { Icon } from '@iconify/react'
 import { useAtom, useAtomValue } from 'jotai'
-import { Bolt, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Toaster } from 'sonner'
 import readFrogLogo from '@/assets/icons/read-frog.png'
@@ -132,7 +132,7 @@ export default function FloatingButton() {
             setFloatingButton({ enabled: false })
           }}
         >
-          <X className="h-3 w-3 text-neutral-400 dark:text-neutral-600" />
+          <Icon icon="tabler:x" className="h-3 w-3 text-neutral-400 dark:text-neutral-600" />
         </div>
         <img
           src={readFrogLogo}
@@ -141,7 +141,7 @@ export default function FloatingButton() {
         />
       </div>
       <HiddenButton
-        Icon={Bolt}
+        icon="tabler:settings"
         onClick={() => {
           sendMessage('openOptionsPage', undefined)
         }}

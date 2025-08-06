@@ -1,7 +1,7 @@
 import type { translateProviderModels } from '@/types/config/provider'
 import { i18n } from '#imports'
+import { Icon } from '@iconify/react'
 import { useAtomValue } from 'jotai'
-import { Check, Languages } from 'lucide-react'
 import { toast } from 'sonner'
 import { pureTranslateProvider } from '@/types/config/provider'
 import { configFields } from '@/utils/atoms/config'
@@ -19,7 +19,7 @@ export default function TranslateButton() {
 
   return (
     <HiddenButton
-      Icon={Languages}
+      icon="ri:translate"
       onClick={() => {
         const provider = translateConfig.provider
         const isPure = pureTranslateProvider.includes(
@@ -42,7 +42,8 @@ export default function TranslateButton() {
         }
       }}
     >
-      <Check
+      <Icon
+        icon="tabler:check"
         className={cn(
           'absolute -right-0.5 -bottom-0.5 h-3 w-3 rounded-full bg-green-500 text-white',
           enablePageTranslation ? 'block' : 'hidden',

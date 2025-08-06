@@ -1,6 +1,6 @@
+import { Icon } from '@iconify/react'
 import { useMutationState } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
-import { BookOpenText, RotateCcw } from 'lucide-react'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
@@ -79,13 +79,13 @@ export function Metadata({ className }: { className?: string }) {
         {explainData.length > 0 && explainData[explainData.length - 1]
           ? (
               <>
-                <RotateCcw className="size-3" />
+                <Icon icon="tabler:reload" className="size-3" />
                 Regenerate
               </>
             )
           : (
               <>
-                <BookOpenText className="size-3" />
+                <Icon icon="tabler:book" className="size-3" />
                 Read
               </>
             )}

@@ -1,9 +1,9 @@
 'use client'
 
 import type { VariantProps } from 'class-variance-authority'
+import { Icon } from '@iconify/react'
 import { Slot } from '@radix-ui/react-slot'
 import { cva } from 'class-variance-authority'
-import { PanelLeftIcon } from 'lucide-react'
 import * as React from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -260,7 +260,7 @@ function SidebarTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar } = useSidebar()
+  const { toggleSidebar, open } = useSidebar()
 
   return (
     <Button
@@ -275,7 +275,7 @@ function SidebarTrigger({
       }}
       {...props}
     >
-      <PanelLeftIcon className="size-full" />
+      {open ? <Icon icon="tabler:layout-sidebar-right-expand" className="size-full" /> : <Icon icon="tabler:layout-sidebar-left-expand" className="size-full" />}
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   )

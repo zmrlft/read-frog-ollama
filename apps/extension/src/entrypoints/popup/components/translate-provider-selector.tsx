@@ -1,7 +1,7 @@
 import type { TranslateProviderNames } from '@/types/config/provider'
 import { i18n } from '#imports'
+import { Icon } from '@iconify/react'
 import { useAtom } from 'jotai'
-import { CircleHelp } from 'lucide-react'
 import ProviderIcon from '@/components/provider-icon'
 
 import {
@@ -26,7 +26,7 @@ export default function TranslateProviderSelector() {
         {i18n.t('translateService.title')}
         <Tooltip>
           <TooltipTrigger asChild>
-            <CircleHelp className="size-3 text-blue-300 dark:text-blue-700/70" />
+            <Icon icon="tabler:help" className="size-3 text-blue-300 dark:text-blue-700/70" />
           </TooltipTrigger>
           <TooltipContent>
             <p>

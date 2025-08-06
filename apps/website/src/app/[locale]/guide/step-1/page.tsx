@@ -3,7 +3,7 @@
 import type {
   LangCodeISO6393,
 } from '@/types/languages'
-import { ArrowRight } from 'lucide-react'
+import { Icon } from '@iconify/react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -58,7 +58,7 @@ export default function Step1Page() {
             <Link href="/guide/step-2">
               {t('guide.continue')}
               {' '}
-              <ArrowRight size={16} />
+              <Icon icon="tabler:arrow-right" className="size-4" />
             </Link>
           </Button>
         </div>
