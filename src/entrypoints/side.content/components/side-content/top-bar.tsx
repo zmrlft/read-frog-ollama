@@ -6,11 +6,11 @@ import type {
 import type { ReadProviderNames } from '@/types/config/provider'
 import type { ArticleExplanation } from '@/types/content'
 import { i18n } from '#imports'
+import { Icon } from '@iconify/react'
 import { SelectGroup } from '@radix-ui/react-select'
 import { useMutationState } from '@tanstack/react-query'
 // import { onMessage } from "@/utils/message";
 import { useAtom, useSetAtom } from 'jotai'
-import { ArrowRight, Download, X } from 'lucide-react'
 import ProviderIcon from '@/components/provider-icon'
 import {
   Select,
@@ -45,7 +45,7 @@ export function TopBar({ className }: { className?: string }) {
     <div className={cn('flex items-start justify-between', className)}>
       <div className="flex items-center gap-x-2 text-sm">
         <SourceLangSelect />
-        <ArrowRight size={12} strokeWidth={1} className="-mx-1" />
+        <Icon icon="tabler:arrow-right" className="-mx-1" />
         <TargetLangSelect />
         <LangLevelSelect />
         <ProviderSelect />
@@ -58,7 +58,7 @@ export function TopBar({ className }: { className?: string }) {
             className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-full bg-neutral-200 p-0.5 dark:bg-neutral-800"
             onClick={() => setIsSideOpen(false)}
           >
-            <X strokeWidth={1.2} className="text-neutral-500" />
+            <Icon icon="tabler:x" className="text-neutral-500" />
           </button>
         </TooltipTrigger>
         <TooltipContent container={shadowWrapper} side="left">
@@ -232,7 +232,8 @@ function FileExport() {
         hideChevron
         className="rounded-md flex !size-7 items-center justify-center p-0 shadow-xs border focus-visible:ring-ring/50 dark:bg-input/30 dark:hover:bg-input/50 border-input"
       >
-        <Download
+        <Icon
+          icon="tabler:download"
           className="size-4 p-0.5 bg-white rounded-full"
         />
       </SelectTrigger>

@@ -1,6 +1,6 @@
 import { browser, i18n } from '#imports'
+import { Icon } from '@iconify/react'
 import { useSetAtom } from 'jotai'
-import { Bolt, Star } from 'lucide-react'
 import { useEffect } from 'react'
 import { Toaster } from 'sonner'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
@@ -50,7 +50,7 @@ function App() {
           className="flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 hover:bg-neutral-300 dark:hover:bg-neutral-700"
           onClick={() => browser.runtime.openOptionsPage()}
         >
-          <Bolt className="size-4" strokeWidth={1.6} />
+          <Icon icon="tabler:settings" className="size-4" strokeWidth={1.6} />
           <span className="text-[13px] font-medium">
             {i18n.t('popup.options')}
           </span>
@@ -75,7 +75,7 @@ function GithubButton() {
           onClick={() =>
             window.open('https://github.com/mengxi-ream/read-frog', '_blank')}
         >
-          <Star className="size-4" strokeWidth={1.6} />
+          <Icon icon="tabler:brand-github" className="size-4" strokeWidth={1.6} />
           <span className="text-[13px] font-medium">Github</span>
         </button>
       </TooltipTrigger>

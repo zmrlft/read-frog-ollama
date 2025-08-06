@@ -28,8 +28,8 @@ options:
   setAPIKeyWarning:
     please: 設定ページで
     page: APIキーを設定してください
-  apiKeys:
-    title: APIキー
+  apiProviders:
+    title: APIプロバイダー
     description:
       openai: GPT-4oなどのモデルを提供
       deepseek: 中国国内での使用を推奨

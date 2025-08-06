@@ -1,5 +1,5 @@
+import { Icon } from '@iconify/react'
 import { useAtom } from 'jotai'
-import { Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -70,7 +70,7 @@ function PatternTable() {
           onKeyDown={handleKeyPress}
         />
         <Button className="size-9" onClick={handleAddPattern}>
-          <Plus className="size-5" />
+          <Icon icon="tabler:plus" className="size-5" />
         </Button>
       </div>
       <Table>
@@ -86,7 +86,7 @@ function PatternTable() {
               <TableCell>{pattern}</TableCell>
               <TableCell className="text-right">
                 <Button variant="outline" size="icon" onClick={() => removePattern(pattern)}>
-                  <Trash2 className="size-4" />
+                  <Icon icon="tabler:trash" className="size-4" />
                 </Button>
               </TableCell>
             </TableRow>

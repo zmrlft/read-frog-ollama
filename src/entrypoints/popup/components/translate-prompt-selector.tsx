@@ -1,7 +1,7 @@
 import type { TranslatePromptObj } from '@/types/config/provider'
 import { i18n } from '#imports'
+import { Icon } from '@iconify/react'
 import { useAtom } from 'jotai'
-import { CircleHelp } from 'lucide-react'
 import {
   Select,
   SelectContent,
@@ -34,7 +34,7 @@ export default function TranslatePromptSelector() {
         {i18n.t('translatePrompt.title')}
         <Tooltip>
           <TooltipTrigger asChild>
-            <CircleHelp className="size-3 text-blue-300 dark:text-blue-700/70" />
+            <Icon icon="tabler:help" className="size-3 text-blue-300 dark:text-blue-700/70" />
           </TooltipTrigger>
           <TooltipContent className="w-36">
             <p>

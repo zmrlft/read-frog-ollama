@@ -28,8 +28,8 @@ options:
   setAPIKeyWarning:
     please: Please set API Key on
     page: page
-  apiKeys:
-    title: API Keys
+  apiProviders:
+    title: API Providers
     description:
       openai: Provides models like GPT-4o
       deepseek: Recommend to use in China

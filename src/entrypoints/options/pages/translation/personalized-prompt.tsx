@@ -1,8 +1,8 @@
 import type { PromptConfigList } from '../../utils/prompt-file'
 import type { TranslatePromptObj } from '@/types/config/provider'
 import { i18n } from '#imports'
+import { Icon } from '@iconify/react'
 import { useAtom, useAtomValue } from 'jotai'
-import { FileDown, FileUp, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import {
@@ -131,7 +131,7 @@ function DeletePrompt({ originPrompt }: { originPrompt: TranslatePromptObj }) {
     <AlertDialog>
       <AlertDialogTrigger>
         <Button className="size-4" variant="ghost">
-          <Trash2 className="size-4"></Trash2>
+          <Icon icon="tabler:trash" className="size-4"></Icon>
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -209,12 +209,12 @@ function ConfigurePrompt({ originPrompt }: { originPrompt?: TranslatePromptObj }
           inEdit
             ? (
                 <Button className="size-8 rounded-full">
-                  <Pencil className="size-4" />
+                  <Icon icon="tabler:pencil" className="size-4" />
                 </Button>
               )
             : (
                 <Button>
-                  <Plus className="size-4" />
+                  <Icon icon="tabler:plus" className="size-4" />
                   {i18n.t('options.translation.personalizedPrompt.addPrompt')}
                 </Button>
               )
@@ -310,7 +310,7 @@ function ImportPrompts() {
   return (
     <Button variant="outline" className="p-0">
       <Label htmlFor="import-file" className="w-full px-3">
-        <FileDown className="size-4" />
+        <Icon icon="tabler:file-download" className="size-4" />
         {i18n.t('options.translation.personalizedPrompt.import')}
       </Label>
       <Input
@@ -345,7 +345,7 @@ function ExportPrompts({ selectedPrompts }: { selectedPrompts: string[] }) {
       }}
       disabled={!selectedPrompts.length}
     >
-      <FileUp className="size-4" />
+      <Icon icon="tabler:file-upload" className="size-4" />
       {i18n.t('options.translation.personalizedPrompt.export')}
     </Button>
   )

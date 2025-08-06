@@ -1,4 +1,5 @@
 import { i18n } from '#imports'
+import { Icon } from '@iconify/react'
 import { Link } from 'react-router'
 import readFrogLogo from '@/assets/icons/read-frog.png'
 import {
@@ -36,7 +37,7 @@ export function AppSidebar() {
                 <SidebarMenuItem key={key}>
                   <SidebarMenuButton asChild>
                     <Link to={item.url}>
-                      <item.icon />
+                      <Icon icon={item.icon} />
                       <span>{i18n.t(`options.${item.title}.title`)}</span>
                     </Link>
                   </SidebarMenuButton>

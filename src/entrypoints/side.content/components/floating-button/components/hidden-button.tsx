@@ -1,11 +1,11 @@
-import type { LucideIcon } from 'lucide-react'
+import { Icon } from '@iconify/react'
 
 export default function HiddenButton({
-  Icon,
+  icon,
   onClick,
   children,
 }: {
-  Icon: LucideIcon
+  icon: string
   onClick: () => void
   children?: React.ReactNode
 }) {
@@ -15,7 +15,7 @@ export default function HiddenButton({
       className="border-border mr-2 translate-x-12 cursor-pointer rounded-full border bg-white p-1.5 text-neutral-600 dark:text-neutral-400 transition-transform duration-300 group-hover:translate-x-0 hover:bg-neutral-100 dark:bg-neutral-900 dark:hover:bg-neutral-800"
       onClick={onClick}
     >
-      <Icon className="h-5 w-5" strokeWidth={1.8} />
+      <Icon icon={icon} className="h-5 w-5" />
       {children}
     </button>
   )

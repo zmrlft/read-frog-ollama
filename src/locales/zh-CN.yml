@@ -28,8 +28,8 @@ options:
   setAPIKeyWarning:
     please: 请在
     page: 页设置 API Key
-  apiKeys:
-    title: API Keys
+  apiProviders:
+    title: API 提供商
     description:
       openai: 提供 GPT-4o 等模型
       deepseek: 推荐在中国使用

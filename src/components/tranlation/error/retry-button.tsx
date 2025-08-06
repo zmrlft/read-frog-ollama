@@ -1,5 +1,5 @@
 import type { TransNode } from '@/types/dom'
-import { RotateCcw } from 'lucide-react'
+import { Icon } from '@iconify/react'
 import { use } from 'react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { translateNodes } from '@/utils/host/translate/node-manipulation'
@@ -19,9 +19,7 @@ export function RetryButton({ nodes }: { nodes: TransNode[] }) {
           type="button"
           onClick={handleRetry}
         >
-          <RotateCcw
-            className="size-3.5 text-blue-500 hover:text-blue-600 dark:hover:text-blue-400"
-          />
+          <Icon icon="tabler:reload" className="size-4 text-blue-500 hover:text-blue-600 dark:hover:text-blue-400" />
         </button>
       </TooltipTrigger>
       <TooltipContent container={shadowWrapper} side="bottom" className="notranslate">
