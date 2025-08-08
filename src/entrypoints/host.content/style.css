@@ -1,3 +1,5 @@
+@import '@/assets/tailwind/custom-translation-node.css';
+
 :root {
   --read-frog-primary: oklch(76.5% 0.177 163.223);
   --read-frog-muted: oklch(0.97 0 0);

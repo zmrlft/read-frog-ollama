@@ -10,9 +10,10 @@ import { omit, pick } from '@/types/utils'
 import { DEFAULT_TRANSLATE_PROMPTS_CONFIG } from './prompt'
 import { DEFAULT_SIDE_CONTENT_WIDTH } from './side'
 import { DEFAULT_REQUEST_CAPACITY, DEFAULT_REQUEST_RATE } from './translate'
+import { DEFAULT_TRANSLATION_NODE_STYLE } from './translation-node-style'
 
 export const CONFIG_STORAGE_KEY = 'config'
-export const CONFIG_SCHEMA_VERSION = 11
+export const CONFIG_SCHEMA_VERSION = 12
 
 export const DEFAULT_PROVIDER_CONFIG: ProvidersConfig = {
   openai: {
@@ -90,6 +91,7 @@ export const DEFAULT_CONFIG: Config = {
       capacity: DEFAULT_REQUEST_CAPACITY,
       rate: DEFAULT_REQUEST_RATE,
     },
+    translationNodeStyle: DEFAULT_TRANSLATION_NODE_STYLE,
   },
   floatingButton: {
     enabled: true,

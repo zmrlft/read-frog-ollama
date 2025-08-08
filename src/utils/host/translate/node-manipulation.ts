@@ -23,6 +23,7 @@ import {
   translateWalkedElement,
   walkAndLabelElement,
 } from '../dom/traversal'
+import { decorateTranslationNode } from './decorate-translation'
 import { translateText } from './translate-text'
 
 const translatingNodes = new Set<HTMLElement | Text>()
@@ -180,6 +181,7 @@ function insertTranslatedNodeIntoWrapper(
   }
 
   translatedNode.textContent = translatedText
+  decorateTranslationNode(translatedNode)
   translatedWrapperNode.appendChild(translatedNode)
 }
 
