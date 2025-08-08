@@ -103,6 +103,12 @@ options:
         description: 确认删除该 Prompt
         confirm: 确认
         cancel: 取消
+    translationStyle:
+      title: 翻译显示样式
+      description: 区分翻译结果的显示样式，具体展示样式可参考示例
+      style:
+        default: 无
+        blur: 模糊效果
 side:
   sourceLang: 来源语言
   targetLang: 目标语言

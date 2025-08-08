@@ -102,6 +102,12 @@ options:
         description: Confirm delete prompt
         confirm: Confirm
         cancel: Cancel
+    translationStyle:
+      title: Translation Display Style
+      description: Distinguish display styles for translation results (see sample for specific style demonstrations)
+      style:
+        default: None
+        blur: Blur Effect
 side:
   sourceLang: Source Language
   targetLang: Target Language

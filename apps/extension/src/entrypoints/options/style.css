@@ -1,3 +1,5 @@
+@import '@/assets/tailwind/custom-translation-node';
+
 body {
   /* Chrome set the font to 75% of the default size */
   font-size: initial; /* reset to 16px */

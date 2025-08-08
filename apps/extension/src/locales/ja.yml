@@ -100,7 +100,12 @@ options:
         title: プロンプトを削除
         description: このプロンプトを削除しますか
         confirm: 確認
-
+    translationStyle:
+      title: 翻訳表示スタイル
+      description: 翻訳結果の表示スタイルを区別（具体的な表示例はサンプルを参照）
+      style:
+        default: なし
+        blur: ぼかし効果
 side:
   sourceLang: ソース言語
   targetLang: 翻訳言語

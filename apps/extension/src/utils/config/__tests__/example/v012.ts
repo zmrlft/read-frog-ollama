@@ -1,4 +1,8 @@
-export const configExample = {
+import type { Config } from '@/types/config/config'
+
+export const description = 'Implement Translation Node Style'
+
+export const configExample: Config = {
   language: {
     detectedCode: 'eng',
     sourceCode: 'auto',
@@ -80,6 +84,7 @@ Input:
       capacity: 300,
       rate: 5,
     },
+    translationNodeStyle: 'default',
   },
   floatingButton: {
     enabled: true,

@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { HOTKEYS } from '@/utils/constants/hotkeys'
 import { MIN_TRANSLATE_CAPACITY, MIN_TRANSLATE_RATE } from '@/utils/constants/translate'
+import { TRANSLATION_NODE_STYLE } from '@/utils/constants/translation-node-style'
 /* ──────────────────────────────
   Single source of truth
   ────────────────────────────── */
@@ -133,6 +134,9 @@ export type TranslateModels = z.infer<typeof translateModelsSchema>
 export const pageTranslateRangeSchema = z.enum(['main', 'all'])
 export type PageTranslateRange = z.infer<typeof pageTranslateRangeSchema>
 
+export const translationNodeStyleSchema = z.enum(TRANSLATION_NODE_STYLE)
+export type TranslationNodeStyle = z.infer<typeof translationNodeStyleSchema>
+
 export const translatePromptObjSchema = z.object({
   name: z.string(),
   id: z.string(),
@@ -165,6 +169,7 @@ export const translateConfigSchema = z.object({
   }),
   promptsConfig: promptsConfigSchema,
   requestQueueConfig: requestQueueConfigSchema,
+  translationNodeStyle: translationNodeStyleSchema,
 })
 export type RequestQueueConfig = z.infer<typeof requestQueueConfigSchema>
 export type TranslateConfig = z.infer<typeof translateConfigSchema>
