@@ -53,23 +53,6 @@ export default defineContentScript({
         // );
         protectSelectAllShadowRoot(shadowHost, wrapper)
 
-        const queryClient = new QueryClient({
-          queryCache: new QueryCache({
-            onError: (error, query) => {
-              const errorDescription
-                = query.meta?.errorDescription || 'Something went wrong'
-              toast.error(`${errorDescription}: ${error.message}`)
-            },
-          }),
-          mutationCache: new MutationCache({
-            onError: (error, _variables, _context, mutation) => {
-              const errorDescription
-                = mutation.meta?.errorDescription || 'Something went wrong'
-              toast.error(`${errorDescription}: ${error.message}`)
-            },
-          }),
-        })
-
         const HydrateAtoms = ({
           initialValues,
           children,
@@ -82,6 +65,27 @@ export default defineContentScript({
         }
 
         buildTranslationPort()
+
+        const queryClient = new QueryClient({
+          queryCache: new QueryCache({
+            onError: (error, query) => {
+              const errorDescription
+              = query.meta?.errorDescription || 'Something went wrong'
+              toast.error(`${errorDescription}: ${error.message}`, {
+                duration: 10000000000,
+              })
+            },
+          }),
+          mutationCache: new MutationCache({
+            onError: (error, _variables, _context, mutation) => {
+              const errorDescription
+              = mutation.meta?.errorDescription || 'Something went wrong'
+              toast.error(`${errorDescription}: ${error.message}`, {
+                duration: 10000000000,
+              })
+            },
+          }),
+        })
 
         const root = ReactDOM.createRoot(wrapper)
         root.render(
