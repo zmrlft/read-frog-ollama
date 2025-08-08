@@ -27,6 +27,8 @@ body:
     attributes:
       label: Is your feature request related to a problem? Please describe.
       description: A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+    validations:
+      required: true
   - type: textarea
     id: solution
     attributes:
@@ -43,6 +45,8 @@ body:
         - Browser Extension
         - Website
         - Other
+    validations:
+      required: true
   - type: textarea
     id: context
     attributes:
