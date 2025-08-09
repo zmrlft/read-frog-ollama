@@ -21,7 +21,7 @@ export default defineContentScript({
     const manager = new PageTranslationManager({
       root: null,
       rootMargin: '1000px',
-      threshold: 0.1,
+      threshold: 0,
     })
 
     manager.registerPageTranslationTriggers()
