@@ -1,39 +1,51 @@
 'use client'
 
+import type { AppRouter } from '@repo/api'
+import type { TRPCClientErrorLike } from '@trpc/client'
+import type { RouterOutputs } from '@/trpc/react'
+import { skipToken, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { Button } from '@/components/shadcn/button'
 import { cn } from '@/lib/cn'
-import { api } from '@/trpc/react'
+import { useTRPC } from '@/trpc/react'
 
 export function Test() {
   const [helloText, setHelloText] = useState('')
   const [newItemName, setNewItemName] = useState('')
 
+  const trpc = useTRPC()
+  const queryClient = useQueryClient()
+
   // Query for hello endpoint
-  const helloQuery = api.test.hello.useQuery(
-    { text: helloText },
-    {
-      enabled: helloText.length > 0,
-      refetchOnWindowFocus: false,
-    },
+  const helloQuery = useQuery(
+    trpc.test.hello.queryOptions(
+      helloText.length > 0 ? { text: helloText } : skipToken,
+      {
+        refetchOnWindowFocus: false,
+      },
+    ),
   )
 
   // Query for getting all test items
-  const testItemsQuery = api.test.get.useQuery(undefined, {
-    refetchOnWindowFocus: false,
-  })
+  const testItemsQuery = useQuery(
+    trpc.test.get.queryOptions(undefined, {
+      refetchOnWindowFocus: false,
+    }),
+  )
 
   // Mutation for creating new test items
-  const createItemMutation = api.test.create.useMutation({
-    onSuccess: () => {
-      // Refetch the items list after successful creation
-      testItemsQuery.refetch()
-      setNewItemName('')
-    },
-    onError: (error) => {
-      console.error('Failed to create item:', error)
-    },
-  })
+  const createItemMutation = useMutation(
+    trpc.test.create.mutationOptions({
+      onSuccess: () => {
+        // Invalidate the items list after successful creation
+        queryClient.invalidateQueries({ queryKey: trpc.test.get.queryKey() })
+        setNewItemName('')
+      },
+      onError: (error: TRPCClientErrorLike<AppRouter>) => {
+        console.error('Failed to create item:', error)
+      },
+    }),
+  )
 
   const handleCreateItem = () => {
     if (newItemName.trim()) {
@@ -167,7 +179,7 @@ export function Test() {
                   </div>
                 )
               : (
-                  testItemsQuery.data.map(item => (
+                  testItemsQuery.data.map((item: RouterOutputs['test']['get'][number]) => (
                     <div
                       key={item.id}
                       className="p-3 bg-gray-50 dark:bg-gray-700 rounded-md border"

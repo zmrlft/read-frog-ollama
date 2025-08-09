@@ -108,17 +108,17 @@ importers:
         specifier: ^3.34.0
         version: 3.34.0(react@19.1.1)
       '@tanstack/react-query':
-        specifier: ^5.83.0
-        version: 5.83.0(react@19.1.1)
+        specifier: ^5.84.2
+        version: 5.84.2(react@19.1.1)
       '@tanstack/react-query-devtools':
-        specifier: ^5.83.0
-        version: 5.83.0(@tanstack/react-query@5.83.0(react@19.1.1))(react@19.1.1)
+        specifier: ^5.84.2
+        version: 5.84.2(@tanstack/react-query@5.84.2(react@19.1.1))(react@19.1.1)
       '@trpc/client':
         specifier: ^11.4.4
         version: 11.4.4(@trpc/server@11.4.4(typescript@5.8.3))(typescript@5.8.3)
       '@trpc/tanstack-react-query':
         specifier: ^11.4.4
-        version: 11.4.4(@tanstack/react-query@5.83.0(react@19.1.1))(@trpc/client@11.4.4(@trpc/server@11.4.4(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.4.4(typescript@5.8.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.8.3)
+        version: 11.4.4(@tanstack/react-query@5.84.2(react@19.1.1))(@trpc/client@11.4.4(@trpc/server@11.4.4(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.4.4(typescript@5.8.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.8.3)
       '@webext-core/messaging':
         specifier: ^2.2.0
         version: 2.3.0
@@ -289,17 +289,17 @@ importers:
         specifier: ^3.34.0
         version: 3.34.0(react@19.1.1)
       '@tanstack/react-query':
-        specifier: ^5.83.0
-        version: 5.83.0(react@19.1.1)
+        specifier: ^5.84.2
+        version: 5.84.2(react@19.1.1)
       '@trpc/client':
         specifier: ^11.4.4
         version: 11.4.4(@trpc/server@11.4.4(typescript@5.8.3))(typescript@5.8.3)
-      '@trpc/react-query':
-        specifier: ^11.4.4
-        version: 11.4.4(@tanstack/react-query@5.83.0(react@19.1.1))(@trpc/client@11.4.4(@trpc/server@11.4.4(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.4.4(typescript@5.8.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.8.3)
       '@trpc/server':
         specifier: ^11.4.4
         version: 11.4.4(typescript@5.8.3)
+      '@trpc/tanstack-react-query':
+        specifier: ^11.4.4
+        version: 11.4.4(@tanstack/react-query@5.84.2(react@19.1.1))(@trpc/client@11.4.4(@trpc/server@11.4.4(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.4.4(typescript@5.8.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.8.3)
       '@vercel/analytics':
         specifier: ^1.5.0
         version: 1.5.0(next@15.4.4(@opentelemetry/api@1.9.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
@@ -339,6 +339,9 @@ importers:
       react-dom:
         specifier: ^19.1.1
         version: 19.1.1(react@19.1.1)
+      server-only:
+        specifier: ^0.0.1
+        version: 0.0.1
       superjson:
         specifier: ^2.2.2
         version: 2.2.2
@@ -2523,20 +2526,20 @@ packages:
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
 
-  '@tanstack/query-core@5.83.0':
-    resolution: {integrity: sha512-0M8dA+amXUkyz5cVUm/B+zSk3xkQAcuXuz5/Q/LveT4ots2rBpPTZOzd7yJa2Utsf8D2Upl5KyjhHRY+9lB/XA==}
+  '@tanstack/query-core@5.83.1':
+    resolution: {integrity: sha512-OG69LQgT7jSp+5pPuCfzltq/+7l2xoweggjme9vlbCPa/d7D7zaqv5vN/S82SzSYZ4EDLTxNO1PWrv49RAS64Q==}
 
-  '@tanstack/query-devtools@5.81.2':
-    resolution: {integrity: sha512-jCeJcDCwKfoyyBXjXe9+Lo8aTkavygHHsUHAlxQKKaDeyT0qyQNLKl7+UyqYH2dDF6UN/14873IPBHchcsU+Zg==}
+  '@tanstack/query-devtools@5.84.0':
+    resolution: {integrity: sha512-fbF3n+z1rqhvd9EoGp5knHkv3p5B2Zml1yNRjh7sNXklngYI5RVIWUrUjZ1RIcEoscarUb0+bOvIs5x9dwzOXQ==}
 
-  '@tanstack/react-query-devtools@5.83.0':
-    resolution: {integrity: sha512-yfp8Uqd3I1jgx8gl0lxbSSESu5y4MO2ThOPBnGNTYs0P+ZFu+E9g5IdOngyUGuo6Uz6Qa7p9TLdZEX3ntik2fQ==}
+  '@tanstack/react-query-devtools@5.84.2':
+    resolution: {integrity: sha512-ojJ66QoW9noqK35Lsmfqpfucj6wuOxLL2TYwEwpvU+iUQ5R/7TKpapWvpy9kZyNSl0mxv5mpS+ImfR8aL8/x3g==}
     peerDependencies:
-      '@tanstack/react-query': ^5.83.0
+      '@tanstack/react-query': ^5.84.2
       react: ^18 || ^19
 
-  '@tanstack/react-query@5.83.0':
-    resolution: {integrity: sha512-/XGYhZ3foc5H0VM2jLSD/NyBRIOK4q9kfeml4+0x2DlL6xVuAcVEW+hTlTapAmejObg0i3eNqhkr2dT+eciwoQ==}
+  '@tanstack/react-query@5.84.2':
+    resolution: {integrity: sha512-cZadySzROlD2+o8zIfbD978p0IphuQzRWiiH3I2ugnTmz4jbjc0+TdibpwqxlzynEen8OulgAg+rzdNF37s7XQ==}
     peerDependencies:
       react: ^18 || ^19
 
@@ -2567,16 +2570,6 @@ packages:
     resolution: {integrity: sha512-86OZl+Y+Xlt9ITGlhCMImERcsWCOrVzpNuzg3XBlsDSmSs9NGsghKjeCpJQlE36XaG3aze+o9pRukiYYvBqxgQ==}
     peerDependencies:
       '@trpc/server': 11.4.4
-      typescript: '>=5.7.2'
-
-  '@trpc/react-query@11.4.4':
-    resolution: {integrity: sha512-syXx1JLSERAHWh8BtBZsbv2PIt2nfvO1Sd6C6vHzNO8wAHxpcmq9HyEdrfi+5SfeRfPCJc/ZPCN2wVv98T+big==}
-    peerDependencies:
-      '@tanstack/react-query': ^5.80.3
-      '@trpc/client': 11.4.4
-      '@trpc/server': 11.4.4
-      react: '>=18.2.0'
-      react-dom: '>=18.2.0'
       typescript: '>=5.7.2'
 
   '@trpc/server@11.4.4':
@@ -6364,6 +6357,9 @@ packages:
     resolution: {integrity: sha512-2G2y++21dhj2R7iHAdd0FIzjGwuKZld+7Pl/bTU6YIkrC2ZMbVUjm+luj6A6V34Rv9XfKJDKpTWu9W4Gse1D9g==}
     engines: {node: '>=14.16'}
 
+  server-only@0.0.1:
+    resolution: {integrity: sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==}
+
   set-cookie-parser@2.7.1:
     resolution: {integrity: sha512-IOc8uWeOZgnb3ptbCURJWNjWUPcO3ZnTTdzsurqERrP6nPyv+paC55vJM0LpOlT2ne+Ix+9+CRG1MNLlyZ4GjQ==}
 
@@ -9380,19 +9376,19 @@ snapshots:
       - supports-color
       - typescript
 
-  '@tanstack/query-core@5.83.0': {}
+  '@tanstack/query-core@5.83.1': {}
 
-  '@tanstack/query-devtools@5.81.2': {}
+  '@tanstack/query-devtools@5.84.0': {}
 
-  '@tanstack/react-query-devtools@5.83.0(@tanstack/react-query@5.83.0(react@19.1.1))(react@19.1.1)':
+  '@tanstack/react-query-devtools@5.84.2(@tanstack/react-query@5.84.2(react@19.1.1))(react@19.1.1)':
     dependencies:
-      '@tanstack/query-devtools': 5.81.2
-      '@tanstack/react-query': 5.83.0(react@19.1.1)
+      '@tanstack/query-devtools': 5.84.0
+      '@tanstack/react-query': 5.84.2(react@19.1.1)
       react: 19.1.1
 
-  '@tanstack/react-query@5.83.0(react@19.1.1)':
+  '@tanstack/react-query@5.84.2(react@19.1.1)':
     dependencies:
-      '@tanstack/query-core': 5.83.0
+      '@tanstack/query-core': 5.83.1
       react: 19.1.1
 
   '@testing-library/dom@10.4.0':
@@ -9431,22 +9427,13 @@ snapshots:
       '@trpc/server': 11.4.4(typescript@5.8.3)
       typescript: 5.8.3
 
-  '@trpc/react-query@11.4.4(@tanstack/react-query@5.83.0(react@19.1.1))(@trpc/client@11.4.4(@trpc/server@11.4.4(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.4.4(typescript@5.8.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.8.3)':
-    dependencies:
-      '@tanstack/react-query': 5.83.0(react@19.1.1)
-      '@trpc/client': 11.4.4(@trpc/server@11.4.4(typescript@5.8.3))(typescript@5.8.3)
-      '@trpc/server': 11.4.4(typescript@5.8.3)
-      react: 19.1.1
-      react-dom: 19.1.1(react@19.1.1)
-      typescript: 5.8.3
-
   '@trpc/server@11.4.4(typescript@5.8.3)':
     dependencies:
       typescript: 5.8.3
 
-  '@trpc/tanstack-react-query@11.4.4(@tanstack/react-query@5.83.0(react@19.1.1))(@trpc/client@11.4.4(@trpc/server@11.4.4(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.4.4(typescript@5.8.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.8.3)':
+  '@trpc/tanstack-react-query@11.4.4(@tanstack/react-query@5.84.2(react@19.1.1))(@trpc/client@11.4.4(@trpc/server@11.4.4(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.4.4(typescript@5.8.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.8.3)':
     dependencies:
-      '@tanstack/react-query': 5.83.0(react@19.1.1)
+      '@tanstack/react-query': 5.84.2(react@19.1.1)
       '@trpc/client': 11.4.4(@trpc/server@11.4.4(typescript@5.8.3))(typescript@5.8.3)
       '@trpc/server': 11.4.4(typescript@5.8.3)
       react: 19.1.1
@@ -13647,6 +13634,8 @@ snapshots:
   serialize-error@11.0.3:
     dependencies:
       type-fest: 2.19.0
+
+  server-only@0.0.1: {}
 
   set-cookie-parser@2.7.1: {}
 

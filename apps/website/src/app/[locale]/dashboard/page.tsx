@@ -1,6 +1,6 @@
 import { auth } from '@repo/auth'
 import { headers } from 'next/headers'
-import { api } from '@/trpc/server'
+import { caller } from '@/trpc/server'
 import { Test } from './test'
 
 export default async function DashboardPage() {
@@ -8,7 +8,7 @@ export default async function DashboardPage() {
     headers: await headers(),
   })
 
-  const res = await api.test.hello({
+  const res = await caller.test.hello({
     text: 'world',
   })
 

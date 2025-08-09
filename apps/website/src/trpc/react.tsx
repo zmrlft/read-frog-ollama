@@ -4,15 +4,15 @@
 import type { AppRouter } from '@repo/api'
 import type { QueryClient } from '@tanstack/react-query'
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
-
 import { WEBSITE_DEV_PORT } from '@repo/constants'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { httpBatchStreamLink, loggerLink } from '@trpc/client'
-import { createTRPCReact } from '@trpc/react-query'
-
+import { createTRPCClient, httpBatchStreamLink, loggerLink } from '@trpc/client'
+import { createTRPCContext } from '@trpc/tanstack-react-query'
 import { useState } from 'react'
 import SuperJSON from 'superjson'
 import { createQueryClient } from './query-client'
+
+export const { TRPCProvider, useTRPC } = createTRPCContext<AppRouter>()
 
 let clientQueryClientSingleton: QueryClient | undefined
 function getQueryClient() {
@@ -25,8 +25,6 @@ function getQueryClient() {
 
   return clientQueryClientSingleton
 }
-
-export const api = createTRPCReact<AppRouter>()
 
 /**
  * Inference helper for inputs.
@@ -46,7 +44,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
   const queryClient = getQueryClient()
 
   const [trpcClient] = useState(() =>
-    api.createClient({
+    createTRPCClient<AppRouter>({
       links: [
         loggerLink({
           enabled: op =>
@@ -68,10 +66,9 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* eslint-disable-next-line react/no-context-provider */}
-      <api.Provider client={trpcClient} queryClient={queryClient}>
+      <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
         {props.children}
-      </api.Provider>
+      </TRPCProvider>
     </QueryClientProvider>
   )
 }
