@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const langCodeISO6393Schema = z.enum([
+export const LANG_CODE_ISO6393_OPTIONS = [
   'eng',
   'cmn',
   'cmn-Hant',
@@ -79,7 +79,9 @@ export const langCodeISO6393Schema = z.enum([
   'hnj',
   'ilo',
   'kaz',
-])
+] as const
+
+export const langCodeISO6393Schema = z.enum(LANG_CODE_ISO6393_OPTIONS)
 
 export const langCodeISO6391Schema = z.enum([
   'en', // English
