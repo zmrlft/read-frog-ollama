@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { configFields } from '@/utils/atoms/config'
+import { BLOCK_CONTENT_CLASS } from '@/utils/constants/dom-labels'
 import { TRANSLATION_NODE_STYLE } from '@/utils/constants/translation-node-style'
 import { decorateTranslationNode } from '@/utils/host/translate/decorate-translation'
 import { ConfigCard } from '../../components/config-card'
@@ -74,14 +75,14 @@ function CustomTranslationStyleExample() {
     if (translatedNode.current) {
       decorateTranslationNode(translatedNode.current, translationNodeStyle)
     }
-  }, [translationNodeStyle])
+  }, [translationNodeStyle, translatedNode])
 
   return (
     <div className="w-full flex flex-col gap-2 mt-4">
       <p className="text-sm">
         { originText }
       </p>
-      <p className="text-sm" ref={translatedNode}>
+      <p className={`text-sm ${BLOCK_CONTENT_CLASS}`} ref={translatedNode}>
         { translatedText }
       </p>
     </div>
