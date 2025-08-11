@@ -14,7 +14,7 @@ import { DEFAULT_REQUEST_CAPACITY, DEFAULT_REQUEST_RATE } from './translate'
 import { DEFAULT_TRANSLATION_NODE_STYLE } from './translation-node-style'
 
 export const CONFIG_STORAGE_KEY = 'config'
-export const CONFIG_SCHEMA_VERSION = 13
+export const CONFIG_SCHEMA_VERSION = 14
 
 export const DEFAULT_PROVIDER_CONFIG: ProvidersConfig = {
   openai: {
@@ -46,6 +46,11 @@ export const DEFAULT_READ_MODELS: ReadModels = {
     isCustomModel: false,
     customModel: '',
   },
+  gemini: {
+    model: 'gemini-2.5-pro',
+    isCustomModel: false,
+    customModel: '',
+  },
 }
 
 export const DEFAULT_TRANSLATE_MODELS: TranslateModels = {
@@ -63,7 +68,7 @@ export const DEFAULT_TRANSLATE_MODELS: TranslateModels = {
     customModel: '',
   },
   gemini: {
-    model: 'gemini-2.5-pro',
+    model: 'gemini-1.5-flash',
     isCustomModel: false,
     customModel: '',
   },
