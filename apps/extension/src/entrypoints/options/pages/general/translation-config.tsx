@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { isLLMTranslateProvider, pageTranslateRangeSchema, translateProviderModels } from '@/types/config/provider'
+import { isAPIProvider, isLLMTranslateProvider, pageTranslateRangeSchema, translateProviderModels } from '@/types/config/provider'
 import { configFields } from '@/utils/atoms/config'
 import { LLM_TRANSLATE_PROVIDER_ITEMS, PURE_TRANSLATE_PROVIDER_ITEMS } from '@/utils/constants/config'
 import { ConfigCard } from '../../components/config-card'
@@ -74,7 +74,7 @@ function TranslateProviderSelector() {
   const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
   const providersConfig = useAtomValue(configFields.providersConfig)
 
-  const providerConfig = isLLMTranslateProvider(translateConfig.provider)
+  const providerConfig = isAPIProvider(translateConfig.provider)
     ? providersConfig[translateConfig.provider]
     : null
 

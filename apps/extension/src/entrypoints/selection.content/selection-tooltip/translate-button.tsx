@@ -10,7 +10,7 @@ import { isPureTranslateProvider } from '@/types/config/provider'
 import { authClient } from '@/utils/auth/auth-client'
 import { globalConfig } from '@/utils/config/config'
 import { WEBSITE_URL } from '@/utils/constants/url'
-import { googleTranslate, microsoftTranslate } from '@/utils/host/translate/api'
+import { deeplxTranslate, googleTranslate, microsoftTranslate } from '@/utils/host/translate/api'
 import { sendMessage } from '@/utils/message'
 import { getTranslatePrompt } from '@/utils/prompts/translate'
 import { getTranslateModel } from '@/utils/provider'
@@ -135,6 +135,9 @@ export function TranslatePopover() {
         }
         else if (provider === 'microsoft') {
           setTranslatedText(await microsoftTranslate(selectionContent, sourceLang, targetLang))
+        }
+        else if (provider === 'deeplx') {
+          setTranslatedText(await deeplxTranslate(selectionContent, sourceLang, targetLang))
         }
       }
       else if (modelString) {
