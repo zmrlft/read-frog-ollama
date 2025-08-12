@@ -3,6 +3,7 @@ import type { LLMTranslateProviderNames } from '@/types/config/provider'
 import { storage } from '#imports'
 import { generateText } from 'ai'
 import { CONFIG_STORAGE_KEY, DEFAULT_PROVIDER_CONFIG } from '@/utils/constants/config'
+import { sendMessage } from '@/utils/message'
 import { getTranslateModel } from '@/utils/provider'
 
 export async function aiTranslate(provider: LLMTranslateProviderNames, modelString: string, prompt: string) {
@@ -83,6 +84,7 @@ export async function deeplxTranslate(
   sourceText: string,
   fromLang: string,
   toLang: string,
+  options?: { backgroundFetch?: boolean },
 ): Promise<string> {
   const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`)
   const baseURL = config?.providersConfig?.deeplx?.baseURL ?? DEFAULT_PROVIDER_CONFIG.deeplx.baseURL
@@ -95,26 +97,54 @@ export async function deeplxTranslate(
   const formatLang = (lang: string) => (lang === 'auto' ? 'auto' : lang.toUpperCase())
   const url = `${baseURL.replace(/\/$/, '')}${apiKey ? `/${apiKey}` : ''}/translate`
 
+  const requestBody = JSON.stringify({
+    text: sourceText,
+    source_lang: formatLang(fromLang),
+    target_lang: formatLang(toLang),
+  })
+
+  // Choose fetch implementation based on options
+  const fetchResponse = options?.backgroundFetch
+    ? await fetchViaBackground(url, requestBody)
+    : await fetchDirect(url, requestBody)
+
+  return parseDeepLXResponse(fetchResponse)
+}
+
+async function fetchViaBackground(url: string, body: string) {
+  const resp = await sendMessage('backgroundFetch', {
+    url,
+    method: 'POST',
+    headers: [['Content-Type', 'application/json']],
+    body,
+    credentials: 'omit',
+  })
+
+  return {
+    ok: resp.status >= 200 && resp.status < 300,
+    status: resp.status,
+    statusText: resp.statusText,
+    text: () => Promise.resolve(resp.body),
+    json: () => Promise.resolve(JSON.parse(resp.body)),
+  }
+}
+
+async function fetchDirect(url: string, body: string) {
   const resp = await fetch(url, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      text: sourceText,
-      source_lang: formatLang(fromLang),
-      target_lang: formatLang(toLang),
-    }),
+    headers: { 'Content-Type': 'application/json' },
+    body,
   }).catch((error) => {
     throw new Error(`Network error during DeepLX translation: ${error.message}`)
   })
 
+  return resp
+}
+
+async function parseDeepLXResponse(resp: { ok: boolean, status: number, statusText: string, json: () => Promise<any> }) {
   if (!resp.ok) {
-    const errorText = await resp
-      .text()
-      .catch(() => 'Unable to read error response')
     throw new Error(
-      `DeepLX translation request failed: ${resp.status} ${resp.statusText}${errorText ? ` - ${errorText}` : ''}`,
+      `DeepLX translation request failed: ${resp.status} ${resp.statusText}`,
     )
   }
 
