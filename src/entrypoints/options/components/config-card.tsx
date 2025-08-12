@@ -1,4 +1,4 @@
-import { cn } from '@/utils/tailwind'
+import { cn } from '@repo/ui/lib/utils'
 
 export function ConfigCard({ title, description, children, className }: { title: React.ReactNode, description: React.ReactNode, children: React.ReactNode, className?: string }) {
   return (

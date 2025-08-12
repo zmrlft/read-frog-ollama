@@ -1,7 +1,7 @@
+import { Button } from '@repo/ui/components/button'
 import guest from '@/assets/icons/avatars/guest.png'
 import { authClient } from '@/utils/auth/auth-client'
 import { WEBSITE_URL } from '@/utils/constants/url'
-import { Button } from './ui/button'
 
 export function UserAccount() {
   const { data, isPending } = authClient.useSession()

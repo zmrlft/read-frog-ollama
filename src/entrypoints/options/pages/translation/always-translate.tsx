@@ -1,8 +1,6 @@
 import { Icon } from '@iconify/react'
-import { useAtom } from 'jotai'
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Button } from '@repo/ui/components/button'
+import { Input } from '@repo/ui/components/input'
 import {
   Table,
   TableBody,
@@ -10,7 +8,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from '@repo/ui/components/table'
+import { useAtom } from 'jotai'
+import { useState } from 'react'
 import { configFields } from '@/utils/atoms/config'
 import { ConfigCard } from '../../components/config-card'
 

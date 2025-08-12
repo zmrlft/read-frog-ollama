@@ -1,8 +1,5 @@
 import type { TranslationNodeStyle } from '@/types/config/provider'
 import { i18n } from '#imports'
-import deepmerge from 'deepmerge'
-import { useAtom, useAtomValue } from 'jotai'
-import { useEffect, useRef } from 'react'
 import {
   Select,
   SelectContent,
@@ -10,7 +7,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@repo/ui/components/select'
+import deepmerge from 'deepmerge'
+import { useAtom, useAtomValue } from 'jotai'
+import { useEffect, useRef } from 'react'
 import { configFields } from '@/utils/atoms/config'
 import { BLOCK_CONTENT_CLASS } from '@/utils/constants/dom-labels'
 import { TRANSLATION_NODE_STYLE } from '@/utils/constants/translation-node-style'

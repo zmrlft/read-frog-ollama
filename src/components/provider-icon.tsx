@@ -1,4 +1,4 @@
-import { cn } from '@/utils/tailwind'
+import { cn } from '@repo/ui/lib/utils'
 
 export default function ProviderIcon({ logo, name, className }: { logo: string, name?: string, className?: string }) {
   return (

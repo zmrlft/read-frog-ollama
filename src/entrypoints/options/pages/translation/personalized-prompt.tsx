@@ -2,9 +2,6 @@ import type { PromptConfigList } from '../../utils/prompt-file'
 import type { TranslatePromptObj } from '@/types/config/provider'
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
-import { useAtom, useAtomValue } from 'jotai'
-import { useState } from 'react'
-import { toast } from 'sonner'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,8 +12,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
-import { Button } from '@/components/ui/button'
+} from '@repo/ui/components/alert-dialog'
+import { Button } from '@repo/ui/components/button'
 import {
   Card,
   CardAction,
@@ -24,10 +21,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+} from '@repo/ui/components/card'
+import { Checkbox } from '@repo/ui/components/checkbox'
+import { Input } from '@repo/ui/components/input'
+import { Label } from '@repo/ui/components/label'
 import {
   Sheet,
   SheetClose,
@@ -36,8 +33,11 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet'
-import { Textarea } from '@/components/ui/textarea'
+} from '@repo/ui/components/sheet'
+import { Textarea } from '@repo/ui/components/textarea'
+import { useAtom, useAtomValue } from 'jotai'
+import { useState } from 'react'
+import { toast } from 'sonner'
 import { configFields } from '@/utils/atoms/config'
 import { DEFAULT_TRANSLATE_PROMPT_ID } from '@/utils/constants/prompt'
 import { ConfigCard } from '../../components/config-card'

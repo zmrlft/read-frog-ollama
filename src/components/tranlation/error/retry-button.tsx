@@ -1,7 +1,7 @@
 import type { TransNode } from '@/types/dom'
 import { Icon } from '@iconify/react'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/ui/components/tooltip'
 import { use } from 'react'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { translateNodes } from '@/utils/host/translate/node-manipulation'
 import { ShadowWrapperContext } from '@/utils/react-shadow-host/create-shadow-host'
 

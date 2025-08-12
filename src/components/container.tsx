@@ -1,4 +1,4 @@
-import { cn } from '@/utils/tailwind'
+import { cn } from '@repo/ui/lib/utils'
 
 function Container({ ref, className, children, ...props }: React.ComponentPropsWithoutRef<'div'> & { ref?: React.RefObject<HTMLDivElement | null> }) {
   return (

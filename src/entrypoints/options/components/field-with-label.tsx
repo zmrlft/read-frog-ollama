@@ -1,4 +1,4 @@
-import { cn } from '@/utils/tailwind'
+import { cn } from '@repo/ui/lib/utils'
 
 export function FieldWithLabel(
   { id, label, children, className }:

@@ -7,23 +7,24 @@ import type { ReadProviderNames } from '@/types/config/provider'
 import type { ArticleExplanation } from '@/types/content'
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
-import { SelectGroup } from '@radix-ui/react-select'
-import { useMutationState } from '@tanstack/react-query'
-// import { onMessage } from "@/utils/message";
-import { useAtom, useSetAtom } from 'jotai'
-import ProviderIcon from '@/components/provider-icon'
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectLabel,
   SelectTrigger,
-} from '@/components/ui/select'
+} from '@repo/ui/components/select'
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/components/ui/tooltip'
+} from '@repo/ui/components/tooltip'
+import { cn } from '@repo/ui/lib/utils'
+import { useMutationState } from '@tanstack/react-query'
+// import { onMessage } from "@/utils/message";
+import { useAtom, useSetAtom } from 'jotai'
+import ProviderIcon from '@/components/provider-icon'
 import {
   LANG_CODE_TO_EN_NAME,
   LANG_CODE_TO_LOCALE_NAME,
@@ -33,7 +34,6 @@ import {
 import { configFields } from '@/utils/atoms/config'
 import { READ_PROVIDER_ITEMS } from '@/utils/constants/config'
 import { DOWNLOAD_FILE_ITEMS } from '@/utils/constants/side'
-import { cn } from '@/utils/tailwind'
 import { shadowWrapper } from '../..'
 import { isSideOpenAtom } from '../../atoms'
 import downloader from '../../utils/downloader'

@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
+import { Alert, AlertDescription, AlertTitle } from '@repo/ui/components/alert'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@repo/ui/components/hover-card'
 import { use } from 'react'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
 import { ShadowWrapperContext } from '@/utils/react-shadow-host/create-shadow-host'
 
 export function ErrorButton({ error }: { error: Error }) {

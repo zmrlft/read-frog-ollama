@@ -1,13 +1,13 @@
 import { browser, i18n } from '#imports'
+import { Button } from '@repo/ui/components/button'
+
+import { cn } from '@repo/ui/lib/utils'
 import { useAtomValue } from 'jotai'
-
 import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
-import { configFields } from '@/utils/atoms/config'
 
+import { configFields } from '@/utils/atoms/config'
 import { isAnyAPIKey } from '@/utils/config/config'
 import { sendMessage } from '@/utils/message'
-import { cn } from '@/utils/tailwind'
 import { isIgnoreTabAtom } from '../atoms/ignore'
 
 export default function ReadButton({ className }: { className?: string }) {

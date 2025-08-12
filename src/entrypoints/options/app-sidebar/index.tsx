@@ -1,7 +1,5 @@
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
-import { Link } from 'react-router'
-import readFrogLogo from '@/assets/icons/read-frog.png'
 import {
   Sidebar,
   SidebarContent,
@@ -12,7 +10,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@/components/ui/sidebar'
+} from '@repo/ui/components/sidebar'
+import { Link } from 'react-router'
+import readFrogLogo from '@/assets/icons/read-frog.png'
 import { version } from '../../../../package.json'
 import { NAV_ITEMS } from './nav-items'
 

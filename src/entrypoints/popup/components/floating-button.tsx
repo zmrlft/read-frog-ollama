@@ -1,6 +1,6 @@
 import { i18n } from '#imports'
+import { Switch } from '@repo/ui/components/switch'
 import { useAtom } from 'jotai'
-import { Switch } from '@/components/ui/switch'
 import { configFields } from '@/utils/atoms/config'
 
 export default function FloatingButton() {
