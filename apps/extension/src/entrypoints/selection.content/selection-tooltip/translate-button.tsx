@@ -137,7 +137,7 @@ export function TranslatePopover() {
           setTranslatedText(await microsoftTranslate(selectionContent, sourceLang, targetLang))
         }
         else if (provider === 'deeplx') {
-          setTranslatedText(await deeplxTranslate(selectionContent, sourceLang, targetLang))
+          setTranslatedText(await deeplxTranslate(selectionContent, sourceLang, targetLang, { backgroundFetch: true }))
         }
       }
       else if (modelString) {
