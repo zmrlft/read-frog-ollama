@@ -111,6 +111,7 @@ options:
         default: 无
         blur: 模糊效果
         blockquote: 引用样式
+        weakened: 弱化
 side:
   sourceLang: 来源语言
   targetLang: 目标语言
