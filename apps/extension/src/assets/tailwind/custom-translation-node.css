@@ -17,3 +17,8 @@
   border-left: 4px solid var(--read-frog-primary);
   padding: 4px 0 4px 12px;
 }
+
+[data-read-frog-custom-translation-style='weakened'] {
+  opacity: 1;
+  color: var(--muted-foreground);
+}

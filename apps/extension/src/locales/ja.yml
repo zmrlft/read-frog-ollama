@@ -108,6 +108,7 @@ options:
         default: なし
         blur: ぼかし効果
         blockquote: 引用スタイル
+        weakened: 弱化
 side:
   sourceLang: ソース言語
   targetLang: 翻訳言語

@@ -110,6 +110,7 @@ options:
         default: None
         blur: Blur Effect
         blockquote: Blockquote Style
+        weakened: Weakened
 side:
   sourceLang: Source Language
   targetLang: Target Language
