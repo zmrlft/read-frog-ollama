@@ -1,10 +1,10 @@
 'use client'
 
+import { Button } from '@repo/ui/components/button'
 import { IconArrowRight } from '@tabler/icons-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Button } from '@/components/shadcn/button'
 import { useExtensionPinned } from '@/hooks/useExtensionPinned'
 
 export default function GuidePage() {
@@ -20,7 +20,7 @@ export default function GuidePage() {
         <div className="mt-6">
           {isPinned === true
             ? (
-                <Button asChild variant="primary" disabled>
+                <Button asChild disabled>
                   <Link href="/guide/step-3">
                     {t('guide.continue')}
                     {' '}
@@ -29,7 +29,7 @@ export default function GuidePage() {
                 </Button>
               )
             : (
-                <Button variant="primary" disabled>
+                <Button disabled>
                   {t('guide.continue')}
                   {' '}
                   <IconArrowRight className="size-4" />

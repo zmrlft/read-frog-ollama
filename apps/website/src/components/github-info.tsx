@@ -1,5 +1,5 @@
 import type { AnchorHTMLAttributes } from 'react'
-import { cn } from '../lib/cn'
+import { cn } from '@repo/ui/lib/utils'
 import { Star } from './icons'
 
 async function getRepoStarsAndForks(

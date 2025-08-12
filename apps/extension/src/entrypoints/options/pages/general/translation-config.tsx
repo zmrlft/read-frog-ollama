@@ -1,11 +1,8 @@
 import type { PageTranslateRange, TranslateProviderNames } from '@/types/config/provider'
 import { i18n } from '#imports'
 
-import deepmerge from 'deepmerge'
-import { useAtom, useAtomValue } from 'jotai'
-import ProviderIcon from '@/components/provider-icon'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Input } from '@/components/ui/input'
+import { Checkbox } from '@repo/ui/components/checkbox'
+import { Input } from '@repo/ui/components/input'
 import {
   Select,
   SelectContent,
@@ -14,7 +11,10 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@repo/ui/components/select'
+import deepmerge from 'deepmerge'
+import { useAtom, useAtomValue } from 'jotai'
+import ProviderIcon from '@/components/provider-icon'
 import { isAPIProvider, isLLMTranslateProvider, pageTranslateRangeSchema, translateProviderModels } from '@/types/config/provider'
 import { configFields } from '@/utils/atoms/config'
 import { LLM_TRANSLATE_PROVIDER_ITEMS, PURE_TRANSLATE_PROVIDER_ITEMS } from '@/utils/constants/config'

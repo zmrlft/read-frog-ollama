@@ -1,5 +1,6 @@
 import type { Config } from '@/types/config/config'
 import { browser, createShadowRootUi, defineContentScript } from '#imports'
+import { TooltipProvider } from '@repo/ui/components/tooltip'
 import {
   MutationCache,
   QueryCache,
@@ -12,7 +13,6 @@ import { Provider as JotaiProvider } from 'jotai/react'
 import { useHydrateAtoms } from 'jotai/utils'
 import ReactDOM from 'react-dom/client'
 import { toast } from 'sonner'
-import { TooltipProvider } from '@/components/ui/tooltip'
 import { configAtom } from '@/utils/atoms/config'
 import { globalConfig, loadGlobalConfig } from '@/utils/config/config'
 import { APP_NAME } from '@/utils/constants/app'

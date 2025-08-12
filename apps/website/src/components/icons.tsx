@@ -1,11 +1,11 @@
 import type { ComponentProps } from 'react'
+import { cn } from '@repo/ui/lib/utils'
 /**
  * @license lucide-react - ISC
  *
  * All copyright belongs to https://github.com/lucide-icons/lucide, we bundle it as part of library to avoid upstream issues.
  */
 import { createElement } from 'react'
-import { cn } from '../lib/cn'
 
 const defaultAttributes: LucideProps = {
   xmlns: 'http://www.w3.org/2000/svg',

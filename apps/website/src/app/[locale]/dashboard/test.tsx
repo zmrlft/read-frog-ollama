@@ -3,10 +3,10 @@
 import type { AppRouter } from '@repo/api'
 import type { TRPCClientErrorLike } from '@trpc/client'
 import type { RouterOutputs } from '@/trpc/react'
+import { Button } from '@repo/ui/components/button'
+import { cn } from '@repo/ui/lib/utils'
 import { skipToken, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import { Button } from '@/components/shadcn/button'
-import { cn } from '@/lib/cn'
 import { useTRPC } from '@/trpc/react'
 
 export function Test() {

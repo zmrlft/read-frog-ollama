@@ -1,5 +1,5 @@
+import { cn } from '@repo/ui/lib/utils'
 import * as React from 'react'
-import { cn } from '@/lib/cn'
 
 function Container({
   className,

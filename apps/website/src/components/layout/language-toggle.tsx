@@ -1,13 +1,13 @@
 'use client'
 import type { ButtonHTMLAttributes, HTMLAttributes } from 'react'
-import { useI18n } from 'fumadocs-ui/contexts/i18n'
-import { cn } from '../../lib/cn'
-import { buttonVariants } from '../ui/button'
+import { buttonVariants } from '@repo/ui/components/button'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '../ui/popover'
+} from '@repo/ui/components/popover'
+import { cn } from '@repo/ui/lib/utils'
+import { useI18n } from 'fumadocs-ui/contexts/i18n'
 
 export type LanguageSelectProps = ButtonHTMLAttributes<HTMLButtonElement>
 
@@ -23,7 +23,7 @@ export function LanguageToggle(props: LanguageSelectProps): React.ReactElement {
         {...props}
         className={cn(
           buttonVariants({
-            color: 'ghost',
+            variant: 'ghost',
             className: 'gap-1.5 p-1.5',
           }),
           props.className,

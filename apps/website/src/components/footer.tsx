@@ -1,10 +1,10 @@
 import type { Locale } from '@/i18n/routing'
+import { cn } from '@repo/ui/lib/utils'
 import { useTranslations } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Container } from '@/components/container'
-import { cn } from '@/lib/cn'
 import { APP_NAME_LOCALE } from '@/lib/constants'
 
 const navigation = {

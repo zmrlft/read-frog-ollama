@@ -1,7 +1,6 @@
 import type { TranslatePromptObj } from '@/types/config/provider'
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
-import { useAtom } from 'jotai'
 import {
   Select,
   SelectContent,
@@ -9,8 +8,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+} from '@repo/ui/components/select'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/ui/components/tooltip'
+import { useAtom } from 'jotai'
 import { isLLMTranslateProvider } from '@/types/config/provider'
 import { configFields } from '@/utils/atoms/config'
 import { DEFAULT_TRANSLATE_PROMPT_ID } from '@/utils/constants/prompt'

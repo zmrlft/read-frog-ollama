@@ -1,10 +1,10 @@
 'use client'
 
+import { Button } from '@repo/ui/components/button'
 import { IconArrowRight } from '@tabler/icons-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Button } from '@/components/shadcn/button'
 import { useGetTargetLanguage } from '@/hooks/useGetTargetLanguage'
 import { useHasTranslation } from '@/hooks/useHasTranslation'
 
@@ -62,7 +62,7 @@ export default function GuidePage() {
         <div className="mt-6">
           {hasTranslated === true
             ? (
-                <Button variant="primary" asChild className="notranslate">
+                <Button asChild className="notranslate">
                   <Link href="/guide/step-4">
                     {t('guide.continue')}
                     {' '}
@@ -71,7 +71,7 @@ export default function GuidePage() {
                 </Button>
               )
             : (
-                <Button variant="primary" disabled>
+                <Button disabled>
                   {t('guide.continue')}
                   {' '}
                   <IconArrowRight className="size-4" />

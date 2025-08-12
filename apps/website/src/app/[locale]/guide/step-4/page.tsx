@@ -1,10 +1,10 @@
 'use client'
 
+import { Button } from '@repo/ui/components/button'
 import { IconArrowRight } from '@tabler/icons-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Button } from '@/components/shadcn/button'
 
 export default function GuidePage() {
   const t = useTranslations()
@@ -17,7 +17,7 @@ export default function GuidePage() {
         </p>
         <div className="mt-6">
           <div className="flex gap-2">
-            <Button asChild variant="primary" disabled>
+            <Button asChild disabled>
               <Link href="/">
                 {t('guide.finish')}
                 {' '}

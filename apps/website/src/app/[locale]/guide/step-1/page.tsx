@@ -3,18 +3,18 @@
 import type {
   LangCodeISO6393,
 } from '@/types/languages'
-import { IconArrowRight } from '@tabler/icons-react'
-import { useTranslations } from 'next-intl'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Button } from '@/components/shadcn/button'
+import { Button } from '@repo/ui/components/button'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/shadcn/select'
+} from '@repo/ui/components/select'
+import { IconArrowRight } from '@tabler/icons-react'
+import { useTranslations } from 'next-intl'
+import Image from 'next/image'
+import Link from 'next/link'
 import { useInitTargetLanguage } from '@/hooks/useInitTargetLanguage'
 import {
   LANG_CODE_TO_LOCALE_NAME,
@@ -54,7 +54,7 @@ export default function Step1Page() {
           </SelectContent>
         </Select>
         <div className="mt-6">
-          <Button asChild variant="primary">
+          <Button asChild>
             <Link href="/guide/step-2">
               {t('guide.continue')}
               {' '}

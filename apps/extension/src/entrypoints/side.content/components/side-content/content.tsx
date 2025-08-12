@@ -1,13 +1,13 @@
 import type { ArticleAnalysis, ArticleExplanation } from '@/types/content'
+import { Button } from '@repo/ui/components/button'
+
+import { Progress } from '@repo/ui/components/progress'
+
+import { ScrollArea } from '@repo/ui/components/scroll-area'
 import { useMutationState } from '@tanstack/react-query'
-
 import { useAtom, useAtomValue } from 'jotai'
-
 import { toast } from 'sonner'
 import LoadingDots from '@/components/loading-dots'
-import { Button } from '@/components/ui/button'
-import { Progress } from '@/components/ui/progress'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { useExtractContent } from '@/hooks/read/extract'
 import { useExplainArticle } from '@/hooks/read/read'
 import { progressAtom, readStateAtom } from '../../atoms'
