@@ -243,6 +243,7 @@ function ConfigurePrompt({ originPrompt }: { originPrompt?: TranslatePromptObj }
               <Textarea
                 id="prompt"
                 value={prompt.prompt}
+                className="max-h-100"
                 onChange={(e) => {
                   setPrompt({
                     ...prompt,
