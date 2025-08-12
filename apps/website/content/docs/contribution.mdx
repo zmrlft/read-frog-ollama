@@ -112,8 +112,8 @@ pnpm dev
 ```
 After startup, access the main website at: http://localhost:8888/.
 
-<Callout title="Windows environment variable configuration">
-  If you are currently in a Windows environment, you need to add a `web-ext.config.ts` file in the `apps/extension` directory to explicitly specify the browser path.  
+<Callout title="Open the extension in the specific browser">
+  You can modify the `web-ext.config.ts` file in the `apps/extension` directory to explicitly specify the browser path.
   ```javascript
   // apps/extension/web-ext.config.ts
   import { defineWebExtConfig } from 'wxt';
@@ -168,7 +168,10 @@ git checkout docs/xxxx
 # Merge the main branch into your local branch
 git rebase main
 
-# After manually resolving the conflicts, push the code again
+# Push the code again if there are conflicts after rebase
+git push --force-with-lease origin docs/xxxx
+
+# If there are no conflicts, push the code again
 git push origin docs/xxxx
 ```
 
@@ -231,7 +234,6 @@ To automatically load environment variables while developing the extension, such
 # apps/extension/.env.local
 WXT_OPENAI_API_KEY=xxx
 WXT_DEEPSEEK_API_KEY=xxx
-WXT_OPENROUTER_API_KEY=xxx
 ```
 
 ## Skip Google API Tests in China

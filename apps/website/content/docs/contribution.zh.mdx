@@ -111,8 +111,8 @@ pnpm dev
 ```
 启动后，在以下地址访问主网站：http://localhost:8888/。
 
-<Callout title="Windows 环境变量配置">
-  如果你当前在 Windows 环境，需要在 `apps/extension` 目录下添加 `web-ext.config.ts` 文件，显式指定浏览器路径。
+<Callout title="在特定浏览器中打开扩展">
+  你可以修改 `apps/extension` 目录下的 `web-ext.config.ts` 文件，显式指定浏览器路径。
   ```javascript
   // apps/extension/web-ext.config.ts
   import { defineWebExtConfig } from 'wxt';
@@ -164,7 +164,10 @@ git checkout docs/xxxx
 # 同步远程分支
 git rebase main
 
-# 手动解决完冲突后，再推送代码
+# 如果 rebase 后还有冲突，推送一次
+git push --force-with-lease origin docs/xxxx
+
+# 如果没有冲突，推送代码
 git push origin docs/xxxx
 ```
 
@@ -226,7 +229,6 @@ Summary >> ....
 # apps/extension/.env.local
 WXT_OPENAI_API_KEY=xxx
 WXT_DEEPSEEK_API_KEY=xxx
-WXT_OPENROUTER_API_KEY=xxx
 ```
 
 ## 在中国大陆跳过谷歌测试
