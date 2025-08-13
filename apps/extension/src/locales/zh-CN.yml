@@ -110,7 +110,7 @@ options:
       style:
         default: 无
         blur: 模糊效果
-        blockquote: 引用样式
+        blockquote: 引用
         weakened: 弱化
 side:
   sourceLang: 来源语言
