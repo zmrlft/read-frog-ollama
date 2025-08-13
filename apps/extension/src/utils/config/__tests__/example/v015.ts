@@ -1,6 +1,8 @@
-export const description = 'Add Gemini to read feature'
+import type { Config } from '@/types/config/config'
 
-export const configExample = {
+export const description = 'Add selectionToolbar'
+
+export const configExample: Config = {
   language: {
     detectedCode: 'eng',
     sourceCode: 'auto',
@@ -101,4 +103,5 @@ Input:
   sideContent: {
     width: 400,
   },
+  selectionToolbar: { enabled: true },
 }

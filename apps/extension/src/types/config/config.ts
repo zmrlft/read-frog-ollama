@@ -11,10 +11,16 @@ const languageSchema = z.object({
   targetCode: langCodeISO6393Schema,
   level: langLevel,
 })
+
 // Floating button schema
 const floatingButtonSchema = z.object({
   enabled: z.boolean(),
   position: z.number().min(0).max(1),
+})
+
+// Text selection button schema
+const selectionToolbarSchema = z.object({
+  enabled: z.boolean(),
 })
 
 // side content schema
@@ -29,6 +35,7 @@ export const configSchema = z.object({
   read: readConfigSchema,
   translate: translateConfigSchema,
   floatingButton: floatingButtonSchema,
+  selectionToolbar: selectionToolbarSchema,
   sideContent: sideContentSchema,
 })
 

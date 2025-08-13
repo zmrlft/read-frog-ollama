@@ -14,7 +14,7 @@ import { DEFAULT_REQUEST_CAPACITY, DEFAULT_REQUEST_RATE } from './translate'
 import { DEFAULT_TRANSLATION_NODE_STYLE } from './translation-node-style'
 
 export const CONFIG_STORAGE_KEY = 'config'
-export const CONFIG_SCHEMA_VERSION = 14
+export const CONFIG_SCHEMA_VERSION = 15
 
 export const DEFAULT_PROVIDER_CONFIG: ProvidersConfig = {
   openai: {
@@ -107,6 +107,9 @@ export const DEFAULT_CONFIG: Config = {
   floatingButton: {
     enabled: true,
     position: 0.66,
+  },
+  selectionToolbar: {
+    enabled: true,
   },
   sideContent: {
     width: DEFAULT_SIDE_CONTENT_WIDTH,
