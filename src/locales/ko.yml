@@ -8,7 +8,8 @@ popup:
   read: 기사 읽기
   translate: 번역
   showOriginal: 원문 보기
-  enabledFloatingButton: 플로팅 버튼 표시
+  enabledFloatingButton: 플로팅 버튼 활성화
+  enabledSelectionToolbar: 선택 툴바 활성화
   alwaysTranslate: 이 사이트 항상 번역
   options: 옵션
   hover: 마우스 오버

@@ -8,7 +8,8 @@ popup:
   read: 阅读文章
   translate: 翻译
   showOriginal: 显示原文
-  enabledFloatingButton: 开启悬浮按钮
+  enabledFloatingButton: 启用悬浮按钮
+  enabledSelectionToolbar: 启用选择工具栏
   alwaysTranslate: 总是翻译这个网站
   options: 选项
   hover: 鼠标悬停

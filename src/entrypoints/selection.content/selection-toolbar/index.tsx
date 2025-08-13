@@ -1,5 +1,6 @@
-import { useAtom, useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useEffect, useLayoutEffect, useRef } from 'react'
+import { configFields } from '@/utils/atoms/config'
 import { isTooltipVisibleAtom, selectionContentAtom } from './atom'
 import { TranslateButton, TranslatePopover } from './translate-button'
 
@@ -8,7 +9,7 @@ const UPWARD_OFFSET_Y = -10
 const MARGIN = 25
 const SELECTION_DIRECTION_THRESHOLD = 5
 
-export function SelectionTooltip() {
+export function SelectionToolbar() {
   const tooltipRef = useRef<HTMLDivElement>(null)
   const tooltipContainerRef = useRef<HTMLDivElement>(null)
   const tooltipPositionRef = useRef({ x: 0, y: 0 }) // use ref to avoid re-rendering
@@ -17,6 +18,7 @@ export function SelectionTooltip() {
   const isDraggingFromTooltipRef = useRef(false) // track if dragging started from tooltip
   const [isTooltipVisible, setIsTooltipVisible] = useAtom(isTooltipVisibleAtom)
   const setSelectionContent = useSetAtom(selectionContentAtom)
+  const selectionToolbar = useAtomValue(configFields.selectionToolbar)
 
   // Calculate position after tooltip is rendered
   useLayoutEffect(() => {
@@ -167,7 +169,7 @@ export function SelectionTooltip() {
 
   return (
     <div ref={tooltipContainerRef}>
-      {isTooltipVisible && (
+      {isTooltipVisible && selectionToolbar.enabled && (
         <div
           ref={tooltipRef}
           className="absolute z-[2147483647] bg-zinc-200 dark:bg-zinc-800 rounded-sm shadow-lg overflow-hidden flex items-center"
