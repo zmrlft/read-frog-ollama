@@ -24,7 +24,7 @@ export default function HotkeySelector() {
       >
         <SelectTrigger
           size="sm"
-          className="ring-none cursor-pointer truncate border-none bg-transparent pl-0 text-[13px] font-medium shadow-none hover:bg-transparent focus-visible:border-none focus-visible:ring-0 dark:bg-transparent dark:hover:bg-transparent"
+          className="py-0! h-5! ring-none cursor-pointer truncate border-none bg-transparent pl-0 text-[13px] font-medium shadow-none hover:bg-transparent focus-visible:border-none focus-visible:ring-0 dark:bg-transparent dark:hover:bg-transparent"
         >
           <div className="truncate">
             {i18n.t('popup.hover')}

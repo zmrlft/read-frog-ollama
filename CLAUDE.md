@@ -105,7 +105,7 @@ Next.js 15 app with:
 
 ## Commit Message Guidelines
 
-Follow conventional commits format: `type(scope): description`
+Follow conventional commits format: `type(scope): description`, keep the commit message concise and clear. and don't add `🤖 Generated with [Claude Code](https://claude.ai/code)` in the commit message.
 
 **Allowed commit types:**
 

@@ -10,7 +10,6 @@ import { initIsIgnoreTabAtom } from './atoms/ignore'
 import { AlwaysTranslate } from './components/always-translate'
 import FloatingButton from './components/floating-button'
 import Hotkey from './components/hotkey-selector'
-import LanguageLevelSelector from './components/language-level-selector'
 import LanguageOptionsSelector from './components/language-options-selector'
 import QuickLinks from './components/quick-links'
 import ReadButton from './components/read-button'
@@ -32,7 +31,7 @@ function App() {
       <div className="bg-background flex flex-col gap-4 px-6 pt-5 pb-4">
         <UserAccount />
         <LanguageOptionsSelector />
-        <LanguageLevelSelector />
+        {/* <LanguageLevelSelector /> */}
         <ReadProviderSelector />
         <TranslateProviderSelector />
         <TranslatePromptSelector />
