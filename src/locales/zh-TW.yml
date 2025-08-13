@@ -109,7 +109,7 @@ options:
       style:
         default: 無
         blur: 模糊效果
-        blockquote: 引用樣式
+        blockquote: 引用
         weakened: 弱化
 side:
   sourceLang: 來源語言

@@ -109,7 +109,7 @@ options:
       style:
         default: 없음
         blur: 흐림 효과
-        blockquote: 인용 스타일
+        blockquote: 인용
         weakened: 약화
 side:
   sourceLang: 원본 언어

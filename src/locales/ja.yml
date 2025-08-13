@@ -107,7 +107,7 @@ options:
       style:
         default: なし
         blur: ぼかし効果
-        blockquote: 引用スタイル
+        blockquote: 引用
         weakened: 弱化
 side:
   sourceLang: ソース言語
