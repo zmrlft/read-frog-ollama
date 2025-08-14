@@ -55,6 +55,7 @@ async function loadAPIKeyFromEnv() {
     return
   }
 
+  // eslint-disable-next-line turbo/no-undeclared-env-vars
   if (import.meta.env.DEV) {
     const newProviderConfig = Object.fromEntries(
       Object.entries(config.providersConfig).map(([provider, cfg]) => {

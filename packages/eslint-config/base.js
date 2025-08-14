@@ -22,6 +22,7 @@ const antfuConfig = {
   },
   rules: {
     'unused-imports/no-unused-imports': 'error',
+    'no-inner-declarations': 'error',
   },
 }
 

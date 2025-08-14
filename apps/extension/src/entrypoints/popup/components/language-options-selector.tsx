@@ -59,7 +59,7 @@ export default function LanguageOptionsSelector() {
           </div>
           <LangCodeSelectorChevronDownIcon />
         </SelectTrigger>
-        <SelectContent className="rounded-lg shadow-md">
+        <SelectContent className="rounded-lg shadow-md w-72">
           <SelectItem value="auto">
             {langCodeLabel(language.detectedCode)}
             <AutoLangCell />
@@ -84,7 +84,7 @@ export default function LanguageOptionsSelector() {
           </div>
           <LangCodeSelectorChevronDownIcon />
         </SelectTrigger>
-        <SelectContent className="rounded-lg shadow-md">
+        <SelectContent className="rounded-lg shadow-md w-72">
           {langCodeISO6393Schema.options.map(key => (
             <SelectItem key={key} value={key}>
               {langCodeLabel(key)}
