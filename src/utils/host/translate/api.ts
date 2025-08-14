@@ -1,16 +1,34 @@
+import type { JSONValue } from 'ai'
 import type { Config } from '@/types/config/config'
 import type { LLMTranslateProviderNames } from '@/types/config/provider'
 import { storage } from '#imports'
 import { generateText } from 'ai'
+import { THINKING_MODELS } from '@/types/config/provider'
 import { CONFIG_STORAGE_KEY, DEFAULT_PROVIDER_CONFIG } from '@/utils/constants/config'
 import { sendMessage } from '@/utils/message'
 import { getTranslateModel } from '@/utils/provider'
 
+/**
+ * Default budget for "thinking" mode models.
+ * Consider making this configurable via environment or user settings if needed.
+ */
+const DEFAULT_THINKING_BUDGET = 128;
+
 export async function aiTranslate(provider: LLMTranslateProviderNames, modelString: string, prompt: string) {
   const model = await getTranslateModel(provider, modelString)
+
+  const providerOptions: Record<string, Record<string, JSONValue>> = {
+    google: {
+      thinkingConfig: {
+        thinkingBudget: THINKING_MODELS.includes(modelString as (typeof THINKING_MODELS)[number]) ? DEFAULT_THINKING_BUDGET : 0,
+      },
+    },
+  }
+
   const { text } = await generateText({
     model,
     prompt,
+    providerOptions,
   })
   return text
 }
