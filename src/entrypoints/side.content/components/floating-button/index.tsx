@@ -100,7 +100,7 @@ export default function FloatingButton() {
 
   return (
     <div
-      className="group fixed z-[2147483647] flex flex-col items-end gap-2"
+      className="group fixed z-[2147483647] flex flex-col items-end gap-2 print:hidden"
       style={{
         right: isSideOpen
           ? `calc(${sideContent.width}px + var(--removed-body-scroll-bar-size, 0px))`
