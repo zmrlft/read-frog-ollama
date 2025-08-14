@@ -1,19 +1,55 @@
-import { browser, defineContentScript } from '#imports'
+import { browser, createShadowRootUi, defineContentScript } from '#imports'
+import { kebabCase } from 'case-anything'
+import ReactDOM from 'react-dom/client'
 // import eruda from 'eruda'
 import { globalConfig, loadGlobalConfig } from '@/utils/config/config'
+import { APP_NAME } from '@/utils/constants/app'
 import { shouldEnableAutoTranslation } from '@/utils/host/translate/auto-translation'
+import { validateTranslationConfig } from '@/utils/host/translate/translate-text'
 import { logger } from '@/utils/logger'
 import { sendMessage } from '@/utils/message'
+import { protectSelectAllShadowRoot } from '@/utils/select-all'
+import { insertShadowRootUIWrapperInto } from '@/utils/shadow-root'
+import { addStyleToShadow } from '@/utils/styles'
+import App from './app'
 import { registerNodeTranslationTriggers } from './translation-control/node-translation'
+
 import { PageTranslationManager } from './translation-control/page-translation'
 import './listen'
 import './style.css'
 
 export default defineContentScript({
   matches: ['*://*/*'],
-  async main() {
+  cssInjectionMode: 'ui',
+  async main(ctx) {
     await loadGlobalConfig()
     // eruda.init()
+
+    const ui = await createShadowRootUi(ctx, {
+      name: `${kebabCase(APP_NAME)}-selection`,
+      position: 'overlay',
+      anchor: 'body',
+      onMount: (container, shadow, shadowHost) => {
+        // Container is a body, and React warns when creating a root on the body, so create a wrapper div
+        const wrapper = insertShadowRootUIWrapperInto(container)
+        addStyleToShadow(shadow)
+        protectSelectAllShadowRoot(shadowHost, wrapper)
+
+        // Create a root on the UI container and render a component
+        const root = ReactDOM.createRoot(wrapper)
+        root.render(
+          <App />,
+        )
+        return root
+      },
+      onRemove: (root) => {
+        // Unmount the root when the UI is removed
+        root?.unmount()
+      },
+    })
+
+    // 4. Mount the UI
+    ui.mount()
 
     registerNodeTranslationTriggers()
 
@@ -56,6 +92,13 @@ export default defineContentScript({
           manager.stop()
         }
         else {
+          if (!validateTranslationConfig({
+            providersConfig: globalConfig!.providersConfig,
+            translate: globalConfig!.translate,
+            language: globalConfig!.language,
+          })) {
+            return
+          }
           manager.start()
         }
       }

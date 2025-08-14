@@ -4,6 +4,7 @@ import textSmallCSS from '@/assets/tailwind/text-small.css?inline'
 import themeCSS from '@/assets/tailwind/theme.css?inline'
 import { TranslationError } from '@/components/tranlation/error'
 import { Spinner } from '@/components/tranlation/spinner'
+import { globalConfig } from '@/utils/config/config'
 import { createReactShadowHost, removeReactShadowHost } from '@/utils/react-shadow-host/create-shadow-host'
 import {
   BLOCK_CONTENT_CLASS,
@@ -24,7 +25,7 @@ import {
   walkAndLabelElement,
 } from '../dom/traversal'
 import { decorateTranslationNode } from './decorate-translation'
-import { translateText } from './translate-text'
+import { translateText, validateTranslationConfig } from './translate-text'
 
 const translatingNodes = new Set<HTMLElement | Text>()
 
@@ -41,6 +42,13 @@ export async function hideOrShowNodeTranslation(point: Point) {
       removeShadowHostInTranslatedWrapper(wrapper)
       wrapper.remove()
     }
+    return
+  }
+  if (!validateTranslationConfig({
+    providersConfig: globalConfig!.providersConfig,
+    translate: globalConfig!.translate,
+    language: globalConfig!.language,
+  })) {
     return
   }
 

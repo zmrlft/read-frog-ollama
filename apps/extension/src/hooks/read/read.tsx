@@ -244,7 +244,7 @@ export function useReadArticle() {
 
   const mutate = async () => {
     if (!isAnyAPIKey(providersConfig)) {
-      toast.error(i18n.t('noConfig.warning'))
+      toast.error(i18n.t('noAPIKeyConfig.warning'))
       return
     }
     // Reset explainArticle data before starting a new read operation

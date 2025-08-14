@@ -2,7 +2,6 @@ import { Icon } from '@iconify/react'
 import { cn } from '@repo/ui/lib/utils'
 import { useAtom, useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
-import { Toaster } from 'sonner'
 import readFrogLogo from '@/assets/icons/read-frog.png'
 import { configFields } from '@/utils/atoms/config'
 import { APP_NAME } from '@/utils/constants/app'
@@ -146,7 +145,6 @@ export default function FloatingButton() {
           sendMessage('openOptionsPage', undefined)
         }}
       />
-      <Toaster richColors className="z-[2147483647] notranslate" duration={10000} />
     </div>
   )
 }

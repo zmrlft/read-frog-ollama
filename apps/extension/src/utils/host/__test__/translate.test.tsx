@@ -3,19 +3,25 @@ import { render, screen } from '@testing-library/react'
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest'
 
+import { DEFAULT_CONFIG } from '@/utils/constants/config'
+
 import {
   BLOCK_CONTENT_CLASS,
   CONTENT_WRAPPER_CLASS,
   INLINE_CONTENT_CLASS,
   NOTRANSLATE_CLASS,
 } from '@/utils/constants/dom-labels'
-
 import { translateWalkedElement, walkAndLabelElement } from '../dom/traversal'
 import { hideOrShowNodeTranslation, translateNodes } from '../translate/node-manipulation'
 import { translateText } from '../translate/translate-text'
 
 vi.mock('../translate/translate-text', () => ({
   translateText: vi.fn(() => Promise.resolve('translation')),
+  validateTranslationConfig: vi.fn(() => true),
+}))
+
+vi.mock('@/utils/config/config', () => ({
+  globalConfig: DEFAULT_CONFIG,
 }))
 
 async function hideOrShowPageTranslation(toggle: boolean = false) {

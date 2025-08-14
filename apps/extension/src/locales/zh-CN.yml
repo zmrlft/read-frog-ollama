@@ -133,7 +133,7 @@ languageLevels:
   beginner: 初级
   intermediate: 中级
   advanced: 高级
-noConfig:
+noAPIKeyConfig:
   warning: 如果想要使用 AI 模型，请先在选项页设置 API Key
   warningWithLink:
     youMust: 您必须先
@@ -141,3 +141,6 @@ noConfig:
     firstOnThe: 在
     optionsPage: 选项
     page: 页
+translation:
+  sameLanguage: 源语言和目标语言必须不同
+  autoModeSameLanguage: 检测到的语言 '$1' 与目标语言相同

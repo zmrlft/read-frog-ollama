@@ -132,7 +132,7 @@ languageLevels:
   beginner: 초급
   intermediate: 중급
   advanced: 고급
-noConfig:
+noAPIKeyConfig:
   warning: AI 모델을 사용하려면 먼저 옵션 페이지에서 API 키를 설정해 주세요
   warningWithLink:
     youMust: 반드시
@@ -140,3 +140,6 @@ noConfig:
     firstOnThe: 먼저
     optionsPage: 옵션
     page: 페이지에서
+translation:
+  sameLanguage: 원본 언어와 대상 언어는 달라야 합니다
+  autoModeSameLanguage: 감지된 언어 '$1'은(는) 대상 언어와 같습니다

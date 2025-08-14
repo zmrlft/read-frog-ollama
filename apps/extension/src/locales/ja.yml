@@ -130,7 +130,7 @@ languageLevels:
   beginner: 初級
   intermediate: 中級
   advanced: 上級
-noConfig:
+noAPIKeyConfig:
   warning: AIモデルを使用するには、まずオプションページでAPIキーを設定してください
   warningWithLink:
     youMust: まず
@@ -138,3 +138,6 @@ noConfig:
     firstOnThe: する必要があります（
     optionsPage: オプションページ
     page: ）
+translation:
+  sameLanguage: ソース言語とターゲット言語は異なる必要があります
+  autoModeSameLanguage: 検出された言語 '$1' はターゲット言語と同じです
