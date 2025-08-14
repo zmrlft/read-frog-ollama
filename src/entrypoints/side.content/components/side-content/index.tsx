@@ -2,7 +2,6 @@ import { cn } from '@repo/ui/lib/utils'
 import { kebabCase } from 'case-anything'
 import { useAtom, useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
-import { Toaster } from 'sonner'
 import { APIConfigWarning } from '@/components/api-config-warning'
 import { configFields } from '@/utils/atoms/config'
 import { isAnyAPIKey } from '@/utils/config/config'
@@ -116,7 +115,6 @@ export default function SideContent() {
           <Metadata className="mx-3" />
           <Content />
         </div>
-        <Toaster richColors className="z-[2147483647] notranslate" duration={10000} />
       </div>
 
       {/* Transparent overlay to prevent other events during resizing */}

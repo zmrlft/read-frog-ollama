@@ -1,6 +1,11 @@
-import { ISO6393_TO_6391, LANG_CODE_TO_EN_NAME } from '@/types/config/languages'
-import { isPureTranslateProvider } from '@/types/config/provider'
-import { globalConfig } from '../../config/config'
+import type { Config } from '@/types/config/config'
+import type { TRANSLATE_PROVIDER_MODELS } from '@/types/config/provider'
+import { i18n } from '#imports'
+import { toast } from 'sonner'
+import { ISO6393_TO_6391, LANG_CODE_TO_EN_NAME, LANG_CODE_TO_LOCALE_NAME } from '@/types/config/languages'
+import { isPureTranslateProvider, PURE_TRANSLATE_PROVIDERS } from '@/types/config/provider'
+import { logger } from '@/utils/logger'
+import { globalConfig, hasSetAPIKey } from '../../config/config'
 import { Sha256Hex } from '../../hash'
 import { sendMessage } from '../../message'
 import { getTranslatePrompt } from '../../prompts/translate'
@@ -58,4 +63,35 @@ export async function translateText(sourceText: string) {
   translatedText = translatedText.trim()
 
   return cleanSourceText === translatedText ? '' : translatedText
+}
+
+export function validateTranslationConfig(config: Pick<Config, 'providersConfig' | 'translate' | 'language'>): boolean {
+  const { providersConfig, translate: translateConfig, language: languageConfig } = config
+  const provider = translateConfig.provider
+
+  const isPure = PURE_TRANSLATE_PROVIDERS.includes(
+    provider as typeof PURE_TRANSLATE_PROVIDERS[number],
+  )
+  // 检查语言是否相同
+  if (isPure) {
+    if (languageConfig.sourceCode === languageConfig.targetCode) {
+      toast.error(i18n.t('translation.sameLanguage'))
+      logger.info('validateTranslationConfig: returning false (same language)')
+      return false
+    }
+    else if (languageConfig.sourceCode === 'auto' && languageConfig.detectedCode === languageConfig.targetCode) {
+      toast.warning(i18n.t('translation.autoModeSameLanguage', [
+        LANG_CODE_TO_LOCALE_NAME[languageConfig.detectedCode] ?? languageConfig.detectedCode,
+      ]))
+    }
+  }
+
+  // 检查API密钥是否配置
+  if (!isPure && !hasSetAPIKey(provider as keyof typeof TRANSLATE_PROVIDER_MODELS, providersConfig)) {
+    toast.error(i18n.t('noAPIKeyConfig.warning'))
+    logger.info('validateTranslationConfig: returning false (no API key)')
+    return false
+  }
+
+  return true
 }

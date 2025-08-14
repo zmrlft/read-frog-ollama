@@ -10,7 +10,7 @@ export function APIConfigWarning({ className }: { className?: string }) {
         className,
       )}
     >
-      {i18n.t('noConfig.warningWithLink.youMust')}
+      {i18n.t('noAPIKeyConfig.warningWithLink.youMust')}
       {' '}
       <a
         href="https://readfrog.app/tutorial/api-key"
@@ -18,20 +18,20 @@ export function APIConfigWarning({ className }: { className?: string }) {
         rel="noreferrer"
         className="underline"
       >
-        {i18n.t('noConfig.warningWithLink.setTheAPIKey')}
+        {i18n.t('noAPIKeyConfig.warningWithLink.setTheAPIKey')}
       </a>
       {' '}
-      {i18n.t('noConfig.warningWithLink.firstOnThe')}
+      {i18n.t('noAPIKeyConfig.warningWithLink.firstOnThe')}
       {' '}
       <button
         type="button"
         className="cursor-pointer underline"
         onClick={() => sendMessage('openOptionsPage', undefined)}
       >
-        {i18n.t('noConfig.warningWithLink.optionsPage')}
+        {i18n.t('noAPIKeyConfig.warningWithLink.optionsPage')}
       </button>
       {' '}
-      {i18n.t('noConfig.warningWithLink.page')}
+      {i18n.t('noAPIKeyConfig.warningWithLink.page')}
       .
     </div>
   )

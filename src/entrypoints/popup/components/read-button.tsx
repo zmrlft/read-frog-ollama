@@ -16,7 +16,7 @@ export default function ReadButton({ className }: { className?: string }) {
 
   const requestReadArticle = async () => {
     if (!isAnyAPIKey(providersConfig)) {
-      toast.error(i18n.t('noConfig.warning'))
+      toast.error(i18n.t('noAPIKeyConfig.warning'))
       return
     }
     const [currentTab] = await browser.tabs.query({

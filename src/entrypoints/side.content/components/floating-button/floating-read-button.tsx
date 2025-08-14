@@ -22,7 +22,7 @@ export default function FloatingReadButton() {
 
   const startReadArticle = () => {
     if (!isAnyAPIKey(providersConfig)) {
-      toast.error(i18n.t('noConfig.warning'))
+      toast.error(i18n.t('noAPIKeyConfig.warning'))
       return
     }
 

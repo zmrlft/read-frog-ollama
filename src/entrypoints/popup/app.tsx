@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/ui/components/tooltip'
 import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
-import { Toaster } from 'sonner'
+import FrogToast from '@/components/frog-toast'
 import { UserAccount } from '@/components/user-account'
 import { version } from '../../../package.json'
 import { initIsIgnoreTabAtom } from './atoms/ignore'
@@ -61,7 +61,7 @@ function App() {
         </span>
         <GithubButton />
       </div>
-      <Toaster richColors position="bottom-center" className="-translate-y-8" duration={10000} />
+      <FrogToast />
     </>
   )
 }
