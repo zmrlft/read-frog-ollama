@@ -13,9 +13,10 @@ export function smashTruncationStyle(element: HTMLElement) {
     element.style.maxHeight = 'unset'
   }
 
-  if (computedStyle.overflow === 'hidden') {
-    element.style.overflow = 'visible'
-  }
+  // fix this issue: https://github.com/mengxi-ream/read-frog/issues/222
+  // if (computedStyle.overflow === 'hidden') {
+  //   element.style.overflow = 'visible'
+  // }
 
   if (computedStyle.textOverflow === 'ellipsis') {
     element.style.textOverflow = 'unset'
