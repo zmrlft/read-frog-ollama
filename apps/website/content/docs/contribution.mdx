@@ -135,6 +135,25 @@ After startup, access the main website at: http://localhost:8888/.
   [details](https://wxt.dev/guide/essentials/config/browser-startup.html).
 </Callout>
 
+<Callout title="Persistent Chrome Profile">
+  **By default, web-ext creates a new profile every time you run the dev script.**
+
+  **Only Chromium browsers support persistent profiles with `--user-data-dir` flag:**
+
+  ```typescript
+  export default defineWebExtConfig({
+    chromiumArgs: ['--user-data-dir=./.wxt/chrome-data'],
+  });
+  ```
+
+  **Benefits:** Your profile persists between dev sessions, so you can:
+  - Install devtools extensions
+  - Remember logins
+  - Keep browser settings
+
+  **💡 TIP:** Use any directory for `--user-data-dir`. Current config creates a profile per project.
+</Callout>
+
 ## Submitting Code
 
 ### Create a new branch
