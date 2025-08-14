@@ -12,7 +12,7 @@ import { getTranslateModel } from '@/utils/provider'
  * Default budget for "thinking" mode models.
  * Consider making this configurable via environment or user settings if needed.
  */
-const DEFAULT_THINKING_BUDGET = 128;
+const DEFAULT_THINKING_BUDGET = 128
 
 export async function aiTranslate(provider: LLMTranslateProviderNames, modelString: string, prompt: string) {
   const model = await getTranslateModel(provider, modelString)

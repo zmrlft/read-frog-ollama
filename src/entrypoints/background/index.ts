@@ -2,9 +2,10 @@ import { browser, defineBackground } from '#imports'
 import { WEBSITE_URL } from '@/utils/constants/url'
 import { logger } from '@/utils/logger'
 import { onMessage, sendMessage } from '@/utils/message'
-import { setupCacheCleanup } from './cache-cleanup'
+import { setUpCacheCleanup } from './cache-cleanup'
 import { ensureConfig } from './config'
 import { newUserGuide } from './new-user-guide'
+import { proxyFetch } from './proxy-fetch'
 import { setUpRequestQueue } from './request-queue'
 import { translationMessage } from './translation'
 
@@ -40,30 +41,11 @@ export default defineBackground(() => {
     sendMessage('readArticle', undefined, message.data.tabId)
   })
 
-  // Proxy cross-origin fetches for content scripts and other contexts
-  onMessage('backgroundFetch', async (message) => {
-    const { url, method, headers, body, credentials } = message.data
-    const response = await fetch(url, {
-      method: method ?? 'POST',
-      headers: headers ? new Headers(headers) : undefined,
-      body,
-      credentials: credentials ?? 'include',
-    })
-
-    const responseHeaders: [string, string][] = Array.from(response.headers.entries())
-    const textBody = await response.text()
-
-    return {
-      status: response.status,
-      statusText: response.statusText,
-      headers: responseHeaders,
-      body: textBody,
-    }
-  })
-
   newUserGuide()
   translationMessage()
 
   setUpRequestQueue()
-  setupCacheCleanup()
+  setUpCacheCleanup()
+
+  proxyFetch()
 })
