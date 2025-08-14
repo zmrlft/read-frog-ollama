@@ -11,34 +11,36 @@ export function protectSelectAllShadowRoot(shadowHost: HTMLElement, wrapper: HTM
   window.addEventListener(
     'keydown',
     (e) => {
-      if (!(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== 'a')
-        return
+      // 只处理 Ctrl+A (Windows/Linux) 或 Cmd+A (Mac)
+      // metaKey 是 Mac 的 Command 键
+      // ctrlKey 是 Windows 的 Ctrl 键
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a' && !e.shiftKey) {
+        const active = document.activeElement
 
-      const active = document.activeElement
+        /* --- 分四种情况 --- */
+        if (shadowHost.contains(active)) {
+          // A. 焦点已经在组件里 → 放行默认行为
+          return
+        }
 
-      /* --- 分四种情况 --- */
-      if (shadowHost.contains(active)) {
-        // A. 焦点已经在组件里 → 放行默认行为
-        return
-      }
+        if (isEditableElement(active)) {
+          // B. 焦点在可编辑元素中（输入框、文本区域等）→ 放行默认行为
+          return
+        }
 
-      if (isEditableElement(active)) {
-        // B. 焦点在可编辑元素中（输入框、文本区域等）→ 放行默认行为
-        return
-      }
+        if (pointerInside) {
+          // C. 鼠标悬停在组件里 → 自定义"组件专选"
+          e.preventDefault()
+          e.stopPropagation()
+          requestAnimationFrame(() => selectAllInside(wrapper))
+          return
+        }
 
-      if (pointerInside) {
-        // C. 鼠标悬停在组件里 → 自定义"组件专选"
+        // D. 其它情况（宿主页面全选，但排除组件）
         e.preventDefault()
         e.stopPropagation()
-        requestAnimationFrame(() => selectAllInside(wrapper))
-        return
+        requestAnimationFrame(() => rebuildSelectionWithoutHost(shadowHost))
       }
-
-      // D. 其它情况（宿主页面全选，但排除组件）
-      e.preventDefault()
-      e.stopPropagation()
-      requestAnimationFrame(() => rebuildSelectionWithoutHost(shadowHost))
     },
     true, // capture
   )
