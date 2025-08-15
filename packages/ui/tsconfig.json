@@ -3,6 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": "src",
+    "paths": {
+      "@repo/ui/*": ["./src/*"]
+    },
     "types": ["node"]
   },
   "include": ["."],
