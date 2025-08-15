@@ -15,6 +15,9 @@ jobs:
     name: Database Migration
     runs-on: ubuntu-latest
     environment: Production
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
     steps:
       - name: Checkout Repo
