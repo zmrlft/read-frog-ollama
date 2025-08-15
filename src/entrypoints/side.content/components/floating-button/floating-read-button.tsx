@@ -18,7 +18,7 @@ export default function FloatingReadButton() {
     analyzeContent,
     explainArticle,
   } = useReadArticle()
-  const { data: extractedContent } = useExtractContent()
+  const { isPending: isExtractingContent, data: extractedContent } = useExtractContent()
 
   const startReadArticle = () => {
     if (!isAnyAPIKey(providersConfig)) {
@@ -27,8 +27,12 @@ export default function FloatingReadButton() {
     }
 
     setIsSideOpen(true)
-    if (!extractedContent) {
+    if (isExtractingContent) {
       toast.warning('Waiting content to be extracted...')
+      return
+    }
+    if (!isExtractingContent && !extractedContent) {
+      toast.error('Failed to extract content')
       return
     }
     if (analyzeContent.isPending || explainArticle.isPending) {
