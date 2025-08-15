@@ -34,8 +34,12 @@ export function Metadata({ className }: { className?: string }) {
   useEffect(() => {
     const removeListener = onMessage('readArticle', () => {
       setIsSideOpen(true)
-      if (!extractedContent) {
+      if (isExtractingContent) {
         toast.warning('Waiting content to be extracted...')
+        return
+      }
+      if (!isExtractingContent && !extractedContent) {
+        toast.error('Failed to extract content')
         return
       }
       if (analyzeContent.isPending || explainArticle.isPending) {
@@ -48,7 +52,7 @@ export function Metadata({ className }: { className?: string }) {
     return () => {
       removeListener()
     }
-  }, [extractedContent, analyzeContent, explainArticle, setIsSideOpen, readArticle])
+  }, [extractedContent, analyzeContent, explainArticle, setIsSideOpen, readArticle, isExtractingContent])
 
   return (
     <div

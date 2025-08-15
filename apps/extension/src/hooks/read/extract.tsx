@@ -23,33 +23,39 @@ function removeDummyNodes(root: Document) {
 export function useExtractContent() {
   const setLanguage = useSetAtom(configFields.language)
 
-  return useQuery<ExtractedContent>({
+  return useQuery<ExtractedContent | null>({
     queryKey: ['extractContent'],
     queryFn: async () => {
-      const documentClone = document.cloneNode(true)
-      removeDummyNodes(documentClone as Document)
-      const article = new Readability(documentClone as Document, {
-        serializer: el => el,
-      }).parse()
-      const paragraphs = article?.content
-        ? flattenToParagraphs(article.content)
-        : []
+      try {
+        const documentClone = document.cloneNode(true)
+        removeDummyNodes(documentClone as Document)
+        const article = new Readability(documentClone as Document, {
+          serializer: el => el,
+        }).parse()
+        const paragraphs = article?.content
+          ? flattenToParagraphs(article.content)
+          : []
 
-      // TODO: in analyzing, we should re-extract the article in case it changed, and reset the lang
-      const lang = article?.textContent ? franc(article.textContent) : 'und'
+        // TODO: in analyzing, we should re-extract the article in case it changed, and reset the lang
+        const lang = article?.textContent ? franc(article.textContent) : 'und'
 
-      logger.log('franc detected lang', lang)
+        logger.log('franc detected lang', lang)
 
-      setLanguage({
-        detectedCode: lang === 'und' ? 'eng' : (lang as LangCodeISO6393),
-      })
+        setLanguage({
+          detectedCode: lang === 'und' ? 'eng' : (lang as LangCodeISO6393),
+        })
 
-      return {
-        article: {
-          ...article,
-          lang,
-        },
-        paragraphs,
+        return {
+          article: {
+            ...article,
+            lang,
+          },
+          paragraphs,
+        }
+      }
+      catch (error) {
+        logger.error('Failed to extract content from document:', error)
+        return null
       }
     },
   })

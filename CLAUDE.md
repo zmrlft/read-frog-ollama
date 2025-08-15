@@ -130,3 +130,7 @@ Follow conventional commits format: `type(scope): description`, keep the commit 
 - `docs: update contribution guide`
 - `i18n(extension): add Japanese translations`
 - `ai(extension): integrate new DeepSeek model`
+
+## Language
+
+The code comments should be in English.
