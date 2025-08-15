@@ -10,6 +10,11 @@
       "persistent": true,
       "env": ["SKIP_ENV_VALIDATION"]
     },
+    "dev:edge": {
+      "cache": false,
+      "persistent": true,
+      "env": ["SKIP_ENV_VALIDATION"]
+    },
     "lint": {
       "dependsOn": ["^build"]
     },

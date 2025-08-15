@@ -12,6 +12,7 @@
     "db:migrate": "turbo db:migrate",
     "db:studio": "turbo db:studio",
     "dev": "turbo dev",
+    "dev:edge": "turbo dev:edge",
     "dev:extension": "turbo dev --filter=@read-frog/extension",
     "dev:website": "turbo dev --filter=@read-frog/website",
     "lint": "eslint . && turbo lint",

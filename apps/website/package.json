@@ -5,6 +5,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev -p 8888",
+    "dev:edge": "next dev -p 8888",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "postinstall": "fumadocs-mdx",
