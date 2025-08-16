@@ -20,7 +20,7 @@ import './style.css'
 
 export default defineContentScript({
   matches: ['*://*/*'],
-  cssInjectionMode: 'ui',
+  cssInjectionMode: 'manifest',
   async main(ctx) {
     await loadGlobalConfig()
     // eruda.init()

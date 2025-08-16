@@ -5,9 +5,18 @@ import { Toaster } from 'sonner'
 import frogIcon from '@/assets/icons/read-frog.png'
 import { APP_NAME } from '@/utils/constants/app'
 
-import './style.css'
-
-const frogIconElement = <img src={frogIcon} alt="🐸" />
+const frogIconElement = (
+  <img
+    src={frogIcon}
+    alt="🐸"
+    style={{
+      maxWidth: '100%',
+      height: 'auto',
+      minHeight: '20px',
+      minWidth: '20px',
+    }}
+  />
+)
 
 function FrogToast(props: React.ComponentProps<typeof Toaster>) {
   return (
