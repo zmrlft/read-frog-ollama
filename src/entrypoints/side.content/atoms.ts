@@ -5,6 +5,8 @@ export const store = createStore()
 
 export const isSideOpenAtom = atom(false)
 
+export const isDraggingButtonAtom = atom(false)
+
 export const progressAtom = atom({
   completed: 0,
   total: 0,

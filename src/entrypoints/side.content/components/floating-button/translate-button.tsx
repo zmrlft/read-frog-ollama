@@ -5,7 +5,7 @@ import { configFields } from '@/utils/atoms/config'
 import { removeAllTranslatedWrapperNodes } from '@/utils/host/translate/node-manipulation'
 import { validateTranslationConfig } from '@/utils/host/translate/translate-text'
 import { sendMessage } from '@/utils/message'
-import { enablePageTranslationAtom } from '../../atoms'
+import { enablePageTranslationAtom, isDraggingButtonAtom } from '../../atoms'
 import HiddenButton from './components/hidden-button'
 
 export default function TranslateButton() {
@@ -13,10 +13,12 @@ export default function TranslateButton() {
   const providersConfig = useAtomValue(configFields.providersConfig)
   const translateConfig = useAtomValue(configFields.translate)
   const languageConfig = useAtomValue(configFields.language)
+  const isDraggingButton = useAtomValue(isDraggingButtonAtom)
 
   return (
     <HiddenButton
       icon="ri:translate"
+      className={(isDraggingButton ? 'translate-x-0' : '')}
       onClick={() => {
         if (!enablePageTranslation) {
           if (!validateTranslationConfig({
