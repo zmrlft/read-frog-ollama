@@ -1,3 +1,4 @@
+import type { APICallError } from 'ai'
 import type { Point, TransNode } from '@/types/dom'
 import React from 'react'
 import textSmallCSS from '@/assets/tailwind/text-small.css?inline'
@@ -204,7 +205,7 @@ async function getTranslatedTextAndRemoveSpinner(nodes: TransNode[], textContent
 
     const errorComponent = React.createElement(TranslationError, {
       nodes,
-      error: error as Error,
+      error: error as APICallError,
     })
 
     const container = createReactShadowHost(
