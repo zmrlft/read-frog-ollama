@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-/* ──────────────  logger.ts  ────────────── */
 
 // eslint-disable-next-line turbo/no-undeclared-env-vars
 const isDev = import.meta.env.DEV
