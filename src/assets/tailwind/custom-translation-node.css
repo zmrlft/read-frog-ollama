@@ -20,5 +20,5 @@
 
 [data-read-frog-custom-translation-style='weakened'] {
   opacity: 1;
-  color: var(--muted-foreground);
+  color: var(--read-frog-muted-foreground) !important;
 }
