@@ -1,12 +1,12 @@
 import { Icon } from '@iconify/react'
 import { cn } from '@repo/ui/lib/utils'
 import { useAtom, useAtomValue } from 'jotai'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import readFrogLogo from '@/assets/icons/read-frog.png'
 import { configFields } from '@/utils/atoms/config'
 import { APP_NAME } from '@/utils/constants/app'
 import { sendMessage } from '@/utils/message'
-import { isSideOpenAtom } from '../../atoms'
+import { isDraggingButtonAtom, isSideOpenAtom } from '../../atoms'
 import HiddenButton from './components/hidden-button'
 import FloatingReadButton from './floating-read-button'
 import TranslateButton from './translate-button'
@@ -17,12 +17,12 @@ export default function FloatingButton() {
   )
   const sideContent = useAtomValue(configFields.sideContent)
   const [isSideOpen, setIsSideOpen] = useAtom(isSideOpenAtom)
-  const [isDraggingButton, setIsDraggingButton] = useState(false)
-  // clientY is the top of the icon button
-  const [initialClientY, setInitialClientY] = useState<number | null>(null)
+  const [isDraggingButton, setIsDraggingButton] = useAtom(isDraggingButtonAtom)
+  const initialClientYRef = useRef<number | null>(null)
 
   // 按钮拖动处理
   useEffect(() => {
+    const initialClientY = initialClientYRef.current
     if (!isDraggingButton || !initialClientY || !floatingButton)
       return
 
@@ -54,11 +54,11 @@ export default function FloatingButton() {
       document.body.style.userSelect = ''
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDraggingButton, initialClientY])
+  }, [isDraggingButton])
 
   const handleButtonDragStart = (e: React.MouseEvent) => {
     // 记录初始位置，用于后续判断是点击还是拖动
-    setInitialClientY(e.clientY)
+    initialClientYRef.current = e.clientY
     let hasMoved = false // 标记是否发生了移动
 
     e.preventDefault()
@@ -73,8 +73,6 @@ export default function FloatingButton() {
       }
     }
 
-    document.addEventListener('mousemove', handleMouseMove)
-
     // 在鼠标释放时，只有未移动才触发点击事件
     const handleMouseUp = () => {
       document.removeEventListener('mousemove', handleMouseMove)
@@ -86,12 +84,8 @@ export default function FloatingButton() {
       }
     }
 
-    document.addEventListener('mouseup', handleMouseUp, { once: true })
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseup', handleMouseUp)
-    }
+    document.addEventListener('mouseup', handleMouseUp)
+    document.addEventListener('mousemove', handleMouseMove)
   }
 
   if (!floatingButton.enabled) {
@@ -116,6 +110,7 @@ export default function FloatingButton() {
           'translate-x-5 transition-transform duration-300 group-hover:translate-x-0',
           isSideOpen && 'opacity-100',
           isDraggingButton ? 'cursor-move' : 'cursor-pointer',
+          isDraggingButton ? 'translate-x-0' : '',
         )}
         onMouseDown={handleButtonDragStart}
       >
@@ -140,6 +135,7 @@ export default function FloatingButton() {
         />
       </div>
       <HiddenButton
+        className={(isDraggingButton ? 'translate-x-0' : '')}
         icon="tabler:settings"
         onClick={() => {
           sendMessage('openOptionsPage', undefined)
