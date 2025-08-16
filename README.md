@@ -144,7 +144,9 @@ Contributions of all types are more than welcome.
 
 ### Contribute Code
 
-Understand the project through AI: [DeepWiki](https://deepwiki.com/mengxi-ream/read-frog)
+Project Structure: [DeepWiki](https://deepwiki.com/mengxi-ream/read-frog)
+
+Ask AI to understand the project: [Dosu](https://app.dosu.dev/29569286-71ba-47dd-b038-c7ab1b9d0df7/documents)
 
 Check out the [Contribution Guide](https://readfrog.app/en/tutorial/contribution) for more details.
 

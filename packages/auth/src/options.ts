@@ -1,5 +1,5 @@
 import type { BetterAuthOptions } from 'better-auth'
-import { APP_NAME } from '@repo/definitions'
+import { APP_NAME, AUTH_BASE_PATH } from '@repo/definitions'
 import { env } from './env'
 
 /**
@@ -12,11 +12,17 @@ export const betterAuthOptions: BetterAuthOptions = {
    * The name of the application.
    */
   appName: APP_NAME,
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60, // Cache duration in seconds
+    },
+  },
   /**
    * Base path for Better Auth.
    * @default "/api/auth"
    */
-  // basePath: "/api",
+  basePath: AUTH_BASE_PATH,
 
   /**
    * Enable email and password authentication

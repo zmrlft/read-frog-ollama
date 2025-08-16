@@ -1,4 +1,5 @@
 import type { CacheConfig } from '@/types/proxy-fetch'
+import { AUTH_BASE_PATH } from '@repo/definitions'
 import { createAuthClient } from 'better-auth/react'
 import { sendMessage } from '@/utils/message'
 import { WEBSITE_URL } from '../constants/url'
@@ -34,7 +35,7 @@ function createCustomFetch(cacheConfig?: CacheConfig) {
 }
 
 export const authClient = createAuthClient({
-  baseURL: WEBSITE_URL,
+  baseURL: `${WEBSITE_URL}${AUTH_BASE_PATH}`,
   fetchOptions: {
     customFetchImpl: createCustomFetch({
       enabled: true,
