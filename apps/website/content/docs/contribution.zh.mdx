@@ -111,46 +111,59 @@ pnpm dev
 ```
 启动后，在以下地址访问主网站：http://localhost:8888/。
 
-<Callout title="在特定浏览器中打开扩展">
-  你可以修改 `apps/extension` 目录下的 `web-ext.config.ts` 文件，显式指定浏览器路径。
-  ```javascript
-  // apps/extension/web-ext.config.ts
-  import { defineWebExtConfig } from 'wxt';
+## 开发 Tips
 
-  export default defineWebExtConfig({
-    binaries: {
-        chrome: "path/to/your/chrome.exe",
-        firefox: "path/to/your/firefox.exe",
-        edge: "path/to/your/edge.exe"
-	  }
-  });
-  ```
-</Callout>
+### 在特定浏览器中打开扩展
 
-<Callout title="pnpm dev 无法自动加载扩展">
-  如果你使用 Chrome 137 或更高版本，你需要下载 [Chrome for
-  Testing](https://developer.chrome.com/blog/chrome-for-testing/) 进行开发。
-  请参考[详细说明](https://wxt.dev/guide/essentials/config/browser-startup.html)。
-</Callout>
+你可以修改 `apps/extension` 目录下的 `web-ext.config.ts` 文件，显式指定浏览器路径。
 
-<Callout title="持久化 Chrome 配置文件">
-  **默认情况下，web-ext 每次运行开发脚本时都会创建新配置文件。**
+```javascript
+// apps/extension/web-ext.config.ts
+import { defineWebExtConfig } from 'wxt';
 
-  **只有 Chromium 浏览器支持使用 `--user-data-dir` 标志创建持久化配置文件：**
+export default defineWebExtConfig({
+  binaries: {
+      chrome: "path/to/your/chrome.exe",
+      firefox: "path/to/your/firefox.exe",
+      edge: "path/to/your/edge.exe"
+    }
+});
+```
 
-  ```typescript
-  export default defineWebExtConfig({
-    chromiumArgs: ['--user-data-dir=./.wxt/chrome-data'],
-  });
-  ```
+### pnpm dev 无法自动加载扩展
 
-  **好处：** 配置文件在开发会话间保持，所以你可以：
-  - 安装开发工具扩展
-  - 记住登录状态
-  - 保持浏览器设置
+如果你使用 Chrome 137 或更高版本，你需要下载 [Chrome for Testing](https://developer.chrome.com/blog/chrome-for-testing/) 进行开发。请参考[详细说明](https://wxt.dev/guide/essentials/config/browser-startup.html)。
 
-  **💡 提示：** 可以为 `--user-data-dir` 使用任何目录。当前配置为每个项目创建配置文件。
-</Callout>
+### 持久化 Chrome 配置文件
+
+**默认情况下，web-ext 每次运行开发脚本时都会创建新配置文件。**
+
+**只有 Chromium 浏览器支持使用 `--user-data-dir` 标志创建持久化配置文件：**
+
+```typescript
+export default defineWebExtConfig({
+  chromiumArgs: ['--user-data-dir=./.wxt/chrome-data'],
+});
+```
+
+**好处：** 配置文件在开发会话间保持，所以你可以：
+- 安装开发工具扩展
+- 记住登录状态
+- 保持浏览器设置
+
+**💡 提示：** 可以为 `--user-data-dir` 使用任何目录。当前配置为每个项目创建配置文件。
+
+### 断点调试问题
+
+⚠️ 如果你遇到了无法断点调试的问题，可能是因为 Chrome DevTools 的 ignore list 设置。扩展注入的内容脚本可能被自动忽略，导致断点失效。
+
+**解决方法：**
+1. 打开任意网页的 Devtools
+2. 点击右上角设置图标（⚙️）
+3. 在左侧导航中选择 "Ignore list"
+4. 确保 "Content scripts injected by extensions" 选项**未勾选**
+
+![Chrome Ignore List](/images/ignore-list.jpg)
 
 ## 提交代码
 

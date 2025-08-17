@@ -112,47 +112,59 @@ pnpm dev
 ```
 After startup, access the main website at: http://localhost:8888/.
 
-<Callout title="Open the extension in the specific browser">
-  You can modify the `web-ext.config.ts` file in the `apps/extension` directory to explicitly specify the browser path.
-  ```javascript
-  // apps/extension/web-ext.config.ts
-  import { defineWebExtConfig } from 'wxt';
+## Development Tips
 
-  export default defineWebExtConfig({
-    binaries: {
-        chrome: "path/to/your/chrome.exe",
-        firefox: "path/to/your/firefox.exe",
-        edge: "path/to/your/edge.exe"
-	  }
-  });
-  ```
-</Callout>
+### Open the extension in the specific browser
 
-<Callout title="pnpm dev can't load the extension automatically">
-  If you use Chrome version 137 or higher, you need to download [Chrome for
-  Testing](https://developer.chrome.com/blog/chrome-for-testing/) for
-  development. See
-  [details](https://wxt.dev/guide/essentials/config/browser-startup.html).
-</Callout>
+You can modify the `web-ext.config.ts` file in the `apps/extension` directory to explicitly specify the browser path.
 
-<Callout title="Persistent Chrome Profile">
-  **By default, web-ext creates a new profile every time you run the dev script.**
+```javascript
+// apps/extension/web-ext.config.ts
+import { defineWebExtConfig } from 'wxt';
 
-  **Only Chromium browsers support persistent profiles with `--user-data-dir` flag:**
+export default defineWebExtConfig({
+  binaries: {
+      chrome: "path/to/your/chrome.exe",
+      firefox: "path/to/your/firefox.exe",
+      edge: "path/to/your/edge.exe"
+    }
+});
+```
 
-  ```typescript
-  export default defineWebExtConfig({
-    chromiumArgs: ['--user-data-dir=./.wxt/chrome-data'],
-  });
-  ```
+### pnpm dev can't load the extension automatically
 
-  **Benefits:** Your profile persists between dev sessions, so you can:
-  - Install devtools extensions
-  - Remember logins
-  - Keep browser settings
+If you use Chrome version 137 or higher, you need to download [Chrome for Testing](https://developer.chrome.com/blog/chrome-for-testing/) for development. See [details](https://wxt.dev/guide/essentials/config/browser-startup.html).
 
-  **💡 TIP:** Use any directory for `--user-data-dir`. Current config creates a profile per project.
-</Callout>
+### Persistent Chrome Profile
+
+**By default, web-ext creates a new profile every time you run the dev script.**
+
+**Only Chromium browsers support persistent profiles with `--user-data-dir` flag:**
+
+```typescript
+export default defineWebExtConfig({
+  chromiumArgs: ['--user-data-dir=./.wxt/chrome-data'],
+});
+```
+
+**Benefits:** Your profile persists between dev sessions, so you can:
+- Install devtools extensions
+- Remember logins
+- Keep browser settings
+
+**💡 TIP:** Use any directory for `--user-data-dir`. Current config creates a profile per project.
+
+### Breakpoint Debugging Issues
+
+⚠️ If you encounter issues with breakpoint debugging, it might be due to Chrome DevTools ignore list settings. Content scripts injected by extensions may be automatically ignored, causing breakpoints to fail.
+
+**Solution:**
+1. Open DevTools on any webpage
+2. Click the settings icon (⚙️) in the top right corner
+3. Select "Ignore list" from the left navigation
+4. Ensure the "Content scripts injected by extensions" option is **unchecked**
+
+![Chrome Ignore List](/images/ignore-list.jpg)
 
 ## Submitting Code
 
