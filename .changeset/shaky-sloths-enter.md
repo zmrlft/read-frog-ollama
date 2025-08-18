@@ -1,5 +1,5 @@
 ---
-"@read-frog/website": major
+"@read-frog/website": patch
 ---
 
 docs: add doc about chrome extension debug
