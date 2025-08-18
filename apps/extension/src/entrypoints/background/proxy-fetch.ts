@@ -1,23 +1,22 @@
 import type { ProxyResponse } from '@/types/proxy-fetch'
 import { browser } from '#imports'
 import { AUTH_COOKIE_PATTERNS, AUTH_COOKIE_PREFIX, AUTH_DOMAINS } from '@repo/definitions'
-import { DEFAULT_PROXY_CACHE_MAX_SIZE, DEFAULT_PROXY_CACHE_TTL_MS } from '@/utils/constants/proxy-fetch'
-import { LRUCache } from '@/utils/data-structure/rlu'
+import { DEFAULT_PROXY_CACHE_TTL_MS } from '@/utils/constants/proxy-fetch'
+
 import { logger } from '@/utils/logger'
 import { onMessage } from '@/utils/message'
-
-function makeCacheKey(reqMethod: string, targetUrl: string) {
-  return `${reqMethod.toUpperCase()} ${targetUrl}`
-}
+import { SessionCacheGroupRegistry } from '../../utils/session-cache/session-cache-group-registry'
 
 export function proxyFetch() {
-  // Two-level cache: groupKey -> LRUCache<requestKey, cachedItem>
-  const cache: Map<string, LRUCache<string, { timestamp: number, response: ProxyResponse }>> = (globalThis as any).__rfProxyCache ?? ((globalThis as any).__rfProxyCache = new Map())
+  // Simplified: No need for in-memory Map, CacheRegistry handles everything
+  async function getSessionCache(groupKey: string) {
+    return await SessionCacheGroupRegistry.getCacheGroup(groupKey)
+  }
 
   // Global cache invalidation function
-  function invalidateAllCache() {
+  async function invalidateAllCache() {
     logger.info('[ProxyFetch] Invalidating all cache')
-    cache.clear()
+    await SessionCacheGroupRegistry.clearAllCacheGroup()
   }
 
   // Listen for cookie changes to invalidate auth-related cache
@@ -33,7 +32,9 @@ export function proxyFetch() {
             domain: cookie.domain,
             removed,
           })
-          invalidateAllCache()
+          invalidateAllCache().catch(error =>
+            logger.error('[ProxyFetch] Failed to invalidate cache:', error),
+          )
         }
       }
     })
@@ -49,55 +50,32 @@ export function proxyFetch() {
       enabled: cacheEnabled = false,
       groupKey: cacheGroupKey = 'default',
       ttl: cacheTtl = DEFAULT_PROXY_CACHE_TTL_MS,
-      maxSize: cacheMaxSize = DEFAULT_PROXY_CACHE_MAX_SIZE,
     } = cacheConfig ?? {}
 
-    function getCached(reqMethod: string, targetUrl: string): ProxyResponse | undefined {
-      if (!cacheEnabled || !cacheGroupKey)
+    async function getCached(reqMethod: string, targetUrl: string): Promise<ProxyResponse | undefined> {
+      if (!cacheEnabled)
         return undefined
 
-      const key = makeCacheKey(reqMethod, targetUrl)
-      const group = cache.get(cacheGroupKey)
-      if (!group)
-        return undefined
-
-      const item = group.get(key) // LRU automatically moves to end
-      if (!item)
-        return undefined
-
-      if (Date.now() - item.timestamp > cacheTtl) {
-        group.delete(key)
-        return undefined
-      }
-
-      logger.info('[ProxyFetch] Return cached response:', { reqMethod, targetUrl })
-      return item.response
+      const sessionCache = await getSessionCache(cacheGroupKey)
+      return await sessionCache.get(reqMethod, targetUrl, cacheTtl)
     }
 
-    function setCached(reqMethod: string, targetUrl: string, resp: ProxyResponse) {
-      logger.info('[ProxyFetch] Set cached response:', { reqMethod, targetUrl })
-
-      if (!cacheEnabled || !cacheGroupKey)
+    async function setCached(reqMethod: string, targetUrl: string, resp: ProxyResponse): Promise<void> {
+      if (!cacheEnabled)
         return
 
-      const key = makeCacheKey(reqMethod, targetUrl)
-      let group = cache.get(cacheGroupKey)
-      if (!group) {
-        group = new LRUCache(cacheMaxSize)
-        cache.set(cacheGroupKey, group)
-      }
-
-      // LRU automatically handles size limits and eviction
-      group.set(key, { timestamp: Date.now(), response: resp })
+      const sessionCache = await getSessionCache(cacheGroupKey)
+      await sessionCache.set(reqMethod, targetUrl, resp)
     }
 
-    function invalidateCache(groupKey?: string) {
+    async function invalidateCache(groupKey?: string): Promise<void> {
       logger.info('[ProxyFetch] Invalidate cache:', { groupKey })
       if (groupKey) {
-        cache.delete(groupKey)
+        const sessionCache = await getSessionCache(groupKey)
+        await sessionCache.clear()
       }
       else {
-        cache.clear()
+        await invalidateAllCache()
       }
     }
 
@@ -105,14 +83,14 @@ export function proxyFetch() {
 
     // Check cache for GET requests
     if (finalMethod === 'GET' && cacheEnabled) {
-      const cached = getCached(finalMethod, url)
+      const cached = await getCached(finalMethod, url)
       if (cached)
         return cached
     }
 
     // Aggressive mode: pre-clear cache before mutations to avoid race with subsequent GETs
     if (finalMethod !== 'GET') {
-      invalidateCache(cacheGroupKey)
+      await invalidateCache(cacheGroupKey)
     }
 
     const response = await fetch(url, {
@@ -139,17 +117,17 @@ export function proxyFetch() {
       if (finalMethod === 'GET') {
         // For auth requests: 401/403 implies session invalid -> clear cache
         if (result.status === 401 || result.status === 403) {
-          invalidateCache(cacheGroupKey)
+          await invalidateCache(cacheGroupKey)
         }
         // Only cache successful GET responses
         else if (result.status >= 200 && result.status < 300) {
-          setCached(finalMethod, url, result)
+          await setCached(finalMethod, url, result)
         }
       }
       else {
         // For auth mutations: only invalidate cache if mutation succeeded
         if (result.status >= 200 && result.status < 300) {
-          invalidateCache(cacheGroupKey)
+          await invalidateCache(cacheGroupKey)
         }
       }
     }
