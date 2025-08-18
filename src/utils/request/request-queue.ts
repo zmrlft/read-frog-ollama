@@ -1,5 +1,5 @@
 import deepmerge from 'deepmerge'
-import { requestQueueConfigSchema } from '@/types/config/provider'
+import { requestQueueConfigSchema } from '@/types/config/translate'
 import { BinaryHeapPQ } from './priority-queue'
 
 export interface RequestTask {

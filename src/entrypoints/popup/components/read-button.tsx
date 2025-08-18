@@ -33,6 +33,7 @@ export default function ReadButton({ className }: { className?: string }) {
   return (
     <Button
       onClick={requestReadArticle}
+      variant="outline"
       className={cn('border-primary', className)}
       disabled={isIgnoreTab}
     >

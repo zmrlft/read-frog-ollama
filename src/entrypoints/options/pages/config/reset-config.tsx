@@ -23,22 +23,22 @@ export function ResetConfig() {
   }
 
   return (
-    <ConfigCard title={i18n.t('options.general.resetConfig.title')} description={i18n.t('options.general.resetConfig.description')}>
+    <ConfigCard title={i18n.t('options.config.resetConfig.title')} description={i18n.t('options.config.resetConfig.description')}>
       <AlertDialog>
-        <AlertDialogTrigger className="w-full flex items-center justify-end">
-          <Button variant="destructive">{i18n.t('options.general.resetConfig.dialog.trigger')}</Button>
+        <AlertDialogTrigger className="w-full flex items-center lg:justify-end">
+          <Button variant="destructive">{i18n.t('options.config.resetConfig.dialog.trigger')}</Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{i18n.t('options.general.resetConfig.dialog.title')}</AlertDialogTitle>
+            <AlertDialogTitle>{i18n.t('options.config.resetConfig.dialog.title')}</AlertDialogTitle>
             <AlertDialogDescription>
-              {i18n.t('options.general.resetConfig.dialog.description')}
+              {i18n.t('options.config.resetConfig.dialog.description')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{i18n.t('options.general.resetConfig.dialog.cancel')}</AlertDialogCancel>
+            <AlertDialogCancel>{i18n.t('options.config.resetConfig.dialog.cancel')}</AlertDialogCancel>
             <AlertDialogAction variant="destructive" onClick={resetToDefaultConfig}>
-              {i18n.t('options.general.resetConfig.dialog.confirm')}
+              {i18n.t('options.config.resetConfig.dialog.confirm')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

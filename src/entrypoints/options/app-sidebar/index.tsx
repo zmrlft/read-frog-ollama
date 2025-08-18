@@ -11,12 +11,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@repo/ui/components/sidebar'
-import { Link } from 'react-router'
+import { Link, useLocation } from 'react-router'
 import readFrogLogo from '@/assets/icons/read-frog.png'
 import { version } from '../../../../package.json'
 import { NAV_ITEMS } from './nav-items'
 
 export function AppSidebar() {
+  const location = useLocation()
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="group-data-[state=expanded]:px-5 group-data-[state=expanded]:pt-4 transition-all">
@@ -35,7 +37,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {Object.entries(NAV_ITEMS).map(([key, item]) => (
                 <SidebarMenuItem key={key}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild isActive={location.pathname === item.url}>
                     <Link to={item.url}>
                       <Icon icon={item.icon} />
                       <span>{i18n.t(`options.${item.title}.title`)}</span>

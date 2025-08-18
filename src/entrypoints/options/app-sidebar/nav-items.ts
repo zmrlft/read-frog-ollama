@@ -1,4 +1,5 @@
 import { ApiProvidersPage } from '../pages/api-providers'
+import { ConfigPage } from '../pages/config'
 import { GeneralPage } from '../pages/general'
 import { TranslationPage } from '../pages/translation'
 
@@ -6,7 +7,7 @@ export const NAV_ITEMS = {
   '': {
     title: 'general',
     url: '/',
-    icon: 'tabler:settings',
+    icon: 'tabler:adjustments-horizontal',
     component: GeneralPage,
   },
   'api-providers': {
@@ -20,6 +21,12 @@ export const NAV_ITEMS = {
     url: '/translation',
     icon: 'ri:translate',
     component: TranslationPage,
+  },
+  'config': {
+    title: 'config',
+    url: '/config',
+    icon: 'tabler:settings',
+    component: ConfigPage,
   },
 } as const satisfies Record<string, {
   title: string

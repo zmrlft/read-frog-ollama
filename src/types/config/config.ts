@@ -2,7 +2,8 @@ import { z } from 'zod'
 
 import { langCodeISO6393Schema, langLevel } from '@/types/config/languages'
 import { MIN_SIDE_CONTENT_WIDTH } from '@/utils/constants/side'
-import { providersConfigSchema, readConfigSchema, translateConfigSchema } from './provider'
+import { providersConfigSchema, readConfigSchema } from './provider'
+import { translateConfigSchema } from './translate'
 
 // Language schema
 const languageSchema = z.object({

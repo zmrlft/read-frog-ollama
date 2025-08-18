@@ -65,15 +65,6 @@ options:
         range:
           main: 主要內容
           all: 所有內容
-    resetConfig:
-      title: 重置配置
-      description: 重置所有配置為預設值
-      dialog:
-        title: 重置配置
-        trigger: 重置配置
-        confirm: 確認
-        cancel: 取消
-        description: 此操作將清空您的所有自定義配置，並將其重置為預設值，請確認是否清除。
   translation:
     title: 翻譯
     requestQueueConfig:
@@ -112,6 +103,23 @@ options:
         blur: 模糊效果
         blockquote: 引用
         weakened: 弱化
+    translationMode:
+      title: 翻譯模式
+      description: 選擇翻譯文字的顯示方式：雙語對照或僅顯示翻譯
+      mode:
+        bilingual: 雙語對照
+        translationOnly: 僅顯示翻譯
+  config:
+    title: 設定
+    resetConfig:
+      title: 重置配置
+      description: 重置所有配置為預設值
+      dialog:
+        title: 重置配置
+        trigger: 重置配置
+        confirm: 確認
+        cancel: 取消
+        description: 此操作將清空您的所有自定義配置，並將其重置為預設值，請確認是否清除。
 side:
   sourceLang: 來源語言
   targetLang: 目標語言

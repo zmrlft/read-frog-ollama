@@ -1,6 +1,8 @@
-export const description = 'Add selectionToolbar'
+import type { Config } from '@/types/config/config'
 
-export const configExample = {
+export const description = 'Add translation mode'
+
+export const configExample: Config = {
   language: {
     detectedCode: 'eng',
     sourceCode: 'auto',
@@ -67,6 +69,7 @@ export const configExample = {
         customModel: '',
       },
     },
+    mode: 'bilingual',
     node: {
       enabled: true,
       hotkey: 'Control',
