@@ -72,7 +72,8 @@ export function validateTranslationConfig(config: Pick<Config, 'providersConfig'
   const isPure = PURE_TRANSLATE_PROVIDERS.includes(
     provider as typeof PURE_TRANSLATE_PROVIDERS[number],
   )
-  // 检查语言是否相同
+
+  // check if the source language is the same as the target language
   if (isPure) {
     if (languageConfig.sourceCode === languageConfig.targetCode) {
       toast.error(i18n.t('translation.sameLanguage'))
@@ -86,7 +87,7 @@ export function validateTranslationConfig(config: Pick<Config, 'providersConfig'
     }
   }
 
-  // 检查API密钥是否配置
+  // check if the API key is configured
   if (!isPure && !hasSetAPIKey(provider as keyof typeof TRANSLATE_PROVIDER_MODELS, providersConfig)) {
     toast.error(i18n.t('noAPIKeyConfig.warning'))
     logger.info('validateTranslationConfig: returning false (no API key)')
