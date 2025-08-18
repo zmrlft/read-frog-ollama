@@ -22,3 +22,8 @@
   opacity: 1;
   color: var(--read-frog-muted-foreground) !important;
 }
+
+[data-read-frog-custom-translation-style='dashedLine'] {
+  text-decoration: underline dashed var(--read-frog-primary);
+  text-underline-offset: 5px;
+}

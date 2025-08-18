@@ -102,6 +102,7 @@ options:
         blur: ぼかし効果
         blockquote: 引用
         weakened: 弱化
+        dashedLine: 破線
     translationMode:
       title: 翻訳モード
       description: 翻訳テキストの表示方法を選択：バイリンガルまたは翻訳のみ
