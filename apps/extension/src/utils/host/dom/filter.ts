@@ -77,7 +77,9 @@ export function isDontWalkIntoElement(element: HTMLElement): boolean {
     = window.getComputedStyle(element).display === 'none'
       || window.getComputedStyle(element).visibility === 'hidden'
 
-  return dontWalkClass || dontWalkCSS
+  const dontWalkAttr = element.getAttribute('translate') === 'no'
+
+  return dontWalkClass || dontWalkCSS || dontWalkAttr
 }
 
 export function isInlineTransNode(node: TransNode): boolean {
