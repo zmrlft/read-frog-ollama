@@ -103,6 +103,7 @@ options:
         blur: 模糊效果
         blockquote: 引用
         weakened: 弱化
+        dashedLine: 虚线
     translationMode:
       title: 翻译模式
       description: 选择翻译文本的显示方式：双语对照或仅显示翻译
