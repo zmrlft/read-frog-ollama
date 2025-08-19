@@ -10,12 +10,3 @@ export const WEBSITE_PROD_URL = 'https://www.readfrog.app'
 export const READFROG_DOMAIN = 'readfrog.app'
 export const LOCALHOST_DOMAIN = 'localhost'
 export const AUTH_DOMAINS = [READFROG_DOMAIN, LOCALHOST_DOMAIN] as const
-
-// Auth cookie name patterns for better-auth
-export const AUTH_COOKIE_PATTERNS = [
-  'better-auth.session_token',
-  'better-auth.session',
-  'session',
-  'auth-token',
-] as const
-export const AUTH_COOKIE_PREFIX = 'better-auth' as const
