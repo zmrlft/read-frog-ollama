@@ -43,6 +43,9 @@ options:
     advancedConfig:
       show: 显示高级配置
       hide: 隐藏高级配置
+    testConnection:
+      button: 测试连接
+      testing: 测试中...
   general:
     title: 通用
     readConfig:

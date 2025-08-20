@@ -43,6 +43,9 @@ options:
     advancedConfig:
       show: 고급 설정 표시
       hide: 고급 설정 숨기기
+    testConnection:
+      button: 연결 테스트
+      testing: 테스트 중...
   general:
     title: 일반
     readConfig:

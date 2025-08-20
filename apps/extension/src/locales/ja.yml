@@ -43,6 +43,9 @@ options:
     advancedConfig:
       show: 詳細設定を表示
       hide: 詳細設定を非表示
+    testConnection:
+      button: 接続テスト
+      testing: テスト中...
   general:
     title: 一般
     readConfig:

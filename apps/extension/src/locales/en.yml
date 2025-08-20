@@ -43,6 +43,9 @@ options:
     advancedConfig:
       show: Show Advanced Config
       hide: Hide Advanced Config
+    testConnection:
+      button: Test Connection
+      testing: Testing...
   general:
     title: General
     readConfig:
