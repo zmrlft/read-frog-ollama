@@ -9,23 +9,11 @@ import { useMutation } from '@tanstack/react-query'
 import { useAtom, useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import LoadingDots from '@/components/loading-dots'
-import { API_PROVIDER_NAMES } from '@/types/config/provider'
 import { configFields } from '@/utils/atoms/config'
 import { API_PROVIDER_ITEMS, DEFAULT_TRANSLATE_MODELS } from '@/utils/constants/config'
 import { aiTranslate, deeplxTranslate } from '@/utils/host/translate/api'
-import { ConfigCard } from '../components/config-card'
-import { FieldWithLabel } from '../components/field-with-label'
-import { PageLayout } from '../components/page-layout'
-
-export function ApiProvidersPage() {
-  return (
-    <PageLayout title={i18n.t('options.apiProviders.title')} innerClassName="[&>*]:border-b [&>*:last-child]:border-b-0">
-      {API_PROVIDER_NAMES.map(provider => (
-        <ProviderConfigCard key={provider} provider={provider} />
-      ))}
-    </PageLayout>
-  )
-}
+import { ConfigCard } from '../../components/config-card'
+import { FieldWithLabel } from '../../components/field-with-label'
 
 export function ProviderConfigCard({ provider }: { provider: APIProviderNames }) {
   const [providersConfig, setProvidersConfig] = useAtom(configFields.providersConfig)
@@ -48,7 +36,7 @@ export function ProviderConfigCard({ provider }: { provider: APIProviderNames })
       <div className="flex flex-col gap-y-4">
         <FieldWithLabel
           label={(
-            <div className="flex items-center justify-between">
+            <div className="flex items-end justify-between">
               <span className="text-sm font-medium">
                 API Key
               </span>
@@ -60,7 +48,6 @@ export function ProviderConfigCard({ provider }: { provider: APIProviderNames })
           id={`${provider}-apiKey`}
         >
           <Input
-            className="mt-1 mb-2"
             value={providersConfig[provider].apiKey}
             type={showAPIKey ? 'text' : 'password'}
             onChange={e =>
@@ -72,7 +59,7 @@ export function ProviderConfigCard({ provider }: { provider: APIProviderNames })
                 },
               })}
           />
-          <div className="flex items-center space-x-2">
+          <div className="mt-0.5 flex items-center space-x-2">
             <Checkbox
               id={`apiKey-${provider}`}
               checked={showAPIKey}
@@ -155,7 +142,7 @@ function ConnectionTestButton({ provider }: { provider: APIProviderNames }) {
         size="sm"
         variant="outline"
         onClick={handleTestConnection}
-        disabled={mutation.isPending || !apiKey}
+        disabled={mutation.isPending || (!apiKey && provider !== 'deeplx')}
         className="h-7 px-3"
       >
         {mutation.isPending
