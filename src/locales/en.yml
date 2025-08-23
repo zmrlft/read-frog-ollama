@@ -115,6 +115,26 @@ options:
         translationOnly: Translation Only
   config:
     title: Config
+    sync:
+      title: Config Sync
+      description: Import and export your configuration settings
+      import: Import Config
+      export: Export Config
+      importSuccess: Config imported successfully
+      exportSuccess: Config exported successfully
+      importError: Import failed
+      versionTooNew: The imported config version is newer, please upgrade Read Frog to the latest version
+      migrationError: Migration failed
+      validationError: Config validation failed
+      exportOptions:
+        title: Select Export Options
+        description: Please choose whether to include API Keys in the exported config. Including API Keys may leak sensitive information, so it's recommended to use only in secure environments.
+        includeAPIKeys: Include API Keys
+        excludeAPIKeys: Exclude API Keys
+        cancel: Cancel
+      viewConfig:
+        expand: Expand Config
+        collapse: Collapse Config
     resetConfig:
       title: Reset Config
       description: Reset all config to default value

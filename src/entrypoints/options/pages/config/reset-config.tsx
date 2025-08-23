@@ -11,6 +11,7 @@ import {
   AlertDialogTrigger,
 } from '@repo/ui/components/alert-dialog'
 import { Button } from '@repo/ui/components/button'
+import { IconRefresh } from '@tabler/icons-react'
 import { useSetAtom } from 'jotai'
 import { writeConfigAtom } from '@/utils/atoms/config'
 import { DEFAULT_CONFIG } from '@/utils/constants/config'
@@ -25,9 +26,14 @@ export function ResetConfig() {
   return (
     <ConfigCard title={i18n.t('options.config.resetConfig.title')} description={i18n.t('options.config.resetConfig.description')}>
       <AlertDialog>
-        <AlertDialogTrigger className="w-full flex items-center lg:justify-end">
-          <Button variant="destructive">{i18n.t('options.config.resetConfig.dialog.trigger')}</Button>
-        </AlertDialogTrigger>
+        <div className="w-full flex justify-end">
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive">
+              <IconRefresh className="size-4" />
+              {i18n.t('options.config.resetConfig.dialog.trigger')}
+            </Button>
+          </AlertDialogTrigger>
+        </div>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{i18n.t('options.config.resetConfig.dialog.title')}</AlertDialogTitle>

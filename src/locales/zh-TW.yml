@@ -115,6 +115,26 @@ options:
         translationOnly: 僅顯示翻譯
   config:
     title: 設定
+    sync:
+      title: 設定同步
+      description: 匯入和匯出您的設定
+      import: 匯入設定
+      export: 匯出設定
+      importSuccess: 設定匯入成功
+      exportSuccess: 設定匯出成功
+      importError: 匯入失敗
+      versionTooNew: 匯入的設定版本較新，請升級 Read Frog 到最新版本
+      migrationError: 遷移失敗
+      validationError: 設定驗證失敗
+      exportOptions:
+        title: 選擇匯出選項
+        description: 請選擇是否在匯出的設定中包含 API Keys。包含 API Keys 可能會洩露敏感資訊，建議僅在安全環境下使用。
+        includeAPIKeys: 包含 API Keys
+        excludeAPIKeys: 不包含 API Keys
+        cancel: 取消
+      viewConfig:
+        expand: 展開設定
+        collapse: 收起設定
     resetConfig:
       title: 重置配置
       description: 重置所有配置為預設值
