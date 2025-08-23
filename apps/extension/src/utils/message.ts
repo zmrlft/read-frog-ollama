@@ -3,6 +3,8 @@ import type { ProxyRequest, ProxyResponse } from '@/types/proxy-fetch'
 import { defineExtensionMessaging } from '@webext-core/messaging'
 
 interface ProtocolMap {
+  // navigation
+  openPage: (data: { url: string, active?: boolean }) => void
   openOptionsPage: () => void
   // config
   getInitialConfig: () => Config | null
@@ -23,8 +25,6 @@ interface ProtocolMap {
   setTranslateRequestQueueConfig: (data: { rate?: number, capacity?: number }) => void
   // network proxy
   backgroundFetch: (data: ProxyRequest) => Promise<ProxyResponse>
-  // navigation
-  openPage: (data: { url: string, active?: boolean }) => void
 }
 
 export const { sendMessage, onMessage }

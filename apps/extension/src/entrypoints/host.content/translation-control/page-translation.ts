@@ -1,7 +1,7 @@
 import { isDontWalkIntoElement, isHTMLElement, isIFrameElement } from '@/utils/host/dom/filter'
 import { deepQueryTopLevelSelector } from '@/utils/host/dom/find'
-import { translateWalkedElement, walkAndLabelElement } from '@/utils/host/dom/traversal'
-import { removeAllTranslatedWrapperNodes } from '@/utils/host/translate/node-manipulation'
+import { walkAndLabelElement } from '@/utils/host/dom/traversal'
+import { removeAllTranslatedWrapperNodes, translateWalkedElement } from '@/utils/host/translate/node-manipulation'
 import { sendMessage } from '@/utils/message'
 
 type SimpleIntersectionOptions = Omit<IntersectionObserverInit, 'threshold'> & {

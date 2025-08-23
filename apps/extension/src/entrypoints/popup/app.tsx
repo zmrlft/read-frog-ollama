@@ -32,9 +32,9 @@ function App() {
         <UserAccount />
         <LanguageOptionsSelector />
         {/* <LanguageLevelSelector /> */}
-        <ReadProviderSelector />
         <TranslateProviderSelector />
         <TranslatePromptSelector />
+        <ReadProviderSelector />
         <div className="grid w-full grid-cols-2 gap-2">
           <ReadButton />
           <TranslateButton />

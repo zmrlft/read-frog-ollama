@@ -134,3 +134,7 @@ Follow conventional commits format: `type(scope): description`, keep the commit 
 ## Language
 
 The code comments should be in English.
+
+## Others
+
+- Please disregard any console.log statements in my code that may violate ESLint rules.

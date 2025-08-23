@@ -26,14 +26,11 @@ export function createReactShadowHost(
   shadowHost.classList.add(REACT_SHADOW_HOST_CLASS)
   shadowHost.style.display = position
 
-  if (style) {
-    Object.assign(shadowHost.style, style)
-  }
-
   const shadowRoot = shadowHost.attachShadow({ mode: 'open' })
   const hostBuilder = new ShadowHostBuilder(shadowRoot, {
     position,
     cssContent,
+    style,
     inheritStyles,
   })
   const innerReactContainer = hostBuilder.build()

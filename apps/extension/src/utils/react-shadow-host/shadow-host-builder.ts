@@ -4,6 +4,7 @@ import { cssRegistry } from './css-registry'
 interface ShadowHostOptions {
   position: 'inline' | 'block'
   cssContent?: string[]
+  style?: Partial<CSSStyleDeclaration>
   inheritStyles?: boolean
 }
 
@@ -35,7 +36,7 @@ export class ShadowHostBuilder {
   ) {}
 
   build(): HTMLElement {
-    const { cssContent, inheritStyles, position } = this.opts
+    const { cssContent, inheritStyles, position, style } = this.opts
     const css: string[] = []
 
     if (!inheritStyles) {
@@ -57,6 +58,9 @@ export class ShadowHostBuilder {
     // add wrapper
     const wrapper = document.createElement('div')
     wrapper.style.display = position
+    if (style) {
+      Object.assign(wrapper.style, style)
+    }
     if (isDarkMode()) {
       wrapper.classList.add('dark')
     }
