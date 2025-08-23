@@ -14,6 +14,7 @@ import {
 import { Button } from '@repo/ui/components/button'
 import { Input } from '@repo/ui/components/input'
 import { Label } from '@repo/ui/components/label'
+import { ScrollArea } from '@repo/ui/components/scroll-area'
 import { kebabCase } from 'case-anything'
 import { saveAs } from 'file-saver'
 import { useAtomValue, useSetAtom } from 'jotai'
@@ -189,14 +190,14 @@ function ViewCurrentConfig() {
       </Button>
 
       {isExpanded && (
-        <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 border">
-          <pre className="text-xs overflow-auto max-h-96 whitespace-pre-wrap">
+        <ScrollArea className="h-96 w-full rounded-lg border bg-muted">
+          <pre className="text-xs p-4 whitespace-pre-wrap break-all overflow-wrap-anywhere">
             {JSON.stringify({
               storedConfigSchemaVersion: CONFIG_SCHEMA_VERSION,
               config,
             }, null, 2)}
           </pre>
-        </div>
+        </ScrollArea>
       )}
     </div>
   )
