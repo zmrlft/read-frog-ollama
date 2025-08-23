@@ -166,7 +166,7 @@ function ConfigurePrompt({ originPrompt }: { originPrompt?: TranslatePromptObj }
 
   const [prompt, setPrompt] = useState<TranslatePromptObj>(originPrompt ?? { id: crypto.randomUUID(), name: '', prompt: '' })
 
-  const name = isDefaultPrompt(prompt.id)
+  const promptName = isDefaultPrompt(prompt.id)
     ? i18n.t('options.translation.personalizedPrompt.default')
     : prompt.name
 
@@ -228,7 +228,7 @@ function ConfigurePrompt({ originPrompt }: { originPrompt?: TranslatePromptObj }
               <Label htmlFor="prompt-name">{i18n.t('options.translation.personalizedPrompt.editPrompt.name')}</Label>
               <Input
                 id="prompt-name"
-                value={name}
+                value={promptName}
                 disabled={isDefaultPrompt(prompt.id)}
                 onChange={(e) => {
                   setPrompt({
@@ -242,6 +242,7 @@ function ConfigurePrompt({ originPrompt }: { originPrompt?: TranslatePromptObj }
               <Label htmlFor="prompt">Prompt</Label>
               <Textarea
                 id="prompt"
+                disabled={isDefaultPrompt(prompt.id)}
                 value={prompt.prompt}
                 className="max-h-100"
                 onChange={(e) => {
@@ -256,10 +257,10 @@ function ConfigurePrompt({ originPrompt }: { originPrompt?: TranslatePromptObj }
         </SheetHeader>
         <SheetFooter>
           <SheetClose asChild>
-            <Button onClick={configurePrompt}>{i18n.t('options.translation.personalizedPrompt.editPrompt.save')}</Button>
+            <Button disabled={isDefaultPrompt(prompt.id)} onClick={configurePrompt}>{i18n.t('options.translation.personalizedPrompt.editPrompt.save')}</Button>
           </SheetClose>
           <SheetClose asChild>
-            <Button variant="outline">{i18n.t('options.translation.personalizedPrompt.editPrompt.close')}</Button>
+            <Button disabled={isDefaultPrompt(prompt.id)} variant="outline">{i18n.t('options.translation.personalizedPrompt.editPrompt.close')}</Button>
           </SheetClose>
         </SheetFooter>
       </SheetContent>

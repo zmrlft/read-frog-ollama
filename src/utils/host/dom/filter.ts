@@ -31,15 +31,12 @@ export function isShallowInlineTransNode(node: Node): boolean {
 }
 
 export function isShallowInlineHTMLElement(element: HTMLElement): boolean {
-  if (
-    element.classList.contains(NOTRANSLATE_CLASS)
-    || !element.textContent?.trim()
-  ) {
+  if (!element.textContent?.trim()) {
     return false
   }
 
   return (
-    window.getComputedStyle(element).display.includes('inline')
+    ['inline', 'contents'].includes(window.getComputedStyle(element).display)
     && !FORCE_BLOCK_TAGS.has(element.tagName)
   )
 }
@@ -56,14 +53,11 @@ export function isShallowBlockTransNode(node: Node): boolean {
 }
 
 export function isShallowBlockHTMLElement(element: HTMLElement): boolean {
-  if (
-    element.classList.contains(NOTRANSLATE_CLASS)
-    || !element.textContent?.trim()
-  ) {
+  if (!element.textContent?.trim()) {
     return false
   }
   return (
-    !window.getComputedStyle(element).display.includes('inline')
+    !['inline', 'contents'].includes(window.getComputedStyle(element).display)
     || FORCE_BLOCK_TAGS.has(element.tagName)
   )
 }

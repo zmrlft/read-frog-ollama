@@ -2,7 +2,6 @@ import type { TransNode } from '@/types/dom'
 import { globalConfig } from '@/utils/config/config'
 import {
   BLOCK_ATTRIBUTE,
-  CONSECUTIVE_INLINE_END_ATTRIBUTE,
   INLINE_ATTRIBUTE,
   PARAGRAPH_ATTRIBUTE,
   WALKED_ATTRIBUTE,
@@ -11,13 +10,10 @@ import {
   INVALID_TRANSLATE_TAGS,
   MAIN_CONTENT_IGNORE_TAGS,
 } from '@/utils/constants/dom-tags'
-
-import { translateNodes } from '../translate/node-manipulation'
 import {
   isDontWalkIntoElement,
   isHTMLElement,
   isIFrameElement,
-  isInlineTransNode,
   isShallowBlockHTMLElement,
   isShallowInlineHTMLElement,
   isTextNode,
@@ -126,97 +122,4 @@ export function walkAndLabelElement(
   }
 
   return false
-}
-
-/**
- * Translate the element if it has inline node child
- * @param element - The element to translate
- * @param walkId - The walk id
- * @param toggle - Whether to toggle the translation, if true, the translation will be removed if it already exists
- */
-export async function translateWalkedElement(
-  element: HTMLElement,
-  walkId: string,
-  toggle: boolean = false,
-) {
-  const promises: Promise<void>[] = []
-
-  // if the walkId is not the same, return
-  if (element.getAttribute(WALKED_ATTRIBUTE) !== walkId)
-    return
-
-  if (element.hasAttribute(PARAGRAPH_ATTRIBUTE)) {
-    let hasBlockNodeChild = false
-
-    for (const child of element.childNodes) {
-      if (isHTMLElement(child) && child.hasAttribute(BLOCK_ATTRIBUTE)) {
-        hasBlockNodeChild = true
-        break
-      }
-    }
-
-    if (!hasBlockNodeChild) {
-      promises.push(translateNodes([element], toggle))
-    }
-    else {
-      // prevent children change during iteration
-      const children = Array.from(element.childNodes)
-      let consecutiveInlineNodes: TransNode[] = []
-      for (const child of children) {
-        if (!child.textContent?.trim()) {
-          continue
-        }
-        if (!(isTextNode(child) || isHTMLElement(child))) {
-          continue
-        }
-
-        if (isInlineTransNode(child)) {
-          consecutiveInlineNodes.push(child)
-          continue
-        }
-        else if (consecutiveInlineNodes.length) {
-          promises.push(dealWithConsecutiveInlineNodes(consecutiveInlineNodes, toggle))
-          consecutiveInlineNodes = []
-        }
-
-        if (isHTMLElement(child)) {
-          promises.push(translateWalkedElement(child, walkId, toggle))
-        }
-      }
-
-      if (consecutiveInlineNodes.length) {
-        promises.push(dealWithConsecutiveInlineNodes(consecutiveInlineNodes, toggle))
-        consecutiveInlineNodes = []
-      }
-    }
-  }
-  else {
-    const promises: Promise<void>[] = []
-    for (const child of element.childNodes) {
-      if (isHTMLElement(child)) {
-        promises.push(translateWalkedElement(child, walkId, toggle))
-      }
-    }
-    if (element.shadowRoot) {
-      for (const child of element.shadowRoot.children) {
-        if (isHTMLElement(child)) {
-          promises.push(translateWalkedElement(child, walkId, toggle))
-        }
-      }
-    }
-  }
-  // This simultaneously ensures that when concurrent translation
-  // and external await call this function, all translations are completed
-  await Promise.all(promises)
-}
-
-async function dealWithConsecutiveInlineNodes(nodes: TransNode[], toggle: boolean = false) {
-  if (nodes.length > 1) {
-    // give attribute to the last node
-    const lastNode = nodes[nodes.length - 1]
-    if (isHTMLElement(lastNode)) {
-      lastNode.setAttribute(CONSECUTIVE_INLINE_END_ATTRIBUTE, '')
-    }
-  }
-  await translateNodes(nodes, toggle)
 }

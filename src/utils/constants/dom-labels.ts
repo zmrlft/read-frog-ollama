@@ -5,9 +5,12 @@ export const BLOCK_CONTENT_CLASS = 'read-frog-translated-block-content'
 export const WALKED_ATTRIBUTE = 'data-read-frog-walked'
 // paragraph means you need to trigger translation on this element (i.e. we have inline children in it)
 export const PARAGRAPH_ATTRIBUTE = 'data-read-frog-paragraph'
-
 export const BLOCK_ATTRIBUTE = 'data-read-frog-block-node'
 export const INLINE_ATTRIBUTE = 'data-read-frog-inline-node'
+
+export const TRANSLATION_MODE_ATTRIBUTE = 'data-read-frog-translation-mode'
+
+export const MARK_ATTRIBUTES = new Set([WALKED_ATTRIBUTE, PARAGRAPH_ATTRIBUTE, BLOCK_ATTRIBUTE, INLINE_ATTRIBUTE])
 
 // if the end of the consecutive inline node is a text node, we can't add this attribute to it
 // therefore, only the consecutive inline html element can have this attribute

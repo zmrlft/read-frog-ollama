@@ -2,7 +2,6 @@ import { Icon } from '@iconify/react'
 import { cn } from '@repo/ui/lib/utils'
 import { useAtomValue } from 'jotai'
 import { configFields } from '@/utils/atoms/config'
-import { removeAllTranslatedWrapperNodes } from '@/utils/host/translate/node-manipulation'
 import { validateTranslationConfig } from '@/utils/host/translate/translate-text'
 import { sendMessage } from '@/utils/message'
 import { enablePageTranslationAtom, isDraggingButtonAtom } from '../../atoms'
@@ -33,7 +32,6 @@ export default function TranslateButton() {
           })
         }
         else {
-          removeAllTranslatedWrapperNodes()
           sendMessage('setEnablePageTranslationOnContentScript', {
             enabled: false,
           })
