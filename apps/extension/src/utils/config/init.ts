@@ -10,13 +10,13 @@ import { runMigration } from './migration'
  * @returns The extension config
  */
 export async function initializeConfig() {
-  const [storedConfig, storedCSchemaVersion] = await Promise.all([
+  const [storedConfig, storedConfigSchemaVersion] = await Promise.all([
     storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`),
     storage.getItem<number>(`local:__configSchemaVersion`),
   ])
 
   let config: Config | null = storedConfig
-  let currentVersion = storedCSchemaVersion ?? 1
+  let currentVersion = storedConfigSchemaVersion ?? 1
 
   if (!config) {
     config = DEFAULT_CONFIG

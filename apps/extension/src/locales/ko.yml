@@ -115,6 +115,26 @@ options:
         translationOnly: 번역만
   config:
     title: 설정
+    sync:
+      title: 설정 동기화
+      description: 설정 가져오기 및 내보내기
+      import: 설정 가져오기
+      export: 설정 내보내기
+      importSuccess: 설정 가져오기 완료
+      exportSuccess: 설정 내보내기 완료
+      importError: 가져오기 실패
+      versionTooNew: 가져온 설정 버전이 최신이므로 Read Frog를 최신 버전으로 업그레이드해 주세요
+      migrationError: 마이그레이션 실패
+      validationError: 설정 검증 실패
+      exportOptions:
+        title: 내보내기 옵션 선택
+        description: 내보내는 설정에 API 키를 포함할지 선택하세요. API 키를 포함하면 민감한 정보가 유출될 수 있으므로 안전한 환경에서만 사용하는 것을 권장합니다.
+        includeAPIKeys: API 키 포함
+        excludeAPIKeys: API 키 제외
+        cancel: 취소
+      viewConfig:
+        expand: 설정 펼치기
+        collapse: 설정 접기
     resetConfig:
       title: 기본 설정 복원
       description: 모든 설정을 기본값으로 재설정

@@ -115,6 +115,26 @@ options:
         translationOnly: 仅显示翻译
   config:
     title: 配置
+    sync:
+      title: 配置同步
+      description: 导入和导出您的配置设置
+      import: 导入配置
+      export: 导出配置
+      importSuccess: 配置导入成功
+      exportSuccess: 配置导出成功
+      importError: 导入失败
+      versionTooNew: 导入的配置版本较新，请升级 Read Frog 到最新版本
+      migrationError: 迁移失败
+      validationError: 配置验证失败
+      exportOptions:
+        title: 选择导出选项
+        description: 请选择是否在导出的配置中包含 API Keys。包含 API Keys 可能会泄露敏感信息，建议仅在安全环境下使用。
+        includeAPIKeys: 包含 API Keys
+        excludeAPIKeys: 不包含 API Keys
+        cancel: 取消
+      viewConfig:
+        expand: 展开配置
+        collapse: 收起配置
     resetConfig:
       title: 恢复默认配置
       description:

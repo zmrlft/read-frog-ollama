@@ -114,6 +114,26 @@ options:
         translationOnly: 翻訳のみ
   config:
     title: 設定
+    sync:
+      title: 設定同期
+      description: 設定をインポート・エクスポート
+      import: 設定をインポート
+      export: 設定をエクスポート
+      importSuccess: 設定のインポートが完了しました
+      exportSuccess: 設定のエクスポートが完了しました
+      importError: インポートに失敗しました
+      versionTooNew: インポートされた設定のバージョンが新しいため、Read Frogを最新バージョンにアップグレードしてください
+      migrationError: 移行に失敗しました
+      validationError: 設定の検証に失敗しました
+      exportOptions:
+        title: エクスポートオプションを選択
+        description: エクスポートする設定にAPIキーを含めるかどうかを選択してください。APIキーを含めると機密情報が漏洩する可能性があるため、安全な環境でのみ使用することをお勧めします。
+        includeAPIKeys: APIキーを含める
+        excludeAPIKeys: APIキーを含めない
+        cancel: キャンセル
+      viewConfig:
+        expand: 設定を展開
+        collapse: 設定を折りたたむ
     resetConfig:
       title: 設定をリセット
       description: すべての設定をデフォルト値にリセットします。
