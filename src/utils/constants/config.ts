@@ -14,7 +14,7 @@ import { DEFAULT_REQUEST_CAPACITY, DEFAULT_REQUEST_RATE } from './translate'
 import { DEFAULT_TRANSLATION_NODE_STYLE } from './translation-node-style'
 
 export const CONFIG_STORAGE_KEY = 'config'
-export const CONFIG_SCHEMA_VERSION = 16
+export const CONFIG_SCHEMA_VERSION = 17
 
 export const DEFAULT_PROVIDER_CONFIG: ProvidersConfig = {
   openai: {
