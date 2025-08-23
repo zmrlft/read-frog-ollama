@@ -10,6 +10,7 @@ export async function ensureConfig() {
   if (!configPromise) {
     configPromise = initializeConfig()
   }
+  await configPromise
   return storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`)
 }
 

@@ -3,7 +3,7 @@ import { WEBSITE_URL } from '@/utils/constants/url'
 import { logger } from '@/utils/logger'
 import { onMessage, sendMessage } from '@/utils/message'
 import { setUpCacheCleanup } from './cache-cleanup'
-import { ensureConfig } from './config'
+import { ensureConfig, getConfigFromBackground } from './config'
 import { newUserGuide } from './new-user-guide'
 import { proxyFetch } from './proxy-fetch'
 import { setUpRequestQueue } from './request-queue'
@@ -28,10 +28,6 @@ export default defineBackground(() => {
     await browser.tabs.create({ url, active: active ?? true })
   })
 
-  onMessage('getInitialConfig', async () => {
-    return await ensureConfig()
-  })
-
   onMessage('openOptionsPage', () => {
     logger.info('openOptionsPage')
     browser.runtime.openOptionsPage()
@@ -40,6 +36,8 @@ export default defineBackground(() => {
   onMessage('popupRequestReadArticle', async (message) => {
     sendMessage('readArticle', undefined, message.data.tabId)
   })
+
+  getConfigFromBackground()
 
   newUserGuide()
   translationMessage()
