@@ -1,0 +1,125 @@
+---
+title: DeepLX
+description: DeepLX 是一个提供类似 DeepL 翻译质量的免费翻译 API。了解如何通过灵活的 baseURL 模式配置不同的 DeepLX 提供商。
+---
+
+## 什么是 DeepLX？
+
+DeepLX 是一个免费的非官方 API，通过逆向工程提供类似 DeepL 的翻译质量。它为需要高质量翻译服务但不想付费的开发者提供了官方 DeepL API 的替代方案。
+
+## 灵活的 BaseURL 配置
+
+陪读蛙支持灵活的 DeepLX baseURL 配置，以适配不同的 DeepLX 提供商。您可以自定义 baseURL 以匹配您提供商的特定端点格式。
+
+### 令牌占位符支持
+
+您可以在 baseURL 中使用 `{{apiKey}}` 占位符，将您的 API 令牌插入到任何位置。当不同的 DeepLX 提供商需要在不同的 URL 格式中使用令牌时，这非常有用。
+
+**示例：**
+
+1. **路径中的令牌**: `https://api.deeplx.com/{{apiKey}}/translate`
+2. **作为查询参数的令牌**: `https://api.deeplx.com/v1/translate?token={{apiKey}}`
+3. **子域名中的令牌**: `https://{{apiKey}}.api.deeplx.com/translate`
+
+### 特殊 URL 处理
+
+#### 标准 DeepLX URL
+
+对于大多数 DeepLX 提供商，如果您的 baseURL 不以 `/translate` 结尾，陪读蛙会自动添加：
+
+- **输入**: `https://deeplx.example.com`
+- **输出**: `https://deeplx.example.com/translate`
+
+带 API 令牌：
+- **输入**: `https://deeplx.example.com` + 令牌 `abc123`
+- **输出**: `https://deeplx.example.com/abc123/translate`
+
+#### api.deeplx.org 特殊逻辑
+
+对于官方的 `https://api.deeplx.org` 端点，陪读蛙应用特殊逻辑，将 API 令牌插入到 `.org` 和 `/translate` 之间：
+
+- **无令牌**: `https://api.deeplx.org/translate`
+- **有令牌**: `https://api.deeplx.org/your-token/translate`
+
+### 配置示例
+
+#### 不需要 API 令牌
+
+一些 DeepLX 提供商不需要身份验证：
+
+```
+BaseURL: https://deeplx.vercel.app
+API Key: （留空）
+结果: https://deeplx.vercel.app/translate
+```
+
+#### 路径中的令牌
+
+```
+BaseURL: https://api.deeplx.com/{{apiKey}}
+API Key: your-secret-token
+结果: https://api.deeplx.com/your-secret-token/translate
+```
+
+#### 作为查询参数的令牌
+
+```
+BaseURL: https://api.example.com/v1/translate?key={{apiKey}}
+API Key: your-api-key
+结果: https://api.example.com/v1/translate?key=your-api-key
+```
+
+#### 带令牌的自定义端点
+
+```
+BaseURL: https://deeplx.mydomain.com/api/{{apiKey}}/translate
+API Key: abc123
+结果: https://deeplx.mydomain.com/api/abc123/translate
+```
+
+## 在陪读蛙中设置 DeepLX
+
+1. **打开扩展选项**: 点击陪读蛙扩展图标并进入选项页面
+2. **导航到 API 提供商**: 进入 API 提供商部分
+3. **配置 DeepLX**:
+   - 根据您提供商的格式设置 **BaseURL**
+   - 如果需要，添加您的 **API Key**（对于不需要密钥的提供商请留空）
+   - 如果需要自定义令牌位置，请使用 `{{apiKey}}` 占位符
+4. **测试翻译**: 尝试翻译一些文本以验证配置是否正常工作
+
+## 常见的 DeepLX 提供商
+
+### 免费提供商（无需 API 密钥）
+- `https://deeplx.vercel.app`
+- `https://deeplx.herokuapp.com`
+
+### 付费/自托管提供商
+- `https://api.deeplx.org`（需要 API 密钥）
+- 您自己的自托管实例
+
+## 故障排除
+
+### URL 构造问题
+如果您在 URL 构造方面遇到问题：
+
+1. **检查您的 baseURL 格式**: 确保它遵循预期的模式
+2. **验证令牌位置**: 确保 `{{apiKey}}` 在正确的位置
+3. **先不用令牌测试**: 尝试使用免费提供商来隔离配置问题
+
+### 常见错误
+
+- **"使用 `{{apiKey}}` 占位符时需要 API 密钥"**: 您在 baseURL 中指定了 `{{apiKey}}` 但没有提供 API 密钥
+- **"DeepLX 翻译请求失败"**: 检查您的 baseURL 和 API 密钥是否正确
+- **网络错误**: 验证 DeepLX 提供商是否可访问且在线
+
+## API 响应格式
+
+DeepLX 提供商应该返回以下格式的 JSON 响应：
+
+```json
+{
+  "data": "翻译后的文本"
+}
+```
+
+如果您正在设置自己的 DeepLX 实例，请确保它返回这种预期格式的响应。

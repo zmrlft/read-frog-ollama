@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(source:*)",
+      "Bash(find:*)",
+      "Bash(cat:*)",
+      "Bash(cd:*)",
+      "Bash(mkdir:*)",
+      "Bash(tree:*)",
+      "Bash(cp:*)",
+      "Bash(touch:*)",
+      "Bash(pnpm test:*)",
+      "Bash(pnpm build)",
+      "Bash(pnpm lint:*)",
+      "Bash(pnpm type-check)",
+      "mcp__context7"
+    ],
+    "deny": []
+  }
+}

@@ -50,6 +50,8 @@ jobs:
             - Test coverage
 
             Be constructive and helpful in your feedback.
+            Be concise and and don't spend too many words on things that are already good.
+            Spend words on things that need improvement.
 
           # Optional: Use sticky comments to make Claude reuse the same comment on subsequent pushes to the same PR
           # use_sticky_comment: true

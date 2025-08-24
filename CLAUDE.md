@@ -2,9 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Coding Style
+## Project Overview
 
-You are a senior engineer producing production-ready code. Follow these rules:
+Read Frog is a browser extension that helps you read and understand text on the web. The Chinese name is called 陪读蛙.
+
+It supports multiple languages and multiple LLM providers.
+
+## Coding Style
 
 ### Design principles
 
@@ -175,3 +179,4 @@ The code comments should be in English.
 ## Others
 
 - Please disregard any console.log statements in my code that may violate ESLint rules.
+- When you want to use `git add xxx` to add files before commit, please use `git add .` to add all files.
