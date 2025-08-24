@@ -21,6 +21,27 @@ vi.mock('@/utils/config/config', () => ({
   globalConfig: DEFAULT_CONFIG,
 }))
 
+// Mock getComputedStyle globally to return proper default values
+const originalGetComputedStyle = window.getComputedStyle
+beforeAll(() => {
+  window.getComputedStyle = vi.fn((element) => {
+    const originalStyle = originalGetComputedStyle(element)
+    if (originalStyle.float === '') {
+      Object.defineProperty(originalStyle, 'float', {
+        value: 'none',
+        writable: true,
+        enumerable: true,
+        configurable: true,
+      })
+    }
+    return originalStyle
+  })
+})
+
+afterAll(() => {
+  window.getComputedStyle = originalGetComputedStyle
+})
+
 async function hideOrShowPageTranslation(toggle: boolean = false) {
   const id = crypto.randomUUID()
 
@@ -139,8 +160,10 @@ describe('toggle translateWalkedElement', () => {
         <div style={{ display: 'block' }}>3</div>
       </div>,
     )
+
     const node = screen.getByTestId('test-node')
     await hideOrShowPageTranslation(true)
+
     expect(node.childNodes[2]).toHaveClass(CONTENT_WRAPPER_CLASS)
     expect(node.childNodes[2].childNodes[1]).toHaveClass(INLINE_CONTENT_CLASS)
 
@@ -158,6 +181,22 @@ describe('translatePage', () => {
     const node = screen.getByTestId('test-node')
     expect(node.childNodes[1]).toHaveClass(CONTENT_WRAPPER_CLASS)
     expect(node.childNodes[1].childNodes[1]).toHaveClass(BLOCK_CONTENT_CLASS)
+  })
+
+  it('should translate floating element as inline node', async () => {
+    render(
+      <div data-testid="test-node">
+        <span style={{ float: 'left' }}>Floating text</span>
+        <span style={{ display: 'inline' }}>Normal text</span>
+      </div>,
+    )
+
+    const node = screen.getByTestId('test-node')
+    await hideOrShowPageTranslation()
+
+    // The floating span should be treated as inline, and translation wrapper should be at the end of parent
+    expect(node.lastChild).toHaveClass(CONTENT_WRAPPER_CLASS)
+    expect(node.lastChild?.childNodes[1]).toHaveClass(BLOCK_CONTENT_CLASS)
   })
 
   it('should insert inline translation and block translation correctly in a node with inline and block node inside', async () => {

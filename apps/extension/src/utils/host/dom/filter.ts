@@ -35,8 +35,16 @@ export function isShallowInlineHTMLElement(element: HTMLElement): boolean {
     return false
   }
 
+  const computedStyle = window.getComputedStyle(element)
+
+  // treat large floating letter on some news websites as inline node
+  // for example: https://www.economist.com/business/2025/08/21/china-is-quietly-upstaging-america-with-its-open-models
+  if (computedStyle.float !== 'none') {
+    return true
+  }
+
   return (
-    ['inline', 'contents'].includes(window.getComputedStyle(element).display)
+    ['inline', 'contents'].includes(computedStyle.display)
     && !FORCE_BLOCK_TAGS.has(element.tagName)
   )
 }
@@ -56,8 +64,16 @@ export function isShallowBlockHTMLElement(element: HTMLElement): boolean {
   if (!element.textContent?.trim()) {
     return false
   }
+
+  const computedStyle = window.getComputedStyle(element)
+
+  // treat large floating letter on some news websites as block node
+  if (computedStyle.float !== 'none') {
+    return false
+  }
+
   return (
-    !['inline', 'contents'].includes(window.getComputedStyle(element).display)
+    !['inline', 'contents'].includes(computedStyle.display)
     || FORCE_BLOCK_TAGS.has(element.tagName)
   )
 }
