@@ -1,10 +1,7 @@
-import { render, screen } from '@testing-library/react'
-
 // @vitest-environment jsdom
+import { act, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-
 import { DEFAULT_CONFIG } from '@/utils/constants/config'
-
 import {
   BLOCK_CONTENT_CLASS,
   CONTENT_WRAPPER_CLASS,
@@ -28,7 +25,9 @@ async function hideOrShowPageTranslation(toggle: boolean = false) {
   const id = crypto.randomUUID()
 
   walkAndLabelElement(document.body, id)
-  await translateWalkedElement(document.body, id, toggle)
+  await act(async () => {
+    await translateWalkedElement(document.body, id, toggle)
+  })
 }
 
 describe('translateText stub', () => {
@@ -54,7 +53,9 @@ describe('translateNode', () => {
       </div>,
     )
     const node = screen.getByTestId('test-node')
-    await translateNodesBilingualMode([node], false)
+    await act(async () => {
+      await translateNodesBilingualMode([node], false)
+    })
     expect(node.childNodes[1]).toHaveClass(CONTENT_WRAPPER_CLASS)
     expect(node.childNodes[1].childNodes[1]).toHaveClass(BLOCK_CONTENT_CLASS)
   })
@@ -68,7 +69,9 @@ describe('translateNode', () => {
     )
     const node = screen.getByTestId('test-node')
     const textNode = node.firstChild as Text
-    await translateNodesBilingualMode([textNode], false)
+    await act(async () => {
+      await translateNodesBilingualMode([textNode], false)
+    })
     expect(node.childNodes[1]).toHaveClass(CONTENT_WRAPPER_CLASS)
     expect(node.childNodes[1].childNodes[1]).toHaveClass(INLINE_CONTENT_CLASS)
   })
@@ -281,7 +284,9 @@ describe('hideOrShowNodeTranslation', () => {
     // Mock elementFromPoint
     document.elementFromPoint = vi.fn(() => originalElement)
 
-    await hideOrShowNodeTranslation({ x: 150, y: 125 })
+    await act(async () => {
+      await hideOrShowNodeTranslation({ x: 150, y: 125 })
+    })
 
     // Should find translation wrapper
     const wrapper = document.querySelector(`.${CONTENT_WRAPPER_CLASS}`)
@@ -322,7 +327,9 @@ describe('hideOrShowNodeTranslation', () => {
     // Mock elementFromPoint to return translated content
     document.elementFromPoint = vi.fn(() => translatedContent)
 
-    await hideOrShowNodeTranslation({ x: 150, y: 125 })
+    await act(async () => {
+      await hideOrShowNodeTranslation({ x: 150, y: 125 })
+    })
 
     // Wrapper should be removed
     expect(document.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
