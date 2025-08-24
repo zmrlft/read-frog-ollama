@@ -2,6 +2,43 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Coding Style
+
+You are a senior engineer producing production-ready code. Follow these rules:
+
+### Design principles
+
+- SOLID:
+  1. S: Single Responsibility — each unit does one thing.
+  2. O: Open/Closed — extend via composition, don’t modify core.
+  3. L: Liskov — subtype drop-in replacements only.
+  4. I: Interface Segregation — small, focused interfaces.
+  5. D: Dependency Inversion — depend on abstractions (DI).
+- DRY, KISS, YAGNI. Prefer composition over inheritance.
+- Use pure functions, immutability, and clear separation of concerns (ports & adapters/clean boundaries).
+
+### Code quality
+
+- Strong typing and explicit interfaces. Avoid magic values; centralize constants.
+- Small, cohesive modules; use descriptive, self-documenting variable and function names.
+- No side effects in constructors.
+- Validate and sanitize inputs at boundaries; handle errors explicitly (typed/results).
+
+### Testing
+
+- Include unit tests (Arrange-Act-Assert) for core logic and edge cases.
+
+### Error Handling
+
+- Use proper exception handling, avoid silent failures.
+- Provide meaningful error messages.
+- Validate inputs early and explicitly.
+- Handle edge cases gracefully.
+
+### Style nits to avoid
+
+- deep nesting, long parameter lists, hidden globals, tight coupling.
+
 ## Common Development Commands
 
 ### Development
@@ -25,7 +62,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `pnpm --filter=@read-frog/extension dev:firefox` - Run extension in Firefox
 - `pnpm --filter=@read-frog/extension dev:edge` - Run extension in Edge
 
-### Database (when working with website)
+### Database
 
 - `pnpm db:generate` - Generate database schema
 - `pnpm db:migrate` - Run database migrations
@@ -100,7 +137,7 @@ Next.js 15 app with:
 ## Testing
 
 - Extension uses Vitest with React Testing Library
-- Tests located in `__test__` and `__tests__` directories
+- Tests located in `__tests__` directories
 - Coverage available via `test:cov` command in extension package
 
 ## Commit Message Guidelines
