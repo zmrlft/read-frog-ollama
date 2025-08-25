@@ -6,6 +6,7 @@ export const FORCE_BLOCK_TAGS = new Set([
   'H4',
   'H5',
   'H6',
+  'BR',
   'FORM',
   'SELECT',
   'BUTTON',
@@ -35,7 +36,6 @@ export const VALID_TRANSLATE_NODES = new Set([
 // Don't walk into these tags
 export const INVALID_TRANSLATE_TAGS = new Set([
   'HEAD',
-  'BR',
   'HR',
   'INPUT',
   'TEXTAREA',

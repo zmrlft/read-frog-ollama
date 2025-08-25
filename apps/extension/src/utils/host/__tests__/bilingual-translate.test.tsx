@@ -183,6 +183,32 @@ describe('translatePage', () => {
     expect(node.childNodes[1].childNodes[1]).toHaveClass(BLOCK_CONTENT_CLASS)
   })
 
+  it('should handle inline elements separated by br tags correctly', async () => {
+    render(
+      <div data-testid="test-node">
+        <span style={{ display: 'inline' }}>First inline text</span>
+        <span style={{ display: 'inline' }}>Second inline text</span>
+        <br />
+        <span style={{ display: 'inline' }}>Third inline text</span>
+        <span style={{ display: 'inline' }}>Fourth inline text</span>
+        <br />
+        <span style={{ display: 'inline' }}>Fifth inline text</span>
+      </div>,
+    )
+
+    const node = screen.getByTestId('test-node')
+    await hideOrShowPageTranslation()
+
+    // Should have multiple translation wrappers due to br tags breaking inline sequences
+    const wrappers = node.querySelectorAll(`.${CONTENT_WRAPPER_CLASS}`)
+    expect(wrappers.length).toBeGreaterThan(1)
+
+    // Each wrapper should contain inline content
+    wrappers.forEach((wrapper) => {
+      expect(wrapper.childNodes[1]).toHaveClass(INLINE_CONTENT_CLASS)
+    })
+  })
+
   it('should translate floating element as inline node', async () => {
     render(
       <div data-testid="test-node">

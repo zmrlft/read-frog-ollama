@@ -379,9 +379,6 @@ export async function translateWalkedElement(
       const children = Array.from(element.childNodes)
       let consecutiveInlineNodes: TransNode[] = []
       for (const child of children) {
-        if (!child.textContent?.trim()) {
-          continue
-        }
         if (!(isTextNode(child) || isHTMLElement(child))) {
           continue
         }

@@ -31,10 +31,6 @@ export function isShallowInlineTransNode(node: Node): boolean {
 }
 
 export function isShallowInlineHTMLElement(element: HTMLElement): boolean {
-  if (!element.textContent?.trim()) {
-    return false
-  }
-
   const computedStyle = window.getComputedStyle(element)
 
   // treat large floating letter on some news websites as inline node
@@ -61,10 +57,6 @@ export function isShallowBlockTransNode(node: Node): boolean {
 }
 
 export function isShallowBlockHTMLElement(element: HTMLElement): boolean {
-  if (!element.textContent?.trim()) {
-    return false
-  }
-
   const computedStyle = window.getComputedStyle(element)
 
   // treat large floating letter on some news websites as block node
