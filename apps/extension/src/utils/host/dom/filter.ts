@@ -31,6 +31,11 @@ export function isShallowInlineTransNode(node: Node): boolean {
 }
 
 export function isShallowInlineHTMLElement(element: HTMLElement): boolean {
+  // to prevent too many inline nodes that make <body> as a paragraph node
+  if (!element.textContent?.trim()) {
+    return false
+  }
+
   const computedStyle = window.getComputedStyle(element)
 
   // treat large floating letter on some news websites as inline node
