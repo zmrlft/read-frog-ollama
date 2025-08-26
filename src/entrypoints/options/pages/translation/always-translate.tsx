@@ -1,3 +1,4 @@
+import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
 import { Button } from '@repo/ui/components/button'
 import { Input } from '@repo/ui/components/input'
@@ -16,7 +17,7 @@ import { ConfigCard } from '../../components/config-card'
 
 export function AlwaysTranslate() {
   return (
-    <ConfigCard title="Always Translate" description="Always translate the webpage">
+    <ConfigCard title={i18n.t('options.translation.alwaysTranslate.title')} description={i18n.t('options.translation.alwaysTranslate.description')}>
       <PatternTable />
     </ConfigCard>
   )
@@ -64,7 +65,7 @@ function PatternTable() {
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2">
         <Input
-          placeholder="Enter URL Pattern"
+          placeholder={i18n.t('options.translation.alwaysTranslate.enterUrlPattern')}
           value={inputValue}
           onChange={e => setInputValue(e.target.value)}
           onKeyDown={handleKeyPress}
@@ -76,7 +77,7 @@ function PatternTable() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">URL Pattern</TableHead>
+            <TableHead className="w-[100px]">{i18n.t('options.translation.alwaysTranslate.urlPattern')}</TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>
