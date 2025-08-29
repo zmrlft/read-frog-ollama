@@ -129,6 +129,9 @@ options:
       mode:
         bilingual: 双语对照
         translationOnly: 仅显示翻译
+    customAutoTranslateShortcutKey:
+      title: 自定义翻译快捷键
+      description: 允许您自定义网页翻译快捷键
   config:
     title: 配置
     sync:
@@ -192,3 +195,5 @@ noAPIKeyConfig:
 translation:
   sameLanguage: 源语言和目标语言必须不同
   autoModeSameLanguage: 检测到的语言 '$1' 与目标语言相同
+shortcutKeySelector:
+  placeholder: 请输入快捷键

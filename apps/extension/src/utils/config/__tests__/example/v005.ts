@@ -70,6 +70,6 @@ export const configExample = {
     position: 0.66,
   },
   sideContent: {
-    width: 400,
+    width: 600,
   },
 }

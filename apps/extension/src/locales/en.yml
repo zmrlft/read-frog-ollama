@@ -129,6 +129,9 @@ options:
       mode:
         bilingual: Bilingual
         translationOnly: Translation Only
+    customAutoTranslateShortcutKey:
+      title: Customize translation shortcut
+      description: Allows you to customize the full-text translation shortcut
   config:
     title: Config
     sync:
@@ -191,3 +194,5 @@ noAPIKeyConfig:
 translation:
   sameLanguage: Source and target languages must be different
   autoModeSameLanguage: Detected language '$1' is the same as target language
+shortcutKeySelector:
+  placeholder: Please enter the shortcut

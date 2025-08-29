@@ -128,6 +128,9 @@ options:
       mode:
         bilingual: バイリンガル
         translationOnly: 翻訳のみ
+    customAutoTranslateShortcutKey:
+      title: 翻訳ショートカットキーをカスタマイズ
+      description: ウェブページ翻訳のショートカットキーをカスタマイズできます
   config:
     title: 設定
     sync:
@@ -190,3 +193,5 @@ noAPIKeyConfig:
 translation:
   sameLanguage: ソース言語とターゲット言語は異なる必要があります
   autoModeSameLanguage: 検出された言語 '$1' はターゲット言語と同じです
+shortcutKeySelector:
+  placeholder: ショートカットを入力してください

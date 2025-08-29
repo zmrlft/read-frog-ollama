@@ -129,6 +129,9 @@ options:
       mode:
         bilingual: 이중 언어
         translationOnly: 번역만
+    customAutoTranslateShortcutKey:
+      title: 번역 단축키 사용자 지정
+      description: 웹페이지 번역 단축키를 사용자 지정할 수 있습니다
   config:
     title: 설정
     sync:
@@ -191,3 +194,5 @@ noAPIKeyConfig:
 translation:
   sameLanguage: 원본 언어와 대상 언어는 달라야 합니다
   autoModeSameLanguage: 감지된 언어 '$1'은(는) 대상 언어와 같습니다
+shortcutKeySelector:
+  placeholder: 단축키를 입력해 주세요

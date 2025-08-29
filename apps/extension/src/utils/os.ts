@@ -1,6 +1,4 @@
 type OS = 'Windows' | 'MacOS' | 'Linux' | 'iOS' | 'Android' | 'Unknown'
-type Key = 'alt' | 'ctrl' | 'shift' | 'enter' | 'backspace' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j'
-  | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z'
 
 function detectOS(): OS {
   if (typeof navigator === 'undefined')
@@ -22,7 +20,7 @@ function detectOS(): OS {
   return 'Unknown'
 }
 
-export function formatHotkey(keys: Key[]): string {
+export function formatHotkey(keys: string[]): string {
   const os = detectOS()
 
   // Define your mappings per platform
@@ -31,17 +29,27 @@ export function formatHotkey(keys: Key[]): string {
       ? {
           // Option is the Mac equivalent of Alt
           alt: '⌥',
-          ctrl: '⌘',
+          ctrl: '⌃',
           shift: '⇧',
           enter: '↩︎',
+          command: '⌘',
           backspace: '⌫',
+          up: '↑',
+          down: '↓',
+          right: '→',
+          left: '←',
         }
       : {
           alt: 'Alt',
           ctrl: 'Ctrl',
           shift: 'Shift',
           enter: 'Enter',
+          command: 'Command',
           backspace: 'Backspace',
+          up: '↑',
+          down: '↓',
+          right: '→',
+          left: '←',
         }
 
   // Map each key, fall back to uppercase raw if unknown
