@@ -2,7 +2,7 @@ import { browser, defineBackground } from '#imports'
 import { WEBSITE_URL } from '@/utils/constants/url'
 import { logger } from '@/utils/logger'
 import { onMessage, sendMessage } from '@/utils/message'
-import { setUpCacheCleanup } from './cache-cleanup'
+import { cleanupAllCache, setUpCacheCleanup } from './cache-cleanup'
 import { ensureConfig, getConfigFromBackground } from './config'
 import { newUserGuide } from './new-user-guide'
 import { proxyFetch } from './proxy-fetch'
@@ -35,6 +35,10 @@ export default defineBackground(() => {
 
   onMessage('popupRequestReadArticle', async (message) => {
     sendMessage('readArticle', undefined, message.data.tabId)
+  })
+
+  onMessage('clearAllCache', async () => {
+    await cleanupAllCache()
   })
 
   getConfigFromBackground()

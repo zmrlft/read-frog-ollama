@@ -67,6 +67,16 @@ options:
         range:
           main: メインコンテンツ
           all: すべてのコンテンツ
+    clearCache:
+      title: キャッシュクリア
+      description: ブラウザのすべての翻訳キャッシュをクリアします
+      clearing: クリア中...
+      dialog:
+        title: キャッシュクリア
+        trigger: キャッシュクリア
+        confirm: 確認
+        cancel: キャンセル
+        description: この操作により、すべての翻訳キャッシュがクリアされます。この操作は元に戻せません。
   translation:
     title: 翻訳
     requestQueueConfig:

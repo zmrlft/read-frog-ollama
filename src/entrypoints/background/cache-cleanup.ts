@@ -45,3 +45,16 @@ async function cleanupOldCache() {
     logger.error('Failed to cleanup old cache:', error)
   }
 }
+
+export async function cleanupAllCache() {
+  try {
+    // Delete all translation cache entries
+    await db.translationCache.clear()
+
+    logger.info(`Cache cleanup: Deleted all translation cache entries`)
+  }
+  catch (error) {
+    logger.error('Failed to cleanup all cache:', error)
+    throw error
+  }
+}

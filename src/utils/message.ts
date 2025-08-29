@@ -25,6 +25,8 @@ interface ProtocolMap {
   setTranslateRequestQueueConfig: (data: { rate?: number, capacity?: number }) => void
   // network proxy
   backgroundFetch: (data: ProxyRequest) => Promise<ProxyResponse>
+  // cache management
+  clearAllCache: () => Promise<void>
 }
 
 export const { sendMessage, onMessage }
