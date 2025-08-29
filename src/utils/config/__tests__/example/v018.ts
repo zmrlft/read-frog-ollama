@@ -1,6 +1,9 @@
-export const description = 'Add DeeplX provider'
+import type { Config } from '@/types/config/config'
+import { DEFAULT_AUTO_TRANSLATE_SHORTCUT_KEY } from '@/utils/constants/translate'
 
-export const configExample = {
+export const description = 'Implement customize translation shortcut key'
+
+export const configExample: Config = {
   language: {
     detectedCode: 'eng',
     sourceCode: 'auto',
@@ -38,6 +41,11 @@ export const configExample = {
         isCustomModel: false,
         customModel: '',
       },
+      gemini: {
+        model: 'gemini-2.5-pro',
+        isCustomModel: false,
+        customModel: '',
+      },
     },
   },
   translate: {
@@ -62,6 +70,7 @@ export const configExample = {
         customModel: '',
       },
     },
+    mode: 'bilingual',
     node: {
       enabled: true,
       hotkey: 'Control',
@@ -71,14 +80,23 @@ export const configExample = {
       autoTranslatePatterns: ['news.ycombinator.com'],
     },
     promptsConfig: {
-      prompt: 'Read Frog: TRANSLATE_DEFAULT_PROMPT',
+      prompt: 'default',
       patterns: [
         {
-          id: 'Read Frog: TRANSLATE_DEFAULT_PROMPT',
-          name: 'Read Frog: TRANSLATE_DEFAULT_PROMPT',
-          prompt: `Treat input as plain text input and translate it into {{targetLang}}, output translation ONLY. If translation is unnecessary (e.g. proper nouns, codes, etc.), return the original text. NO explanations. NO notes.
-Input:
+          id: 'default',
+          name: 'default',
+          prompt: `You are a professional {{targetLang}} native translator who needs to fluently translate text into {{targetLang}}.
+
+## Translation Rules
+1. Output only the translated content, without explanations or additional content (such as "Here's the translation:" or "Translation as follows:")
+2. The returned translation must maintain exactly the same number of paragraphs and format as the original text.
+3. If the text contains HTML tags, consider where the tags should be placed in the translation while maintaining fluency.
+4. For content that should not be translated (such as proper nouns, code, etc.), keep the original text.
+
+Translate to {{targetLang}}:
+\`\`\`
 {{input}}
+\`\`\`
 `,
         },
       ],
@@ -88,6 +106,7 @@ Input:
       rate: 5,
     },
     translationNodeStyle: 'default',
+    customAutoTranslateShortcutKey: DEFAULT_AUTO_TRANSLATE_SHORTCUT_KEY,
   },
   floatingButton: {
     enabled: true,
@@ -96,4 +115,5 @@ Input:
   sideContent: {
     width: 600,
   },
+  selectionToolbar: { enabled: true },
 }

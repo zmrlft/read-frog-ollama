@@ -1,5 +1,6 @@
 import { browser, i18n } from '#imports'
 import { Button } from '@repo/ui/components/button'
+import { cn } from '@repo/ui/lib/utils'
 import { useAtom, useAtomValue } from 'jotai'
 import { configFields } from '@/utils/atoms/config'
 import { validateTranslationConfig } from '@/utils/host/translate/translate-text'
@@ -43,11 +44,14 @@ export default function TranslateButton({ className }: { className?: string }) {
     <Button
       onClick={toggleTranslation}
       disabled={isIgnoreTab}
-      className={className}
+      className={cn(
+        'block truncate',
+        className,
+      )}
     >
       {isPageTranslated
         ? i18n.t('popup.showOriginal')
-        : `${i18n.t('popup.translate')} (${formatHotkey(['alt', 'q'])})`}
+        : `${i18n.t('popup.translate')} (${formatHotkey(translateConfig.customAutoTranslateShortcutKey)})`}
     </Button>
   )
 }

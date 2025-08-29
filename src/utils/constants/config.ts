@@ -10,11 +10,11 @@ import { API_PROVIDER_NAMES, PURE_TRANSLATE_PROVIDERS, READ_PROVIDER_NAMES, TRAN
 import { omit, pick } from '@/types/utils'
 import { DEFAULT_TRANSLATE_PROMPTS_CONFIG } from './prompt'
 import { DEFAULT_SIDE_CONTENT_WIDTH } from './side'
-import { DEFAULT_REQUEST_CAPACITY, DEFAULT_REQUEST_RATE } from './translate'
+import { DEFAULT_AUTO_TRANSLATE_SHORTCUT_KEY, DEFAULT_REQUEST_CAPACITY, DEFAULT_REQUEST_RATE } from './translate'
 import { DEFAULT_TRANSLATION_NODE_STYLE } from './translation-node-style'
 
 export const CONFIG_STORAGE_KEY = 'config'
-export const CONFIG_SCHEMA_VERSION = 17
+export const CONFIG_SCHEMA_VERSION = 18
 
 export const DEFAULT_PROVIDER_CONFIG: ProvidersConfig = {
   openai: {
@@ -104,6 +104,7 @@ export const DEFAULT_CONFIG: Config = {
       rate: DEFAULT_REQUEST_RATE,
     },
     translationNodeStyle: DEFAULT_TRANSLATION_NODE_STYLE,
+    customAutoTranslateShortcutKey: DEFAULT_AUTO_TRANSLATE_SHORTCUT_KEY,
   },
   floatingButton: {
     enabled: true,

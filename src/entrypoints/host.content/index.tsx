@@ -1,19 +1,18 @@
-import { browser, createShadowRootUi, defineContentScript } from '#imports'
+import { browser, createShadowRootUi, defineContentScript, storage } from '#imports'
 import { kebabCase } from 'case-anything'
 import ReactDOM from 'react-dom/client'
 // import eruda from 'eruda'
 import { globalConfig, loadGlobalConfig } from '@/utils/config/config'
 import { APP_NAME } from '@/utils/constants/app'
 import { shouldEnableAutoTranslation } from '@/utils/host/translate/auto-translation'
-import { validateTranslationConfig } from '@/utils/host/translate/translate-text'
 import { logger } from '@/utils/logger'
 import { sendMessage } from '@/utils/message'
 import { protectSelectAllShadowRoot } from '@/utils/select-all'
 import { insertShadowRootUIWrapperInto } from '@/utils/shadow-root'
 import { addStyleToShadow } from '@/utils/styles'
 import App from './app'
+import { TranslationShortcutKeyManager } from './translation-control/bind-translation-shortcut'
 import { registerNodeTranslationTriggers } from './translation-control/node-translation'
-
 import { PageTranslationManager } from './translation-control/page-translation'
 import './listen'
 import './style.css'
@@ -60,6 +59,10 @@ export default defineContentScript({
       threshold: 0,
     })
 
+    const shortcutKeyManager = new TranslationShortcutKeyManager({
+      pageTranslationManager: manager,
+    })
+
     manager.registerPageTranslationTriggers()
 
     const handleUrlChange = (from: string, to: string) => {
@@ -78,31 +81,11 @@ export default defineContentScript({
       handleUrlChange(from, to)
     })
 
-    window.addEventListener('keydown', (e: KeyboardEvent) => {
-      // Listen for Alt + Q for translation toggle (Windows: Alt + Q, Mac: Option + Q)
-      if (
-        e.altKey
-        && !e.ctrlKey
-        && !e.shiftKey
-        && !e.metaKey
-        && (e.code === 'KeyQ' || (typeof e.key === 'string' && e.key.toLowerCase() === 'q'))
-      ) {
-        e.preventDefault() // Prevent any default browser behavior
-        if (manager.isActive) {
-          manager.stop()
-        }
-        else {
-          if (!validateTranslationConfig({
-            providersConfig: globalConfig!.providersConfig,
-            translate: globalConfig!.translate,
-            language: globalConfig!.language,
-          })) {
-            return
-          }
-          manager.start()
-        }
-      }
-    }, { capture: true })
+    shortcutKeyManager.bindTranslationShortcutKey()
+
+    storage.watch('local:config', () => {
+      shortcutKeyManager.bindTranslationShortcutKey()
+    })
 
     port.onMessage.addListener((msg) => {
       logger.info('onMessage', msg)
