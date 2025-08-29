@@ -68,6 +68,16 @@ options:
         range:
           main: 주요 내용
           all: 전체 내용
+    clearCache:
+      title: 캐시 지우기
+      description: 브라우저의 모든 번역 캐시를 지웁니다
+      clearing: 지우는 중...
+      dialog:
+        title: 캐시 지우기
+        trigger: 캐시 지우기
+        confirm: 확인
+        cancel: 취소
+        description: 이 작업은 모든 번역 캐시를 지웁니다. 이 작업은 되돌릴 수 없습니다.
   translation:
     title: 번역
     requestQueueConfig:

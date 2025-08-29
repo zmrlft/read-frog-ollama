@@ -1,6 +1,7 @@
 import { i18n } from '#imports'
 import { PageLayout } from '../../components/page-layout'
 import { AlwaysTranslate } from './always-translate'
+import { ClearCacheConfig } from './clear-cache-config'
 import { CustomTranslationStyle } from './custom-translation-style'
 import { PersonalizedPrompt } from './personalized-prompt'
 import { RequestRate } from './request-rate'
@@ -14,6 +15,7 @@ export function TranslationPage() {
       <CustomTranslationStyle />
       <AlwaysTranslate />
       <PersonalizedPrompt />
+      <ClearCacheConfig />
     </PageLayout>
   )
 }

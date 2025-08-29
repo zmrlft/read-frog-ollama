@@ -68,6 +68,16 @@ options:
         range:
           main: Main Content
           all: All Content
+    clearCache:
+      title: Clear Cache
+      description: Clear all translation cache in your browser
+      clearing: Clearing...
+      dialog:
+        title: Clear Cache
+        trigger: Clear Cache
+        confirm: Confirm
+        cancel: Cancel
+        description: This operation will clear all translation cache. This action cannot be undone.
   translation:
     title: Translation
     requestQueueConfig:
