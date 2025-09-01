@@ -23,7 +23,7 @@ import {
 } from '../../constants/dom-labels'
 import { FORCE_INLINE_TRANSLATION_TAGS } from '../../constants/dom-tags'
 import { isBlockTransNode, isHTMLElement, isInlineTransNode, isTextNode, isTranslatedWrapperNode, isTransNode } from '../dom/filter'
-import { deepQueryTopLevelSelector, findNearestAncestorBlockNodeAt, findNearestAncestorBlockNodeFor, unwrapDeepestOnlyHTMLChild } from '../dom/find'
+import { deepQueryTopLevelSelector, findNearestAncestorBlockNodeAt, unwrapDeepestOnlyHTMLChild } from '../dom/find'
 import { getOwnerDocument } from '../dom/node'
 import {
   extractTextContent,
@@ -210,7 +210,7 @@ export async function translateNodeTranslationOnlyMode(nodes: ChildNode[], walkI
       console.error('targetNode.parentElement is not HTMLElement', targetNode.parentElement)
       return
     }
-    const existedTranslatedWrapper = findPreviousTranslatedWrapper(findNearestAncestorBlockNodeFor(targetNode.parentElement), walkId)
+    const existedTranslatedWrapper = findPreviousTranslatedWrapper(targetNode.parentElement, walkId)
     if (existedTranslatedWrapper) {
       removeTranslatedWrapperWithRestore(existedTranslatedWrapper)
       if (toggle) {
