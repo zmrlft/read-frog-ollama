@@ -52,11 +52,11 @@ export function walkAndLabelElement(
   element: HTMLElement,
   walkId: string,
 ): 'isOrHasBlockNode' | 'isShallowInlineNode' | false {
-  element.setAttribute(WALKED_ATTRIBUTE, walkId)
-
   if (isDontWalkIntoElement(element)) {
     return false
   }
+
+  element.setAttribute(WALKED_ATTRIBUTE, walkId)
 
   if (
     globalConfig

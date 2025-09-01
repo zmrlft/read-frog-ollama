@@ -1,3 +1,4 @@
+import { globalConfig } from '@/utils/config/config'
 import { isDontWalkIntoElement, isHTMLElement, isIFrameElement } from '@/utils/host/dom/filter'
 import { deepQueryTopLevelSelector } from '@/utils/host/dom/find'
 import { walkAndLabelElement } from '@/utils/host/dom/traversal'
@@ -66,6 +67,11 @@ export class PageTranslationManager implements IPageTranslationManager {
   }
 
   start(): void {
+    if (!globalConfig) {
+      console.warn('Global config is not initialized')
+      return
+    }
+
     if (this.isAutoTranslating) {
       console.warn('AutoTranslationManager is already active')
       return
@@ -83,7 +89,11 @@ export class PageTranslationManager implements IPageTranslationManager {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           if (isHTMLElement(entry.target)) {
-            translateWalkedElement(entry.target, walkId)
+            if (!globalConfig) {
+              console.warn('Global config is not initialized')
+              return
+            }
+            translateWalkedElement(entry.target, walkId, globalConfig.translate.mode)
           }
           observer.unobserve(entry.target)
         }

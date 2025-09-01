@@ -12,11 +12,6 @@ export const TRANSLATION_MODE_ATTRIBUTE = 'data-read-frog-translation-mode'
 
 export const MARK_ATTRIBUTES = new Set([WALKED_ATTRIBUTE, PARAGRAPH_ATTRIBUTE, BLOCK_ATTRIBUTE, INLINE_ATTRIBUTE])
 
-// if the end of the consecutive inline node is a text node, we can't add this attribute to it
-// therefore, only the consecutive inline html element can have this attribute
-// this attribute is used to determine if the translation of this target node should be the next sibling, rather than inside the node
-export const CONSECUTIVE_INLINE_END_ATTRIBUTE = 'data-read-frog-consecutive-consecutive-inline-end'
-
 export const NOTRANSLATE_CLASS = 'notranslate'
 
 export const REACT_SHADOW_HOST_CLASS = 'read-frog-react-shadow-host'

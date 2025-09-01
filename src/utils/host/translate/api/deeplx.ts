@@ -1,3 +1,4 @@
+import type { LangCodeISO6391 } from '@repo/definitions'
 import type { Config } from '@/types/config/config'
 import { storage } from '#imports'
 import { CONFIG_STORAGE_KEY, DEFAULT_PROVIDER_CONFIG } from '@/utils/constants/config'
@@ -5,8 +6,8 @@ import { sendMessage } from '@/utils/message'
 
 export async function deeplxTranslate(
   sourceText: string,
-  fromLang: string,
-  toLang: string,
+  fromLang: LangCodeISO6391 | 'auto',
+  toLang: LangCodeISO6391,
   options?: { backgroundFetch?: boolean },
 ): Promise<string> {
   const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`)
@@ -17,7 +18,7 @@ export async function deeplxTranslate(
     throw new Error('DeepLX baseURL is not configured')
   }
 
-  const formatLang = (lang: string) => {
+  const formatLang = (lang: LangCodeISO6391 | 'auto') => {
     if (lang === 'auto')
       return 'auto'
     let formattedLang = lang.toUpperCase()

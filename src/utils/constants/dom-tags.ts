@@ -26,13 +26,6 @@ export const FORCE_BLOCK_TAGS = new Set([
   'NAV',
 ])
 
-export const VALID_TRANSLATE_NODES = new Set([
-  ...FORCE_BLOCK_TAGS,
-  'DIV',
-  'SPAN',
-  'A',
-])
-
 // Don't walk into these tags
 export const INVALID_TRANSLATE_TAGS = new Set([
   'HEAD',

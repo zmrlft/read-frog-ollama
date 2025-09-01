@@ -12,9 +12,7 @@ export const DEFAULT_TRANSLATE_PROMPT = `You are a professional ${TARGET_LANG_TO
 4. For content that should not be translated (such as proper nouns, code, etc.), keep the original text.
 
 Translate to ${TARGET_LANG_TOKEN}:
-\`\`\`
 ${INPUT_TOKEN}
-\`\`\`
 `
 
 export const DEFAULT_TRANSLATE_PROMPT_ID = 'default'

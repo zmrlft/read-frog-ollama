@@ -21,6 +21,7 @@ interface ProtocolMap {
   getPinState: () => boolean
   returnPinState: (data: { isPinned: boolean }) => void
   // request
+  // TODO: use discriminated union to define the type of the request
   enqueueRequest: (data: { type: string, params: Record<string, any>, scheduleAt: number, hash: string }) => Promise<any>
   setTranslateRequestQueueConfig: (data: { rate?: number, capacity?: number }) => void
   // network proxy

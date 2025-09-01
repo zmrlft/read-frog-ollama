@@ -1,5 +1,6 @@
 import type { Point } from '@/types/dom'
 
+import { CONTENT_WRAPPER_CLASS } from '@/utils/constants/dom-labels'
 import { isHTMLElement, isIFrameElement, isShallowInlineHTMLElement, isTranslatedContentNode, isTranslatedWrapperNode } from './filter'
 import { smashTruncationStyle } from './style'
 
@@ -57,21 +58,25 @@ function findElementAt(root: Document | ShadowRoot, point: Point): Element | nul
   return findDeepestElement(initialElement)
 }
 
+export function findNearestAncestorBlockNodeFor(element: Element) {
+  const startElement = element.closest(`.${CONTENT_WRAPPER_CLASS}`)?.parentElement || element
+  let currentNode = startElement
+  while (currentNode && currentNode.parentElement && isHTMLElement(currentNode) && isShallowInlineHTMLElement(currentNode)) {
+    currentNode = currentNode.parentElement
+  }
+  return currentNode
+}
+
 /**
  * Find the nearest block node from the point
  * @param point - The point to find the nearest block node
  */
 export function findNearestAncestorBlockNodeAt(point: Point) {
-  let currentNode = findElementAt(document, point)
+  const currentNode = findElementAt(document, point)
+  if (!currentNode)
+    return null
 
-  while (
-    currentNode && isHTMLElement(currentNode)
-    && isShallowInlineHTMLElement(currentNode)
-  ) {
-    currentNode = currentNode.parentElement
-  }
-
-  return currentNode
+  return findNearestAncestorBlockNodeFor(currentNode)
 }
 
 export function deepQueryTopLevelSelector(element: HTMLElement | ShadowRoot | Document, selectorFn: (element: HTMLElement) => boolean): HTMLElement[] {
@@ -122,10 +127,8 @@ export function unwrapDeepestOnlyHTMLChild(element: HTMLElement) {
   while (currentElement) {
     smashTruncationStyle(currentElement)
 
-    const onlyChild
-      = currentElement.childNodes.length === 1
-        && currentElement.children.length === 1
-    if (!onlyChild)
+    // Only have one HTML child and no Text Child
+    if (!(currentElement.children.length === 1 && currentElement.childNodes.length === 1))
       break
 
     const onlyChildElement = currentElement.children[0]
