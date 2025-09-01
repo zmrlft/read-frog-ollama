@@ -1,6 +1,8 @@
-export const description = 'Implement customize translation shortcut key'
+import type { Config } from '@/types/config/config'
 
-export const configExample = {
+export const description = 'Migrate to new default prompt'
+
+export const configExample: Config = {
   language: {
     detectedCode: 'eng',
     sourceCode: 'auto',
@@ -91,9 +93,7 @@ export const configExample = {
 4. For content that should not be translated (such as proper nouns, code, etc.), keep the original text.
 
 Translate to {{targetLang}}:
-\`\`\`
 {{input}}
-\`\`\`
 `,
         },
       ],
