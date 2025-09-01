@@ -44,8 +44,10 @@ export function isShallowInlineHTMLElement(element: HTMLElement): boolean {
     return true
   }
 
+  const isInlineDisplay = ['inline', 'contents'].some(display => computedStyle.display.includes(display))
+
   return (
-    ['inline', 'contents'].includes(computedStyle.display)
+    isInlineDisplay
     && !FORCE_BLOCK_TAGS.has(element.tagName)
   )
 }
@@ -69,8 +71,10 @@ export function isShallowBlockHTMLElement(element: HTMLElement): boolean {
     return false
   }
 
+  const isInlineDisplay = ['inline', 'contents'].some(display => computedStyle.display.includes(display))
+
   return (
-    !['inline', 'contents'].includes(computedStyle.display)
+    !isInlineDisplay
     || FORCE_BLOCK_TAGS.has(element.tagName)
   )
 }
@@ -117,6 +121,10 @@ export function isHTMLElement(node: Node): node is HTMLElement {
     && 'setAttribute' in node
 }
 
+export function isElement(node: Node): node is Element {
+  return node.nodeType === Node.ELEMENT_NODE
+}
+
 /**
  * More reliable check for Text nodes that works across different contexts
  * avoid using instanceof Text
@@ -127,6 +135,10 @@ export function isTextNode(node: Node): node is Text {
   return node.nodeType === Node.TEXT_NODE
     && 'textContent' in node
     && 'data' in node
+}
+
+export function isTransNode(node: Node): node is TransNode {
+  return isHTMLElement(node) || isTextNode(node)
 }
 
 export function isIFrameElement(node: Node): node is HTMLIFrameElement {

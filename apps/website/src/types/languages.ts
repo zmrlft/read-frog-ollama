@@ -1,3 +1,4 @@
+// TODO: delete this file since we have moved to @repo/definitions
 import type { Locale } from 'next-intl'
 import { z } from 'zod'
 

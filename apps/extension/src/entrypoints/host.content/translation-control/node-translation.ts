@@ -1,7 +1,7 @@
 import type { Point } from '@/types/dom'
 import { globalConfig } from '@/utils/config/config'
 import { isEditable } from '@/utils/host/dom/filter'
-import { hideOrShowNodeTranslation } from '@/utils/host/translate/node-manipulation'
+import { removeOrShowNodeTranslation } from '@/utils/host/translate/node-manipulation'
 
 export function registerNodeTranslationTriggers() {
   const mousePosition: Point = { x: 0, y: 0 }
@@ -29,8 +29,12 @@ export function registerNodeTranslationTriggers() {
         // If user hold other key, it will trigger keyState.isOtherKeyPressed = true; later by repeat event
         keyState.isOtherKeyPressed = false
         timerId = setTimeout(() => {
+          if (!globalConfig) {
+            console.warn('Global config is not initialized')
+            return
+          }
           if (!keyState.isOtherKeyPressed && keyState.isHotkeyPressed) {
-            hideOrShowNodeTranslation(mousePosition)
+            removeOrShowNodeTranslation(mousePosition, globalConfig.translate.mode)
             actionTriggered = true
           }
           timerId = null
@@ -52,6 +56,10 @@ export function registerNodeTranslationTriggers() {
       return
     if (e.target instanceof HTMLElement && isEditable(e.target))
       return
+    if (!globalConfig) {
+      console.warn('Global config is not initialized')
+      return
+    }
     if (e.key === getHotkey()) {
       // translate if user release the hotkey and no other key is pressed
       if (!keyState.isOtherKeyPressed) {
@@ -60,7 +68,7 @@ export function registerNodeTranslationTriggers() {
           timerId = null
         }
         if (!actionTriggered) {
-          hideOrShowNodeTranslation(mousePosition)
+          removeOrShowNodeTranslation(mousePosition, globalConfig.translate.mode)
         }
       }
       actionTriggered = false
