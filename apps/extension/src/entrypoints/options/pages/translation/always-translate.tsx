@@ -30,7 +30,7 @@ function PatternTable() {
 
   const addPattern = (pattern: string) => {
     const cleanedPattern = pattern.trim()
-    if (!cleanedPattern)
+    if (!cleanedPattern || autoTranslatePatterns.includes(cleanedPattern))
       return
 
     setTranslateConfig({
