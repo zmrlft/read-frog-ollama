@@ -1,6 +1,8 @@
+import type { Config } from '@/types/config/config'
+
 export const description = 'Migrate to new default prompt'
 
-export const configExample = {
+export const configExample: Config = {
   language: {
     detectedCode: 'eng',
     sourceCode: 'auto',
@@ -106,6 +108,7 @@ Translate to {{targetLang}}:
   floatingButton: {
     enabled: true,
     position: 0.66,
+    disabledFloatingButtonPatterns: [],
   },
   sideContent: {
     width: 600,

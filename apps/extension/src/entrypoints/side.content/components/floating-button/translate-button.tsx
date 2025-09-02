@@ -4,20 +4,19 @@ import { useAtomValue } from 'jotai'
 import { configFields } from '@/utils/atoms/config'
 import { validateTranslationConfig } from '@/utils/host/translate/translate-text'
 import { sendMessage } from '@/utils/message'
-import { enablePageTranslationAtom, isDraggingButtonAtom } from '../../atoms'
+import { enablePageTranslationAtom } from '../../atoms'
 import HiddenButton from './components/hidden-button'
 
-export default function TranslateButton() {
+export default function TranslateButton({ className }: { className: string }) {
   const enablePageTranslation = useAtomValue(enablePageTranslationAtom)
   const providersConfig = useAtomValue(configFields.providersConfig)
   const translateConfig = useAtomValue(configFields.translate)
   const languageConfig = useAtomValue(configFields.language)
-  const isDraggingButton = useAtomValue(isDraggingButtonAtom)
 
   return (
     <HiddenButton
       icon="ri:translate"
-      className={(isDraggingButton ? 'translate-x-0' : '')}
+      className={className}
       onClick={() => {
         if (!enablePageTranslation) {
           if (!validateTranslationConfig({

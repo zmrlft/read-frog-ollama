@@ -7,10 +7,10 @@ import { useReadArticle } from '@/hooks/read/read'
 import { configFields } from '@/utils/atoms/config'
 
 import { isAnyAPIKey } from '@/utils/config/config'
-import { isDraggingButtonAtom, isSideOpenAtom } from '../../atoms'
+import { isSideOpenAtom } from '../../atoms'
 import HiddenButton from './components/hidden-button'
 
-export default function FloatingReadButton() {
+export default function FloatingReadButton({ className }: { className: string }) {
   const providersConfig = useAtomValue(configFields.providersConfig)
   const setIsSideOpen = useSetAtom(isSideOpenAtom)
   const {
@@ -19,7 +19,6 @@ export default function FloatingReadButton() {
     explainArticle,
   } = useReadArticle()
   const { isPending: isExtractingContent, data: extractedContent } = useExtractContent()
-  const isDraggingButton = useAtomValue(isDraggingButtonAtom)
 
   const startReadArticle = () => {
     if (!isAnyAPIKey(providersConfig)) {
@@ -43,5 +42,5 @@ export default function FloatingReadButton() {
     readArticle()
   }
 
-  return <HiddenButton icon="tabler:book" onClick={startReadArticle} className={(isDraggingButton ? 'translate-x-0' : '')} />
+  return <HiddenButton icon="tabler:book" onClick={startReadArticle} className={className} />
 }

@@ -1,11 +1,19 @@
+import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@repo/ui/components/dropdown-menu'
 import { cn } from '@repo/ui/lib/utils'
 import { useAtom, useAtomValue } from 'jotai'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import readFrogLogo from '@/assets/icons/read-frog.png'
 import { configFields } from '@/utils/atoms/config'
 import { APP_NAME } from '@/utils/constants/app'
 import { sendMessage } from '@/utils/message'
+import { shadowWrapper } from '../../'
 import { isDraggingButtonAtom, isSideOpenAtom } from '../../atoms'
 import HiddenButton from './components/hidden-button'
 import FloatingReadButton from './floating-read-button'
@@ -18,6 +26,7 @@ export default function FloatingButton() {
   const sideContent = useAtomValue(configFields.sideContent)
   const [isSideOpen, setIsSideOpen] = useAtom(isSideOpenAtom)
   const [isDraggingButton, setIsDraggingButton] = useAtom(isDraggingButtonAtom)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const initialClientYRef = useRef<number | null>(null)
 
   // 按钮拖动处理
@@ -88,7 +97,9 @@ export default function FloatingButton() {
     document.addEventListener('mousemove', handleMouseMove)
   }
 
-  if (!floatingButton.enabled) {
+  const attachSideClassName = isDraggingButton || isSideOpen || isDropdownOpen ? 'translate-x-0' : ''
+
+  if (!floatingButton.enabled || floatingButton.disabledFloatingButtonPatterns.some(pattern => window.location.href.includes(pattern))) {
     return null
   }
 
@@ -102,32 +113,56 @@ export default function FloatingButton() {
         top: `${floatingButton.position * 100}vh`,
       }}
     >
-      <FloatingReadButton />
-      <TranslateButton />
+      <FloatingReadButton className={attachSideClassName} />
+      <TranslateButton className={attachSideClassName} />
       <div
         className={cn(
           'border-border flex h-10 w-15 items-center rounded-l-full border border-r-0 bg-white opacity-60 shadow-lg group-hover:opacity-100 dark:bg-neutral-900',
           'translate-x-5 transition-transform duration-300 group-hover:translate-x-0',
-          isSideOpen && 'opacity-100',
+          (isSideOpen || isDropdownOpen) && 'opacity-100',
           isDraggingButton ? 'cursor-move' : 'cursor-pointer',
-          isDraggingButton ? 'translate-x-0' : '',
+          attachSideClassName,
         )}
         onMouseDown={handleButtonDragStart}
       >
-        <div
-          title="Close floating button"
-          className={cn(
-            'border-border absolute -top-1 -left-1 hidden cursor-pointer rounded-full border bg-neutral-100 dark:bg-neutral-900',
-            'group-hover:block',
-          )}
-          onMouseDown={e => e.stopPropagation()} // 父级不会收到 mousedown
-          onClick={(e) => {
-            e.stopPropagation() // 父级不会收到 click
-            setFloatingButton({ enabled: false })
-          }}
-        >
-          <Icon icon="tabler:x" className="h-3 w-3 text-neutral-400 dark:text-neutral-600" />
-        </div>
+        <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+          <DropdownMenuTrigger asChild>
+            <div
+              title="Close floating button"
+              className={cn(
+                'border-border absolute -top-1 -left-1 hidden cursor-pointer rounded-full border bg-neutral-100 dark:bg-neutral-900',
+                'group-hover:block',
+                isDropdownOpen && 'block',
+              )}
+              onMouseDown={e => e.stopPropagation()} // 父级不会收到 mousedown
+            >
+              <Icon icon="tabler:x" className="h-3 w-3 text-neutral-400 dark:text-neutral-600" />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" side="left" container={shadowWrapper} hideWhenDetached>
+            <DropdownMenuItem
+              onMouseDown={e => e.stopPropagation()}
+              onClick={() => {
+                const currentDomain = window.location.hostname
+                const currentPatterns = floatingButton.disabledFloatingButtonPatterns || []
+                setFloatingButton({
+                  ...floatingButton,
+                  disabledFloatingButtonPatterns: [...currentPatterns, currentDomain],
+                })
+              }}
+            >
+              {i18n.t('options.floatingButton.closeMenu.disableForSite')}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onMouseDown={e => e.stopPropagation()}
+              onClick={() => {
+                setFloatingButton({ ...floatingButton, enabled: false })
+              }}
+            >
+              {i18n.t('options.floatingButton.closeMenu.disableGlobally')}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <img
           src={readFrogLogo}
           alt={APP_NAME}
@@ -135,7 +170,7 @@ export default function FloatingButton() {
         />
       </div>
       <HiddenButton
-        className={(isDraggingButton ? 'translate-x-0' : '')}
+        className={attachSideClassName}
         icon="tabler:settings"
         onClick={() => {
           sendMessage('openOptionsPage', undefined)

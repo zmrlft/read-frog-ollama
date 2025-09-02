@@ -1,5 +1,6 @@
 import { ApiProvidersPage } from '../pages/api-providers'
 import { ConfigPage } from '../pages/config'
+import { FloatingButtonPage } from '../pages/floating-button'
 import { GeneralPage } from '../pages/general'
 import { TranslationPage } from '../pages/translation'
 
@@ -21,6 +22,12 @@ export const NAV_ITEMS = {
     url: '/translation',
     icon: 'ri:translate',
     component: TranslationPage,
+  },
+  'floating-button': {
+    title: 'floatingButton',
+    url: '/floating-button',
+    icon: 'tabler:float-right',
+    component: FloatingButtonPage,
   },
   'config': {
     title: 'config',
