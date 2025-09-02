@@ -109,6 +109,7 @@ export const DEFAULT_CONFIG: Config = {
   floatingButton: {
     enabled: true,
     position: 0.66,
+    disabledFloatingButtonPatterns: [],
   },
   selectionToolbar: {
     enabled: true,

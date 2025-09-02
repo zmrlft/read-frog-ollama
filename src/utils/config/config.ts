@@ -13,6 +13,14 @@ import { sendMessage } from '../message'
 // eslint-disable-next-line import/no-mutable-exports
 export let globalConfig: Config | null = null
 
+export function shouldDisableFloatingButton(url: string, config: Config): boolean {
+  const disabledFloatingButtonPatterns = config?.floatingButton.disabledFloatingButtonPatterns
+  if (!disabledFloatingButtonPatterns)
+    return false
+
+  return disabledFloatingButtonPatterns.some(pattern => url.toLowerCase().includes(pattern.toLowerCase()))
+}
+
 export async function loadGlobalConfig() {
   const config = await sendMessage('getInitialConfig', undefined)
   if (configSchema.safeParse(config).success) {

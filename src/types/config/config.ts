@@ -17,6 +17,7 @@ const languageSchema = z.object({
 const floatingButtonSchema = z.object({
   enabled: z.boolean(),
   position: z.number().min(0).max(1),
+  disabledFloatingButtonPatterns: z.array(z.string()),
 })
 
 // Text selection button schema
