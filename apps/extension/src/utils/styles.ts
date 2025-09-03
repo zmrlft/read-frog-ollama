@@ -15,6 +15,25 @@ export function addStyleToShadow(shadow: ShadowRoot) {
   })
 }
 
+function isInternalStyleElement(node: Node) {
+  if (!node)
+    return false
+
+  if (node instanceof HTMLStyleElement && node.attributes.getNamedItem('wxt-shadow-root-document-styles')) {
+    return true
+  }
+
+  if (node instanceof HTMLStyleElement && node.id === '_goober') {
+    return true
+  }
+
+  if (node instanceof HTMLStyleElement && node.textContent?.includes('[data-sonner-toaster]')) {
+    return true
+  }
+
+  return false
+}
+
 export function mirrorDynamicStyles(selector: string, shadowRoot: ShadowRoot, contentMatch?: string) {
   // TODO: 目前函数只会把找到的第一个 style 放进来，但是可能存在多个 style 匹配，那其实要全部放进来，并且对应不同的 mirrorSheet
   const mirrorSheet = new CSSStyleSheet()
@@ -68,7 +87,12 @@ export function mirrorDynamicStyles(selector: string, shadowRoot: ShadowRoot, co
           }
         }
       })
-      // TODO: handle removed nodes
+      // protect inner dom
+      mutation.removedNodes.forEach((node) => {
+        if (isInternalStyleElement(node)) {
+          document.head.append(node)
+        }
+      })
     })
   })
 
