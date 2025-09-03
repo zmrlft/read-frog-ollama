@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { configSchema } from '@/types/config/config'
 import { CONFIG_SCHEMA_VERSION } from '@/utils/constants/config'
 import { logger } from '@/utils/logger'
 import { getMigrations, LATEST_SCHEMA_VERSION, runMigration } from '../../migration'
@@ -12,6 +13,13 @@ describe('all Config Migrations', () => {
     const migrations = await getMigrations()
     const maxKey = Math.max(...Object.keys(migrations).map(Number))
     expect(maxKey).toBe(LATEST_SCHEMA_VERSION)
+
+    const latestVersionStr = String(LATEST_SCHEMA_VERSION).padStart(3, '0')
+    const latestExampleModule = await import(`../example/v${latestVersionStr}.ts`)
+    const latestExampleConfig = latestExampleModule.configExample
+
+    const parseResult = configSchema.safeParse(latestExampleConfig)
+    expect(parseResult.success).toBe(true)
   })
 
   it('should have migration scripts for all versions', async () => {
