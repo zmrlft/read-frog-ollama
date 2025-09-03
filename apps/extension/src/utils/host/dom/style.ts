@@ -3,22 +3,26 @@
  * @param element - The node to smash the truncation style
  */
 export function smashTruncationStyle(element: HTMLElement) {
-  const computedStyle = window.getComputedStyle(element)
+  const scheduleIdleTask = window.requestIdleCallback ?? window.requestAnimationFrame
 
-  if (computedStyle.webkitLineClamp && computedStyle.webkitLineClamp !== 'none') {
-    element.style.webkitLineClamp = 'unset'
-  }
+  scheduleIdleTask(() => {
+    const computedStyle = window.getComputedStyle(element)
 
-  if (computedStyle.maxHeight && computedStyle.maxHeight !== 'none') {
-    element.style.maxHeight = 'unset'
-  }
+    if (computedStyle.webkitLineClamp && computedStyle.webkitLineClamp !== 'none') {
+      element.style.webkitLineClamp = 'unset'
+    }
 
-  // fix this issue: https://github.com/mengxi-ream/read-frog/issues/222
-  // if (computedStyle.overflow === 'hidden') {
-  //   element.style.overflow = 'visible'
-  // }
+    if (computedStyle.maxHeight && computedStyle.maxHeight !== 'none') {
+      element.style.maxHeight = 'unset'
+    }
 
-  if (computedStyle.textOverflow === 'ellipsis') {
-    element.style.textOverflow = 'unset'
-  }
+    // fix this issue: https://github.com/mengxi-ream/read-frog/issues/222
+    // if (computedStyle.overflow === 'hidden') {
+    //   element.style.overflow = 'visible'
+    // }
+
+    if (computedStyle.textOverflow === 'ellipsis') {
+      element.style.textOverflow = 'unset'
+    }
+  })
 }
