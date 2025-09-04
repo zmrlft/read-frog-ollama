@@ -92,6 +92,7 @@ export function ShortcutKeyRecorder(
       onKeyUp={clearHotkeys}
       value={formatShortcut}
       placeholder={i18n.t('shortcutKeySelector.placeholder')}
+      readOnly
     />
   )
 }

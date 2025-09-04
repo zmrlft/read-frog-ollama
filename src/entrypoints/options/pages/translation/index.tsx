@@ -4,7 +4,7 @@ import { AlwaysTranslate } from './always-translate'
 import { ClearCacheConfig } from './clear-cache-config'
 import { CustomAutoTranslateShortcutKey } from './custom-auto-translate-shortcut-key'
 import { CustomTranslationStyle } from './custom-translation-style'
-import { PersonalizedPrompt } from './personalized-prompt'
+import { PersonalizedPrompts } from './personalized-prompt'
 import { RequestRate } from './request-rate'
 import { TranslationMode } from './translation-mode'
 
@@ -16,7 +16,7 @@ export function TranslationPage() {
       <RequestRate />
       <CustomTranslationStyle />
       <AlwaysTranslate />
-      <PersonalizedPrompt />
+      <PersonalizedPrompts />
       <ClearCacheConfig />
     </PageLayout>
   )

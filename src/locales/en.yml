@@ -106,9 +106,9 @@ options:
       description: Always translate this website
       urlPattern: URL Pattern
       enterUrlPattern: Enter URL Pattern
-    personalizedPrompt:
-      title: Personalized Prompt
-      description: Customizing different types of Prompts allows you to adjust the Prompt type yourself during translation. A Prompt represents the text that the user sends to the LLM, where {{input}} denotes the text content of the paragraph and {{targetLang}} denotes the target language.
+    personalizedPrompts:
+      title: Personalized Prompts
+      description: Customizing different types of Prompts allows you to adjust the Prompt type yourself during translation. A Prompt represents the text that the user sends to the LLM.
       addPrompt: Add Prompt
       default: Default
       importSuccess: Import Success
@@ -117,6 +117,9 @@ options:
       editPrompt:
         title: Edit Prompt
         name: Name
+        promptCellInput:
+          input: Text content to translate
+          targetLang: Target language
         save: Save Changes
         close: Cancel
       deletePrompt:

@@ -105,9 +105,9 @@ options:
       description: このサイトを常に翻訳する
       urlPattern: URL パターン
       enterUrlPattern: URL パターンを入力
-    personalizedPrompt:
+    personalizedPrompts:
       title: 個人化プロンプト
-      description: 異なるタイプのプロンプトをカスタマイズすることで、翻訳時にプロンプトタイプを自ら調整できます。プロンプトとは、ユーザーがLLMに送信するテキストを指し、その中で {{input}} は段落のテキスト内容を、{{targetLang}} はターゲット言語を表します。
+      description: 異なるタイプのプロンプトをカスタマイズすることで、翻訳時にプロンプトタイプを自ら調整できます。プロンプトとは、ユーザーがLLMに送信するテキストを指します。
       addPrompt: プロンプトを追加
       default: デフォルト
       importSuccess: インポート成功
@@ -116,6 +116,9 @@ options:
       editPrompt:
         title: プロンプトを編集
         name: 名前
+        promptCellInput:
+          input: 翻訳するテキスト内容
+          targetLang: 目標言語
         save: 保存
         close: キャンセル
       deletePrompt:
