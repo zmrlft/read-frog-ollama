@@ -16,7 +16,7 @@ import { configFields } from '@/utils/atoms/config'
 import { DEFAULT_TRANSLATE_PROMPT_ID } from '@/utils/constants/prompt'
 
 function name(prompt: TranslatePromptObj) {
-  return prompt.id === DEFAULT_TRANSLATE_PROMPT_ID ? i18n.t('options.translation.personalizedPrompt.default') : prompt.name
+  return prompt.id === DEFAULT_TRANSLATE_PROMPT_ID ? i18n.t('options.translation.personalizedPrompts.default') : prompt.name
 }
 
 export default function TranslatePromptSelector() {

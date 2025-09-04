@@ -1,5 +1,5 @@
 import { globalConfig } from '@/utils/config/config'
-import { DEFAULT_TRANSLATE_PROMPT, INPUT_TOKEN, TARGET_LANG_TOKEN } from '../constants/prompt'
+import { DEFAULT_TRANSLATE_PROMPT, getTokenCellText, INPUT, TARGET_LANG } from '../constants/prompt'
 
 export function getTranslatePrompt(targetLang: string, input: string) {
   if (!globalConfig) {
@@ -11,6 +11,6 @@ export function getTranslatePrompt(targetLang: string, input: string) {
   const prompt = patterns.find(pattern => pattern.id === promptId)?.prompt ?? DEFAULT_TRANSLATE_PROMPT
 
   return prompt
-    .replaceAll(TARGET_LANG_TOKEN, targetLang)
-    .replaceAll(INPUT_TOKEN, input)
+    .replaceAll(getTokenCellText(TARGET_LANG), targetLang)
+    .replaceAll(getTokenCellText(INPUT), input)
 }

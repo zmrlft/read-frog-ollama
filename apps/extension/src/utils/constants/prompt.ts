@@ -1,9 +1,13 @@
 import type { TranslatePromptObj } from '@/types/config/provider'
 
-export const TARGET_LANG_TOKEN = '{{targetLang}}'
-export const INPUT_TOKEN = '{{input}}'
+export const TOKENS = ['targetLang', 'input'] as const
 
-export const DEFAULT_TRANSLATE_PROMPT = `You are a professional ${TARGET_LANG_TOKEN} native translator who needs to fluently translate text into ${TARGET_LANG_TOKEN}.
+export const TARGET_LANG = TOKENS[0]
+export const INPUT = TOKENS[1]
+
+export const getTokenCellText = (token: string) => `{{${token}}}`
+
+export const DEFAULT_TRANSLATE_PROMPT = `You are a professional ${getTokenCellText(TARGET_LANG)} native translator who needs to fluently translate text into ${getTokenCellText(TARGET_LANG)}.
 
 ## Translation Rules
 1. Output only the translated content, without explanations or additional content (such as "Here's the translation:" or "Translation as follows:")
@@ -11,8 +15,8 @@ export const DEFAULT_TRANSLATE_PROMPT = `You are a professional ${TARGET_LANG_TO
 3. If the text contains HTML tags, consider where the tags should be placed in the translation while maintaining fluency.
 4. For content that should not be translated (such as proper nouns, code, etc.), keep the original text.
 
-Translate to ${TARGET_LANG_TOKEN}:
-${INPUT_TOKEN}
+Translate to ${getTokenCellText(TARGET_LANG)}:
+${getTokenCellText(INPUT)}
 `
 
 export const DEFAULT_TRANSLATE_PROMPT_ID = 'default'
