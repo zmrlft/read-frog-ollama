@@ -14,7 +14,7 @@ import { DEFAULT_CONFIG } from '@/utils/constants/config'
 import { protectSelectAllShadowRoot } from '@/utils/select-all'
 import { insertShadowRootUIWrapperInto } from '@/utils/shadow-root'
 import { queryClient } from '@/utils/trpc/client'
-import { addStyleToShadow, mirrorDynamicStyles } from '../../utils/styles'
+import { addStyleToShadow, mirrorDynamicStyles, protectInternalStyles } from '../../utils/styles'
 import App from './app'
 import { enablePageTranslationAtom, store, translationPortAtom } from './atoms'
 import '@/assets/tailwind/theme.css'
@@ -46,6 +46,10 @@ export default defineContentScript({
         //   shadow,
         //   ".with-scroll-bars-hidden22"
         // );
+
+        // Protect internal style elements from being removed
+        protectInternalStyles()
+
         protectSelectAllShadowRoot(shadowHost, wrapper)
 
         const HydrateAtoms = ({
