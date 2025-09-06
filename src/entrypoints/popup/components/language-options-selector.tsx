@@ -1,8 +1,13 @@
 import type {
   LangCodeISO6393,
-} from '@/types/config/languages'
+} from '@repo/definitions'
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
+import {
+  LANG_CODE_TO_EN_NAME,
+  LANG_CODE_TO_LOCALE_NAME,
+  langCodeISO6393Schema,
+} from '@repo/definitions'
 import {
   Select,
   SelectContent,
@@ -11,11 +16,6 @@ import {
   SelectValue,
 } from '@repo/ui/components/select'
 import { useAtom } from 'jotai'
-import {
-  LANG_CODE_TO_EN_NAME,
-  LANG_CODE_TO_LOCALE_NAME,
-  langCodeISO6393Schema,
-} from '@/types/config/languages'
 import { configFields } from '@/utils/atoms/config'
 
 function langCodeLabel(langCode: LangCodeISO6393) {

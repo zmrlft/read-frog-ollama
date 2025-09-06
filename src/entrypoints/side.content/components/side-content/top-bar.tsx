@@ -1,12 +1,18 @@
-import type { DOWNLOAD_FILE_TYPES } from '../../utils/downloader'
 import type {
   LangCodeISO6393,
   LangLevel,
-} from '@/types/config/languages'
+} from '@repo/definitions'
+import type { DOWNLOAD_FILE_TYPES } from '../../utils/downloader'
 import type { ReadProviderNames } from '@/types/config/provider'
 import type { ArticleExplanation } from '@/types/content'
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
+import {
+  LANG_CODE_TO_EN_NAME,
+  LANG_CODE_TO_LOCALE_NAME,
+  langCodeISO6393Schema,
+  langLevel,
+} from '@repo/definitions'
 import {
   Select,
   SelectContent,
@@ -25,12 +31,6 @@ import { useMutationState } from '@tanstack/react-query'
 // import { onMessage } from "@/utils/message";
 import { useAtom, useSetAtom } from 'jotai'
 import ProviderIcon from '@/components/provider-icon'
-import {
-  LANG_CODE_TO_EN_NAME,
-  LANG_CODE_TO_LOCALE_NAME,
-  langCodeISO6393Schema,
-  langLevel,
-} from '@/types/config/languages'
 import { configFields } from '@/utils/atoms/config'
 import { READ_PROVIDER_ITEMS } from '@/utils/constants/config'
 import { DOWNLOAD_FILE_ITEMS } from '@/utils/constants/side'

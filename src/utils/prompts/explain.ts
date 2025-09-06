@@ -1,4 +1,4 @@
-import type { LangLevel } from '@/types/config/languages'
+import type { LangLevel } from '@repo/definitions'
 import { syntacticCategoryAbbr } from '@/types/content'
 
 export function getExplainPrompt(sourceLang: string, targetLang: string, langLevel: LangLevel) {

@@ -146,6 +146,10 @@ options:
     customAutoTranslateShortcutKey:
       title: 自定义翻译快捷键
       description: 允许您自定义网页翻译快捷键
+    autoTranslateLanguages:
+      title: 基于语言的自动翻译
+      description: 当检测到指定语言时自动翻译页面内容
+      selectLanguages: 选择语言
   config:
     title: 配置
     sync:

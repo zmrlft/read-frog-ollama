@@ -146,6 +146,10 @@ options:
     customAutoTranslateShortcutKey:
       title: Customize translation shortcut
       description: Allows you to customize the full-text translation shortcut
+    autoTranslateLanguages:
+      title: Auto translate based on language
+      description: Automatically translate page content when specific languages are detected
+      selectLanguages: Select languages
   config:
     title: Config
     sync:

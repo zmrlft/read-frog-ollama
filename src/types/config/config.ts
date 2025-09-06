@@ -1,6 +1,6 @@
-import { z } from 'zod'
+import { langCodeISO6393Schema, langLevel } from '@repo/definitions'
 
-import { langCodeISO6393Schema, langLevel } from '@/types/config/languages'
+import { z } from 'zod'
 import { MIN_SIDE_CONTENT_WIDTH } from '@/utils/constants/side'
 import { providersConfigSchema, readConfigSchema } from './provider'
 import { translateConfigSchema } from './translate'
