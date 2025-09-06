@@ -34,6 +34,12 @@ function isInternalStyleElement(node: Node) {
   return false
 }
 
+/**
+ * Mirrors dynamic style changes from document to shadow root
+ * @param selector - CSS selector to find the style element (e.g., '#_goober')
+ * @param shadowRoot - Target shadow root to mirror styles to
+ * @param contentMatch - Optional text content to match within the style element
+ */
 export function mirrorDynamicStyles(selector: string, shadowRoot: ShadowRoot, contentMatch?: string) {
   // TODO: 目前函数只会把找到的第一个 style 放进来，但是可能存在多个 style 匹配，那其实要全部放进来，并且对应不同的 mirrorSheet
   const mirrorSheet = new CSSStyleSheet()
@@ -81,20 +87,61 @@ export function mirrorDynamicStyles(selector: string, shadowRoot: ShadowRoot, co
         if (node instanceof HTMLStyleElement && node.matches(selector)) {
           // Only check content if contentMatch is provided
           if (!contentMatch || node.textContent?.includes(contentMatch)) {
+            // Disconnect previous observer if src changes
+            if (src && src !== node) {
+              srcObserver.disconnect()
+            }
             src = node
             mirrorSheet.replaceSync(node.textContent?.trim() ?? '')
             srcObserver.observe(src, opts)
           }
         }
       })
-      // protect inner dom
+    })
+  })
+
+  headObserver.observe(document.head, { childList: true })
+}
+
+/**
+ * Protects internal style elements from being removed from the document head
+ * Automatically re-adds them if they get removed by other scripts
+ */
+export function protectInternalStyles() {
+  // Track if we're currently re-adding nodes to prevent infinite loops
+  let isReAddingNode = false
+  // WeakSet to track nodes we've already processed to avoid duplicate operations
+  const processedNodes = new WeakSet<Node>()
+
+  const protectionObserver = new MutationObserver((mutations) => {
+    // Skip processing if we're in the middle of re-adding a node
+    if (isReAddingNode)
+      return
+
+    mutations.forEach((mutation) => {
+      // Check removed nodes and re-add internal style elements
       mutation.removedNodes.forEach((node) => {
-        if (isInternalStyleElement(node)) {
-          document.head.append(node)
+        if (isInternalStyleElement(node) && !processedNodes.has(node)) {
+          processedNodes.add(node)
+          // Use a flag to prevent recursive mutation observation
+          isReAddingNode = true
+          // Use requestAnimationFrame to defer the re-addition
+          requestAnimationFrame(() => {
+            // Check if the node is still detached before re-adding
+            if (!document.contains(node)) {
+              document.head.append(node)
+            }
+            isReAddingNode = false
+            // Clean up WeakSet after a delay
+            setTimeout(() => processedNodes.delete(node), 50)
+          })
         }
       })
     })
   })
 
-  headObserver.observe(document.head, { childList: true })
+  protectionObserver.observe(document.head, { childList: true })
+
+  // Return a cleanup function
+  return () => protectionObserver.disconnect()
 }
