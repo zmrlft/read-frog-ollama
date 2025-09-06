@@ -2,7 +2,11 @@
 
 import type {
   LangCodeISO6393,
-} from '@/types/languages'
+} from '@repo/definitions'
+import {
+  LANG_CODE_TO_LOCALE_NAME,
+  langCodeISO6393Schema,
+} from '@repo/definitions'
 import { Button } from '@repo/ui/components/button'
 import {
   Select,
@@ -16,10 +20,6 @@ import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useInitTargetLanguage } from '@/hooks/useInitTargetLanguage'
-import {
-  LANG_CODE_TO_LOCALE_NAME,
-  langCodeISO6393Schema,
-} from '@/types/languages'
 
 export default function Step1Page() {
   const t = useTranslations()

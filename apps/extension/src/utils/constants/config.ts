@@ -14,7 +14,7 @@ import { DEFAULT_AUTO_TRANSLATE_SHORTCUT_KEY, DEFAULT_REQUEST_CAPACITY, DEFAULT_
 import { DEFAULT_TRANSLATION_NODE_STYLE } from './translation-node-style'
 
 export const CONFIG_STORAGE_KEY = 'config'
-export const CONFIG_SCHEMA_VERSION = 20
+export const CONFIG_SCHEMA_VERSION = 21
 
 export const DEFAULT_PROVIDER_CONFIG: ProvidersConfig = {
   openai: {
@@ -97,6 +97,7 @@ export const DEFAULT_CONFIG: Config = {
     page: {
       range: 'main',
       autoTranslatePatterns: ['news.ycombinator.com'],
+      autoTranslateLanguages: [],
     },
     promptsConfig: DEFAULT_TRANSLATE_PROMPTS_CONFIG,
     requestQueueConfig: {

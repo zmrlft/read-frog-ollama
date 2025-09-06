@@ -395,5 +395,10 @@ export const ISO6393_TO_6391: Record<LangCodeISO6393, LangCodeISO6391 | undefine
   'kaz': 'kk',
 }
 
+export const LOCALE_TO_ISO6393: Partial<Record<LangCodeISO6391, LangCodeISO6393>> = {
+  en: 'eng',
+  zh: 'cmn',
+}
+
 export const langLevel = z.enum(['beginner', 'intermediate', 'advanced'])
 export type LangLevel = z.infer<typeof langLevel>

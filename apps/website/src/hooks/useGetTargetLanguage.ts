@@ -1,4 +1,4 @@
-import type { LangCodeISO6393 } from '@/types/languages'
+import type { LangCodeISO6393 } from '@repo/definitions'
 import { useEffect, useState } from 'react'
 
 export function useGetTargetLanguage() {

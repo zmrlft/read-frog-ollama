@@ -15,7 +15,7 @@ import { useState } from 'react'
 import { configFields } from '@/utils/atoms/config'
 import { ConfigCard } from '../../components/config-card'
 
-export function AlwaysTranslate() {
+export function AutoTranslateWebsitePatterns() {
   return (
     <ConfigCard title={i18n.t('options.translation.alwaysTranslate.title')} description={i18n.t('options.translation.alwaysTranslate.description')}>
       <PatternTable />

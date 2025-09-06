@@ -1,4 +1,4 @@
-import type { LangCodeISO6393 } from '@/types/config/languages'
+import type { LangCodeISO6393 } from '@repo/definitions'
 import type { ExtractedContent } from '@/types/content'
 
 import { Readability } from '@mozilla/readability'

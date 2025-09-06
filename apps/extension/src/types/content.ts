@@ -1,6 +1,6 @@
-import { z } from 'zod'
+import { langCodeISO6393Schema } from '@repo/definitions'
 
-import { langCodeISO6393Schema } from './config/languages'
+import { z } from 'zod'
 
 export interface ExtractedContent {
   article: {

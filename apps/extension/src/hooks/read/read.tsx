@@ -5,6 +5,7 @@ import type {
   ExtractedContent,
 } from '@/types/content'
 import { i18n } from '#imports'
+import { LANG_CODE_TO_EN_NAME } from '@repo/definitions'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { generateObject } from 'ai'
 import { useAtomValue, useSetAtom } from 'jotai'
@@ -14,7 +15,6 @@ import {
   readStateAtom,
   store,
 } from '@/entrypoints/side.content/atoms'
-import { LANG_CODE_TO_EN_NAME } from '@/types/config/languages'
 import {
   articleAnalysisSchema,
   articleExplanationSchema,

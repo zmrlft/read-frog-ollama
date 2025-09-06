@@ -1,9 +1,9 @@
 'use client'
 
-import type { LangCodeISO6393 } from '@/types/languages'
+import type { LangCodeISO6393 } from '@repo/definitions'
+import { LOCALE_TO_ISO6393 } from '@repo/definitions'
 import { useLocale } from 'next-intl'
 import { useEffect, useMemo, useState } from 'react'
-import { LOCALE_TO_ISO6393 } from '@/types/languages'
 
 export function useInitTargetLanguage(): [
   LangCodeISO6393,

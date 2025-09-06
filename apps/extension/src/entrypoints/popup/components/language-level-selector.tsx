@@ -1,4 +1,4 @@
-import type { LangLevel } from '@/types/config/languages'
+import type { LangLevel } from '@repo/definitions'
 
 import { i18n } from '#imports'
 import {

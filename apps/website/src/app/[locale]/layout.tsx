@@ -1,5 +1,6 @@
 import type { Translations } from 'fumadocs-ui/i18n'
 import type { Metadata } from 'next'
+import type { Locale } from 'next-intl'
 import type { ReactNode } from 'react'
 import { Analytics } from '@vercel/analytics/next'
 import { RootProvider } from 'fumadocs-ui/provider'
@@ -19,7 +20,7 @@ const inter = Inter({
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: Locale }>
 }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'metadata' })

@@ -145,6 +145,10 @@ options:
     customAutoTranslateShortcutKey:
       title: 翻訳ショートカットキーをカスタマイズ
       description: ウェブページ翻訳のショートカットキーをカスタマイズできます
+    autoTranslateLanguages:
+      title: 言語に基づく自動翻訳
+      description: 特定の言語が検出された場合にページコンテンツを自動翻訳します
+      selectLanguages: 言語を選択
   config:
     title: 設定
     sync:

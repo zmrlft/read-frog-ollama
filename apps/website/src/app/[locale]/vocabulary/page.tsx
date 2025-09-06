@@ -1,10 +1,10 @@
 'use client'
 
 import type { RouterOutputs } from '@/trpc/react'
+import { LANG_CODE_TO_EN_NAME } from '@repo/definitions'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useTRPC } from '@/trpc/react'
-import { LANG_CODE_TO_EN_NAME } from '@/types/languages'
 
 export default function VocabularyPage() {
   const trpc = useTRPC()

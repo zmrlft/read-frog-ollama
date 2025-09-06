@@ -1,3 +1,4 @@
+import { langCodeISO6393Schema } from '@repo/definitions'
 import { z } from 'zod'
 import { HOTKEYS } from '@/utils/constants/hotkeys'
 import { MIN_TRANSLATE_CAPACITY, MIN_TRANSLATE_RATE } from '@/utils/constants/translate'
@@ -22,6 +23,7 @@ export const translateConfigSchema = z.object({
   page: z.object({
     range: pageTranslateRangeSchema,
     autoTranslatePatterns: z.array(z.string()),
+    autoTranslateLanguages: z.array(langCodeISO6393Schema),
   }),
   promptsConfig: promptsConfigSchema,
   requestQueueConfig: requestQueueConfigSchema,
