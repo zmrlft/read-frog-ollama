@@ -1,6 +1,5 @@
-import type { PageTranslateRange, TranslateProviderNames } from '@/types/config/provider'
+import type { PageTranslateRange } from '@/types/config/translate'
 import { i18n } from '#imports'
-
 import { Checkbox } from '@repo/ui/components/checkbox'
 import { Input } from '@repo/ui/components/input'
 import {
@@ -12,12 +11,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@repo/ui/components/select'
-import deepmerge from 'deepmerge'
+import { deepmerge } from 'deepmerge-ts'
 import { useAtom, useAtomValue } from 'jotai'
 import ProviderIcon from '@/components/provider-icon'
-import { isAPIProvider, isLLMTranslateProvider, pageTranslateRangeSchema, TRANSLATE_PROVIDER_MODELS } from '@/types/config/provider'
+import { isAPIProviderConfig, isLLMTranslateProviderConfig, TRANSLATE_PROVIDER_MODELS } from '@/types/config/provider'
+import { pageTranslateRangeSchema } from '@/types/config/translate'
 import { configFields } from '@/utils/atoms/config'
-import { LLM_TRANSLATE_PROVIDER_ITEMS, PURE_TRANSLATE_PROVIDER_ITEMS } from '@/utils/constants/config'
+import { translateProviderConfigAtom, updateLLMProviderConfig } from '@/utils/atoms/provider'
+import { getLLMTranslateProvidersConfig, getNonAPIProvidersConfig, getPureAPIProviderConfig } from '@/utils/config/helpers'
+import { PROVIDER_ITEMS } from '@/utils/constants/config'
 import { ConfigCard } from '../../components/config-card'
 import { FieldWithLabel } from '../../components/field-with-label'
 import { SetApiKeyWarning } from '../../components/set-api-key-warning'
@@ -73,26 +75,27 @@ function RangeSelector() {
 function TranslateProviderSelector() {
   const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
   const providersConfig = useAtomValue(configFields.providersConfig)
+  const translateProviderConfig = useAtomValue(translateProviderConfigAtom)
 
-  const providerConfig = isAPIProvider(translateConfig.provider)
-    ? providersConfig[translateConfig.provider]
-    : null
+  // some deeplx providers don't need api key
+  const needSetAPIKey = translateProviderConfig && isAPIProviderConfig(translateProviderConfig) && translateProviderConfig.provider !== 'deeplx' && translateProviderConfig.apiKey === undefined
 
+  // TODO: extract the selector to a separate component and use it in translation config and popup
   return (
     <FieldWithLabel
       id="translateProvider"
       label={(
         <div className="flex gap-2">
           {i18n.t('options.general.translationConfig.provider')}
-          {providerConfig && !providerConfig.apiKey && translateConfig.provider !== 'deeplx' && <SetApiKeyWarning />}
+          {needSetAPIKey && <SetApiKeyWarning />}
         </div>
       )}
     >
       <Select
-        value={translateConfig.provider}
-        onValueChange={(value: TranslateProviderNames) =>
+        value={translateConfig.providerName}
+        onValueChange={(value: string) =>
           setTranslateConfig(
-            { ...translateConfig, provider: value },
+            { ...translateConfig, providerName: value },
           )}
       >
         <SelectTrigger className="w-full">
@@ -101,17 +104,22 @@ function TranslateProviderSelector() {
         <SelectContent>
           <SelectGroup>
             <SelectLabel>{i18n.t('translateService.aiTranslator')}</SelectLabel>
-            {Object.entries(LLM_TRANSLATE_PROVIDER_ITEMS).map(([value, { logo, name }]) => (
-              <SelectItem key={value} value={value}>
-                <ProviderIcon logo={logo} name={name} />
+            {getLLMTranslateProvidersConfig(providersConfig).map(({ name, provider }) => (
+              <SelectItem key={name} value={name}>
+                <ProviderIcon logo={PROVIDER_ITEMS[provider].logo} name={name} />
               </SelectItem>
             ))}
           </SelectGroup>
           <SelectGroup>
             <SelectLabel>{i18n.t('translateService.normalTranslator')}</SelectLabel>
-            {Object.entries(PURE_TRANSLATE_PROVIDER_ITEMS).map(([value, { logo, name }]) => (
-              <SelectItem key={value} value={value}>
-                <ProviderIcon logo={logo} name={name} />
+            {getNonAPIProvidersConfig(providersConfig).map(({ name, provider }) => (
+              <SelectItem key={name} value={name}>
+                <ProviderIcon logo={PROVIDER_ITEMS[provider].logo} name={name} />
+              </SelectItem>
+            ))}
+            {getPureAPIProviderConfig(providersConfig).map(({ name, provider }) => (
+              <SelectItem key={name} value={name}>
+                <ProviderIcon logo={PROVIDER_ITEMS[provider].logo} name={name} />
               </SelectItem>
             ))}
           </SelectGroup>
@@ -122,43 +130,46 @@ function TranslateProviderSelector() {
 }
 
 function TranslateModelSelector() {
-  const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
+  const [translateProviderConfig, setTranslateProviderConfig] = useAtom(translateProviderConfigAtom)
 
-  const provider = translateConfig.provider
-
-  if (!isLLMTranslateProvider(provider)) {
+  if (!translateProviderConfig || !isLLMTranslateProviderConfig(translateProviderConfig)) {
     return null
   }
 
-  const modelConfig = translateConfig.models[provider]
+  const provider = translateProviderConfig.provider
+  const modelConfig = translateProviderConfig.models.translate
 
   return (
     <FieldWithLabel id="translateModel" label={i18n.t('options.general.translationConfig.model.title')}>
       {modelConfig.isCustomModel
         ? (
             <Input
-              value={modelConfig.customModel}
+              value={modelConfig.customModel ?? ''}
               onChange={e =>
-                setTranslateConfig(deepmerge(translateConfig, {
-                  models: {
-                    [provider]: {
-                      customModel: e.target.value,
+                setTranslateProviderConfig(
+                  updateLLMProviderConfig(translateProviderConfig, {
+                    models: {
+                      translate: {
+                        customModel: e.target.value === '' ? null : e.target.value,
+                      },
                     },
-                  },
-                }))}
+                  }),
+                )}
             />
           )
         : (
             <Select
               value={modelConfig.model}
               onValueChange={value =>
-                setTranslateConfig(deepmerge(translateConfig, {
-                  models: {
-                    [provider]: {
-                      model: value,
+                setTranslateProviderConfig(
+                  updateLLMProviderConfig(translateProviderConfig, {
+                    models: {
+                      translate: {
+                        model: value as any,
+                      },
                     },
-                  },
-                }))}
+                  }),
+                )}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select a model" />
@@ -176,33 +187,37 @@ function TranslateModelSelector() {
           )}
       <div className="mt-0.5 flex items-center space-x-2">
         <Checkbox
-          id={`isCustomModel-translate-${translateConfig.provider}`}
+          id={`isCustomModel-translate-${provider}`}
           checked={modelConfig.isCustomModel}
           onCheckedChange={(checked) => {
             if (checked === false) {
-              setTranslateConfig(deepmerge(translateConfig, {
-                models: {
-                  [translateConfig.provider]: {
-                    customModel: '',
-                    isCustomModel: false,
+              setTranslateProviderConfig(
+                updateLLMProviderConfig(translateProviderConfig, {
+                  models: {
+                    translate: {
+                      customModel: null,
+                      isCustomModel: false,
+                    },
                   },
-                },
-              }))
+                }),
+              )
             }
             else {
-              setTranslateConfig(deepmerge(translateConfig, {
-                models: {
-                  [translateConfig.provider]: {
-                    customModel: translateConfig.models[provider].model,
-                    isCustomModel: true,
+              setTranslateProviderConfig(
+                updateLLMProviderConfig(translateProviderConfig, {
+                  models: {
+                    translate: {
+                      customModel: modelConfig.model,
+                      isCustomModel: true,
+                    },
                   },
-                },
-              }))
+                }),
+              )
             }
           }}
         />
         <label
-          htmlFor={`isCustomModel-translate-${translateConfig.provider}`}
+          htmlFor={`isCustomModel-translate-${provider}`}
           className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
         >
           {i18n.t('options.general.translationConfig.model.enterCustomModel')}

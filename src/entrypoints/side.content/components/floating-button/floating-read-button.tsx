@@ -6,7 +6,7 @@ import { useExtractContent } from '@/hooks/read/extract'
 import { useReadArticle } from '@/hooks/read/read'
 import { configFields } from '@/utils/atoms/config'
 
-import { isAnyAPIKey } from '@/utils/config/config'
+import { isAnyAPIKeyForReadProviders } from '@/utils/config/config'
 import { isSideOpenAtom } from '../../atoms'
 import HiddenButton from './components/hidden-button'
 
@@ -21,7 +21,7 @@ export default function FloatingReadButton({ className }: { className: string })
   const { isPending: isExtractingContent, data: extractedContent } = useExtractContent()
 
   const startReadArticle = () => {
-    if (!isAnyAPIKey(providersConfig)) {
+    if (!isAnyAPIKeyForReadProviders(providersConfig)) {
       toast.error(i18n.t('noAPIKeyConfig.warning'))
       return
     }

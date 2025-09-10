@@ -1,4 +1,4 @@
-import type { TranslationNodeStyle } from '@/types/config/provider'
+import type { TranslationNodeStyle } from '@/types/config/translate'
 import { i18n } from '#imports'
 import {
   Select,

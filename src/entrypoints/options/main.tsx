@@ -9,7 +9,6 @@ import { HashRouter } from 'react-router'
 import FrogToast from '@/components/frog-toast'
 import { configAtom } from '@/utils/atoms/config'
 import { globalConfig, loadGlobalConfig } from '@/utils/config/config'
-import { DEFAULT_CONFIG } from '@/utils/constants/config'
 import { isDarkMode } from '@/utils/tailwind'
 import { queryClient } from '@/utils/trpc/client'
 import App from './app'
@@ -36,7 +35,11 @@ async function initApp() {
   const root = document.getElementById('root')!
   root.className = 'antialiased bg-background'
 
-  const config = globalConfig ?? DEFAULT_CONFIG
+  const config = globalConfig
+
+  if (!config) {
+    throw new Error('Global config is not loaded')
+  }
 
   ReactDOM.createRoot(root).render(
     <React.StrictMode>

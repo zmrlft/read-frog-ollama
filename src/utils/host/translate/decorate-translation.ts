@@ -1,6 +1,6 @@
-import type { TranslationNodeStyle } from '@/types/config/provider'
+import type { TranslationNodeStyle } from '@/types/config/translate'
 import { camelCase } from 'case-anything'
-import { translationNodeStyleSchema } from '@/types/config/provider'
+import { translationNodeStyleSchema } from '@/types/config/translate'
 import { globalConfig } from '@/utils/config/config'
 import { CUSTOM_TRANSLATION_NODE_ATTRIBUTE } from '@/utils/constants/translation-node-style'
 

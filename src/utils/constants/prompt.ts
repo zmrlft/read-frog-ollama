@@ -1,4 +1,4 @@
-import type { TranslatePromptObj } from '@/types/config/provider'
+import type { TranslatePromptObj } from '@/types/config/translate'
 
 export const TOKENS = ['targetLang', 'input'] as const
 

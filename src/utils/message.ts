@@ -1,4 +1,5 @@
 import type { Config } from '@/types/config/config'
+import type { ProviderConfig } from '@/types/config/provider'
 import type { ProxyRequest, ProxyResponse } from '@/types/proxy-fetch'
 import { defineExtensionMessaging } from '@webext-core/messaging'
 
@@ -21,8 +22,7 @@ interface ProtocolMap {
   getPinState: () => boolean
   returnPinState: (data: { isPinned: boolean }) => void
   // request
-  // TODO: use discriminated union to define the type of the request
-  enqueueRequest: (data: { type: string, params: Record<string, any>, scheduleAt: number, hash: string }) => Promise<any>
+  enqueueTranslateRequest: (data: { text: string, langConfig: Config['language'], providerConfig: ProviderConfig, scheduleAt: number, hash: string }) => Promise<string>
   setTranslateRequestQueueConfig: (data: { rate?: number, capacity?: number }) => void
   // network proxy
   backgroundFetch: (data: ProxyRequest) => Promise<ProxyResponse>

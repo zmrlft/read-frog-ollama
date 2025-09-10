@@ -1,18 +1,17 @@
 import type { LangCodeISO6391 } from '@repo/definitions'
-import type { Config } from '@/types/config/config'
-import { storage } from '#imports'
-import { CONFIG_STORAGE_KEY, DEFAULT_PROVIDER_CONFIG } from '@/utils/constants/config'
+import type { PureAPIProviderConfig } from '@/types/config/provider'
+import { DEFAULT_DEEPLX_BASE_URL } from '@/utils/constants/config'
 import { sendMessage } from '@/utils/message'
 
 export async function deeplxTranslate(
   sourceText: string,
   fromLang: LangCodeISO6391 | 'auto',
   toLang: LangCodeISO6391,
-  options?: { backgroundFetch?: boolean },
+  providerConfig: PureAPIProviderConfig,
+  options?: { forceBackgroundFetch?: boolean },
 ): Promise<string> {
-  const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`)
-  const baseURL = config?.providersConfig?.deeplx?.baseURL ?? DEFAULT_PROVIDER_CONFIG.deeplx.baseURL
-  const apiKey = config?.providersConfig?.deeplx?.apiKey
+  const baseURL = providerConfig.baseURL ?? DEFAULT_DEEPLX_BASE_URL
+  const apiKey = providerConfig.apiKey
 
   if (!baseURL) {
     throw new Error('DeepLX baseURL is not configured')
@@ -35,7 +34,7 @@ export async function deeplxTranslate(
     target_lang: formatLang(toLang),
   })
 
-  const fetchResponse = options?.backgroundFetch
+  const fetchResponse = options?.forceBackgroundFetch
     ? await fetchViaBackground(url, requestBody)
     : await fetchDirect(url, requestBody)
 

@@ -1,5 +1,3 @@
-import type { ReadProviderNames } from '@/types/config/provider'
-
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
 import {
@@ -10,13 +8,15 @@ import {
   SelectValue,
 } from '@repo/ui/components/select'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/ui/components/tooltip'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import ProviderIcon from '@/components/provider-icon'
 import { configFields } from '@/utils/atoms/config'
-import { READ_PROVIDER_ITEMS } from '@/utils/constants/config'
+import { getReadProvidersConfig } from '@/utils/config/helpers'
+import { PROVIDER_ITEMS } from '@/utils/constants/config'
 
 export default function ReadProviderSelector() {
   const [readConfig, setReadConfig] = useAtom(configFields.read)
+  const providersConfig = useAtomValue(configFields.providersConfig)
 
   return (
     <div className="flex items-center justify-between gap-2">
@@ -34,11 +34,11 @@ export default function ReadProviderSelector() {
         </Tooltip>
       </span>
       <Select
-        value={readConfig.provider}
-        onValueChange={(value: ReadProviderNames) => {
+        value={readConfig.providerName}
+        onValueChange={(value: string) => {
           setReadConfig({
             ...readConfig,
-            provider: value,
+            providerName: value,
           })
         }}
       >
@@ -46,9 +46,9 @@ export default function ReadProviderSelector() {
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {Object.entries(READ_PROVIDER_ITEMS).map(([value, { logo, name }]) => (
-            <SelectItem key={value} value={value}>
-              <ProviderIcon logo={logo} name={name} />
+          {getReadProvidersConfig(providersConfig).map(({ name, provider }) => (
+            <SelectItem key={name} value={name}>
+              <ProviderIcon logo={PROVIDER_ITEMS[provider].logo} name={name} />
             </SelectItem>
           ))}
         </SelectContent>

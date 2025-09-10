@@ -1,13 +1,18 @@
 import { i18n } from '#imports'
-import { API_PROVIDER_NAMES } from '@/types/config/provider'
+import { useAtomValue } from 'jotai'
+import { isAPIProviderConfig } from '@/types/config/provider'
+import { configFields } from '@/utils/atoms/config'
 import { PageLayout } from '../../components/page-layout'
 import { ProviderConfigCard } from './provider-config-card'
 
 export function ApiProvidersPage() {
+  const providersConfig = useAtomValue(configFields.providersConfig)
+  const apiProvidersConfig = providersConfig.filter(providerConfig => isAPIProviderConfig(providerConfig))
+
   return (
     <PageLayout title={i18n.t('options.apiProviders.title')} innerClassName="[&>*]:border-b [&>*:last-child]:border-b-0">
-      {API_PROVIDER_NAMES.map(provider => (
-        <ProviderConfigCard key={provider} provider={provider} />
+      {apiProvidersConfig.map(providerConfig => (
+        <ProviderConfigCard key={providerConfig.name} providerConfig={providerConfig} />
       ))}
     </PageLayout>
   )

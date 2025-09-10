@@ -1,9 +1,7 @@
 import type { Config } from '@/types/config/config'
 import deepmerge from 'deepmerge'
 import { atom } from 'jotai'
-
 import { selectAtom } from 'jotai/utils'
-
 import { CONFIG_STORAGE_KEY, DEFAULT_CONFIG } from '../constants/config'
 import { storageAdapter } from './storage-adapter'
 
@@ -11,21 +9,43 @@ export const configAtom = atom<Config>(DEFAULT_CONFIG)
 
 const overwriteMerge = (_target: unknown[], source: unknown[]) => source
 
+let configPromise: Promise<Config> | null = null
+
+function ensureConfigLoaded(): Promise<Config> {
+  if (!configPromise) {
+    configPromise = storageAdapter.get<Config>(CONFIG_STORAGE_KEY, DEFAULT_CONFIG)
+  }
+  return configPromise
+}
+
 export const writeConfigAtom = atom(
   null,
   async (get, set, patch: Partial<Config>) => {
-    // ! If we don't use HydrateAtoms, there will be a bug that every time refresh the page, the config will be reset to default
-    // ! because we call this function when the page is loaded by extractContent useQuery, that time, configAtom is DEFAULT_CONFIG and the next will be deepmerge(DEFAULT_CONFIG, patch)
+    // Ensure config is loaded from storage before any writes
+    const savedConfig = await ensureConfigLoaded()
+
+    // If configAtom still has default value, update it with saved config
+    if (get(configAtom) === DEFAULT_CONFIG) {
+      set(configAtom, savedConfig)
+    }
+
     const next = deepmerge(get(configAtom), patch, { arrayMerge: overwriteMerge })
-    set(configAtom, next) // UI 乐观更新，这会让 react 多一次渲染，因为 react 渲染只有浅比较，前后两个 object 值一样会触发两次渲染
-    await storageAdapter.set(CONFIG_STORAGE_KEY, next) // 成功后会调用 onMount 的 callback，设置真正的值，第二次渲染
+    set(configAtom, next)
+    await storageAdapter.set(CONFIG_STORAGE_KEY, next)
   },
 )
 
 configAtom.onMount = (setAtom: (newValue: Config) => void) => {
-  storageAdapter.get<Config>(CONFIG_STORAGE_KEY, DEFAULT_CONFIG).then(setAtom)
+  // Load config on mount
+  ensureConfigLoaded().then(setAtom)
+
+  // Watch for external changes
   const unwatch = storageAdapter.watch<Config>(CONFIG_STORAGE_KEY, setAtom)
-  return unwatch
+
+  return () => {
+    unwatch()
+    configPromise = null // Reset on unmount for hot reload
+  }
 }
 
 // export const configFieldAtom = <K extends Keys>(key: K) => {

@@ -1,4 +1,4 @@
-import type { TextUIPart } from 'ai'
+import type { JSONValue, TextUIPart } from 'ai'
 import { Icon } from '@iconify/react'
 import { ISO6393_TO_6391, LANG_CODE_TO_EN_NAME } from '@repo/definitions'
 import { useMutation } from '@tanstack/react-query'
@@ -6,14 +6,16 @@ import { readUIMessageStream, streamText } from 'ai'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { isPureTranslateProvider } from '@/types/config/provider'
+import { isLLMTranslateProviderConfig, isNonAPIProvider, isPureAPIProvider, THINKING_MODELS } from '@/types/config/provider'
+import { configFields } from '@/utils/atoms/config'
+import { translateProviderConfigAtom } from '@/utils/atoms/provider'
 import { authClient } from '@/utils/auth/auth-client'
 import { globalConfig } from '@/utils/config/config'
 import { WEBSITE_URL } from '@/utils/constants/url'
 import { deeplxTranslate, googleTranslate, microsoftTranslate } from '@/utils/host/translate/api'
 import { sendMessage } from '@/utils/message'
 import { getTranslatePrompt } from '@/utils/prompts/translate'
-import { getTranslateModel } from '@/utils/provider'
+import { getTranslateModel } from '@/utils/providers/model'
 import { trpc } from '@/utils/trpc/client'
 import { isTooltipVisibleAtom, isTranslatePopoverVisibleAtom, mouseClickPositionAtom, selectionContentAtom } from './atom'
 
@@ -44,6 +46,8 @@ export function TranslatePopover() {
   const [isVisible, setIsVisible] = useAtom(isTranslatePopoverVisibleAtom)
   const [isTranslating, setIsTranslating] = useState(false)
   const [translatedText, setTranslatedText] = useState<string | undefined>(undefined)
+  const translateProviderConfig = useAtomValue(translateProviderConfigAtom)
+  const languageConfig = useAtomValue(configFields.language)
   const mouseClickPosition = useAtomValue(mouseClickPositionAtom)
   const selectionContent = useAtomValue(selectionContentAtom)
   const popoverRef = useRef<HTMLDivElement>(null)
@@ -109,56 +113,100 @@ export function TranslatePopover() {
     }
 
     const translate = async () => {
-      if (!selectionContent) {
+      const cleanText = selectionContent?.replace(/\u200B/g, '').trim()
+      if (!cleanText) {
         return
       }
 
       if (!globalConfig) {
         throw new Error('No global config when translate text')
       }
-      const provider = globalConfig.translate.provider
-      const modelConfig = globalConfig.translate.models[provider]
-      if (!modelConfig && !isPureTranslateProvider(provider)) {
-        throw new Error(`No configuration found for provider: ${provider}`)
+
+      if (!translateProviderConfig) {
+        throw new Error(`No provider config for ${globalConfig.translate.providerName} when translate text`)
       }
-      const modelString = modelConfig?.isCustomModel ? modelConfig.customModel : modelConfig?.model
+
+      const { provider } = translateProviderConfig
 
       setIsTranslating(true)
-      if (isPureTranslateProvider(provider)) {
-        const sourceLang = globalConfig.language.sourceCode === 'auto' ? 'auto' : (ISO6393_TO_6391[globalConfig.language.sourceCode] ?? 'auto')
-        const targetLang = ISO6393_TO_6391[globalConfig.language.targetCode]
-        if (!targetLang) {
-          throw new Error('Invalid target language code')
-        }
-        if (provider === 'google') {
-          setTranslatedText(await googleTranslate(selectionContent, sourceLang, targetLang))
-        }
-        else if (provider === 'microsoft') {
-          setTranslatedText(await microsoftTranslate(selectionContent, sourceLang, targetLang))
-        }
-        else if (provider === 'deeplx') {
-          setTranslatedText(await deeplxTranslate(selectionContent, sourceLang, targetLang, { backgroundFetch: true }))
-        }
-      }
-      else if (modelString) {
-        const targetLang = LANG_CODE_TO_EN_NAME[globalConfig.language.targetCode]
-        if (!targetLang) {
-          throw new Error('Invalid target language code')
-        }
-        const prompt = getTranslatePrompt(targetLang, selectionContent)
-        const model = await getTranslateModel(provider, modelString)
-        const result = streamText({
-          model,
-          prompt,
-        })
-        for await (const uiMessage of readUIMessageStream({
-          stream: result.toUIMessageStream(),
-        })) {
-          setTranslatedText((uiMessage.parts[uiMessage.parts.length - 1] as TextUIPart).text)
-        }
-      }
 
-      setIsTranslating(false)
+      try {
+        let translatedText = ''
+
+        if (isNonAPIProvider(provider)) {
+          const sourceLang = languageConfig.sourceCode === 'auto' ? 'auto' : (ISO6393_TO_6391[languageConfig.sourceCode] ?? 'auto')
+          const targetLang = ISO6393_TO_6391[languageConfig.targetCode]
+          if (!targetLang) {
+            throw new Error(`Invalid target language code: ${languageConfig.targetCode}`)
+          }
+
+          if (provider === 'google') {
+            translatedText = await googleTranslate(cleanText, sourceLang, targetLang)
+          }
+          else if (provider === 'microsoft') {
+            translatedText = await microsoftTranslate(cleanText, sourceLang, targetLang)
+          }
+        }
+        else if (isPureAPIProvider(provider)) {
+          const sourceLang = languageConfig.sourceCode === 'auto' ? 'auto' : (ISO6393_TO_6391[languageConfig.sourceCode] ?? 'auto')
+          const targetLang = ISO6393_TO_6391[languageConfig.targetCode]
+          if (!targetLang) {
+            throw new Error(`Invalid target language code: ${languageConfig.targetCode}`)
+          }
+
+          if (provider === 'deeplx') {
+            translatedText = await deeplxTranslate(cleanText, sourceLang, targetLang, translateProviderConfig, { forceBackgroundFetch: true })
+          }
+        }
+        else if (isLLMTranslateProviderConfig(translateProviderConfig)) {
+          const targetLangName = LANG_CODE_TO_EN_NAME[languageConfig.targetCode]
+          const { name: providerName, models: { translate } } = translateProviderConfig
+          const translateModel = translate.isCustomModel ? translate.customModel : translate.model
+          const model = await getTranslateModel(providerName)
+
+          // Configure ultrathink for thinking models
+          const DEFAULT_THINKING_BUDGET = 128
+          const providerOptions: Record<string, Record<string, JSONValue>> = {
+            google: {
+              thinkingConfig: {
+                thinkingBudget: THINKING_MODELS.includes(translateModel as (typeof THINKING_MODELS)[number]) ? DEFAULT_THINKING_BUDGET : 0,
+              },
+            },
+          }
+
+          const prompt = getTranslatePrompt(targetLangName, cleanText)
+
+          // Use streaming for AI providers
+          const result = streamText({
+            model,
+            prompt,
+            providerOptions,
+          })
+
+          for await (const uiMessage of readUIMessageStream({
+            stream: result.toUIMessageStream(),
+          })) {
+            const lastPart = uiMessage.parts[uiMessage.parts.length - 1] as TextUIPart
+            setTranslatedText(lastPart.text)
+          }
+        }
+        else {
+          throw new Error(`Unknown provider: ${provider}`)
+        }
+
+        // Set final text if not streaming
+        if (translatedText && !isLLMTranslateProviderConfig(translateProviderConfig)) {
+          translatedText = translatedText.trim()
+          setTranslatedText(translatedText === cleanText ? '' : translatedText)
+        }
+      }
+      catch (error) {
+        console.error('Translation error:', error)
+        toast.error('Translation failed')
+      }
+      finally {
+        setIsTranslating(false)
+      }
     }
 
     if (isVisible) {
@@ -169,7 +217,7 @@ export function TranslatePopover() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isVisible, selectionContent, handleClose])
+  }, [isVisible, selectionContent, handleClose, languageConfig.sourceCode, languageConfig.targetCode, translateProviderConfig])
 
   if (!isVisible || !mouseClickPosition || !selectionContent) {
     return null

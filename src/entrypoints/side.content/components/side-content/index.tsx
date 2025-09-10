@@ -4,7 +4,7 @@ import { useAtom, useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { APIConfigWarning } from '@/components/api-config-warning'
 import { configFields } from '@/utils/atoms/config'
-import { isAnyAPIKey } from '@/utils/config/config'
+import { isAnyAPIKeyForReadProviders } from '@/utils/config/config'
 import { APP_NAME } from '@/utils/constants/app'
 import { MIN_SIDE_CONTENT_WIDTH } from '@/utils/constants/side'
 import { isSideOpenAtom } from '../../atoms'
@@ -109,7 +109,7 @@ export default function SideContent() {
 
         <div className="flex h-full flex-col gap-y-2 py-3">
           <TopBar className="mx-3" />
-          {!isAnyAPIKey(providersConfig) && (
+          {!isAnyAPIKeyForReadProviders(providersConfig) && (
             <APIConfigWarning className="mx-3" />
           )}
           <Metadata className="mx-3" />

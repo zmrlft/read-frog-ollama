@@ -1,6 +1,8 @@
 import type { Config } from '@/types/config/config'
+import type { ProvidersConfig } from '@/types/config/provider'
 import { storage } from '#imports'
 import { configSchema } from '@/types/config/config'
+import { isAPIProviderConfig } from '@/types/config/provider'
 import { CONFIG_SCHEMA_VERSION, CONFIG_STORAGE_KEY, DEFAULT_CONFIG } from '../constants/config'
 import { logger } from '../logger'
 import { runMigration } from './migration'
@@ -57,15 +59,32 @@ async function loadAPIKeyFromEnv() {
 
   // eslint-disable-next-line turbo/no-undeclared-env-vars
   if (import.meta.env.DEV) {
-    const newProviderConfig = Object.fromEntries(
-      Object.entries(config.providersConfig).map(([provider, cfg]) => {
-        const apiKeyEnvName = `WXT_${provider.toUpperCase()}_API_KEY`
-        return [provider, { ...cfg, apiKey: import.meta.env[apiKeyEnvName] }]
-      }),
+    // Use reduce to maintain type safety with the new array-based providersConfig
+    const updatedProvidersConfig: ProvidersConfig = config.providersConfig.reduce<ProvidersConfig>(
+      (acc, providerConfig) => {
+        // Only add API key for providers that support it
+        if (isAPIProviderConfig(providerConfig)) {
+          const apiKeyEnvName = `WXT_${providerConfig.provider.toUpperCase()}_API_KEY`
+          const envApiKey = import.meta.env[apiKeyEnvName] as string | undefined
+
+          // If env variable exists, update the config with the API key
+          if (envApiKey) {
+            return [...acc, {
+              ...providerConfig,
+              apiKey: envApiKey,
+            }]
+          }
+        }
+
+        // Keep the original config if no API key needed or not found
+        return [...acc, providerConfig]
+      },
+      [],
     )
+
     await storage.setItem(`local:${CONFIG_STORAGE_KEY}`, {
       ...config,
-      providersConfig: newProviderConfig,
+      providersConfig: updatedProvidersConfig,
     })
   }
 }

@@ -21,11 +21,13 @@ import {
 } from '@/types/content'
 import { sendInBatchesWithFixedDelay } from '@/utils/ai-request'
 import { configAtom, configFields } from '@/utils/atoms/config'
-import { isAnyAPIKey } from '@/utils/config/config'
+import { readProviderConfigAtom } from '@/utils/atoms/provider'
+import { isAnyAPIKeyForReadProviders } from '@/utils/config/config'
+import { getProviderConfigByName } from '@/utils/config/helpers'
 import { logger } from '@/utils/logger'
 import { getAnalyzePrompt } from '@/utils/prompts/analyze'
 import { getExplainPrompt } from '@/utils/prompts/explain'
-import { getReadModel } from '@/utils/provider'
+import { getReadModel } from '@/utils/providers/model'
 
 interface ExplainArticleParams {
   extractedContent: ExtractedContent
@@ -37,7 +39,8 @@ const MAX_CHARACTERS = 1000
 
 export function useAnalyzeContent() {
   const setReadState = useSetAtom(readStateAtom)
-  const { language, read } = useAtomValue(configAtom)
+  const { language } = useAtomValue(configAtom)
+  const readProviderConfig = useAtomValue(readProviderConfigAtom)
   const setLanguage = useSetAtom(configFields.language)
   return useMutation<ArticleAnalysis, Error, ExtractedContent>({
     mutationKey: ['analyzeContent'],
@@ -51,12 +54,7 @@ export function useAnalyzeContent() {
       const maxAttempts = 3
       let lastError
 
-      const modelConfig = read.models[read.provider]
-      const modelString = modelConfig.isCustomModel ? modelConfig.customModel : modelConfig.model
-      if (!modelString) {
-        throw new Error('No model string available for summary generation')
-      }
-      const model = await getReadModel(read.provider, modelString)
+      const model = await getReadModel(readProviderConfig.name)
       const targetLang = LANG_CODE_TO_EN_NAME[language.targetCode]
 
       while (attempts < maxAttempts) {
@@ -105,7 +103,11 @@ async function explainBatch(batch: string[], articleAnalysis: ArticleAnalysis, c
   let attempts = 0
   let lastError
 
-  const { language, read } = config
+  const { language, read, providersConfig } = config
+  const readProviderConfig = getProviderConfigByName(providersConfig, read.providerName)
+  if (!readProviderConfig) {
+    throw new Error(`Provider ${read.providerName} not found`)
+  }
 
   const targetLang = LANG_CODE_TO_EN_NAME[language.targetCode]
   const sourceLang
@@ -115,14 +117,7 @@ async function explainBatch(batch: string[], articleAnalysis: ArticleAnalysis, c
         : language.sourceCode
     ]
 
-  const modelConfig = read.models[read.provider]
-  const modelString = modelConfig.isCustomModel ? modelConfig.customModel : modelConfig.model
-
-  if (!modelString) {
-    throw new Error('No model string available for explanation generation')
-  }
-
-  const model = await getReadModel(read.provider, modelString)
+  const model = await getReadModel(readProviderConfig.name)
   while (attempts < MAX_ATTEMPTS) {
     try {
       const { object: articleExplanation } = await generateObject({
@@ -243,7 +238,7 @@ export function useReadArticle() {
   const providersConfig = useAtomValue(configFields.providersConfig)
 
   const mutate = async () => {
-    if (!isAnyAPIKey(providersConfig)) {
+    if (!isAnyAPIKeyForReadProviders(providersConfig)) {
       toast.error(i18n.t('noAPIKeyConfig.warning'))
       return
     }

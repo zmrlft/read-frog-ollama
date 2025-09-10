@@ -1,6 +1,6 @@
 import { DEFAULT_CONFIG } from '@/utils/constants/config'
 import { db } from '@/utils/db/dexie/db'
-import { aiTranslate, deeplxTranslate, googleTranslate, microsoftTranslate } from '@/utils/host/translate/api'
+import { executeTranslate } from '@/utils/host/translate/translate-text'
 import { onMessage } from '@/utils/message'
 import { RequestQueue } from '@/utils/request/request-queue'
 import { ensureConfig } from './config'
@@ -17,42 +17,25 @@ export async function setUpRequestQueue() {
     baseRetryDelayMs: 1_000,
   })
 
-  onMessage('enqueueRequest', async (message) => {
-    const { data } = message
+  onMessage('enqueueTranslateRequest', async (message) => {
+    const { data: { text, langConfig, providerConfig, scheduleAt, hash } } = message
 
     // Check cache first
-    if (data.hash) {
-      const cached = await db.translationCache.get(data.hash)
+    if (hash) {
+      const cached = await db.translationCache.get(hash)
       if (cached) {
         return cached.translation
       }
     }
 
     // Create thunk based on type and params
-    let thunk: () => Promise<any>
-    switch (data.type) {
-      case 'googleTranslate':
-        thunk = () => googleTranslate(data.params.text, data.params.fromLang, data.params.toLang)
-        break
-      case 'microsoftTranslate':
-        thunk = () => microsoftTranslate(data.params.text, data.params.fromLang, data.params.toLang)
-        break
-      case 'deeplxTranslate':
-        thunk = () => deeplxTranslate(data.params.text, data.params.fromLang, data.params.toLang)
-        break
-      case 'aiTranslate':
-        thunk = () => aiTranslate(data.params.provider, data.params.modelString, data.params.prompt)
-        break
-      default:
-        throw new Error(`Unknown request type: ${data.type}`)
-    }
-
-    const result = await requestQueue.enqueue(thunk, data.scheduleAt, data.hash)
+    const thunk = () => executeTranslate(text, langConfig, providerConfig)
+    const result = await requestQueue.enqueue(thunk, scheduleAt, hash)
 
     // Cache the translation result if successful
-    if (result && data.hash) {
+    if (result && hash) {
       await db.translationCache.put({
-        key: data.hash,
+        key: hash,
         translation: result,
         createdAt: new Date(),
       })
@@ -63,7 +46,6 @@ export async function setUpRequestQueue() {
 
   onMessage('setTranslateRequestQueueConfig', (message) => {
     const { data } = message
-
     requestQueue.setQueueOptions(data)
   })
 }

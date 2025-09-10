@@ -1,4 +1,3 @@
-import type { TranslateProviderNames } from '@/types/config/provider'
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
 import {
@@ -12,13 +11,15 @@ import {
 } from '@repo/ui/components/select'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/ui/components/tooltip'
 
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import ProviderIcon from '@/components/provider-icon'
 import { configFields } from '@/utils/atoms/config'
-import { LLM_TRANSLATE_PROVIDER_ITEMS, PURE_TRANSLATE_PROVIDER_ITEMS } from '@/utils/constants/config'
+import { getLLMTranslateProvidersConfig, getNonAPIProvidersConfig, getPureAPIProviderConfig } from '@/utils/config/helpers'
+import { PROVIDER_ITEMS } from '@/utils/constants/config'
 
 export default function TranslateProviderSelector() {
   const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
+  const providersConfig = useAtomValue(configFields.providersConfig)
 
   return (
     <div className="flex items-center justify-between gap-2">
@@ -36,11 +37,11 @@ export default function TranslateProviderSelector() {
         </Tooltip>
       </span>
       <Select
-        value={translateConfig.provider}
-        onValueChange={(value: TranslateProviderNames) => {
+        value={translateConfig.providerName}
+        onValueChange={(value: string) => {
           setTranslateConfig({
             ...translateConfig,
-            provider: value,
+            providerName: value,
           })
         }}
       >
@@ -50,17 +51,22 @@ export default function TranslateProviderSelector() {
         <SelectContent>
           <SelectGroup>
             <SelectLabel>{i18n.t('translateService.aiTranslator')}</SelectLabel>
-            {Object.entries(LLM_TRANSLATE_PROVIDER_ITEMS).map(([value, { logo, name }]) => (
-              <SelectItem key={value} value={value}>
-                <ProviderIcon logo={logo} name={name} />
+            {getLLMTranslateProvidersConfig(providersConfig).map(({ name, provider }) => (
+              <SelectItem key={name} value={name}>
+                <ProviderIcon logo={PROVIDER_ITEMS[provider].logo} name={name} />
               </SelectItem>
             ))}
           </SelectGroup>
           <SelectGroup>
             <SelectLabel>{i18n.t('translateService.normalTranslator')}</SelectLabel>
-            {Object.entries(PURE_TRANSLATE_PROVIDER_ITEMS).map(([value, { logo, name }]) => (
-              <SelectItem key={value} value={value}>
-                <ProviderIcon logo={logo} name={name} />
+            {getNonAPIProvidersConfig(providersConfig).map(({ name, provider }) => (
+              <SelectItem key={name} value={name}>
+                <ProviderIcon logo={PROVIDER_ITEMS[provider].logo} name={name} />
+              </SelectItem>
+            ))}
+            {getPureAPIProviderConfig(providersConfig).map(({ name, provider }) => (
+              <SelectItem key={name} value={name}>
+                <ProviderIcon logo={PROVIDER_ITEMS[provider].logo} name={name} />
               </SelectItem>
             ))}
           </SelectGroup>

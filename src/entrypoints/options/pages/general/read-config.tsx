@@ -3,12 +3,13 @@ import { i18n } from '#imports'
 import { Checkbox } from '@repo/ui/components/checkbox'
 import { Input } from '@repo/ui/components/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/components/select'
-import deepmerge from 'deepmerge'
 import { useAtom, useAtomValue } from 'jotai'
 import ProviderIcon from '@/components/provider-icon'
 import { READ_PROVIDER_MODELS } from '@/types/config/provider'
 import { configFields } from '@/utils/atoms/config'
-import { READ_PROVIDER_ITEMS } from '@/utils/constants/config'
+import { readProviderConfigAtom, updateLLMProviderConfig } from '@/utils/atoms/provider'
+import { getLLMTranslateProvidersConfig } from '@/utils/config/helpers'
+import { PROVIDER_ITEMS } from '@/utils/constants/config'
 import { ConfigCard } from '../../components/config-card'
 import { FieldWithLabel } from '../../components/field-with-label'
 import { SetApiKeyWarning } from '../../components/set-api-key-warning'
@@ -27,22 +28,23 @@ export function ReadConfig() {
 function ReadProviderSelector() {
   const [readConfig, setReadConfig] = useAtom(configFields.read)
   const providersConfig = useAtomValue(configFields.providersConfig)
-  const providerConfig = providersConfig[readConfig.provider]
+  const readProviderConfig = useAtomValue(readProviderConfigAtom)
+
   return (
     <FieldWithLabel
       id="readProvider"
       label={(
         <div className="flex gap-2">
           {i18n.t('options.general.readConfig.provider')}
-          {!providerConfig.apiKey && <SetApiKeyWarning />}
+          {!readProviderConfig.apiKey && <SetApiKeyWarning />}
         </div>
       )}
     >
       <Select
-        value={readConfig.provider}
+        value={readConfig.providerName}
         onValueChange={(value: ReadProviderNames) =>
           setReadConfig(
-            { ...readConfig, provider: value },
+            { ...readConfig, providerName: value },
           )}
       >
         <SelectTrigger className="w-full">
@@ -50,9 +52,9 @@ function ReadProviderSelector() {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {Object.entries(READ_PROVIDER_ITEMS).map(([value, { logo, name }]) => (
-              <SelectItem key={value} value={value}>
-                <ProviderIcon logo={logo} name={name} />
+            {getLLMTranslateProvidersConfig(providersConfig).map(({ name, provider }) => (
+              <SelectItem key={name} value={name}>
+                <ProviderIcon logo={PROVIDER_ITEMS[provider].logo} name={name} />
               </SelectItem>
             ))}
           </SelectGroup>
@@ -63,42 +65,48 @@ function ReadProviderSelector() {
 }
 
 function ReadModelSelector() {
-  const [readConfig, setReadConfig] = useAtom(configFields.read)
-  const modelConfig = readConfig.models[readConfig.provider]
+  const [readProviderConfig, setReadProviderConfig] = useAtom(readProviderConfigAtom)
+  const provider = readProviderConfig.provider
+  const modelConfig = readProviderConfig.models.read
+
   return (
     <FieldWithLabel id="readModel" label={i18n.t('options.general.readConfig.model.title')}>
       {modelConfig.isCustomModel
         ? (
             <Input
-              value={modelConfig.customModel}
+              value={modelConfig.customModel ?? ''}
               onChange={e =>
-                setReadConfig(deepmerge(readConfig, {
-                  models: {
-                    [readConfig.provider]: {
-                      customModel: e.target.value,
+                setReadProviderConfig(
+                  updateLLMProviderConfig(readProviderConfig, {
+                    models: {
+                      read: {
+                        customModel: e.target.value === '' ? null : e.target.value,
+                      },
                     },
-                  },
-                }))}
+                  }),
+                )}
             />
           )
         : (
             <Select
               value={modelConfig.model}
               onValueChange={value =>
-                setReadConfig(deepmerge(readConfig, {
-                  models: {
-                    [readConfig.provider]: {
-                      model: value,
+                setReadProviderConfig(
+                  updateLLMProviderConfig(readProviderConfig, {
+                    models: {
+                      read: {
+                        model: value as any,
+                      },
                     },
-                  },
-                }))}
+                  }),
+                )}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select a model" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  {READ_PROVIDER_MODELS[readConfig.provider].map(model => (
+                  {READ_PROVIDER_MODELS[provider].map(model => (
                     <SelectItem key={model} value={model}>
                       {model}
                     </SelectItem>
@@ -109,33 +117,37 @@ function ReadModelSelector() {
           )}
       <div className="mt-0.5 flex items-center space-x-2">
         <Checkbox
-          id={`isCustomModel-read-${readConfig.provider}`}
+          id={`isCustomModel-read-${provider}`}
           checked={modelConfig.isCustomModel}
           onCheckedChange={(checked) => {
             if (checked === false) {
-              setReadConfig(deepmerge(readConfig, {
-                models: {
-                  [readConfig.provider]: {
-                    customModel: '',
-                    isCustomModel: false,
+              setReadProviderConfig(
+                updateLLMProviderConfig(readProviderConfig, {
+                  models: {
+                    read: {
+                      customModel: null,
+                      isCustomModel: false,
+                    },
                   },
-                },
-              }))
+                }),
+              )
             }
             else {
-              setReadConfig(deepmerge(readConfig, {
-                models: {
-                  [readConfig.provider]: {
-                    customModel: readConfig.models[readConfig.provider].model,
-                    isCustomModel: true,
+              setReadProviderConfig(
+                updateLLMProviderConfig(readProviderConfig, {
+                  models: {
+                    read: {
+                      customModel: modelConfig.model,
+                      isCustomModel: true,
+                    },
                   },
-                },
-              }))
+                }),
+              )
             }
           }}
         />
         <label
-          htmlFor={`isCustomModel-read-${readConfig.provider}`}
+          htmlFor={`isCustomModel-read-${provider}`}
           className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
         >
           {i18n.t('options.general.readConfig.model.enterCustomModel')}

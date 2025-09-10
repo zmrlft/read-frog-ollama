@@ -1,4 +1,4 @@
-import { describe, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { RequestQueue } from '../request-queue'
 
 // Convenience helper: returns a thunk that resolves with <value>

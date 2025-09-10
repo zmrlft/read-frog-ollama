@@ -1,4 +1,4 @@
-import type { TranslatePromptObj } from '@/types/config/provider'
+import type { TranslatePromptObj } from '@/types/config/translate'
 import { i18n } from '#i18n'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@repo/ui/components/alert-dialog'

@@ -1,4 +1,4 @@
-import type { TranslatePromptObj } from '@/types/config/provider'
+import type { TranslatePromptObj } from '@/types/config/translate'
 import { saveAs } from 'file-saver'
 import { APP_NAME } from '@/utils/constants/app'
 
