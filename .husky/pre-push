@@ -1,6 +1,6 @@
 # Check if SKIP_PRE_PUSH environment variable is set
-if [ "$SKIP_PRE_PUSH" = "true" ]; then
-  echo "⏭️  Skipping pre-push checks (SKIP_PRE_PUSH=true)"
+if [ "$SKIP_HUSKY" = "true" ]; then
+  echo "⏭️  Skipping pre-push checks (SKIP_HUSKY=true)"
   exit 0
 fi
 

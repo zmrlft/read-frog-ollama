@@ -1,4 +1,4 @@
-import type { TranslatePromptObj } from '@/types/config/provider'
+import type { TranslatePromptObj } from '@/types/config/translate'
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
 import {
@@ -10,9 +10,10 @@ import {
   SelectValue,
 } from '@repo/ui/components/select'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/ui/components/tooltip'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { isLLMTranslateProvider } from '@/types/config/provider'
 import { configFields } from '@/utils/atoms/config'
+import { translateProviderConfigAtom } from '@/utils/atoms/provider'
 import { DEFAULT_TRANSLATE_PROMPT_ID } from '@/utils/constants/prompt'
 
 function name(prompt: TranslatePromptObj) {
@@ -20,10 +21,11 @@ function name(prompt: TranslatePromptObj) {
 }
 
 export default function TranslatePromptSelector() {
+  const translateProviderConfig = useAtomValue(translateProviderConfigAtom)
   const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
 
-  if (!isLLMTranslateProvider(translateConfig.provider))
-    return <></>
+  if (!translateProviderConfig?.provider || !isLLMTranslateProvider(translateProviderConfig?.provider))
+    return null
 
   const promptsConfig = translateConfig.promptsConfig
   const { patterns = [], prompt } = promptsConfig

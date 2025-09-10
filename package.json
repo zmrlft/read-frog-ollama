@@ -8,6 +8,7 @@
   "author": "MengXi <contact@mengxi.work> (https://mengxi.work)",
   "scripts": {
     "build": "turbo build",
+    "build:analyze": "turbo build:analyze",
     "db:generate": "turbo db:generate",
     "db:migrate": "turbo db:migrate",
     "db:studio": "turbo db:studio",

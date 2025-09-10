@@ -1,4 +1,4 @@
-import type { APIProviderNames } from '@/types/config/provider'
+import type { APIProviderConfig } from '@/types/config/provider'
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
 import { Button } from '@repo/ui/components/button'
@@ -6,18 +6,22 @@ import { Checkbox } from '@repo/ui/components/checkbox'
 import { Input } from '@repo/ui/components/input'
 import { cn } from '@repo/ui/lib/utils'
 import { useMutation } from '@tanstack/react-query'
-import { useAtom, useAtomValue } from 'jotai'
+import { useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import LoadingDots from '@/components/loading-dots'
-import { configFields } from '@/utils/atoms/config'
-import { API_PROVIDER_ITEMS, DEFAULT_TRANSLATE_MODELS } from '@/utils/constants/config'
-import { aiTranslate, deeplxTranslate } from '@/utils/host/translate/api'
+import { providerConfigAtom } from '@/utils/atoms/provider'
+import { getObjectWithoutAPIKeys } from '@/utils/config/config'
+import { API_PROVIDER_ITEMS, DEFAULT_CONFIG } from '@/utils/constants/config'
+import { executeTranslate } from '@/utils/host/translate/translate-text'
 import { ConfigCard } from '../../components/config-card'
 import { FieldWithLabel } from '../../components/field-with-label'
 
-export function ProviderConfigCard({ provider }: { provider: APIProviderNames }) {
-  const [providersConfig, setProvidersConfig] = useAtom(configFields.providersConfig)
+export function ProviderConfigCard({ providerConfig }: { providerConfig: APIProviderConfig }) {
+  const setProviderConfig = useSetAtom(providerConfigAtom(providerConfig.name))
+  // const [providersConfig, setProvidersConfig] = useAtom(configFields.providersConfig)
   const [showAPIKey, setShowAPIKey] = useState(false)
+
+  const provider = providerConfig.provider
 
   return (
     <ConfigCard
@@ -41,22 +45,19 @@ export function ProviderConfigCard({ provider }: { provider: APIProviderNames })
                 API Key
               </span>
               <ConnectionTestButton
-                provider={provider}
+                providerConfig={providerConfig}
               />
             </div>
           )}
           id={`${provider}-apiKey`}
         >
           <Input
-            value={providersConfig[provider].apiKey}
+            value={providerConfig.apiKey}
             type={showAPIKey ? 'text' : 'password'}
             onChange={e =>
-              setProvidersConfig({
-                ...providersConfig,
-                [provider]: {
-                  ...providersConfig[provider],
-                  apiKey: e.target.value,
-                },
+              setProviderConfig({
+                ...providerConfig,
+                apiKey: e.target.value,
               })}
           />
           <div className="mt-0.5 flex items-center space-x-2">
@@ -74,7 +75,7 @@ export function ProviderConfigCard({ provider }: { provider: APIProviderNames })
           </div>
         </FieldWithLabel>
 
-        <AdvancedProviderConfig provider={provider} />
+        <AdvancedProviderConfig providerConfig={providerConfig} />
       </div>
     </ConfigCard>
   )
@@ -107,20 +108,14 @@ const ConnectionTestResultIconMap = {
   error: <ConnectionErrorIcon />,
 }
 
-function ConnectionTestButton({ provider }: { provider: APIProviderNames }) {
-  const providersConfig = useAtomValue(configFields.providersConfig)
-  const { apiKey, baseURL } = providersConfig[provider]
+function ConnectionTestButton({ providerConfig }: { providerConfig: APIProviderConfig }) {
+  const { apiKey, baseURL, provider } = providerConfig
 
   const mutation = useMutation({
-    mutationKey: ['apiConnection', provider],
+    // for safety, we should not include apiKey in the mutationKey
+    mutationKey: ['apiConnection', getObjectWithoutAPIKeys(providerConfig)],
     mutationFn: async () => {
-      if (provider === 'deeplx') {
-        await deeplxTranslate('Hi', 'en', 'zh')
-      }
-      else {
-        const modelName = DEFAULT_TRANSLATE_MODELS[provider].model
-        await aiTranslate(provider, modelName, 'Hi')
-      }
+      return await executeTranslate('Hi', DEFAULT_CONFIG.language, providerConfig)
     },
   })
 
@@ -130,7 +125,7 @@ function ConnectionTestButton({ provider }: { provider: APIProviderNames }) {
 
   useEffect(() => {
     mutation.reset()
-  }, [apiKey, baseURL])
+  }, [provider, apiKey, baseURL])
 
   const testResult = mutation.isSuccess ? 'success' : mutation.isError ? 'error' : null
   const ConnectionTestResultIcon = testResult ? ConnectionTestResultIconMap[testResult] : null
@@ -164,9 +159,11 @@ function ConnectionTestButton({ provider }: { provider: APIProviderNames }) {
   )
 }
 
-function AdvancedProviderConfig({ provider }: { provider: APIProviderNames }) {
-  const [providersConfig, setProvidersConfig] = useAtom(configFields.providersConfig)
+function AdvancedProviderConfig({ providerConfig }: { providerConfig: APIProviderConfig }) {
+  const setProviderConfig = useSetAtom(providerConfigAtom(providerConfig.name))
   const [showAdvanced, setShowAdvanced] = useState(false)
+
+  const { provider, baseURL } = providerConfig
 
   return (
     <div>
@@ -182,14 +179,11 @@ function AdvancedProviderConfig({ provider }: { provider: APIProviderNames }) {
         <FieldWithLabel id={`${provider}-baseURL`} label="Base URL">
           <Input
             className="mt-1 mb-2"
-            value={providersConfig[provider].baseURL}
+            value={baseURL}
             onChange={e =>
-              setProvidersConfig({
-                ...providersConfig,
-                [provider]: {
-                  ...providersConfig[provider],
-                  baseURL: e.target.value,
-                },
+              setProviderConfig({
+                ...providerConfig,
+                baseURL: e.target.value,
               })}
           />
         </FieldWithLabel>

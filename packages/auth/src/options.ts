@@ -29,7 +29,7 @@ export const betterAuthOptions: BetterAuthOptions = {
    */
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false, // TODO: set to be true later
+    requireEmailVerification: true,
     minPasswordLength: 8,
     maxPasswordLength: 128,
   },

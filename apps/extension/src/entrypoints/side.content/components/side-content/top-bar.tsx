@@ -28,11 +28,12 @@ import {
 } from '@repo/ui/components/tooltip'
 import { cn } from '@repo/ui/lib/utils'
 import { useMutationState } from '@tanstack/react-query'
-// import { onMessage } from "@/utils/message";
-import { useAtom, useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import ProviderIcon from '@/components/provider-icon'
 import { configFields } from '@/utils/atoms/config'
-import { READ_PROVIDER_ITEMS } from '@/utils/constants/config'
+import { readProviderConfigAtom } from '@/utils/atoms/provider'
+import { getLLMTranslateProvidersConfig } from '@/utils/config/helpers'
+import { PROVIDER_ITEMS, READ_PROVIDER_ITEMS } from '@/utils/constants/config'
 import { DOWNLOAD_FILE_ITEMS } from '@/utils/constants/side'
 import { shadowWrapper } from '../..'
 import { isSideOpenAtom } from '../../atoms'
@@ -71,14 +72,16 @@ export function TopBar({ className }: { className?: string }) {
 
 function ProviderSelect() {
   const [readConfig, setReadConfig] = useAtom(configFields.read)
+  const readProviderConfig = useAtomValue(readProviderConfigAtom)
+  const providersConfig = useAtomValue(configFields.providersConfig)
 
   return (
     <Select
-      value={readConfig.provider}
+      value={readConfig.providerName}
       onValueChange={(value: ReadProviderNames) => {
         setReadConfig({
           ...readConfig,
-          provider: value,
+          providerName: value,
         })
       }}
     >
@@ -87,17 +90,17 @@ function ProviderSelect() {
         className="flex !size-7 items-center justify-center p-0"
       >
         <img
-          src={READ_PROVIDER_ITEMS[readConfig.provider].logo}
-          alt={readConfig.provider}
+          src={READ_PROVIDER_ITEMS[readProviderConfig.provider].logo}
+          alt={readConfig.providerName}
           className="size-4 p-0.5 bg-white rounded-full"
         />
       </SelectTrigger>
       <SelectContent container={shadowWrapper}>
         <SelectGroup>
           <SelectLabel>{i18n.t('readService.title')}</SelectLabel>
-          {Object.entries(READ_PROVIDER_ITEMS).map(([provider, { logo, name }]) => (
-            <SelectItem key={provider} value={provider}>
-              <ProviderIcon logo={logo} name={name} />
+          {getLLMTranslateProvidersConfig(providersConfig).map(({ name, provider }) => (
+            <SelectItem key={name} value={name}>
+              <ProviderIcon logo={PROVIDER_ITEMS[provider].logo} name={name} />
             </SelectItem>
           ))}
         </SelectGroup>

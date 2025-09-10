@@ -1,72 +1,81 @@
-export const description = 'Migrate to new default prompt'
+import type { Config } from '@/types/config/config'
 
-export const configExample = {
+export const description = 'Allow arbitrary custom providers'
+
+export const configExample: Config = {
   language: {
     detectedCode: 'eng',
     sourceCode: 'auto',
     targetCode: 'jpn',
     level: 'intermediate',
   },
-  providersConfig: {
-    openai: {
+  providersConfig: [
+    {
+      name: 'OpenAI',
+      provider: 'openai',
       apiKey: 'sk-1234567890',
       baseURL: 'https://api.openai.com/v1',
+      models: {
+        read: {
+          model: 'gpt-4o-mini',
+          isCustomModel: true,
+          customModel: 'gpt-4.1-nano',
+        },
+        translate: {
+          model: 'gpt-4o-mini',
+          isCustomModel: true,
+          customModel: 'gpt-4.1-nano',
+        },
+      },
     },
-    deepseek: {
+    {
+      name: 'DeepSeek',
+      provider: 'deepseek',
       apiKey: undefined,
       baseURL: 'https://api.deepseek.com/v1',
+      models: {
+        read: {
+          model: 'deepseek-chat',
+          isCustomModel: false,
+          customModel: '',
+        },
+        translate: {
+          model: 'deepseek-chat',
+          isCustomModel: false,
+          customModel: '',
+        },
+      },
     },
-    gemini: {
+    {
+      name: 'Gemini',
+      provider: 'gemini',
       apiKey: undefined,
       baseURL: 'https://generativelanguage.googleapis.com/v1beta',
+      models: {
+        read: {
+          model: 'gemini-2.5-pro',
+          isCustomModel: false,
+          customModel: '',
+        },
+        translate: {
+          model: 'gemini-2.5-pro',
+          isCustomModel: false,
+          customModel: '',
+        },
+      },
     },
-    deeplx: {
+    {
+      name: 'DeepLX',
+      provider: 'deeplx',
       apiKey: undefined,
       baseURL: 'https://deeplx.vercel.app',
     },
-  },
+  ],
   read: {
-    provider: 'openai',
-    models: {
-      openai: {
-        model: 'gpt-4o-mini',
-        isCustomModel: true,
-        customModel: 'gpt-4.1-nano',
-      },
-      deepseek: {
-        model: 'deepseek-chat',
-        isCustomModel: false,
-        customModel: '',
-      },
-      gemini: {
-        model: 'gemini-2.5-pro',
-        isCustomModel: false,
-        customModel: '',
-      },
-    },
+    providerName: 'OpenAI',
   },
   translate: {
-    provider: 'microsoft',
-    models: {
-      microsoft: null,
-      google: null,
-      deeplx: null,
-      openai: {
-        model: 'gpt-4o-mini',
-        isCustomModel: true,
-        customModel: 'gpt-4.1-nano',
-      },
-      deepseek: {
-        model: 'deepseek-chat',
-        isCustomModel: false,
-        customModel: '',
-      },
-      gemini: {
-        model: 'gemini-2.5-pro',
-        isCustomModel: false,
-        customModel: '',
-      },
-    },
+    providerName: 'Microsoft Translator',
     mode: 'bilingual',
     node: {
       enabled: true,

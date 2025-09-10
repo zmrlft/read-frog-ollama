@@ -22,7 +22,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { configSchema } from '@/types/config/config'
 import { configAtom, writeConfigAtom } from '@/utils/atoms/config'
-import { getConfigWithoutAPIKeys } from '@/utils/config/config'
+import { getObjectWithoutAPIKeys } from '@/utils/config/config'
 import { runMigration } from '@/utils/config/migration'
 import { APP_NAME } from '@/utils/constants/app'
 import { CONFIG_SCHEMA_VERSION } from '@/utils/constants/config'
@@ -125,7 +125,7 @@ function ExportConfig() {
     let exportData = config
 
     if (!includeApiKeys) {
-      exportData = getConfigWithoutAPIKeys(config)
+      exportData = getObjectWithoutAPIKeys(config)
     }
 
     const json = JSON.stringify({

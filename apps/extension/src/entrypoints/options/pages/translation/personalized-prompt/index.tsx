@@ -1,4 +1,4 @@
-import type { TranslatePromptObj } from '@/types/config/provider'
+import type { TranslatePromptObj } from '@/types/config/translate'
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
 import { Button } from '@repo/ui/components/button'

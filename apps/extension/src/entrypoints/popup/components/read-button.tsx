@@ -6,7 +6,7 @@ import { useAtomValue } from 'jotai'
 import { toast } from 'sonner'
 
 import { configFields } from '@/utils/atoms/config'
-import { isAnyAPIKey } from '@/utils/config/config'
+import { isAnyAPIKeyForReadProviders } from '@/utils/config/config'
 import { sendMessage } from '@/utils/message'
 import { isIgnoreTabAtom } from '../atoms/ignore'
 
@@ -15,7 +15,7 @@ export default function ReadButton({ className }: { className?: string }) {
   const providersConfig = useAtomValue(configFields.providersConfig)
 
   const requestReadArticle = async () => {
-    if (!isAnyAPIKey(providersConfig)) {
+    if (!isAnyAPIKeyForReadProviders(providersConfig)) {
       toast.error(i18n.t('noAPIKeyConfig.warning'))
       return
     }
