@@ -76,8 +76,7 @@ export async function executeTranslate(text: string, langConfig: Config['languag
     throw new Error(`Unknown provider: ${provider}`)
   }
 
-  translatedText = translatedText.trim()
-  return translatedText === text ? '' : translatedText
+  return translatedText.trim()
 }
 
 export function validateTranslationConfig(config: Pick<Config, 'providersConfig' | 'translate' | 'language'>): boolean {

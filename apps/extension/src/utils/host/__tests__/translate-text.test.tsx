@@ -78,14 +78,6 @@ describe('translate-text', () => {
       expect(mockMicrosoftTranslate).toHaveBeenCalledWith('\u200B hello \u200B', 'en', 'zh')
     })
 
-    it('should return empty string when translation equals source text', async () => {
-      mockMicrosoftTranslate.mockResolvedValue('test')
-
-      const result = await executeTranslate('test', langConfig, providerConfig)
-
-      expect(result).toBe('')
-    })
-
     it('should trim translation result', async () => {
       mockMicrosoftTranslate.mockResolvedValue('  测试结果  ')
 
