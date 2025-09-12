@@ -4,7 +4,7 @@ import { ISO6393_TO_6391, LANG_CODE_TO_EN_NAME } from '@repo/definitions'
 import { useMutation } from '@tanstack/react-query'
 import { readUIMessageStream, streamText } from 'ai'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { isLLMTranslateProviderConfig, isNonAPIProvider, isPureAPIProvider, THINKING_MODELS } from '@/types/config/provider'
 import { configFields } from '@/utils/atoms/config'
@@ -18,6 +18,7 @@ import { getTranslatePrompt } from '@/utils/prompts/translate'
 import { getTranslateModel } from '@/utils/providers/model'
 import { trpc } from '@/utils/trpc/client'
 import { isTooltipVisibleAtom, isTranslatePopoverVisibleAtom, mouseClickPositionAtom, selectionContentAtom } from './atom'
+import { PopoverWrapper } from './popover-wrapper'
 
 export function TranslateButton() {
   // const selectionContent = useAtomValue(selectionContentAtom)
@@ -43,14 +44,12 @@ export function TranslateButton() {
 }
 
 export function TranslatePopover() {
-  const [isVisible, setIsVisible] = useAtom(isTranslatePopoverVisibleAtom)
   const [isTranslating, setIsTranslating] = useState(false)
   const [translatedText, setTranslatedText] = useState<string | undefined>(undefined)
   const translateProviderConfig = useAtomValue(translateProviderConfigAtom)
   const languageConfig = useAtomValue(configFields.language)
-  const mouseClickPosition = useAtomValue(mouseClickPositionAtom)
   const selectionContent = useAtomValue(selectionContentAtom)
-  const popoverRef = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useAtom(isTranslatePopoverVisibleAtom)
   const { data: session } = authClient.useSession()
 
   const createVocabulary = useMutation({
@@ -61,9 +60,8 @@ export function TranslatePopover() {
   })
 
   const handleClose = useCallback(() => {
-    setIsVisible(false)
     setTranslatedText(undefined)
-  }, [setIsVisible])
+  }, [])
 
   const handleCopy = useCallback(() => {
     if (translatedText) {
@@ -102,16 +100,6 @@ export function TranslatePopover() {
   }, [session?.user?.id, selectionContent, translatedText, createVocabulary])
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (popoverRef.current) {
-        const eventPath = event.composedPath()
-        const isClickInsideTooltip = eventPath.includes(popoverRef.current)
-        if (!isClickInsideTooltip) {
-          handleClose()
-        }
-      }
-    }
-
     const translate = async () => {
       const cleanText = selectionContent?.replace(/\u200B/g, '').trim()
       if (!cleanText) {
@@ -210,41 +198,18 @@ export function TranslatePopover() {
     }
 
     if (isVisible) {
-      document.addEventListener('mousedown', handleClickOutside)
       translate()
     }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isVisible, selectionContent, handleClose, languageConfig.sourceCode, languageConfig.targetCode, translateProviderConfig])
-
-  if (!isVisible || !mouseClickPosition || !selectionContent) {
-    return null
-  }
+  }, [isVisible, selectionContent, languageConfig.sourceCode, languageConfig.targetCode, translateProviderConfig])
 
   return (
-    <div
-      ref={popoverRef}
-      className="fixed z-[2147483647] bg-white dark:bg-zinc-800 border rounded-lg w-[300px] shadow-lg"
-      style={{
-        left: mouseClickPosition.x,
-        top: mouseClickPosition.y,
-      }}
+    <PopoverWrapper
+      title="Translation"
+      icon="ri:translate"
+      onClose={handleClose}
+      isVisible={isVisible}
+      setIsVisible={setIsVisible}
     >
-      <div className="flex items-center justify-between p-4 border-b">
-        <div className="flex items-center gap-2">
-          <Icon icon="ri:translate" strokeWidth={0.8} className="size-4.5 text-zinc-600 dark:text-zinc-400" />
-          <h2 className="text-base font-medium text-zinc-900 dark:text-zinc-100">Translation</h2>
-        </div>
-        <button
-          type="button"
-          onClick={handleClose}
-          className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded"
-        >
-          <Icon icon="tabler:x" strokeWidth={1} className="size-4 text-zinc-600 dark:text-zinc-400" />
-        </button>
-      </div>
       <div className="p-4 border-b">
         <div className="border-b pb-4"><p className="text-sm text-zinc-600 dark:text-zinc-400">{selectionContent}</p></div>
         <div className="pt-4">
@@ -279,6 +244,6 @@ export function TranslatePopover() {
           <Icon icon="tabler:copy" strokeWidth={1} className="size-4 text-zinc-600 dark:text-zinc-400" />
         </button>
       </div>
-    </div>
+    </PopoverWrapper>
   )
 }
