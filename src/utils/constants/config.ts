@@ -1,14 +1,10 @@
 import type { Config } from '@/types/config/config'
 import type { AllProviderNames, ProvidersConfig, PureAPIProviderConfig, ReadModels, TranslateLLMModels } from '@/types/config/provider'
 import type { PageTranslateRange } from '@/types/config/translate'
-import deeplxLogo from '@/assets/providers/deeplx.png'
-import deepseekLogo from '@/assets/providers/deepseek.png'
-import geminiLogo from '@/assets/providers/gemini.png'
-import googleLogo from '@/assets/providers/google.png'
-import microsoftLogo from '@/assets/providers/microsoft.png'
-import openaiLogo from '@/assets/providers/openai.jpg'
+import deeplxLogo from '@/assets/providers/deeplx.svg'
 import { API_PROVIDER_NAMES, NON_API_TRANSLATE_PROVIDERS, NON_API_TRANSLATE_PROVIDERS_MAP, PURE_TRANSLATE_PROVIDERS, READ_PROVIDER_NAMES, TRANSLATE_PROVIDER_NAMES } from '@/types/config/provider'
 import { omit, pick } from '@/types/utils'
+import { getLobeIconsCDNUrl } from '../logo'
 import { DEFAULT_TRANSLATE_PROMPTS_CONFIG } from './prompt'
 import { DEFAULT_SIDE_CONTENT_WIDTH } from './side'
 import { DEFAULT_AUTO_TRANSLATE_SHORTCUT_KEY, DEFAULT_REQUEST_CAPACITY, DEFAULT_REQUEST_RATE } from './translate'
@@ -145,11 +141,11 @@ export const DEFAULT_CONFIG: Config = {
 export const PROVIDER_ITEMS: Record<AllProviderNames, { logo: string, name: string }>
   = {
     microsoft: {
-      logo: microsoftLogo,
+      logo: getLobeIconsCDNUrl('microsoft-color'),
       name: NON_API_TRANSLATE_PROVIDERS_MAP.microsoft,
     },
     google: {
-      logo: googleLogo,
+      logo: getLobeIconsCDNUrl('google-color'),
       name: NON_API_TRANSLATE_PROVIDERS_MAP.google,
     },
     deeplx: {
@@ -157,15 +153,15 @@ export const PROVIDER_ITEMS: Record<AllProviderNames, { logo: string, name: stri
       name: 'DeepLX',
     },
     openai: {
-      logo: openaiLogo,
+      logo: getLobeIconsCDNUrl('openai'),
       name: 'OpenAI',
     },
     deepseek: {
-      logo: deepseekLogo,
+      logo: getLobeIconsCDNUrl('deepseek-color'),
       name: 'DeepSeek',
     },
     gemini: {
-      logo: geminiLogo,
+      logo: getLobeIconsCDNUrl('gemini-color'),
       name: 'Gemini',
     },
   }

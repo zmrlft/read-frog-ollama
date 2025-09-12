@@ -7,19 +7,16 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@repo/ui/components/select'
 import { deepmerge } from 'deepmerge-ts'
 import { useAtom, useAtomValue } from 'jotai'
-import ProviderIcon from '@/components/provider-icon'
+import TranslateProviderSelector from '@/components/provider/translate-provider-selector'
 import { isAPIProviderConfig, isLLMTranslateProviderConfig, TRANSLATE_PROVIDER_MODELS } from '@/types/config/provider'
 import { pageTranslateRangeSchema } from '@/types/config/translate'
 import { configFields } from '@/utils/atoms/config'
 import { translateProviderConfigAtom, updateLLMProviderConfig } from '@/utils/atoms/provider'
-import { getLLMTranslateProvidersConfig, getNonAPIProvidersConfig, getPureAPIProviderConfig } from '@/utils/config/helpers'
-import { PROVIDER_ITEMS } from '@/utils/constants/config'
 import { ConfigCard } from '../../components/config-card'
 import { FieldWithLabel } from '../../components/field-with-label'
 import { SetApiKeyWarning } from '../../components/set-api-key-warning'
@@ -28,7 +25,7 @@ export default function TranslationConfig() {
   return (
     <ConfigCard title={i18n.t('options.general.translationConfig.title')} description={i18n.t('options.general.translationConfig.description')}>
       <div className="space-y-4">
-        <TranslateProviderSelector />
+        <TranslateProviderSelectorField />
         <TranslateModelSelector />
         <RangeSelector />
       </div>
@@ -72,15 +69,12 @@ function RangeSelector() {
   )
 }
 
-function TranslateProviderSelector() {
-  const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
-  const providersConfig = useAtomValue(configFields.providersConfig)
+function TranslateProviderSelectorField() {
   const translateProviderConfig = useAtomValue(translateProviderConfigAtom)
 
   // some deeplx providers don't need api key
   const needSetAPIKey = translateProviderConfig && isAPIProviderConfig(translateProviderConfig) && translateProviderConfig.provider !== 'deeplx' && translateProviderConfig.apiKey === undefined
 
-  // TODO: extract the selector to a separate component and use it in translation config and popup
   return (
     <FieldWithLabel
       id="translateProvider"
@@ -91,40 +85,7 @@ function TranslateProviderSelector() {
         </div>
       )}
     >
-      <Select
-        value={translateConfig.providerName}
-        onValueChange={(value: string) =>
-          setTranslateConfig(
-            { ...translateConfig, providerName: value },
-          )}
-      >
-        <SelectTrigger className="w-full">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>{i18n.t('translateService.aiTranslator')}</SelectLabel>
-            {getLLMTranslateProvidersConfig(providersConfig).map(({ name, provider }) => (
-              <SelectItem key={name} value={name}>
-                <ProviderIcon logo={PROVIDER_ITEMS[provider].logo} name={name} />
-              </SelectItem>
-            ))}
-          </SelectGroup>
-          <SelectGroup>
-            <SelectLabel>{i18n.t('translateService.normalTranslator')}</SelectLabel>
-            {getNonAPIProvidersConfig(providersConfig).map(({ name, provider }) => (
-              <SelectItem key={name} value={name}>
-                <ProviderIcon logo={PROVIDER_ITEMS[provider].logo} name={name} />
-              </SelectItem>
-            ))}
-            {getPureAPIProviderConfig(providersConfig).map(({ name, provider }) => (
-              <SelectItem key={name} value={name}>
-                <ProviderIcon logo={PROVIDER_ITEMS[provider].logo} name={name} />
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+      <TranslateProviderSelector className="w-full" />
     </FieldWithLabel>
   )
 }
