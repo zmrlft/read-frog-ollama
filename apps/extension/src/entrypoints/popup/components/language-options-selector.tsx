@@ -22,7 +22,7 @@ function langCodeLabel(langCode: LangCodeISO6393) {
   return `${LANG_CODE_TO_EN_NAME[langCode]} (${LANG_CODE_TO_LOCALE_NAME[langCode]})`
 }
 
-const langSelectorTriggerClasses = 'cursor-pointer bg-input/50 hover:bg-input border-input !h-14 w-30 rounded-lg border shadow-xs pr-2 gap-1'
+const langSelectorTriggerClasses = '!h-14 w-30 rounded-lg shadow-xs pr-2 gap-1'
 
 const langSelectorContentClasses = 'flex flex-col items-start text-base font-medium min-w-0 flex-1'
 

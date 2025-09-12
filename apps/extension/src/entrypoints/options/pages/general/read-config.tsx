@@ -1,15 +1,11 @@
-import type { ReadProviderNames } from '@/types/config/provider'
 import { i18n } from '#imports'
 import { Checkbox } from '@repo/ui/components/checkbox'
 import { Input } from '@repo/ui/components/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/components/select'
 import { useAtom, useAtomValue } from 'jotai'
-import ProviderIcon from '@/components/provider-icon'
+import ReadProviderSelector from '@/components/provider/read-provider-selector'
 import { READ_PROVIDER_MODELS } from '@/types/config/provider'
-import { configFields } from '@/utils/atoms/config'
 import { readProviderConfigAtom, updateLLMProviderConfig } from '@/utils/atoms/provider'
-import { getLLMTranslateProvidersConfig } from '@/utils/config/helpers'
-import { PROVIDER_ITEMS } from '@/utils/constants/config'
 import { ConfigCard } from '../../components/config-card'
 import { FieldWithLabel } from '../../components/field-with-label'
 import { SetApiKeyWarning } from '../../components/set-api-key-warning'
@@ -18,16 +14,14 @@ export function ReadConfig() {
   return (
     <ConfigCard title={i18n.t('options.general.readConfig.title')} description={i18n.t('options.general.readConfig.description')}>
       <div className="flex flex-col gap-4">
-        <ReadProviderSelector />
+        <ReadProviderSelectorField />
         <ReadModelSelector />
       </div>
     </ConfigCard>
   )
 }
 
-function ReadProviderSelector() {
-  const [readConfig, setReadConfig] = useAtom(configFields.read)
-  const providersConfig = useAtomValue(configFields.providersConfig)
+function ReadProviderSelectorField() {
   const readProviderConfig = useAtomValue(readProviderConfigAtom)
 
   return (
@@ -40,26 +34,7 @@ function ReadProviderSelector() {
         </div>
       )}
     >
-      <Select
-        value={readConfig.providerName}
-        onValueChange={(value: ReadProviderNames) =>
-          setReadConfig(
-            { ...readConfig, providerName: value },
-          )}
-      >
-        <SelectTrigger className="w-full">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            {getLLMTranslateProvidersConfig(providersConfig).map(({ name, provider }) => (
-              <SelectItem key={name} value={name}>
-                <ProviderIcon logo={PROVIDER_ITEMS[provider].logo} name={name} />
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+      <ReadProviderSelector className="w-full" />
     </FieldWithLabel>
   )
 }

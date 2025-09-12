@@ -13,11 +13,11 @@ import Hotkey from './components/hotkey-selector'
 import LanguageOptionsSelector from './components/language-options-selector'
 import QuickLinks from './components/quick-links'
 import ReadButton from './components/read-button'
-import ReadProviderSelector from './components/read-provider-selector'
+import ReadProviderField from './components/read-provider-field'
 import SelectionToolbar from './components/text-selection-tooltip'
 import TranslateButton from './components/translate-button'
 import TranslatePromptSelector from './components/translate-prompt-selector'
-import TranslateProviderSelector from './components/translate-provider-selector'
+import TranslateProviderField from './components/translate-provider-field'
 
 function App() {
   const initIsIgnoreTab = useSetAtom(initIsIgnoreTabAtom)
@@ -32,9 +32,9 @@ function App() {
         <UserAccount />
         <LanguageOptionsSelector />
         {/* <LanguageLevelSelector /> */}
-        <TranslateProviderSelector />
+        <TranslateProviderField />
         <TranslatePromptSelector />
-        <ReadProviderSelector />
+        <ReadProviderField />
         <div className="grid w-full grid-cols-2 gap-2">
           <ReadButton />
           <TranslateButton />

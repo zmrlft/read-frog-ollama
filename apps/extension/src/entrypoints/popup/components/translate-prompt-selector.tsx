@@ -56,7 +56,7 @@ export default function TranslatePromptSelector() {
           })
         }}
       >
-        <SelectTrigger className="bg-input/50 hover:bg-input !h-7 w-31 cursor-pointer pr-1.5 pl-2.5 outline-none">
+        <SelectTrigger className="!h-7 w-31 pr-1.5 pl-2.5">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

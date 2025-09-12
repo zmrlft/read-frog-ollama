@@ -3,7 +3,6 @@ import type {
   LangLevel,
 } from '@repo/definitions'
 import type { DOWNLOAD_FILE_TYPES } from '../../utils/downloader'
-import type { ReadProviderNames } from '@/types/config/provider'
 import type { ArticleExplanation } from '@/types/content'
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
@@ -29,11 +28,10 @@ import {
 import { cn } from '@repo/ui/lib/utils'
 import { useMutationState } from '@tanstack/react-query'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import ProviderIcon from '@/components/provider-icon'
+import ReadProviderSelector from '@/components/provider/read-provider-selector'
 import { configFields } from '@/utils/atoms/config'
 import { readProviderConfigAtom } from '@/utils/atoms/provider'
-import { getLLMTranslateProvidersConfig } from '@/utils/config/helpers'
-import { PROVIDER_ITEMS, READ_PROVIDER_ITEMS } from '@/utils/constants/config'
+import { READ_PROVIDER_ITEMS } from '@/utils/constants/config'
 import { DOWNLOAD_FILE_ITEMS } from '@/utils/constants/side'
 import { shadowWrapper } from '../..'
 import { isSideOpenAtom } from '../../atoms'
@@ -41,6 +39,8 @@ import downloader from '../../utils/downloader'
 
 export function TopBar({ className }: { className?: string }) {
   const setIsSideOpen = useSetAtom(isSideOpenAtom)
+  const readProviderConfig = useAtomValue(readProviderConfigAtom)
+  const readConfig = useAtomValue(configFields.read)
 
   return (
     <div className={cn('flex items-start justify-between', className)}>
@@ -49,7 +49,17 @@ export function TopBar({ className }: { className?: string }) {
         <Icon icon="tabler:arrow-right" className="-mx-1" />
         <TargetLangSelect />
         <LangLevelSelect />
-        <ProviderSelect />
+        <ReadProviderSelector
+          className="flex !size-7 items-center justify-center p-0"
+          hideChevron
+          customTrigger={(
+            <img
+              src={READ_PROVIDER_ITEMS[readProviderConfig.provider].logo}
+              alt={readConfig.providerName}
+              className="size-4 p-0.5 bg-white rounded-full"
+            />
+          )}
+        />
         <FileExport />
       </div>
       <Tooltip>
@@ -70,45 +80,6 @@ export function TopBar({ className }: { className?: string }) {
   )
 }
 
-function ProviderSelect() {
-  const [readConfig, setReadConfig] = useAtom(configFields.read)
-  const readProviderConfig = useAtomValue(readProviderConfigAtom)
-  const providersConfig = useAtomValue(configFields.providersConfig)
-
-  return (
-    <Select
-      value={readConfig.providerName}
-      onValueChange={(value: ReadProviderNames) => {
-        setReadConfig({
-          ...readConfig,
-          providerName: value,
-        })
-      }}
-    >
-      <SelectTrigger
-        hideChevron
-        className="flex !size-7 items-center justify-center p-0"
-      >
-        <img
-          src={READ_PROVIDER_ITEMS[readProviderConfig.provider].logo}
-          alt={readConfig.providerName}
-          className="size-4 p-0.5 bg-white rounded-full"
-        />
-      </SelectTrigger>
-      <SelectContent container={shadowWrapper}>
-        <SelectGroup>
-          <SelectLabel>{i18n.t('readService.title')}</SelectLabel>
-          {getLLMTranslateProvidersConfig(providersConfig).map(({ name, provider }) => (
-            <SelectItem key={name} value={name}>
-              <ProviderIcon logo={PROVIDER_ITEMS[provider].logo} name={name} />
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
-  )
-}
-
 function LangLevelSelect() {
   const [language, setLanguage] = useAtom(configFields.language)
 
@@ -121,7 +92,6 @@ function LangLevelSelect() {
         hideChevron
         className="border-border flex !h-7 w-auto items-center gap-2 rounded-md border px-2"
       >
-        <div className="h-1 w-1 shrink-0 rounded-full bg-orange-500"></div>
         <div className="max-w-15 min-w-0 truncate">
           {i18n.t(`languageLevels.${language.level}`)}
         </div>
@@ -153,7 +123,6 @@ function TargetLangSelect() {
         hideChevron
         className="border-border flex !h-7 w-auto items-center gap-2 rounded-md border px-2"
       >
-        <div className="h-1 w-1 shrink-0 rounded-full bg-blue-500"></div>
         <div className="max-w-15 min-w-0 truncate">
           {`${LANG_CODE_TO_EN_NAME[language.targetCode]} (${LANG_CODE_TO_LOCALE_NAME[language.targetCode]})`}
         </div>
@@ -185,7 +154,6 @@ function SourceLangSelect() {
         hideChevron
         className="border-border flex !h-7 w-auto items-center gap-2 rounded-md border px-2"
       >
-        <div className="h-1 w-1 shrink-0 rounded-full bg-blue-500"></div>
         <div className="max-w-15 min-w-0 truncate">
           {language.sourceCode === 'auto'
             ? LANG_CODE_TO_EN_NAME[language.detectedCode]

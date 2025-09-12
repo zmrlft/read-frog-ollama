@@ -23,7 +23,7 @@ export default function LanguageLevelSelector() {
       >
         <SelectTrigger
           size="sm"
-          className="bg-input/50 hover:bg-input !h-7 w-29 cursor-pointer pr-1.5 pl-2.5 outline-none"
+          className="!h-7 w-29 pr-1.5 pl-2.5"
         >
           <SelectValue />
         </SelectTrigger>
