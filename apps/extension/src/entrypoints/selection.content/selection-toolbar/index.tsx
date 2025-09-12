@@ -1,11 +1,10 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import { configFields } from '@/utils/atoms/config'
-import AiButton from './ai-button'
+import { MARGIN } from '@/utils/constants/selection'
+import AiButton, { AiPopover } from './ai-button'
 import { isTooltipVisibleAtom, selectionContentAtom } from './atom'
 import { TranslateButton, TranslatePopover } from './translate-button'
-
-const MARGIN = 25
 
 export function SelectionToolbar() {
   const tooltipRef = useRef<HTMLDivElement>(null)
@@ -33,7 +32,7 @@ export function SelectionToolbar() {
     const rightBoundary = clientWidth - tooltipWidth - MARGIN
 
     // calculate the position of the tooltip, but strictly limit it within the boundaries
-    const clampedX = Math.max(Math.min(rightBoundary, selectionPositionRef.current.x), leftBoundary)
+    const clampedX = Math.max(leftBoundary, Math.min(rightBoundary, selectionPositionRef.current.x))
     const clampedY = Math.max(topBoundary, Math.min(bottomBoundary, selectionPositionRef.current.y))
 
     // directly operate the DOM, avoid React re-rendering
@@ -141,6 +140,7 @@ export function SelectionToolbar() {
         </div>
       )}
       <TranslatePopover />
+      <AiPopover />
     </div>
   )
 }
