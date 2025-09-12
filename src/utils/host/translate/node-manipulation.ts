@@ -78,7 +78,7 @@ export async function translateNodes(nodes: ChildNode[], translationMode: Transl
   if (translationMode === 'translationOnly') {
     await translateNodeTranslationOnlyMode(nodes, walkId, toggle)
   }
-  else {
+  else if (translationMode === 'bilingual') {
     await translateNodesBilingualMode(nodes, walkId, toggle)
   }
 }
@@ -106,7 +106,7 @@ export async function translateNodesBilingualMode(nodes: ChildNode[], walkId: st
     const targetNode
       = transNodes.length === 1 && isBlockTransNode(lastNode) && isHTMLElement(lastNode) ? unwrapDeepestOnlyHTMLChild(lastNode) : lastNode
 
-    const existedTranslatedWrapper = findPreviousTranslatedWrapper(targetNode, walkId)
+    const existedTranslatedWrapper = findPreviousTranslatedWrapperInside(targetNode, walkId)
     if (existedTranslatedWrapper) {
       removeTranslatedWrapperWithRestore(existedTranslatedWrapper)
       if (toggle) {
@@ -119,7 +119,7 @@ export async function translateNodesBilingualMode(nodes: ChildNode[], walkId: st
       }
     }
 
-    const textContent = transNodes.map(node => extractTextContent(node)).join(' ')
+    const textContent = transNodes.map(node => extractTextContent(node)).join(' ').trim()
     if (!textContent)
       return
 
@@ -140,10 +140,13 @@ export async function translateNodesBilingualMode(nodes: ChildNode[], walkId: st
       targetNode.appendChild(translatedWrapperNode)
     }
 
-    const translatedText = await getTranslatedTextAndRemoveSpinner(nodes, textContent, spinner, translatedWrapperNode)
+    const realTranslatedText = await getTranslatedTextAndRemoveSpinner(nodes, textContent, spinner, translatedWrapperNode)
 
-    if (!translatedText)
+    const translatedText = realTranslatedText === textContent ? '' : realTranslatedText
+    if (!translatedText) {
+      translatedWrapperNode.remove()
       return
+    }
 
     insertTranslatedNodeIntoWrapper(
       translatedWrapperNode,
@@ -157,7 +160,13 @@ export async function translateNodesBilingualMode(nodes: ChildNode[], walkId: st
 }
 
 export async function translateNodeTranslationOnlyMode(nodes: ChildNode[], walkId: string, toggle: boolean = false) {
-  const outerTransNodes = nodes.filter(node => isTransNode(node))
+  const isTransNodeAndNotTranslatedWrapper = (node: Node): node is TransNode => {
+    if (isHTMLElement(node) && node.classList.contains(CONTENT_WRAPPER_CLASS))
+      return false
+    return isTransNode(node)
+  }
+
+  const outerTransNodes = nodes.filter(isTransNode)
   if (outerTransNodes.length === 0) {
     return
   }
@@ -181,12 +190,8 @@ export async function translateNodeTranslationOnlyMode(nodes: ChildNode[], walkI
   let allChildNodes: ChildNode[] = []
   if (outerTransNodes.length === 1 && isHTMLElement(outerTransNodes[0])) {
     const unwrappedHTMLChild = unwrapDeepestOnlyHTMLChild(outerTransNodes[0])
-    transNodes = Array.from(unwrappedHTMLChild.childNodes).filter((node): node is TransNode => {
-      if (isHTMLElement(node) && node.classList.contains(CONTENT_WRAPPER_CLASS))
-        return false
-      return isTransNode(node)
-    })
     allChildNodes = Array.from(unwrappedHTMLChild.childNodes)
+    transNodes = allChildNodes.filter(isTransNodeAndNotTranslatedWrapper)
   }
   else {
     transNodes = outerTransNodes
@@ -210,9 +215,12 @@ export async function translateNodeTranslationOnlyMode(nodes: ChildNode[], walkI
       console.error('targetNode.parentElement is not HTMLElement', targetNode.parentElement)
       return
     }
-    const existedTranslatedWrapper = findPreviousTranslatedWrapper(targetNode.parentElement, walkId)
-    if (existedTranslatedWrapper) {
-      removeTranslatedWrapperWithRestore(existedTranslatedWrapper)
+    const existedTranslatedWrapper = findPreviousTranslatedWrapperInside(targetNode.parentElement, walkId)
+    const existedTranslatedWrapperOutside = targetNode.parentElement.closest(`.${CONTENT_WRAPPER_CLASS}`)
+
+    const finalTranslatedWrapper = existedTranslatedWrapperOutside ?? existedTranslatedWrapper
+    if (finalTranslatedWrapper && isHTMLElement(finalTranslatedWrapper)) {
+      removeTranslatedWrapperWithRestore(finalTranslatedWrapper)
       if (toggle) {
         return
       }
@@ -230,7 +238,7 @@ export async function translateNodeTranslationOnlyMode(nodes: ChildNode[], walkI
     }
 
     const innerTextContent = transNodes.map(node => extractTextContent(node)).join(' ')
-    if (!innerTextContent)
+    if (!innerTextContent.trim())
       return
 
     const cleanTextContent = (content: string): string => {
@@ -316,7 +324,7 @@ function createSpinnerInside(translatedWrapperNode: HTMLElement) {
   return container
 }
 
-function findPreviousTranslatedWrapper(node: Element | Text, walkId: string): HTMLElement | null {
+function findPreviousTranslatedWrapperInside(node: Element | Text, walkId: string): HTMLElement | null {
   if (isHTMLElement(node)) {
     // Check if the node itself is a translated wrapper
     if (node.classList.contains(CONTENT_WRAPPER_CLASS) && node.getAttribute(WALKED_ATTRIBUTE) !== walkId) {

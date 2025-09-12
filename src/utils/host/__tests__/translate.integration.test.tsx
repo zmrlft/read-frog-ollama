@@ -704,7 +704,49 @@ describe('translate', () => {
       })
     })
   })
+  describe('empty text nodes with no need to translate node in middle', () => {
+    it('bilingual mode: should not insert translation wrapper', async () => {
+      render(
+        <div data-testid="test-node">
+          {' '}
+          <div>{MOCK_TRANSLATION}</div>
+          {' '}
+        </div>,
+      )
+      const node = screen.getByTestId('test-node')
+      await removeOrShowPageTranslation('bilingual', true)
 
+      // test no translation wrapper
+      expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+      expect(node.textContent).toBe(` ${MOCK_TRANSLATION} `)
+
+      await removeOrShowPageTranslation('bilingual', true)
+      expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+      expect(node.textContent).toBe(` ${MOCK_TRANSLATION} `)
+    })
+  })
+  describe('translation only mode', () => {
+    it('translation only mode: should have translation wrapper', async () => {
+      // Mock translateText to return the exact HTML string with spaces
+      const TRANSLATED_TEXT = `<div>${MOCK_TRANSLATION}</div>`
+      vi.mocked(translateText).mockResolvedValueOnce(TRANSLATED_TEXT)
+
+      render(
+        <div data-testid="test-node">
+          <div>{MOCK_TRANSLATION}</div>
+        </div>,
+      )
+      const node = screen.getByTestId('test-node')
+      await removeOrShowPageTranslation('translationOnly', true)
+
+      const wrapper = node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)
+      expect(wrapper).toBeTruthy()
+      expect(wrapper?.innerHTML).toBe(TRANSLATED_TEXT)
+
+      await removeOrShowPageTranslation('translationOnly', true)
+      expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+    })
+  })
   describe('switching between translation modes', () => {
     it('should properly clean up translations when switching from bilingual to translation-only mode', async () => {
       render(
