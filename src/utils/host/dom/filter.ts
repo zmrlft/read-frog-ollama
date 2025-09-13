@@ -9,6 +9,7 @@ import {
   NOTRANSLATE_CLASS,
 } from '@/utils/constants/dom-labels'
 import { FORCE_BLOCK_TAGS, INVALID_TRANSLATE_TAGS, MAIN_CONTENT_IGNORE_TAGS } from '@/utils/constants/dom-tags'
+import { CUSTOM_DONT_WALK_INTO_ELEMENT_SELECTOR_MAP } from '@/utils/constants/translate'
 
 export function isEditable(element: HTMLElement): boolean {
   const tag = element.tagName
@@ -80,6 +81,17 @@ export function isShallowBlockHTMLElement(element: HTMLElement): boolean {
   )
 }
 
+export function isCustomDontWalkIntoElement(element: HTMLElement): boolean {
+  const dontWalkIntoElementSelectorList = CUSTOM_DONT_WALK_INTO_ELEMENT_SELECTOR_MAP[window.location.hostname] ?? []
+
+  const dontWalkSelector = dontWalkIntoElementSelectorList.join(',')
+
+  if (!dontWalkSelector)
+    return false
+
+  return element.matches(dontWalkSelector)
+}
+
 export function isDontWalkIntoButTranslateAsChildElement(element: HTMLElement): boolean {
   const dontWalkClass = [NOTRANSLATE_CLASS, 'sr-only'].some(className =>
     element.classList.contains(className),
@@ -91,13 +103,14 @@ export function isDontWalkIntoButTranslateAsChildElement(element: HTMLElement): 
 }
 
 export function isDontWalkIntoAndDontTranslateAsChildElement(element: HTMLElement): boolean {
+  const dontWalkCustomElement = isCustomDontWalkIntoElement(element)
   const dontWalkContent = globalConfig && globalConfig.translate.page.range !== 'all' && MAIN_CONTENT_IGNORE_TAGS.has(element.tagName)
   const dontWalkInvalidTag = INVALID_TRANSLATE_TAGS.has(element.tagName)
   const dontWalkCSS
     = window.getComputedStyle(element).display === 'none'
       || window.getComputedStyle(element).visibility === 'hidden'
 
-  return dontWalkContent || dontWalkInvalidTag || dontWalkCSS
+  return dontWalkCustomElement || dontWalkContent || dontWalkInvalidTag || dontWalkCSS
 }
 
 export function isInlineTransNode(node: TransNode): boolean {
