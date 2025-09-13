@@ -3,7 +3,7 @@ import { useAtom, useSetAtom } from 'jotai'
 import { isAiPopoverVisibleAtom, isTooltipVisibleAtom, mouseClickPositionAtom } from './atom'
 import { PopoverWrapper } from './popover-wrapper'
 
-export default function AiButton() {
+export function AiButton() {
   const setIsTooltipVisible = useSetAtom(isTooltipVisibleAtom)
   const setIsAiPopoverVisible = useSetAtom(isAiPopoverVisibleAtom)
   const setMousePosition = useSetAtom(mouseClickPositionAtom)
