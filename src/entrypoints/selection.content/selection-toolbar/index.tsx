@@ -2,7 +2,6 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import { configFields } from '@/utils/atoms/config'
 import { MARGIN } from '@/utils/constants/selection'
-import AiButton, { AiPopover } from './ai-button'
 import { isTooltipVisibleAtom, selectionContentAtom } from './atom'
 import { TranslateButton, TranslatePopover } from './translate-button'
 
@@ -136,11 +135,9 @@ export function SelectionToolbar() {
           className="absolute z-[2147483647] bg-zinc-200 dark:bg-zinc-800 rounded-sm shadow-lg overflow-hidden flex items-center"
         >
           <TranslateButton />
-          <AiButton />
         </div>
       )}
       <TranslatePopover />
-      <AiPopover />
     </div>
   )
 }
