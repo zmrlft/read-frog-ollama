@@ -122,11 +122,11 @@ function createProviderModelsSchema<T extends LLMTranslateProviderNames | ReadPr
 }
 
 // Base schema without models
-const baseProviderConfigSchema = z.object({
+export const baseProviderConfigSchema = z.object({
   name: z.string().nonempty(),
 })
 
-const baseAPIProviderConfigSchema = baseProviderConfigSchema.extend({
+export const baseAPIProviderConfigSchema = baseProviderConfigSchema.extend({
   apiKey: z.string().optional(),
   baseURL: z.url().optional(),
 })

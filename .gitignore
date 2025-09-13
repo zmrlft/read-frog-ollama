@@ -11,3 +11,5 @@ node_modules/
 dist/
 
 supabase/
+
+.claude/settings.local.json

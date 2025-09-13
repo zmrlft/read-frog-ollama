@@ -9,6 +9,8 @@ import { useMutation } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import LoadingDots from '@/components/loading-dots'
+import ValidatedInput from '@/components/ui/validated-input'
+import { baseAPIProviderConfigSchema } from '@/types/config/provider'
 import { providerConfigAtom } from '@/utils/atoms/provider'
 import { getObjectWithoutAPIKeys } from '@/utils/config/config'
 import { API_PROVIDER_ITEMS, DEFAULT_CONFIG } from '@/utils/constants/config'
@@ -18,7 +20,6 @@ import { FieldWithLabel } from '../../components/field-with-label'
 
 export function ProviderConfigCard({ providerConfig }: { providerConfig: APIProviderConfig }) {
   const setProviderConfig = useSetAtom(providerConfigAtom(providerConfig.name))
-  // const [providersConfig, setProvidersConfig] = useAtom(configFields.providersConfig)
   const [showAPIKey, setShowAPIKey] = useState(false)
 
   const provider = providerConfig.provider
@@ -177,14 +178,17 @@ function AdvancedProviderConfig({ providerConfig }: { providerConfig: APIProvide
 
       {showAdvanced && (
         <FieldWithLabel id={`${provider}-baseURL`} label="Base URL">
-          <Input
+          <ValidatedInput
             className="mt-1 mb-2"
-            value={baseURL}
+            value={baseURL ?? ''}
+            schema={baseAPIProviderConfigSchema.shape.baseURL}
+            preprocessValue={(value: string) => value === '' ? undefined : value}
             onChange={e =>
               setProviderConfig({
                 ...providerConfig,
                 baseURL: e.target.value,
               })}
+            placeholder="https://api.example.com/v1"
           />
         </FieldWithLabel>
       )}
