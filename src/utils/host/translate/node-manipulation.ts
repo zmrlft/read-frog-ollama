@@ -143,8 +143,13 @@ export async function translateNodesBilingualMode(nodes: ChildNode[], walkId: st
     const realTranslatedText = await getTranslatedTextAndRemoveSpinner(nodes, textContent, spinner, translatedWrapperNode)
 
     const translatedText = realTranslatedText === textContent ? '' : realTranslatedText
+
     if (!translatedText) {
-      translatedWrapperNode.remove()
+      // Only remove wrapper if translation returned empty (not needed),
+      // but keep it for error display (undefined)
+      if (translatedText === '') {
+        translatedWrapperNode.remove()
+      }
       return
     }
 
