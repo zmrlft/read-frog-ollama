@@ -97,9 +97,10 @@ export function isDontWalkIntoButTranslateAsChildElement(element: HTMLElement): 
     element.classList.contains(className),
   )
 
-  const dontWalkAttr = element.getAttribute('translate') === 'no'
+  // issue: https://github.com/mengxi-ream/read-frog/issues/459
+  // const dontWalkAttr = element.getAttribute('translate') === 'no'
 
-  return dontWalkClass || dontWalkAttr
+  return dontWalkClass
 }
 
 export function isDontWalkIntoAndDontTranslateAsChildElement(element: HTMLElement): boolean {
