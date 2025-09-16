@@ -13,9 +13,9 @@ async function discoverMigrations(): Promise<Record<number, MigrationFunction>> 
   for (const [path, importFn] of Object.entries(migrationModules)) {
     try {
       // 从文件路径提取版本号
-      const match = path.match(/v(\d{3})-to-v(\d{3})\.ts$/)
+      const match = path.match(/v\d{3}-to-v(\d{3})\.ts$/)
       if (match) {
-        const toVersion = Number.parseInt(match[2], 10)
+        const toVersion = Number.parseInt(match[1], 10)
         const module = await importFn() as MigrationModule
         const migrationFn = module.migrate
 

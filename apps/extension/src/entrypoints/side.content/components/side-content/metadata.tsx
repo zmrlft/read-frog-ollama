@@ -46,7 +46,7 @@ export function Metadata({ className }: { className?: string }) {
         toast.warning('Reading in progress...')
         return
       }
-      readArticle()
+      void readArticle()
     })
 
     return () => {

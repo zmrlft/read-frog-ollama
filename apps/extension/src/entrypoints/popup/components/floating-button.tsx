@@ -16,7 +16,7 @@ export default function FloatingButton() {
       <Switch
         checked={floatingButton.enabled}
         onCheckedChange={(checked) => {
-          setFloatingButton({ enabled: checked })
+          void setFloatingButton({ enabled: checked })
         }}
       />
     </div>

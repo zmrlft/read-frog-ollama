@@ -152,7 +152,7 @@ function TranslateModelSelector() {
           checked={modelConfig.isCustomModel}
           onCheckedChange={(checked) => {
             if (checked === false) {
-              setTranslateProviderConfig(
+              void setTranslateProviderConfig(
                 updateLLMProviderConfig(translateProviderConfig, {
                   models: {
                     translate: {
@@ -164,7 +164,7 @@ function TranslateModelSelector() {
               )
             }
             else {
-              setTranslateProviderConfig(
+              void setTranslateProviderConfig(
                 updateLLMProviderConfig(translateProviderConfig, {
                   models: {
                     translate: {

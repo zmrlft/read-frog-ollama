@@ -34,7 +34,7 @@ export const promptsConfigSchema = z.object({
 })
 
 export const translateConfigSchema = z.object({
-  providerName: z.string().nonempty(),
+  providerId: z.string().nonempty(),
   mode: translationModeSchema,
   node: z.object({
     enabled: z.boolean(),

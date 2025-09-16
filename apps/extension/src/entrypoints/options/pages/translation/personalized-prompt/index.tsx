@@ -137,7 +137,7 @@ function ConfigurePrompt({ originPrompt }: { originPrompt?: TranslatePromptObj }
 
     const _patterns = translateConfig.promptsConfig.patterns
 
-    setTranslateConfig({
+    void setTranslateConfig({
       promptsConfig: {
         ...translateConfig.promptsConfig,
         patterns: inEdit

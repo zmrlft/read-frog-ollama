@@ -94,7 +94,7 @@ export class RequestQueue {
         this.waitingTasks.delete(task.hash)
         this.executingTasks.set(task.hash, task)
         this.bucketTokens--
-        this.executeTask(task)
+        void this.executeTask(task)
       }
       else {
         break

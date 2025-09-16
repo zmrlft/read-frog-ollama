@@ -1,5 +1,5 @@
 import type { PromptConfigList } from './utils/prompt-file'
-import { i18n } from '#i18n'
+import { i18n } from '#imports'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { Button } from '@repo/ui/components/button'
 import { Input } from '@repo/ui/components/input'
@@ -19,7 +19,7 @@ export function ImportPrompts() {
       id: crypto.randomUUID(),
     }))
 
-    setTranslateConfig({
+    void setTranslateConfig({
       promptsConfig: {
         ...translateConfig.promptsConfig,
         patterns: [...originPatterns, ...patterns],

@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router'
-
 import { NAV_ITEMS } from './app-sidebar/nav-items'
 
 export default function App() {

@@ -35,8 +35,25 @@ const userConfigs = [{
   },
 }]
 
+const typedUserConfigs = [
+  ...userConfigs,
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    ignores: ['**/*.md/**'],
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-floating-promises': 'error',
+    },
+  },
+]
+
 // Default config without additional options
 export const config = antfu(antfuConfig, userConfigs)
+export const typedConfig = antfu(antfuConfig, typedUserConfigs)
 
 // Function to create config with additional antfu options
 export function createConfig(additionalOptions = {}) {
@@ -44,4 +61,12 @@ export function createConfig(additionalOptions = {}) {
     ...antfuConfig,
     ...additionalOptions,
   }, userConfigs)
+}
+
+// Function to create config with TypeScript type checking rules
+export function createTypedConfig(additionalOptions = {}) {
+  return antfu({
+    ...antfuConfig,
+    ...additionalOptions,
+  }, typedUserConfigs)
 }

@@ -36,7 +36,7 @@ function PatternTable() {
     if (!cleanedPattern || disabledFloatingButtonPatterns.includes(cleanedPattern))
       return
 
-    setFloatingButtonConfig({
+    void setFloatingButtonConfig({
       ...floatingButtonConfig,
       disabledFloatingButtonPatterns: [...disabledFloatingButtonPatterns, cleanedPattern],
     })
@@ -44,7 +44,7 @@ function PatternTable() {
   }
 
   const removePattern = (pattern: string) => {
-    setFloatingButtonConfig({
+    void setFloatingButtonConfig({
       ...floatingButtonConfig,
       disabledFloatingButtonPatterns: disabledFloatingButtonPatterns.filter(p => p !== pattern),
     })

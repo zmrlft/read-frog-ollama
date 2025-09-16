@@ -32,13 +32,15 @@ options:
     page: page
   apiProviders:
     title: API Providers
-    description:
-      openai: Provides models like GPT-4o
-      deepseek: Recommend to use in China
-      openrouter: The unified interface for multiple LLM providers
-      ollama: Local LLM
-      gemini: Provide models such as Gemini-2.5-Pro
-      deeplx: Unofficial DeepL API
+    description: Configure the API providers for translation and reading functions here
+    providers:
+      description:
+        openai: Provides models like GPT-4o
+        deepseek: Recommend to use in China
+        openrouter: The unified interface for multiple LLM providers
+        ollama: Local LLM
+        gemini: Provide models such as Gemini-2.5-Pro
+        deeplx: Unofficial DeepL API
     apiKey:
       showAPIKey: Show API Key
     advancedConfig:

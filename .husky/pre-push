@@ -17,6 +17,7 @@ else
 fi
 
 pnpm syncpack:lint
+pnpm lint
 pnpm type-check
 pnpm build
 

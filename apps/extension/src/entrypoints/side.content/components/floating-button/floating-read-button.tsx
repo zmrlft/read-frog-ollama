@@ -39,7 +39,7 @@ export default function FloatingReadButton({ className }: { className: string })
       toast.warning('Reading in progress...')
       return
     }
-    readArticle()
+    void readArticle()
   }
 
   return <HiddenButton icon="tabler:book" onClick={startReadArticle} className={className} />

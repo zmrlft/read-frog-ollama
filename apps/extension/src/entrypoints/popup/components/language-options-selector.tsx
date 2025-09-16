@@ -30,11 +30,11 @@ export default function LanguageOptionsSelector() {
   const [language, setLanguage] = useAtom(configFields.language)
 
   const handleSourceLangChange = (newLangCode: LangCodeISO6393) => {
-    setLanguage({ sourceCode: newLangCode })
+    void setLanguage({ sourceCode: newLangCode })
   }
 
   const handleTargetLangChange = (newLangCode: LangCodeISO6393) => {
-    setLanguage({ targetCode: newLangCode })
+    void setLanguage({ targetCode: newLangCode })
   }
 
   const sourceLangLabel = language.sourceCode === 'auto'

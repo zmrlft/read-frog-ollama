@@ -23,7 +23,7 @@ function App() {
   const initIsIgnoreTab = useSetAtom(initIsIgnoreTabAtom)
 
   useEffect(() => {
-    initIsIgnoreTab()
+    void initIsIgnoreTab()
   }, [initIsIgnoreTab])
 
   return (

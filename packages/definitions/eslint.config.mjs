@@ -1,3 +1,3 @@
-import { config } from '@repo/eslint-config/base'
+import { typedConfig } from '@repo/eslint-config/base'
 
-export default config
+export default typedConfig

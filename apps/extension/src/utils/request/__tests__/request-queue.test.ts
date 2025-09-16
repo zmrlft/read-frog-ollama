@@ -127,9 +127,9 @@ describe('requestQueue – token bucket', () => {
     }
 
     // enqueue 3 tasks immediately, each takes 1000ms to complete
-    q.enqueue(trackingThunk(0), Date.now(), '0')
-    q.enqueue(trackingThunk(1), Date.now(), '1')
-    q.enqueue(trackingThunk(2), Date.now(), '2')
+    void q.enqueue(trackingThunk(0), Date.now(), '0')
+    void q.enqueue(trackingThunk(1), Date.now(), '1')
+    void q.enqueue(trackingThunk(2), Date.now(), '2')
 
     // t=1000ms: 第一个任务应该完成
     vi.advanceTimersByTime(1_000)
@@ -165,8 +165,8 @@ describe('requestQueue – respects scheduleAt', () => {
 
     // Task A scheduled now, task B scheduled 2s later
     const now = Date.now()
-    q.enqueue(trackingThunk('A'), now, 'A')
-    q.enqueue(trackingThunk('B'), now + 2000, 'B')
+    void q.enqueue(trackingThunk('A'), now, 'A')
+    void q.enqueue(trackingThunk('B'), now + 2000, 'B')
 
     vi.advanceTimersByTime(0)
     expect(completed).toEqual(['A'])
@@ -215,7 +215,7 @@ describe('requestQueue – high volume', () => {
     }
 
     for (let i = 0; i < count; i++) {
-      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+      void q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
     }
 
     // Advance time enough: 100 tasks, initial 5 tokens, then 5 per sec
@@ -244,8 +244,8 @@ describe('requestQueue – bucket refill while idle', () => {
     }
 
     // Use up both initial tokens
-    q.enqueue(trackingThunk('x'), Date.now(), 'x')
-    q.enqueue(trackingThunk('y'), Date.now(), 'y')
+    void q.enqueue(trackingThunk('x'), Date.now(), 'x')
+    void q.enqueue(trackingThunk('y'), Date.now(), 'y')
 
     vi.advanceTimersByTime(0)
     expect(completed).toEqual(['x', 'y'])
@@ -254,7 +254,7 @@ describe('requestQueue – bucket refill while idle', () => {
     vi.advanceTimersByTime(1500)
 
     // New task should run immediately because capacity refilled to ≥1
-    q.enqueue(trackingThunk('z'), Date.now(), 'z')
+    void q.enqueue(trackingThunk('z'), Date.now(), 'z')
     expect(completed).toEqual(['x', 'y', 'z'])
   })
 })
@@ -448,7 +448,7 @@ describe('requestQueue – reconfigure the request queue', () => {
     }
 
     for (let i = 0; i < count; i++) {
-      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+      void q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
     }
 
     vi.advanceTimersByTime(1_500)
@@ -480,7 +480,7 @@ describe('requestQueue – reconfigure the request queue', () => {
     }
 
     for (let i = 0; i < count; i++) {
-      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+      void q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
     }
 
     vi.advanceTimersByTime(3_000)
@@ -512,7 +512,7 @@ describe('requestQueue – reconfigure the request queue', () => {
     }
 
     for (let i = 0; i < count; i++) {
-      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+      void q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
     }
 
     vi.advanceTimersByTime(2_000)
@@ -544,7 +544,7 @@ describe('requestQueue – reconfigure the request queue', () => {
     }
 
     for (let i = 0; i < count; i++) {
-      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+      void q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
     }
 
     vi.advanceTimersByTime(2_000)
@@ -576,7 +576,7 @@ describe('requestQueue – reconfigure the request queue', () => {
     }
 
     for (let i = 0; i < count; i++) {
-      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+      void q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
     }
 
     // Advance time enough: 50 tasks, initial 5 tokens, then 10 per sec
@@ -589,7 +589,7 @@ describe('requestQueue – reconfigure the request queue', () => {
     q.setQueueOptions({ rate: 5, capacity: 10 })
 
     for (let i = count; i < count * 2; i++) {
-      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+      void q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
     }
 
     // Advance time enough: 50 tasks, initial 10 tokens, then 5 per sec
@@ -615,7 +615,7 @@ describe('requestQueue – reconfigure the request queue', () => {
     const abortIndex = count / 2
     // time = 0 + (25 - 10) / 10 = 1.5
     for (let i = 0; i < abortIndex; i++) {
-      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+      void q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
     }
 
     // Reset rate. All task apply last rate
@@ -623,7 +623,7 @@ describe('requestQueue – reconfigure the request queue', () => {
 
     // time = (50 - 25) / 10 = 2.5
     for (let i = abortIndex; i < count; i++) {
-      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+      void q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
     }
 
     vi.advanceTimersByTime(4_000)
@@ -648,7 +648,7 @@ describe('requestQueue – reconfigure the request queue', () => {
 
     // immediately run 10 tasks
     for (let i = 0; i < abortIndex; i++) {
-      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+      void q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
     }
 
     // reset bucket tokens to 20
@@ -656,7 +656,7 @@ describe('requestQueue – reconfigure the request queue', () => {
 
     // immediately run 20 tasks
     for (let i = abortIndex; i < count; i++) {
-      q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
+      void q.enqueue(trackingThunk(i), Date.now(), `task-${i}`)
     }
 
     // immediately 30 tasks , remaining 20 tasks need 20 / 5 = 4 seconds

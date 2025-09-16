@@ -5,7 +5,7 @@ export function FieldWithLabel(
   { id: string, label: React.ReactNode, children: React.ReactNode, className?: string },
 ) {
   return (
-    <div className={cn('flex flex-col gap-1', className)}>
+    <div className={cn('flex flex-col gap-1.5', className)}>
       <label htmlFor={id} className="text-sm font-medium">
         {label}
       </label>

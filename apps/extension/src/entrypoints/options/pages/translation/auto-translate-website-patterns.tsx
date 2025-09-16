@@ -33,7 +33,7 @@ function PatternTable() {
     if (!cleanedPattern || autoTranslatePatterns.includes(cleanedPattern))
       return
 
-    setTranslateConfig({
+    void setTranslateConfig({
       page: {
         ...translateConfig.page,
         autoTranslatePatterns: [...autoTranslatePatterns, cleanedPattern],
@@ -43,7 +43,7 @@ function PatternTable() {
   }
 
   const removePattern = (pattern: string) => {
-    setTranslateConfig({
+    void setTranslateConfig({
       page: {
         ...translateConfig.page,
         autoTranslatePatterns: autoTranslatePatterns.filter(p => p !== pattern),

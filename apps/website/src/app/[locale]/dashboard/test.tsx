@@ -38,7 +38,7 @@ export function Test() {
     trpc.test.create.mutationOptions({
       onSuccess: () => {
         // Invalidate the items list after successful creation
-        queryClient.invalidateQueries({ queryKey: trpc.test.get.queryKey() })
+        void queryClient.invalidateQueries({ queryKey: trpc.test.get.queryKey() })
         setNewItemName('')
       },
       onError: (error: TRPCClientErrorLike<AppRouter>) => {
@@ -145,7 +145,9 @@ export function Test() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => testItemsQuery.refetch()}
+            onClick={() => {
+              void testItemsQuery.refetch()
+            }}
             disabled={testItemsQuery.isFetching}
           >
             {testItemsQuery.isFetching ? 'Refreshing...' : 'Refresh'}

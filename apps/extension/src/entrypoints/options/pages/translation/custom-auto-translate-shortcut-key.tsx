@@ -10,7 +10,7 @@ export function CustomAutoTranslateShortcutKey() {
   const shortcutKey = translateConfig.customAutoTranslateShortcutKey ?? DEFAULT_AUTO_TRANSLATE_SHORTCUT_KEY
 
   const updateShortcutKey = (shortcutKey: string[]) => {
-    setTranslateConfig({
+    void setTranslateConfig({
       ...translateConfig,
       customAutoTranslateShortcutKey: shortcutKey,
     })

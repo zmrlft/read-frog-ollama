@@ -51,6 +51,7 @@ export default function ValidatedInput({
   )
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let finalEvent: React.ChangeEvent<HTMLInputElement> = e
     if (preprocessValue) {
       const processedValue = preprocessValue(e.target.value)
       const newEvent = {
@@ -60,14 +61,17 @@ export default function ValidatedInput({
           value: processedValue,
         },
       }
-      onChange?.(newEvent as React.ChangeEvent<HTMLInputElement>)
+      finalEvent = newEvent as React.ChangeEvent<HTMLInputElement>
+    }
+    if (schema.safeParse(finalEvent.target.value).success) {
+      onChange?.(finalEvent)
     }
     else {
-      onChange?.(e)
+      console.error('Invalid value:', finalEvent.target.value)
     }
 
     if (validateOn === 'change' || hasBeenValidated) {
-      validateValue(e.target.value)
+      validateValue(finalEvent.target.value)
     }
   }
 

@@ -3,10 +3,10 @@ import { db } from '@/utils/db/dexie/db'
 import { executeTranslate } from '@/utils/host/translate/translate-text'
 import { onMessage } from '@/utils/message'
 import { RequestQueue } from '@/utils/request/request-queue'
-import { ensureConfig } from './config'
+import { ensureInitializedConfig } from './config'
 
 export async function setUpRequestQueue() {
-  const config = await ensureConfig()
+  const config = await ensureInitializedConfig()
   const { translate: { requestQueueConfig: { rate, capacity } } } = config ?? DEFAULT_CONFIG
 
   const requestQueue = new RequestQueue({

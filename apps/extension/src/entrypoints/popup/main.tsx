@@ -77,4 +77,4 @@ async function initApp() {
   )
 }
 
-initApp()
+void initApp()

@@ -1,7 +1,7 @@
 import pluginQuery from '@tanstack/eslint-plugin-query'
-import { createConfig } from './base.js'
+import { createTypedConfig } from './base.js'
 
-export const config = createConfig({
+export const config = createTypedConfig({
   react: true,
 }).append({
   plugins: {

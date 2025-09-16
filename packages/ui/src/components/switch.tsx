@@ -1,22 +1,39 @@
 'use client'
 
+import type { VariantProps } from 'class-variance-authority'
 import * as SwitchPrimitive from '@radix-ui/react-switch'
 
 import { cn } from '@repo/ui/lib/utils'
 
+import { cva } from 'class-variance-authority'
+
 import * as React from 'react'
+
+const switchVariants = cva(
+  'peer focus-visible:ring-ring focus-visible:ring-offset-background data-[state=unchecked]:bg-input inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent shadow-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+  {
+    variants: {
+      variant: {
+        default: 'data-[state=checked]:bg-primary',
+        monochrome: 'data-[state=checked]:bg-monochrome',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+    },
+  },
+)
 
 function Switch({
   className,
+  variant,
   ...props
-}: React.ComponentProps<typeof SwitchPrimitive.Root>) {
+}: React.ComponentProps<typeof SwitchPrimitive.Root>
+  & VariantProps<typeof switchVariants>) {
   return (
     <SwitchPrimitive.Root
       data-slot="switch"
-      className={cn(
-        'peer focus-visible:ring-ring focus-visible:ring-offset-background data-[state=checked]:bg-primary data-[state=unchecked]:bg-input inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent shadow-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
-        className,
-      )}
+      className={cn(switchVariants({ variant, className }))}
       {...props}
     >
       <SwitchPrimitive.Thumb
@@ -29,4 +46,6 @@ function Switch({
   )
 }
 
-export { Switch }
+export type SwitchProps = VariantProps<typeof switchVariants>
+
+export { Switch, switchVariants }

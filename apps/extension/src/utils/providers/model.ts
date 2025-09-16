@@ -3,7 +3,7 @@ import { storage } from '#imports'
 import { createDeepSeek } from '@ai-sdk/deepseek'
 import { createGoogleGenerativeAI } from '@ai-sdk/google'
 import { createOpenAI } from '@ai-sdk/openai'
-import { getLLMTranslateProvidersConfig, getProviderConfigByName } from '../config/helpers'
+import { getLLMTranslateProvidersConfig, getProviderConfigById } from '../config/helpers'
 import { CONFIG_STORAGE_KEY } from '../constants/config'
 
 interface ProviderFactoryMap {
@@ -18,16 +18,16 @@ const CREATE_AI_MAPPER: ProviderFactoryMap = {
   gemini: createGoogleGenerativeAI,
 }
 
-async function getLanguageModel(providerName: string, modelType: 'read' | 'translate') {
+async function getLanguageModelById(providerId: string, modelType: 'read' | 'translate') {
   const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`)
   if (!config) {
     throw new Error('Config not found')
   }
 
   const LLMProvidersConfig = getLLMTranslateProvidersConfig(config.providersConfig)
-  const providerConfig = getProviderConfigByName(LLMProvidersConfig, providerName)
+  const providerConfig = getProviderConfigById(LLMProvidersConfig, providerId)
   if (!providerConfig) {
-    throw new Error(`Provider ${providerName} not found`)
+    throw new Error(`Provider ${providerId} not found`)
   }
 
   const provider = CREATE_AI_MAPPER[providerConfig.provider]({
@@ -47,10 +47,10 @@ async function getLanguageModel(providerName: string, modelType: 'read' | 'trans
   return provider.languageModel(modelId)
 }
 
-export async function getTranslateModel(providerName: string) {
-  return getLanguageModel(providerName, 'translate')
+export async function getTranslateModelById(providerId: string) {
+  return getLanguageModelById(providerId, 'translate')
 }
 
-export async function getReadModel(providerName: string) {
-  return getLanguageModel(providerName, 'read')
+export async function getReadModelById(providerId: string) {
+  return getLanguageModelById(providerId, 'read')
 }

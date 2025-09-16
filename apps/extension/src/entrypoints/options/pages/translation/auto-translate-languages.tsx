@@ -35,7 +35,7 @@ function AutoTranslateLanguagesSelector() {
   const allLanguages = langCodeISO6393Schema.options
 
   const handleLanguageToggle = (language: LangCodeISO6393, checked: boolean) => {
-    setTranslateConfig({
+    void setTranslateConfig({
       page: {
         ...translateConfig.page,
         autoTranslateLanguages: checked
@@ -76,7 +76,7 @@ function SelectedLanguageCells() {
   const selectedLanguages = translateConfig.page.autoTranslateLanguages
 
   const removeLanguage = (language: LangCodeISO6393) => {
-    setTranslateConfig({
+    void setTranslateConfig({
       page: {
         ...translateConfig.page,
         autoTranslateLanguages: selectedLanguages.filter(lang => lang !== language),

@@ -1,12 +1,13 @@
 import type { Config } from '@/types/config/config'
 import { storage } from '#imports'
+import { configSchema } from '@/types/config/config'
 import { initializeConfig } from '@/utils/config/init'
 import { CONFIG_STORAGE_KEY } from '@/utils/constants/config'
 import { onMessage } from '@/utils/message'
 
 let configPromise: Promise<void> | null = null
 
-export async function ensureConfig() {
+export async function ensureInitializedConfig() {
   if (!configPromise) {
     configPromise = initializeConfig()
   }
@@ -16,6 +17,12 @@ export async function ensureConfig() {
 
 export function getConfigFromBackground() {
   onMessage('getInitialConfig', async () => {
-    return await ensureConfig()
+    const config = await ensureInitializedConfig()
+    if (!configSchema.safeParse(config).success) {
+      console.error('Config is invalid. re-initializing config')
+      await initializeConfig()
+      return storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`)
+    }
+    return config
   })
 }

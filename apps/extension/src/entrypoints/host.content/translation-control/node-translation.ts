@@ -34,7 +34,7 @@ export function registerNodeTranslationTriggers() {
             return
           }
           if (!keyState.isOtherKeyPressed && keyState.isHotkeyPressed) {
-            removeOrShowNodeTranslation(mousePosition, globalConfig.translate.mode)
+            void removeOrShowNodeTranslation(mousePosition, globalConfig.translate.mode)
             actionTriggered = true
           }
           timerId = null
@@ -68,7 +68,7 @@ export function registerNodeTranslationTriggers() {
           timerId = null
         }
         if (!actionTriggered) {
-          removeOrShowNodeTranslation(mousePosition, globalConfig.translate.mode)
+          void removeOrShowNodeTranslation(mousePosition, globalConfig.translate.mode)
         }
       }
       actionTriggered = false
