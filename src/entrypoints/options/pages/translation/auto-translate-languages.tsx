@@ -99,7 +99,7 @@ function SelectedLanguageCells() {
           <Button
             variant="ghost"
             size="icon"
-            className="h-4 w-4 p-0 hover:bg-destructive hover:text-destructive-foreground"
+            className="h-4 w-4 p-0 hover:bg-input hover:text-input-foreground"
             onClick={() => removeLanguage(language)}
           >
             <Icon icon="tabler:x" className="h-3 w-3" />
