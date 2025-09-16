@@ -40,7 +40,7 @@ export const writeConfigAtom = atom(
 
 configAtom.onMount = (setAtom: (newValue: Config) => void) => {
   // Load config on mount
-  ensureConfigLoaded().then(setAtom)
+  void ensureConfigLoaded().then(setAtom)
 
   // Watch for external changes
   const unwatch = storageAdapter.watch<Config>(CONFIG_STORAGE_KEY, setAtom)

@@ -41,7 +41,7 @@ export function useExtractContent() {
 
         logger.log('franc detected lang', lang)
 
-        setLanguage({
+        void setLanguage({
           detectedCode: lang === 'und' ? 'eng' : (lang as LangCodeISO6393),
         })
 

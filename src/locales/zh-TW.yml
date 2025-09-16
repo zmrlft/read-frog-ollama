@@ -32,13 +32,15 @@ options:
     page: 頁設置 API Key
   apiProviders:
     title: API 提供商
-    description:
-      openai: 提供 GPT-4o 等模型
-      deepseek: 推薦在中國使用
-      openrouter: 多個 LLM 提供商的統一接口
-      ollama: 本地大模型服務
-      gemini: 提供 Gemini-2.5-Pro 等模型
-      deeplx: 非官方 DeepL API
+    description: 配置用於翻譯和閱讀功能的 API 提供商
+    providers:
+      description:
+        openai: 提供 GPT-4o 等模型
+        deepseek: 推薦在中國使用
+        openrouter: 多個 LLM 提供商的統一介面
+        ollama: 本地大模型服務
+        gemini: 提供 Gemini-2.5-Pro 等模型
+        deeplx: 非官方 DeepL API
     apiKey:
       showAPIKey: 顯示 API Key
     advancedConfig:

@@ -26,12 +26,12 @@ export default function TranslateButton({ className }: { className: string }) {
           })) {
             return
           }
-          sendMessage('setEnablePageTranslationOnContentScript', {
+          void sendMessage('setEnablePageTranslationOnContentScript', {
             enabled: true,
           })
         }
         else {
-          sendMessage('setEnablePageTranslationOnContentScript', {
+          void sendMessage('setEnablePageTranslationOnContentScript', {
             enabled: false,
           })
         }

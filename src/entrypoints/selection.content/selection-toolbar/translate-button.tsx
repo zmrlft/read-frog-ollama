@@ -15,7 +15,7 @@ import { WEBSITE_URL } from '@/utils/constants/url'
 import { deeplxTranslate, googleTranslate, microsoftTranslate } from '@/utils/host/translate/api'
 import { sendMessage } from '@/utils/message'
 import { getTranslatePrompt } from '@/utils/prompts/translate'
-import { getTranslateModel } from '@/utils/providers/model'
+import { getTranslateModelById } from '@/utils/providers/model'
 import { trpc } from '@/utils/trpc/client'
 import { isTooltipVisibleAtom, isTranslatePopoverVisibleAtom, mouseClickPositionAtom, selectionContentAtom } from './atom'
 import { PopoverWrapper } from './popover-wrapper'
@@ -65,7 +65,7 @@ export function TranslatePopover() {
 
   const handleCopy = useCallback(() => {
     if (translatedText) {
-      navigator.clipboard.writeText(translatedText)
+      void navigator.clipboard.writeText(translatedText)
       toast.success('Translation copied to clipboard!')
     }
   }, [translatedText])
@@ -111,7 +111,7 @@ export function TranslatePopover() {
       }
 
       if (!translateProviderConfig) {
-        throw new Error(`No provider config for ${globalConfig.translate.providerName} when translate text`)
+        throw new Error(`No provider config for ${globalConfig.translate.providerId} when translate text`)
       }
 
       const { provider } = translateProviderConfig
@@ -148,9 +148,9 @@ export function TranslatePopover() {
         }
         else if (isLLMTranslateProviderConfig(translateProviderConfig)) {
           const targetLangName = LANG_CODE_TO_EN_NAME[languageConfig.targetCode]
-          const { name: providerName, models: { translate } } = translateProviderConfig
+          const { id: providerId, models: { translate } } = translateProviderConfig
           const translateModel = translate.isCustomModel ? translate.customModel : translate.model
-          const model = await getTranslateModel(providerName)
+          const model = await getTranslateModelById(providerId)
 
           // Configure ultrathink for thinking models
           const DEFAULT_THINKING_BUDGET = 128
@@ -198,7 +198,7 @@ export function TranslatePopover() {
     }
 
     if (isVisible) {
-      translate()
+      void translate()
     }
   }, [isVisible, selectionContent, languageConfig.sourceCode, languageConfig.targetCode, translateProviderConfig])
 

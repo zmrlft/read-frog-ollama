@@ -26,7 +26,7 @@ export function TestTRPC() {
       toast.success('Item created successfully!')
       setCreateName('')
       // Invalidate and refetch the get query
-      queryClient.invalidateQueries(trpc.test.get.queryOptions())
+      void queryClient.invalidateQueries(trpc.test.get.queryOptions())
     },
     onError: (error) => {
       toast.error(`Failed to create item: ${error.message}`)
@@ -43,7 +43,7 @@ export function TestTRPC() {
   }
 
   const handleRefreshItems = () => {
-    queryClient.invalidateQueries(trpc.test.get.queryOptions())
+    void queryClient.invalidateQueries(trpc.test.get.queryOptions())
   }
 
   return (

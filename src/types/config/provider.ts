@@ -123,7 +123,10 @@ function createProviderModelsSchema<T extends LLMTranslateProviderNames | ReadPr
 
 // Base schema without models
 export const baseProviderConfigSchema = z.object({
+  id: z.string().nonempty(),
   name: z.string().nonempty(),
+  description: z.string().optional(),
+  enabled: z.boolean(),
 })
 
 export const baseAPIProviderConfigSchema = baseProviderConfigSchema.extend({
@@ -169,6 +172,19 @@ export const providerConfigItemSchema = z.discriminatedUnion('provider', provide
 
 export const providersConfigSchema = z.array(providerConfigItemSchema).superRefine(
   (providers, ctx) => {
+    const idSet = new Set<string>()
+    providers.forEach((provider, index) => {
+      if (idSet.has(provider.id)) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `Duplicate provider id "${provider.id}"`,
+          path: [index, 'id'],
+        })
+      }
+      idSet.add(provider.id)
+    })
+
+    // TODO: test this on the UI
     const nameSet = new Set<string>()
     providers.forEach((provider, index) => {
       if (nameSet.has(provider.name)) {

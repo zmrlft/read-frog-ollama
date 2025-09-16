@@ -3,14 +3,14 @@ import type { LLMTranslateProviderConfig } from '@/types/config/provider'
 import { generateText } from 'ai'
 import { THINKING_MODELS } from '@/types/config/provider'
 import { getTranslatePrompt } from '@/utils/prompts/translate'
-import { getTranslateModel } from '@/utils/providers/model'
+import { getTranslateModelById } from '@/utils/providers/model'
 
 const DEFAULT_THINKING_BUDGET = 128
 
 export async function aiTranslate(text: string, targetLangName: string, providerConfig: LLMTranslateProviderConfig) {
-  const { name: providerName, models: { translate } } = providerConfig
+  const { id: providerId, models: { translate } } = providerConfig
   const translateModel = translate.isCustomModel ? translate.customModel : translate.model
-  const model = await getTranslateModel(providerName)
+  const model = await getTranslateModelById(providerId)
 
   const providerOptions: Record<string, Record<string, JSONValue>> = {
     google: {

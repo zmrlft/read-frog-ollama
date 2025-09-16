@@ -20,7 +20,7 @@ import { ConfigCard } from '../../components/config-card'
 export function ResetConfig() {
   const setConfig = useSetAtom(writeConfigAtom)
   function resetToDefaultConfig() {
-    setConfig(DEFAULT_CONFIG)
+    void setConfig(DEFAULT_CONFIG)
   }
 
   return (

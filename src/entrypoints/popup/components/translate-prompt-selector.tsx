@@ -48,7 +48,7 @@ export default function TranslatePromptSelector() {
       <Select
         value={prompt}
         onValueChange={(value) => {
-          setTranslateConfig({
+          void setTranslateConfig({
             promptsConfig: {
               ...promptsConfig,
               prompt: value,

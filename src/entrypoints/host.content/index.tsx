@@ -72,7 +72,7 @@ export default defineContentScript({
           manager.stop()
         }
         // Notify background script that URL has changed, let it decide whether to automatically enable translation
-        sendMessage('resetPageTranslationOnNavigation', { url: to })
+        void sendMessage('resetPageTranslationOnNavigation', { url: to })
       }
     }
 

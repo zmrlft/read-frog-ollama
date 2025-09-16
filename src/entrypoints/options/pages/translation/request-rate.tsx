@@ -80,14 +80,14 @@ function TranslateNumberSelector({ property }: { property: KeyOfRequestQueueConf
           const newConfigValue = Number(e.target.value)
           const configParseResult = requestQueueConfigSchema.partial().safeParse({ [property]: newConfigValue })
           if (configParseResult.success) {
-            setTranslateConfig({
+            void setTranslateConfig({
               ...translateConfig,
               requestQueueConfig: {
                 ...translateConfig.requestQueueConfig,
                 [property]: newConfigValue,
               },
             })
-            sendMessage('setTranslateRequestQueueConfig', {
+            void sendMessage('setTranslateRequestQueueConfig', {
               [property]: newConfigValue,
             })
           }

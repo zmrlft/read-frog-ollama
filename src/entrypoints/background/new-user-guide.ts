@@ -5,7 +5,7 @@ import { onMessage, sendMessage } from '@/utils/message'
 let lastIsPinned = false
 
 export function newUserGuide() {
-  guidePinExtension()
+  void guidePinExtension()
 }
 
 export async function guidePinExtension() {
@@ -14,7 +14,7 @@ export async function guidePinExtension() {
     return isOnToolbar
   })
 
-  checkPinnedAndNotify()
+  void checkPinnedAndNotify()
 
   if (browser.action.onUserSettingsChanged) {
     browser.action.onUserSettingsChanged.addListener(checkPinnedAndNotify)
@@ -32,7 +32,7 @@ async function checkPinnedAndNotify() {
 
   browser.tabs.query({ url: OFFICIAL_SITE_URL_PATTERNS }, (tabs) => {
     for (const tab of tabs) {
-      sendMessage('pinStateChanged', { isPinned: isOnToolbar }, tab.id)
+      void sendMessage('pinStateChanged', { isPinned: isOnToolbar }, tab.id)
     }
   })
 }

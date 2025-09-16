@@ -3,7 +3,7 @@ import { WEBSITE_URL } from '@/utils/constants/url'
 import { logger } from '@/utils/logger'
 import { onMessage, sendMessage } from '@/utils/message'
 import { cleanupAllCache, setUpCacheCleanup } from './cache-cleanup'
-import { ensureConfig, getConfigFromBackground } from './config'
+import { ensureInitializedConfig, getConfigFromBackground } from './config'
 import { newUserGuide } from './new-user-guide'
 import { proxyFetch } from './proxy-fetch'
 import { setUpRequestQueue } from './request-queue'
@@ -15,7 +15,7 @@ export default defineBackground({
     logger.info('Hello background!', { id: browser.runtime.id })
 
     browser.runtime.onInstalled.addListener(async (details) => {
-      await ensureConfig()
+      await ensureInitializedConfig()
       // Open tutorial page when extension is installed
       if (details.reason === 'install') {
         await browser.tabs.create({
@@ -32,11 +32,11 @@ export default defineBackground({
 
     onMessage('openOptionsPage', () => {
       logger.info('openOptionsPage')
-      browser.runtime.openOptionsPage()
+      void browser.runtime.openOptionsPage()
     })
 
     onMessage('popupRequestReadArticle', async (message) => {
-      sendMessage('readArticle', undefined, message.data.tabId)
+      void sendMessage('readArticle', undefined, message.data.tabId)
     })
 
     onMessage('clearAllCache', async () => {
@@ -48,7 +48,7 @@ export default defineBackground({
     newUserGuide()
     translationMessage()
 
-    setUpRequestQueue()
+    void setUpRequestQueue()
     setUpCacheCleanup()
 
     proxyFetch()

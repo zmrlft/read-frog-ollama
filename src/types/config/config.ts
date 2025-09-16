@@ -40,27 +40,27 @@ export const configSchema = z.object({
   selectionToolbar: selectionToolbarSchema,
   sideContent: sideContentSchema,
 }).superRefine((data, ctx) => {
-  const providerNamesSet = new Set(data.providersConfig.map(p => p.name))
-  const providerNames = Array.from(providerNamesSet)
+  const providerIdsSet = new Set(data.providersConfig.map(p => p.id))
+  const providerIds = Array.from(providerIdsSet)
 
-  if (!providerNamesSet.has(data.read.providerName)) {
+  if (!providerIdsSet.has(data.read.providerId)) {
     ctx.addIssue({
       code: 'invalid_value',
-      values: providerNames,
-      message: `Invalid provider name "${data.read.providerName}". Must be one of: ${providerNames.join(', ')}`,
-      path: ['read', 'providerName'],
+      values: providerIds,
+      message: `Invalid provider id "${data.read.providerId}". Must be one of: ${providerIds.join(', ')}`,
+      path: ['read', 'providerId'],
     })
   }
 
-  const validTranslateProviders = [...providerNames, ...Object.values(NON_API_TRANSLATE_PROVIDERS_MAP)]
+  const validTranslateProviders = [...providerIds, ...Object.values(NON_API_TRANSLATE_PROVIDERS_MAP)]
   const validTranslateProvidersSet = new Set(validTranslateProviders)
 
-  if (!validTranslateProvidersSet.has(data.translate.providerName)) {
+  if (!validTranslateProvidersSet.has(data.translate.providerId)) {
     ctx.addIssue({
       code: 'invalid_value',
       values: validTranslateProviders,
-      message: `Invalid provider name "${data.translate.providerName}". Must be one of: ${validTranslateProviders.join(', ')}`,
-      path: ['translate', 'providerName'],
+      message: `Invalid provider id "${data.translate.providerId}". Must be one of: ${validTranslateProviders.join(', ')}`,
+      path: ['translate', 'providerId'],
     })
   }
 })

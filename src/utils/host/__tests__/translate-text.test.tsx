@@ -51,6 +51,8 @@ describe('translate-text', () => {
     }
 
     const providerConfig = {
+      id: 'microsoft-default',
+      enabled: true,
       name: 'Microsoft Translator',
       provider: 'microsoft' as const,
     }

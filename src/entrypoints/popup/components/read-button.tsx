@@ -24,7 +24,7 @@ export default function ReadButton({ className }: { className?: string }) {
       currentWindow: true,
     })
     if (currentTab.id) {
-      sendMessage('popupRequestReadArticle', {
+      void sendMessage('popupRequestReadArticle', {
         tabId: currentTab.id,
       })
     }

@@ -84,7 +84,7 @@ function ImportConfig() {
             logger.error(config, configSchema.safeParse(config).error)
             return
           }
-          setConfig(config)
+          void setConfig(config)
           toast.success(`${i18n.t('options.config.sync.importSuccess')} !`)
         }
         catch (error) {

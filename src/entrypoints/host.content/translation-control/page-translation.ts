@@ -79,7 +79,7 @@ export class PageTranslationManager implements IPageTranslationManager {
     }
 
     this.isAutoTranslating = true
-    sendMessage('setEnablePageTranslationOnContentScript', {
+    void sendMessage('setEnablePageTranslationOnContentScript', {
       enabled: true,
     })
 
@@ -95,7 +95,7 @@ export class PageTranslationManager implements IPageTranslationManager {
               return
             }
             if (!entry.target.closest(`.${CONTENT_WRAPPER_CLASS}`)) {
-              translateWalkedElement(entry.target, walkId, globalConfig.translate.mode)
+              void translateWalkedElement(entry.target, walkId, globalConfig.translate.mode)
             }
           }
           observer.unobserve(entry.target)
@@ -121,7 +121,7 @@ export class PageTranslationManager implements IPageTranslationManager {
     this.walkId = null
     this.dontWalkIntoElementsCache = new WeakSet()
 
-    sendMessage('setEnablePageTranslationOnContentScript', {
+    void sendMessage('setEnablePageTranslationOnContentScript', {
       enabled: false,
     })
 

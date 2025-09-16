@@ -45,7 +45,7 @@ export default function FloatingButton() {
         ),
       )
       const newPosition = newY / window.innerHeight
-      setFloatingButton({ position: newPosition })
+      void setFloatingButton({ position: newPosition })
     }
 
     const handleMouseUp = () => {
@@ -145,7 +145,7 @@ export default function FloatingButton() {
               onClick={() => {
                 const currentDomain = window.location.hostname
                 const currentPatterns = floatingButton.disabledFloatingButtonPatterns || []
-                setFloatingButton({
+                void setFloatingButton({
                   ...floatingButton,
                   disabledFloatingButtonPatterns: [...currentPatterns, currentDomain],
                 })
@@ -156,7 +156,7 @@ export default function FloatingButton() {
             <DropdownMenuItem
               onMouseDown={e => e.stopPropagation()}
               onClick={() => {
-                setFloatingButton({ ...floatingButton, enabled: false })
+                void setFloatingButton({ ...floatingButton, enabled: false })
               }}
             >
               {i18n.t('options.floatingButton.closeMenu.disableGlobally')}
@@ -173,7 +173,7 @@ export default function FloatingButton() {
         className={attachSideClassName}
         icon="tabler:settings"
         onClick={() => {
-          sendMessage('openOptionsPage', undefined)
+          void sendMessage('openOptionsPage', undefined)
         }}
       />
     </div>

@@ -31,7 +31,7 @@ export default function SideContent() {
       const newWidth = windowWidth - e.clientX
       const clampedWidth = Math.max(MIN_SIDE_CONTENT_WIDTH, newWidth)
 
-      setSideContent({ width: clampedWidth })
+      void setSideContent({ width: clampedWidth })
     }
 
     const handleMouseUp = () => {

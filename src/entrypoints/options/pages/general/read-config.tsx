@@ -96,7 +96,7 @@ function ReadModelSelector() {
           checked={modelConfig.isCustomModel}
           onCheckedChange={(checked) => {
             if (checked === false) {
-              setReadProviderConfig(
+              void setReadProviderConfig(
                 updateLLMProviderConfig(readProviderConfig, {
                   models: {
                     read: {
@@ -108,7 +108,7 @@ function ReadModelSelector() {
               )
             }
             else {
-              setReadProviderConfig(
+              void setReadProviderConfig(
                 updateLLMProviderConfig(readProviderConfig, {
                   models: {
                     read: {

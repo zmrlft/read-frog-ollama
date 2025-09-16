@@ -31,7 +31,7 @@ export default function TranslateButton({ className }: { className?: string }) {
         return
       }
 
-      sendMessage('setEnablePageTranslation', {
+      void sendMessage('setEnablePageTranslation', {
         tabId: currentTab.id,
         enabled: !isPageTranslated,
       })

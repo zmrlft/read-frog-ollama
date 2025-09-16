@@ -19,7 +19,7 @@ export default function SelectionToolbar() {
         checked={selectionToolbar.enabled}
         aria-labelledby={labelId}
         onCheckedChange={(checked) => {
-          setSelectionToolbar({ ...selectionToolbar, enabled: checked })
+          void setSelectionToolbar({ ...selectionToolbar, enabled: checked })
         }}
       />
     </div>

@@ -4,7 +4,7 @@ import { i18n } from '#imports'
 import { ISO6393_TO_6391, LANG_CODE_TO_EN_NAME, LANG_CODE_TO_LOCALE_NAME } from '@repo/definitions'
 import { toast } from 'sonner'
 import { isAPIProviderConfig, isLLMTranslateProviderConfig, isNonAPIProvider, isPureAPIProvider, isPureTranslateProvider } from '@/types/config/provider'
-import { getProviderConfigByName } from '@/utils/config/helpers'
+import { getProviderConfigById } from '@/utils/config/helpers'
 import { logger } from '@/utils/logger'
 import { globalConfig } from '../../config/config'
 import { Sha256Hex } from '../../hash'
@@ -18,11 +18,11 @@ export async function translateText(text: string) {
   if (!globalConfig) {
     throw new Error('No global config when translate text')
   }
-  const providerName = globalConfig.translate.providerName
-  const providerConfig = getProviderConfigByName(globalConfig.providersConfig, providerName)
+  const providerId = globalConfig.translate.providerId
+  const providerConfig = getProviderConfigById(globalConfig.providersConfig, providerId)
 
   if (!providerConfig) {
-    throw new Error(`No provider config for ${providerName} when translate text`)
+    throw new Error(`No provider config for id ${providerId} when translate text`)
   }
 
   const langConfig = globalConfig.language
@@ -81,7 +81,7 @@ export async function executeTranslate(text: string, langConfig: Config['languag
 
 export function validateTranslationConfig(config: Pick<Config, 'providersConfig' | 'translate' | 'language'>): boolean {
   const { providersConfig, translate: translateConfig, language: languageConfig } = config
-  const providerConfig = getProviderConfigByName(providersConfig, translateConfig.providerName)
+  const providerConfig = getProviderConfigById(providersConfig, translateConfig.providerId)
   if (!providerConfig) {
     return false
   }

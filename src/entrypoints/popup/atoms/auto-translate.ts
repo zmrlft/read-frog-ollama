@@ -42,7 +42,7 @@ export const toggleCurrentSiteAtom = atom(
     if (checked) {
       // Add hostname to patterns if not already present
       if (!currentPatterns.some(pattern => hostname.includes(pattern))) {
-        set(configFields.translate, {
+        void set(configFields.translate, {
           page: {
             ...translateConfig.page,
             autoTranslatePatterns: [...currentPatterns, hostname],
@@ -55,7 +55,7 @@ export const toggleCurrentSiteAtom = atom(
       const filteredPatterns = currentPatterns.filter(pattern =>
         !hostname.includes(pattern),
       )
-      set(configFields.translate, {
+      void set(configFields.translate, {
         page: {
           ...translateConfig.page,
           autoTranslatePatterns: filteredPatterns,

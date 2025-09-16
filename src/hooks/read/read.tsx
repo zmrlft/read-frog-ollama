@@ -23,11 +23,11 @@ import { sendInBatchesWithFixedDelay } from '@/utils/ai-request'
 import { configAtom, configFields } from '@/utils/atoms/config'
 import { readProviderConfigAtom } from '@/utils/atoms/provider'
 import { isAnyAPIKeyForReadProviders } from '@/utils/config/config'
-import { getProviderConfigByName } from '@/utils/config/helpers'
+import { getProviderConfigById } from '@/utils/config/helpers'
 import { logger } from '@/utils/logger'
 import { getAnalyzePrompt } from '@/utils/prompts/analyze'
 import { getExplainPrompt } from '@/utils/prompts/explain'
-import { getReadModel } from '@/utils/providers/model'
+import { getReadModelById } from '@/utils/providers/model'
 
 interface ExplainArticleParams {
   extractedContent: ExtractedContent
@@ -54,7 +54,7 @@ export function useAnalyzeContent() {
       const maxAttempts = 3
       let lastError
 
-      const model = await getReadModel(readProviderConfig.name)
+      const model = await getReadModelById(readProviderConfig.name)
       const targetLang = LANG_CODE_TO_EN_NAME[language.targetCode]
 
       while (attempts < maxAttempts) {
@@ -70,7 +70,7 @@ export function useAnalyzeContent() {
           })
 
           // TODO: if und, then UI need to show UI to ask user to select the language or not continue
-          setLanguage({
+          void setLanguage({
             detectedCode:
               articleAnalysis.detectedLang === 'und'
                 ? 'eng'
@@ -104,9 +104,9 @@ async function explainBatch(batch: string[], articleAnalysis: ArticleAnalysis, c
   let lastError
 
   const { language, read, providersConfig } = config
-  const readProviderConfig = getProviderConfigByName(providersConfig, read.providerName)
+  const readProviderConfig = getProviderConfigById(providersConfig, read.providerId)
   if (!readProviderConfig) {
-    throw new Error(`Provider ${read.providerName} not found`)
+    throw new Error(`Provider ${read.providerId} not found`)
   }
 
   const targetLang = LANG_CODE_TO_EN_NAME[language.targetCode]
@@ -117,7 +117,7 @@ async function explainBatch(batch: string[], articleAnalysis: ArticleAnalysis, c
         : language.sourceCode
     ]
 
-  const model = await getReadModel(readProviderConfig.name)
+  const model = await getReadModelById(readProviderConfig.name)
   while (attempts < MAX_ATTEMPTS) {
     try {
       const { object: articleExplanation } = await generateObject({

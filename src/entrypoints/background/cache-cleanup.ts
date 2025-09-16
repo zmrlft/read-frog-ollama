@@ -8,7 +8,7 @@ const CHECK_INTERVAL_MINUTES = 24 * 60
 
 export function setUpCacheCleanup() {
   // Set up periodic alarm for cache cleanup
-  browser.alarms.create(CACHE_CLEANUP_ALARM, {
+  void browser.alarms.create(CACHE_CLEANUP_ALARM, {
     delayInMinutes: 1,
     periodInMinutes: CHECK_INTERVAL_MINUTES,
   })
