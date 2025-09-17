@@ -33,6 +33,15 @@ options:
   apiProviders:
     title: API Providers
     description: Configure the API providers for translation and reading functions here
+    addProvider: Add Provider
+    form:
+      fields:
+        name: Name
+        description: Description
+        apiKey: API Key
+        baseURL: Base URL
+      delete: Delete
+      atLeastOneProvider: You must have at least one API provider
     providers:
       description:
         openai: Provides models like GPT-4o
@@ -40,12 +49,10 @@ options:
         openrouter: The unified interface for multiple LLM providers
         ollama: Local LLM
         gemini: Provide models such as Gemini-2.5-Pro
+        openaiCompatible: Third-party and OpenAI API compatible
         deeplx: Unofficial DeepL API
     apiKey:
       showAPIKey: Show API Key
-    advancedConfig:
-      show: Show Advanced Config
-      hide: Hide Advanced Config
     testConnection:
       button: Test Connection
       testing: Testing...
