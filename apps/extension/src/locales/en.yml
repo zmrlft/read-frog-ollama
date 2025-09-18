@@ -34,6 +34,17 @@ options:
     title: API Providers
     description: Configure the API providers for translation and reading functions here
     addProvider: Add Provider
+    badges:
+      publicBeta: Public Beta
+      translate: Translate
+      read: Read
+    dialog:
+      title: Add New Provider
+      description: Choose an API provider to add to your configuration.
+      groups:
+        llmProviders: LLM Providers
+        customProviders: OpenAI Compatible Custom Providers
+        pureTranslationProviders: Pure Translation Providers
     form:
       fields:
         name: Name
@@ -42,15 +53,43 @@ options:
         baseURL: Base URL
       delete: Delete
       atLeastOneProvider: You must have at least one API provider
+      duplicateProviderName: 'Duplicate provider name "$1"'
+      defaultProvider:
+        translate: Set as default translate provider
+        read: Set as default read provider
+      models:
+        read:
+          title: Read Model
+          customTitle: Read Custom Model
+          placeholder: Select a model
+        translate:
+          title: Translate Model
+          customTitle: Translate Custom Model
+          placeholder: Select a model
     providers:
       description:
         openai: Provides models like GPT-4o
         deepseek: Recommend to use in China
         openrouter: The unified interface for multiple LLM providers
         ollama: Local LLM
-        gemini: Provide models such as Gemini-2.5-Pro
+        gemini: Google's flagship AI models with advanced reasoning capabilities
+        anthropic: Claude models known for safety and reasoning excellence
+        xai: Elon Musk's AI company offering Grok models with real-time data access
+        siliconflow: High-performance inference platform for Chinese and international models
+        ai302: Comprehensive AI platform offering multiple premium models in one place
         openaiCompatible: Third-party and OpenAI API compatible
         deeplx: Unofficial DeepL API
+        amazonBedrock: AWS managed service for enterprise-grade foundation models
+        groq: Specialized hardware for ultra-fast LLM inference speeds
+        deepinfra: Cost-effective cloud inference for popular open-source models
+        mistral: European AI company specializing in efficient multilingual models
+        togetherai: Collaborative platform for running and fine-tuning open-source models
+        cohere: Enterprise-focused AI with strong multilingual and RAG capabilities
+        fireworks: Production-ready inference platform for open-source models
+        cerebras: Ultra-fast AI inference for rapid translation and text analysis
+        replicate: Access to diverse open-source models for specialized translation tasks
+        perplexity: Real-time knowledge-enhanced AI for contextual translations and reading assistance
+        vercel: Optimized AI models for web content translation and analysis
     apiKey:
       showAPIKey: Show API Key
     testConnection:

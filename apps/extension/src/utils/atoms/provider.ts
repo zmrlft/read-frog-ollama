@@ -79,6 +79,7 @@ export function updateLLMProviderConfig(
   config: LLMTranslateProviderConfig,
   updates: PartialDeep<LLMTranslateProviderConfig>,
 ): LLMTranslateProviderConfig {
+  // @ts-expect-error - Type instantiation too deep due to complex provider union types
   const result = deepmerge(config, updates)
   return llmProviderConfigItemSchema.parse(result)
 }

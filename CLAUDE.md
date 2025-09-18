@@ -176,6 +176,10 @@ Follow conventional commits format: `type(scope): description`, keep the commit 
 
 The code comments should be in English.
 
+## i18n
+
+After you updated the locale files for extension app, you need to run `pnpm dev:extension` to update the locale types to pass the ESLint check.
+
 ## Others
 
 - Please disregard any console.log statements in my code that may violate ESLint rules.

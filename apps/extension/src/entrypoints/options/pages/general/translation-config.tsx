@@ -177,7 +177,7 @@ function TranslateModelSelector() {
                   }),
                 )
               }
-              else {
+              else if (checked === true) {
                 void setTranslateProviderConfig(
                   updateLLMProviderConfig(translateProviderConfig, {
                     models: {
