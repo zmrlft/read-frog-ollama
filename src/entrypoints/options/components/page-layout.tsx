@@ -3,7 +3,7 @@ import { SidebarTrigger } from '@repo/ui/components/sidebar'
 import { cn } from '@repo/ui/lib/utils'
 import Container from '@/components/container'
 
-export function PageLayout({ title, children, className, innerClassName }: { title: string, children: React.ReactNode, className?: string, innerClassName?: string }) {
+export function PageLayout({ title, children, className, innerClassName }: { title: React.ReactNode, children: React.ReactNode, className?: string, innerClassName?: string }) {
   return (
     <div className={cn('w-full', className)}>
       <div className="border-b">

@@ -121,7 +121,7 @@ function ReadModelSelector() {
                   }),
                 )
               }
-              else {
+              else if (checked === true) {
                 void setReadProviderConfig(
                   updateLLMProviderConfig(readProviderConfig, {
                     models: {

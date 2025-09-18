@@ -2,7 +2,7 @@ import { langCodeISO6393Schema, langLevel } from '@repo/definitions'
 
 import { z } from 'zod'
 import { MIN_SIDE_CONTENT_WIDTH } from '@/utils/constants/side'
-import { NON_API_TRANSLATE_PROVIDERS_MAP, providersConfigSchema } from './provider'
+import { isReadProvider, isTranslateProvider, NON_API_TRANSLATE_PROVIDERS_MAP, providersConfigSchema } from './provider'
 import { readConfigSchema } from './read'
 import { translateConfigSchema } from './translate'
 // Language schema
@@ -52,6 +52,16 @@ export const configSchema = z.object({
     })
   }
 
+  const readProvider = data.providersConfig.find(p => p.id === data.read.providerId)
+  if (!readProvider || !isReadProvider(readProvider.provider)) {
+    ctx.addIssue({
+      code: 'invalid_value',
+      values: providerIds,
+      message: `Invalid provider id "${data.read.providerId}". Must be a read provider`,
+      path: ['read', 'providerId'],
+    })
+  }
+
   const validTranslateProviders = [...providerIds, ...Object.values(NON_API_TRANSLATE_PROVIDERS_MAP)]
   const validTranslateProvidersSet = new Set(validTranslateProviders)
 
@@ -60,6 +70,16 @@ export const configSchema = z.object({
       code: 'invalid_value',
       values: validTranslateProviders,
       message: `Invalid provider id "${data.translate.providerId}". Must be one of: ${validTranslateProviders.join(', ')}`,
+      path: ['translate', 'providerId'],
+    })
+  }
+
+  const translateProvider = data.providersConfig.find(p => p.id === data.translate.providerId)
+  if (!translateProvider || !isTranslateProvider(translateProvider.provider)) {
+    ctx.addIssue({
+      code: 'invalid_value',
+      values: validTranslateProviders,
+      message: `Invalid provider id "${data.translate.providerId}". Must be a translate provider`,
       path: ['translate', 'providerId'],
     })
   }

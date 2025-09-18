@@ -34,6 +34,17 @@ options:
     title: API 提供商
     description: 配置用於翻譯和閱讀功能的 API 提供商
     addProvider: 新增提供商
+    badges:
+      publicBeta: 公測版
+      translate: 翻譯
+      read: 閱讀
+    dialog:
+      title: 新增提供商
+      description: 選擇要新增到配置中的 API 提供商
+      groups:
+        llmProviders: LLM 提供商
+        customProviders: OpenAI 相容自定義提供商
+        pureTranslationProviders: 純翻譯提供商
     form:
       fields:
         name: 名稱
@@ -42,15 +53,43 @@ options:
         baseURL: Base URL
       delete: 刪除
       atLeastOneProvider: 您必須至少有一個 API 提供商
+      duplicateProviderName: '重複的提供商名稱 "$1"'
+      defaultProvider:
+        translate: 設為預設翻譯提供商
+        read: 設為預設閱讀提供商
+      models:
+        read:
+          title: 閱讀模型
+          customTitle: 自定義閱讀模型
+          placeholder: 選擇一個模型
+        translate:
+          title: 翻譯模型
+          customTitle: 自定義翻譯模型
+          placeholder: 選擇一個模型
     providers:
       description:
         openai: 提供 GPT-4o 等模型
         deepseek: 推薦在中國使用
         openrouter: 多個 LLM 提供商的統一介面
         ollama: 本地大模型服務
-        gemini: 提供 Gemini-2.5-Pro 等模型
+        gemini: 具有先進推理能力的 Google 旗艦 AI 模型
+        anthropic: 以安全性和推理能力著稱的 Claude 模型
+        xai: 馬斯克的 AI 公司，提供具有即時數據存取能力的 Grok 模型
+        siliconflow: 面向中國和國際模型的高效能推理平台
+        ai302: 在一個平台提供多種高端模型的綜合 AI 平台
         openaiCompatible: OpenAI API 相容的第三方
         deeplx: 非官方 DeepL API
+        amazonBedrock: 面向企業級基礎模型的 AWS 託管服務
+        groq: 專注於超高速 LLM 推理速度的專用硬體
+        deepinfra: 面向熱門開源模型的經濟高效雲端推理
+        mistral: 專注於高效多語言模型的歐洲 AI 公司
+        togetherai: 用於運行和微調開源模型的協作平台
+        cohere: 具有強大多語言和 RAG 能力的企業級 AI
+        fireworks: 面向開源模型的生產就緒推理平台
+        cerebras: 超快速 AI 推理，適合快速翻譯和文本分析
+        replicate: 存取多樣化開源模型，適合專業翻譯任務
+        perplexity: 即時知識增強 AI，提供語境化翻譯和閱讀輔助
+        vercel: 針對網頁內容翻譯和分析優化的 AI 模型
     apiKey:
       showAPIKey: 顯示 API Key
     testConnection:
