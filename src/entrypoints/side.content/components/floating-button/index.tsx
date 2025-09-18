@@ -139,7 +139,7 @@ export default function FloatingButton() {
               <Icon icon="tabler:x" className="h-3 w-3 text-neutral-400 dark:text-neutral-600" />
             </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" side="left" container={shadowWrapper} hideWhenDetached>
+          <DropdownMenuContent align="start" side="left" className="z-[2147483647]" container={shadowWrapper} hideWhenDetached>
             <DropdownMenuItem
               onMouseDown={e => e.stopPropagation()}
               onClick={() => {
