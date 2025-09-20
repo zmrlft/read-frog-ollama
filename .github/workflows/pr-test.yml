@@ -1,4 +1,4 @@
-name: PR Test
+name: PR - Test & Build
 
 on:
   pull_request:
@@ -6,7 +6,8 @@ on:
       - main
 
 jobs:
-  test:
+  test-and-build:
+    name: Test & Build
     runs-on: ubuntu-latest
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}

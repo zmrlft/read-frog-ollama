@@ -1,4 +1,4 @@
-name: Database Migration
+name: Deploy - Database Migration
 
 on:
   push:
@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   migrate:
-    name: Database Migration
+    name: Run Migrations
     runs-on: ubuntu-latest
     environment: Production
     env:

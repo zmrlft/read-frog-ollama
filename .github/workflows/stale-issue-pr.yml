@@ -1,4 +1,4 @@
-name: Mark stale issues and pull requests
+name: Maintenance - Stale Issues & PRs
 
 on:
   schedule:
@@ -8,6 +8,7 @@ on:
 
 jobs:
   stale:
+    name: Mark Stale Items
     runs-on: ubuntu-latest
     steps:
       - uses: actions/stale@v9

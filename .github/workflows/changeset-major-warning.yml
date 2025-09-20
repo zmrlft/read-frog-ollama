@@ -1,4 +1,4 @@
-name: Changeset Major Version Warning
+name: PR - Major Version Warning
 
 on:
   pull_request:
@@ -12,7 +12,8 @@ permissions:
   issues: write
 
 jobs:
-  check-major-changes:
+  check-major:
+    name: Check Breaking Changes
     runs-on: ubuntu-latest
 
     steps:

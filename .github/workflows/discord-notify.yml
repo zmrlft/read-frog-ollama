@@ -1,4 +1,4 @@
-name: Discord Release Notification
+name: Notification - Discord Release
 
 on:
   workflow_dispatch:
@@ -15,7 +15,7 @@ on:
 
 jobs:
   notify:
-    name: Send Discord Notification
+    name: Send to Discord
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo

@@ -1,4 +1,4 @@
-name: Claude Code Review
+name: PR - Claude Review
 
 on:
   pull_request:
@@ -11,7 +11,7 @@ on:
     #   - "src/**/*.jsx"
 
 jobs:
-  claude-review:
+  code-review:
     if: github.event.pull_request.head.repo.full_name == github.repository
     # Optional: Filter by PR author
     # if: |
