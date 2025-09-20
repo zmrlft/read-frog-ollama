@@ -23,7 +23,7 @@ jobs:
 
       - name: Get changed changeset files
         id: changed-files
-        uses: tj-actions/changed-files@v44
+        uses: tj-actions/changed-files@v47
         with:
           files: '.changeset/*.md'
           files_ignore: .changeset/README.md
