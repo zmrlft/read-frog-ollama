@@ -1,34 +1,21 @@
 import type { Config } from '@/types/config/config'
-
 import type { ProvidersConfig } from '@/types/config/provider'
-
 import { storage } from '#imports'
 import { configSchema } from '@/types/config/config'
 import { isReadProviderConfig } from '@/types/config/provider'
 import {
   CONFIG_STORAGE_KEY,
 } from '../constants/config'
-import { sendMessage } from '../message'
+import { logger } from '../logger'
 
-// eslint-disable-next-line import/no-mutable-exports
-export let globalConfig: Config | null = null
-
-export function shouldDisableFloatingButton(url: string, config: Config): boolean {
-  const disabledFloatingButtonPatterns = config?.floatingButton.disabledFloatingButtonPatterns
-  if (!disabledFloatingButtonPatterns)
-    return false
-
-  return disabledFloatingButtonPatterns.some(pattern => url.toLowerCase().includes(pattern.toLowerCase()))
+export async function getConfigFromStorage() {
+  const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`)
+  if (!config) {
+    logger.warn('No config found in storage, using default config')
+    return null
+  }
+  return configSchema.parse(config)
 }
-
-export async function loadGlobalConfig() {
-  const config = await sendMessage('getInitialConfig', undefined)
-  globalConfig = configSchema.parse(config)
-}
-
-storage.watch<Config>(`local:${CONFIG_STORAGE_KEY}`, (newConfig) => {
-  globalConfig = configSchema.parse(newConfig)
-})
 
 export function isAnyAPIKeyForReadProviders(providersConfig: ProvidersConfig) {
   const readProvidersConfig = providersConfig.filter(isReadProviderConfig)

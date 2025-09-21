@@ -5,13 +5,13 @@ import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import { llmProviderConfigItemSchema, providerConfigItemSchema } from '@/types/config/provider'
 import { getLLMTranslateProvidersConfig, getProviderConfigById } from '../config/helpers'
-import { configFields } from './config'
+import { configFieldsAtomMap } from './config'
 
 // Derived atom for read provider config
 export const readProviderConfigAtom = atom(
   (get) => {
-    const readConfig = get(configFields.read)
-    const providersConfig = get(configFields.providersConfig)
+    const readConfig = get(configFieldsAtomMap.read)
+    const providersConfig = get(configFieldsAtomMap.providersConfig)
     const LLMProvidersConfig = getLLMTranslateProvidersConfig(providersConfig)
     const providerConfig = getProviderConfigById(LLMProvidersConfig, readConfig.providerId)
     if (!providerConfig) {
@@ -20,22 +20,22 @@ export const readProviderConfigAtom = atom(
     return providerConfig
   },
   async (get, set, newProviderConfig: LLMTranslateProviderConfig) => {
-    const readConfig = get(configFields.read)
-    const providersConfig = get(configFields.providersConfig)
+    const readConfig = get(configFieldsAtomMap.read)
+    const providersConfig = get(configFieldsAtomMap.providersConfig)
 
     const updatedProviders = providersConfig.map(provider =>
       provider.id === readConfig.providerId ? newProviderConfig : provider,
     )
 
-    await set(configFields.providersConfig, updatedProviders)
+    await set(configFieldsAtomMap.providersConfig, updatedProviders)
   },
 )
 
 // Derived atom for translate provider config
 export const translateProviderConfigAtom = atom(
   (get) => {
-    const translateConfig = get(configFields.translate)
-    const providersConfig = get(configFields.providersConfig)
+    const translateConfig = get(configFieldsAtomMap.translate)
+    const providersConfig = get(configFieldsAtomMap.providersConfig)
 
     const providerConfig = getProviderConfigById(providersConfig, translateConfig.providerId)
     if (providerConfig)
@@ -45,14 +45,14 @@ export const translateProviderConfigAtom = atom(
     return undefined
   },
   async (get, set, newProviderConfig: ProviderConfig) => {
-    const translateConfig = get(configFields.translate)
-    const providersConfig = get(configFields.providersConfig)
+    const translateConfig = get(configFieldsAtomMap.translate)
+    const providersConfig = get(configFieldsAtomMap.providersConfig)
 
     const updatedProviders = providersConfig.map(provider =>
       provider.id === translateConfig.providerId ? newProviderConfig : provider,
     )
 
-    await set(configFields.providersConfig, updatedProviders)
+    await set(configFieldsAtomMap.providersConfig, updatedProviders)
   },
 )
 
@@ -60,17 +60,17 @@ export const translateProviderConfigAtom = atom(
 export const providerConfigAtom = atomFamily((id: string) =>
   atom(
     (get) => {
-      const providersConfig = get(configFields.providersConfig)
+      const providersConfig = get(configFieldsAtomMap.providersConfig)
       return getProviderConfigById(providersConfig, id)
     },
     async (get, set, newProviderConfig: ProviderConfig) => {
-      const providersConfig = get(configFields.providersConfig)
+      const providersConfig = get(configFieldsAtomMap.providersConfig)
 
       const updatedProviders = providersConfig.map(provider =>
         provider.id === id ? newProviderConfig : provider,
       )
 
-      await set(configFields.providersConfig, updatedProviders)
+      await set(configFieldsAtomMap.providersConfig, updatedProviders)
     },
   ),
 )

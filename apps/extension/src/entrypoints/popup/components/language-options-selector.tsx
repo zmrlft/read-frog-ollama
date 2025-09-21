@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from '@repo/ui/components/select'
 import { useAtom } from 'jotai'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 
 function langCodeLabel(langCode: LangCodeISO6393) {
   return `${LANG_CODE_TO_EN_NAME[langCode]} (${LANG_CODE_TO_LOCALE_NAME[langCode]})`
@@ -27,7 +27,7 @@ const langSelectorTriggerClasses = '!h-14 w-30 rounded-lg shadow-xs pr-2 gap-1'
 const langSelectorContentClasses = 'flex flex-col items-start text-base font-medium min-w-0 flex-1'
 
 export default function LanguageOptionsSelector() {
-  const [language, setLanguage] = useAtom(configFields.language)
+  const [language, setLanguage] = useAtom(configFieldsAtomMap.language)
 
   const handleSourceLangChange = (newLangCode: LangCodeISO6393) => {
     void setLanguage({ sourceCode: newLangCode })

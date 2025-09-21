@@ -1,3 +1,4 @@
+import type { Config } from '@/types/config/config'
 import type { TransNode } from '@/types/dom'
 import {
   BLOCK_ATTRIBUTE,
@@ -15,7 +16,7 @@ import {
   isTextNode,
 } from './filter'
 
-export function extractTextContent(node: TransNode): string {
+export function extractTextContent(node: TransNode, config: Config): string {
   if (isTextNode(node)) {
     return node.textContent ?? ''
   }
@@ -28,7 +29,7 @@ export function extractTextContent(node: TransNode): string {
   //   return ''
   // }
 
-  if (isDontWalkIntoAndDontTranslateAsChildElement(node)) {
+  if (isDontWalkIntoAndDontTranslateAsChildElement(node, config)) {
     return ''
   }
 
@@ -36,7 +37,7 @@ export function extractTextContent(node: TransNode): string {
   return childNodes.reduce((text: string, child: Node): string => {
     // TODO: support SVGElement in the future
     if (isTextNode(child) || isHTMLElement(child)) {
-      return text + extractTextContent(child)
+      return text + extractTextContent(child, config)
     }
     return text
   }, '')
@@ -51,12 +52,13 @@ export function extractTextContent(node: TransNode): string {
 export function walkAndLabelElement(
   element: HTMLElement,
   walkId: string,
+  config: Config,
 ): 'isOrHasBlockNode' | 'isShallowInlineNode' | false {
   if (isDontWalkIntoButTranslateAsChildElement(element)) {
     return false
   }
 
-  if (isDontWalkIntoAndDontTranslateAsChildElement(element)) {
+  if (isDontWalkIntoAndDontTranslateAsChildElement(element, config)) {
     return false
   }
 
@@ -65,7 +67,7 @@ export function walkAndLabelElement(
   if (element.shadowRoot) {
     for (const child of element.shadowRoot.children) {
       if (isHTMLElement(child)) {
-        walkAndLabelElement(child, walkId)
+        walkAndLabelElement(child, walkId, config)
       }
     }
   }
@@ -73,7 +75,7 @@ export function walkAndLabelElement(
   if (isIFrameElement(element)) {
     const iframeDocument = element.contentDocument
     if (iframeDocument && iframeDocument.body) {
-      walkAndLabelElement(iframeDocument.body, walkId)
+      walkAndLabelElement(iframeDocument.body, walkId, config)
     }
   }
 
@@ -89,7 +91,7 @@ export function walkAndLabelElement(
     }
 
     if (isHTMLElement(child)) {
-      const result = walkAndLabelElement(child, walkId)
+      const result = walkAndLabelElement(child, walkId, config)
 
       if (result === 'isOrHasBlockNode') {
         hasBlockNodeChild = true

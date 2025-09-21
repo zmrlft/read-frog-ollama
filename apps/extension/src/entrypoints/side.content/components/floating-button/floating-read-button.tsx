@@ -4,14 +4,14 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { toast } from 'sonner'
 import { useExtractContent } from '@/hooks/read/extract'
 import { useReadArticle } from '@/hooks/read/read'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 
 import { isAnyAPIKeyForReadProviders } from '@/utils/config/config'
 import { isSideOpenAtom } from '../../atoms'
 import HiddenButton from './components/hidden-button'
 
 export default function FloatingReadButton({ className }: { className: string }) {
-  const providersConfig = useAtomValue(configFields.providersConfig)
+  const providersConfig = useAtomValue(configFieldsAtomMap.providersConfig)
   const setIsSideOpen = useSetAtom(isSideOpenAtom)
   const {
     mutate: readArticle,

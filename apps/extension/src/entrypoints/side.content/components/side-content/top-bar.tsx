@@ -29,7 +29,7 @@ import { cn } from '@repo/ui/lib/utils'
 import { useMutationState } from '@tanstack/react-query'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import ReadProviderSelector from '@/components/provider/read-provider-selector'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { readProviderConfigAtom } from '@/utils/atoms/provider'
 import { READ_PROVIDER_ITEMS } from '@/utils/constants/providers'
 import { DOWNLOAD_FILE_ITEMS } from '@/utils/constants/side'
@@ -41,7 +41,7 @@ import downloader from '../../utils/downloader'
 export function TopBar({ className }: { className?: string }) {
   const setIsSideOpen = useSetAtom(isSideOpenAtom)
   const readProviderConfig = useAtomValue(readProviderConfigAtom)
-  const readConfig = useAtomValue(configFields.read)
+  const readConfig = useAtomValue(configFieldsAtomMap.read)
 
   return (
     <div className={cn('flex items-start justify-between', className)}>
@@ -82,7 +82,7 @@ export function TopBar({ className }: { className?: string }) {
 }
 
 function LangLevelSelect() {
-  const [language, setLanguage] = useAtom(configFields.language)
+  const [language, setLanguage] = useAtom(configFieldsAtomMap.language)
 
   return (
     <Select
@@ -112,7 +112,7 @@ function LangLevelSelect() {
 }
 
 function TargetLangSelect() {
-  const [language, setLanguage] = useAtom(configFields.language)
+  const [language, setLanguage] = useAtom(configFieldsAtomMap.language)
 
   return (
     <Select
@@ -143,7 +143,7 @@ function TargetLangSelect() {
 }
 
 function SourceLangSelect() {
-  const [language, setLanguage] = useAtom(configFields.language)
+  const [language, setLanguage] = useAtom(configFieldsAtomMap.language)
 
   return (
     <Select

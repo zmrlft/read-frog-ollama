@@ -12,7 +12,7 @@ import {
 } from '@repo/ui/components/table'
 import { useAtom } from 'jotai'
 import { useState } from 'react'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { ConfigCard } from '../../components/config-card'
 
 export function AutoTranslateWebsitePatterns() {
@@ -24,7 +24,7 @@ export function AutoTranslateWebsitePatterns() {
 }
 
 function PatternTable() {
-  const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
+  const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
   const [inputValue, setInputValue] = useState('')
   const { autoTranslatePatterns } = translateConfig.page
 

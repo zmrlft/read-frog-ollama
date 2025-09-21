@@ -11,7 +11,7 @@ import {
 import { deepmerge } from 'deepmerge-ts'
 import { useAtom, useAtomValue } from 'jotai'
 import { useEffect, useRef } from 'react'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { BLOCK_CONTENT_CLASS } from '@/utils/constants/dom-labels'
 import { TRANSLATION_NODE_STYLE } from '@/utils/constants/translation-node-style'
 import { decorateTranslationNode } from '@/utils/host/translate/decorate-translation'
@@ -27,7 +27,7 @@ export function CustomTranslationStyle() {
 }
 
 function CustomTranslationStyleSelector() {
-  const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
+  const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
   const originTranslationNodeStyle = translateConfig.translationNodeStyle
 
   return (
@@ -65,7 +65,7 @@ function CustomTranslationStyleSelector() {
 }
 
 function CustomTranslationStyleExample() {
-  const { translationNodeStyle } = useAtomValue(configFields.translate)
+  const { translationNodeStyle } = useAtomValue(configFieldsAtomMap.translate)
 
   const translatedNode = useRef(null)
   const originText = `Mr. Kamiya isn\'t confronting the world; he\'s confronting something that might make the world turn its head.`
@@ -73,7 +73,7 @@ function CustomTranslationStyleExample() {
 
   useEffect(() => {
     if (translatedNode.current) {
-      decorateTranslationNode(translatedNode.current, translationNodeStyle)
+      void decorateTranslationNode(translatedNode.current, translationNodeStyle)
     }
   }, [translationNodeStyle])
 

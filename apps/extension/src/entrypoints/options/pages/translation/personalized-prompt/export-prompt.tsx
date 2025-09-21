@@ -2,11 +2,11 @@ import { i18n } from '#imports'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { Button } from '@repo/ui/components/button'
 import { useAtomValue } from 'jotai'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { downloadJSONFile } from './utils/prompt-file'
 
 export function ExportPrompts({ selectedPrompts }: { selectedPrompts: string[] }) {
-  const translateConfig = useAtomValue(configFields.translate)
+  const translateConfig = useAtomValue(configFieldsAtomMap.translate)
   const promptsConfig = translateConfig.promptsConfig
   const patterns = promptsConfig.patterns
 

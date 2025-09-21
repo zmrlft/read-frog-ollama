@@ -1,3 +1,4 @@
+import type { Config } from '@/types/config/config'
 // @vitest-environment jsdom
 import type { TranslationMode } from '@/types/config/translate'
 import { act, render, screen } from '@testing-library/react'
@@ -22,14 +23,34 @@ vi.mock('@/utils/host/translate/translate-text', () => ({
 }))
 
 vi.mock('@/utils/config/config', () => ({
-  globalConfig: DEFAULT_CONFIG,
+  getConfigFromStorage: vi.fn(),
 }))
+
+const BILINGUAL_CONFIG: Config = {
+  ...DEFAULT_CONFIG,
+  translate: {
+    ...DEFAULT_CONFIG.translate,
+    mode: 'bilingual' as const,
+  },
+}
+
+const TRANSLATION_ONLY_CONFIG: Config = {
+  ...DEFAULT_CONFIG,
+  translate: {
+    ...DEFAULT_CONFIG.translate,
+    mode: 'translationOnly' as const,
+  },
+}
 
 describe('translate', () => {
   // Setup and teardown for getComputedStyle mock
   const originalGetComputedStyle = window.getComputedStyle
 
-  beforeAll(() => {
+  beforeAll(async () => {
+    // Mock getConfigFromStorage to return DEFAULT_CONFIG
+    const { getConfigFromStorage } = await import('@/utils/config/config')
+    vi.mocked(getConfigFromStorage).mockResolvedValue(DEFAULT_CONFIG)
+
     window.getComputedStyle = vi.fn((element) => {
       const originalStyle = originalGetComputedStyle(element)
       if (originalStyle.float === '') {
@@ -52,9 +73,9 @@ describe('translate', () => {
   async function removeOrShowPageTranslation(translationMode: TranslationMode, toggle: boolean = false) {
     const id = crypto.randomUUID()
 
-    walkAndLabelElement(document.body, id)
+    walkAndLabelElement(document.body, id, translationMode === 'bilingual' ? BILINGUAL_CONFIG : TRANSLATION_ONLY_CONFIG)
     await act(async () => {
-      await translateWalkedElement(document.body, id, translationMode, toggle)
+      await translateWalkedElement(document.body, id, toggle, translationMode === 'bilingual' ? BILINGUAL_CONFIG : TRANSLATION_ONLY_CONFIG)
     })
   }
 

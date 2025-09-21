@@ -1,5 +1,5 @@
 import { atom } from 'jotai'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { getAPIProvidersConfig } from '@/utils/config/helpers'
 
 const internalSelectedProviderIdAtom = atom<string | undefined>(undefined)
@@ -11,7 +11,7 @@ export const selectedProviderIdAtom = atom(
       return selected
     }
 
-    const providersConfig = get(configFields.providersConfig)
+    const providersConfig = get(configFieldsAtomMap.providersConfig)
     const apiProvidersConfig = getAPIProvidersConfig(providersConfig)
     const firstProviderId = apiProvidersConfig.length > 0
       ? apiProvidersConfig[0].id

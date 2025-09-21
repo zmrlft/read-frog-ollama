@@ -4,7 +4,7 @@ import { Input } from '@repo/ui/components/input'
 import { useAtom } from 'jotai'
 import { toast } from 'sonner'
 import { requestQueueConfigSchema } from '@/types/config/translate'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { MIN_TRANSLATE_CAPACITY, MIN_TRANSLATE_RATE } from '@/utils/constants/translate'
 import { sendMessage } from '@/utils/message'
 import { ConfigCard } from '../../components/config-card'
@@ -61,7 +61,7 @@ const propertyMinAllowedValue = {
 }
 
 function TranslateNumberSelector({ property }: { property: KeyOfRequestQueueConfig }) {
-  const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
+  const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
   const { requestQueueConfig } = translateConfig
 
   const currentConfigValue = requestQueueConfig[property]

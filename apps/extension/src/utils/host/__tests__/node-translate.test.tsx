@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import type { Config } from '@/types/config/config'
 import { act, render, screen } from '@testing-library/react'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import { DEFAULT_CONFIG } from '@/utils/constants/config'
@@ -6,19 +7,32 @@ import { BLOCK_ATTRIBUTE, BLOCK_CONTENT_CLASS, CONTENT_WRAPPER_CLASS, PARAGRAPH_
 import { removeOrShowNodeTranslation } from '../translate/node-manipulation'
 import { expectNodeLabels, expectTranslatedContent, expectTranslationWrapper, MOCK_ORIGINAL_TEXT } from './utils'
 
+// Test config with fixed bilingual mode - won't change with DEFAULT_CONFIG
+const TEST_CONFIG: Config = {
+  ...DEFAULT_CONFIG,
+  translate: {
+    ...DEFAULT_CONFIG.translate,
+    mode: 'bilingual' as const,
+  },
+}
+
 vi.mock('@/utils/host/translate/translate-text', () => ({
   translateText: vi.fn(() => Promise.resolve('translation')),
   validateTranslationConfig: vi.fn(() => true),
 }))
 
 vi.mock('@/utils/config/config', () => ({
-  globalConfig: DEFAULT_CONFIG,
+  getConfigFromStorage: vi.fn(),
 }))
 
 describe('node translation', () => {
   const originalGetComputedStyle = window.getComputedStyle
 
-  beforeAll(() => {
+  beforeAll(async () => {
+    // Mock getConfigFromStorage to return TEST_CONFIG with bilingual mode
+    const { getConfigFromStorage } = await import('@/utils/config/config')
+    vi.mocked(getConfigFromStorage).mockResolvedValue(TEST_CONFIG)
+
     window.getComputedStyle = vi.fn((element) => {
       const originalStyle = originalGetComputedStyle(element)
       if (originalStyle.float === '') {
@@ -47,7 +61,7 @@ describe('node translation', () => {
       const originalElementFromPoint = document.elementFromPoint
       document.elementFromPoint = vi.fn(() => node)
       await act(async () => {
-        await removeOrShowNodeTranslation({ x: 150, y: 125 }, 'bilingual')
+        await removeOrShowNodeTranslation({ x: 150, y: 125 }, TEST_CONFIG)
       })
 
       expectNodeLabels(node, [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
@@ -70,13 +84,13 @@ describe('node translation', () => {
       const originalElementFromPoint = document.elementFromPoint
       document.elementFromPoint = vi.fn(() => node)
       await act(async () => {
-        await removeOrShowNodeTranslation({ x: 150, y: 125 }, 'bilingual')
+        await removeOrShowNodeTranslation({ x: 150, y: 125 }, TEST_CONFIG)
       })
 
       const translatedContent = node.querySelector(`.${BLOCK_CONTENT_CLASS}`)
       document.elementFromPoint = vi.fn(() => translatedContent as Element)
       await act(async () => {
-        await removeOrShowNodeTranslation({ x: 150, y: 125 }, 'bilingual')
+        await removeOrShowNodeTranslation({ x: 150, y: 125 }, TEST_CONFIG)
       })
 
       expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
@@ -94,12 +108,12 @@ describe('node translation', () => {
       const originalElementFromPoint = document.elementFromPoint
       document.elementFromPoint = vi.fn(() => node)
       await act(async () => {
-        await removeOrShowNodeTranslation({ x: 150, y: 125 }, 'bilingual')
+        await removeOrShowNodeTranslation({ x: 150, y: 125 }, TEST_CONFIG)
       })
       const wrapper = node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)
       document.elementFromPoint = vi.fn(() => wrapper as Element)
       await act(async () => {
-        await removeOrShowNodeTranslation({ x: 150, y: 125 }, 'bilingual')
+        await removeOrShowNodeTranslation({ x: 150, y: 125 }, TEST_CONFIG)
       })
 
       expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()

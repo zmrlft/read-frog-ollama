@@ -1,7 +1,7 @@
 import type { Config } from '@/types/config/config'
 import { defineContentScript, storage } from '#imports'
 import { kebabCase } from 'case-anything'
-import { globalConfig, loadGlobalConfig } from '@/utils/config/config'
+import { getConfigFromStorage } from '@/utils/config/config'
 import { APP_NAME } from '@/utils/constants/app'
 import { CONFIG_STORAGE_KEY } from '@/utils/constants/config'
 import { OFFICIAL_SITE_URL_PATTERNS } from '@/utils/constants/url'
@@ -15,8 +15,8 @@ export default defineContentScript({
     })
 
     window.addEventListener('message', async (e) => {
-      await loadGlobalConfig()
-      if (!globalConfig)
+      const config = await getConfigFromStorage()
+      if (!config)
         return
       if (e.source !== window)
         return
@@ -33,12 +33,12 @@ export default defineContentScript({
         // thus extract query will set the target language back to initial config when it call setLanguage
         await new Promise(resolve => setTimeout(resolve, 500))
         await storage.setItem<Config>(`local:${CONFIG_STORAGE_KEY}`, {
-          ...globalConfig,
-          language: { ...globalConfig.language, targetCode: langCodeISO6393 },
+          ...config,
+          language: { ...config.language, targetCode: langCodeISO6393 },
         })
       }
       else if (source === 'read-frog-page' && type === 'getTargetLanguage') {
-        const targetLanguage = globalConfig.language.targetCode
+        const targetLanguage = config.language.targetCode
         window.postMessage({ source: `${kebabCase(APP_NAME)}-ext`, type: 'getTargetLanguage', data: { targetLanguage } }, '*')
       }
     })

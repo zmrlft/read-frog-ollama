@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { MARGIN } from '@/utils/constants/selection'
 import { isTooltipVisibleAtom, selectionContentAtom } from './atom'
 import { TranslateButton, TranslatePopover } from './translate-button'
@@ -12,7 +12,7 @@ export function SelectionToolbar() {
   const isDraggingFromTooltipRef = useRef(false) // track if dragging started from tooltip
   const [isTooltipVisible, setIsTooltipVisible] = useAtom(isTooltipVisibleAtom)
   const setSelectionContent = useSetAtom(selectionContentAtom)
-  const selectionToolbar = useAtomValue(configFields.selectionToolbar)
+  const selectionToolbar = useAtomValue(configFieldsAtomMap.selectionToolbar)
 
   const updatePosition = useCallback(() => {
     if (!isTooltipVisible || !tooltipRef.current || !selectionPositionRef.current)

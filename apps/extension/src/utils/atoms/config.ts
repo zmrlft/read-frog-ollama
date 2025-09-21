@@ -3,6 +3,7 @@ import { deepmergeCustom } from 'deepmerge-ts'
 import { atom } from 'jotai'
 import { selectAtom } from 'jotai/utils'
 import { CONFIG_STORAGE_KEY, DEFAULT_CONFIG } from '../constants/config'
+import { logger } from '../logger'
 import { storageAdapter } from './storage-adapter'
 
 export const configAtom = atom<Config>(DEFAULT_CONFIG)
@@ -12,25 +13,14 @@ export const mergeWithArrayOverwrite = deepmergeCustom({
   mergeArrays: values => values[values.length - 1],
 })
 
-let configPromise: Promise<Config> | null = null
-
-function ensureConfigLoaded(): Promise<Config> {
-  if (!configPromise) {
-    configPromise = storageAdapter.get<Config>(CONFIG_STORAGE_KEY, DEFAULT_CONFIG)
-  }
-  return configPromise
-}
-
 export const writeConfigAtom = atom(
   null,
   async (get, set, patch: Partial<Config>) => {
-    // Ensure config is loaded from storage before any writes
-    const savedConfig = await ensureConfigLoaded()
-
-    // If configAtom still has default value, update it with saved config
-    if (get(configAtom) === DEFAULT_CONFIG) {
-      set(configAtom, savedConfig)
-    }
+    const configInStorage = await storageAdapter.get<Config>(CONFIG_STORAGE_KEY, DEFAULT_CONFIG)
+    // Update atom to the newest config from storage
+    // This is to prevent the bug that somewhere call setAtom before `unwatch` in `configAtom.onMount`
+    // so prevent the race condition that the config is not the newest
+    set(configAtom, configInStorage)
 
     const next = mergeWithArrayOverwrite(get(configAtom), patch)
     set(configAtom, next)
@@ -39,15 +29,25 @@ export const writeConfigAtom = atom(
 )
 
 configAtom.onMount = (setAtom: (newValue: Config) => void) => {
-  // Load config on mount
-  void ensureConfigLoaded().then(setAtom)
-
-  // Watch for external changes
+  void storageAdapter.get<Config>(CONFIG_STORAGE_KEY, DEFAULT_CONFIG).then(setAtom)
   const unwatch = storageAdapter.watch<Config>(CONFIG_STORAGE_KEY, setAtom)
+
+  const handleVisibilityChange = () => {
+    if (document.visibilityState === 'visible') {
+      // If the tab becomes visible again, reload the config from storage
+      // to make sure the config is the newest
+      // This is to fix the issue that when a tab becomes inactive, it won't watch the config change
+      // and when it becomes active, the config is not the newest
+      // Github issue: https://github.com/mengxi-ream/read-frog/issues/435
+      logger.info('configAtom onMount handleVisibilityChange when: ', new Date())
+      void storageAdapter.get<Config>(CONFIG_STORAGE_KEY, DEFAULT_CONFIG).then(setAtom)
+    }
+  }
+  document.addEventListener('visibilitychange', handleVisibilityChange)
 
   return () => {
     unwatch()
-    configPromise = null // Reset on unmount for hot reload
+    document.removeEventListener('visibilitychange', handleVisibilityChange)
   }
 }
 
@@ -62,7 +62,8 @@ configAtom.onMount = (setAtom: (newValue: Config) => void) => {
 type Keys = keyof Config
 
 export function getConfigFieldAtom<K extends Keys>(key: K) {
-  // 如果不介意"改别的字段也重渲"，可以直接 get(configAtom)[key] 而不使用 selectAtom。
+  // If you don't mind "re-rendering when other fields are changed"
+  // you can directly get(configAtom)[key] instead of using selectAtom.
   const sliceAtom = selectAtom(configAtom, c => c[key])
 
   return atom(
@@ -72,7 +73,7 @@ export function getConfigFieldAtom<K extends Keys>(key: K) {
   )
 }
 
-function buildConfigFields<C extends Config>(cfg: C) {
+function buildConfigFieldsAtomMap<C extends Config>(cfg: C) {
   type ValidKey = Extract<keyof C, keyof Config>
   type Map = { [K in ValidKey]: ReturnType<typeof getConfigFieldAtom<K>> }
 
@@ -86,4 +87,4 @@ function buildConfigFields<C extends Config>(cfg: C) {
   return res
 }
 
-export const configFields = buildConfigFields(DEFAULT_CONFIG)
+export const configFieldsAtomMap = buildConfigFieldsAtomMap(DEFAULT_CONFIG)

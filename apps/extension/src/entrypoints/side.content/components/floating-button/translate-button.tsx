@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
 import { cn } from '@repo/ui/lib/utils'
 import { useAtomValue } from 'jotai'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { validateTranslationConfig } from '@/utils/host/translate/translate-text'
 import { sendMessage } from '@/utils/message'
 import { enablePageTranslationAtom } from '../../atoms'
@@ -9,9 +9,9 @@ import HiddenButton from './components/hidden-button'
 
 export default function TranslateButton({ className }: { className: string }) {
   const enablePageTranslation = useAtomValue(enablePageTranslationAtom)
-  const providersConfig = useAtomValue(configFields.providersConfig)
-  const translateConfig = useAtomValue(configFields.translate)
-  const languageConfig = useAtomValue(configFields.language)
+  const providersConfig = useAtomValue(configFieldsAtomMap.providersConfig)
+  const translateConfig = useAtomValue(configFieldsAtomMap.translate)
+  const languageConfig = useAtomValue(configFieldsAtomMap.language)
 
   return (
     <HiddenButton

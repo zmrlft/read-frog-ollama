@@ -1,11 +1,10 @@
-import { globalConfig } from '@/utils/config/config'
+import { getConfigFromStorage } from '@/utils/config/config'
+import { DEFAULT_CONFIG } from '../constants/config'
 import { DEFAULT_TRANSLATE_PROMPT, getTokenCellText, INPUT, TARGET_LANG } from '../constants/prompt'
 
-export function getTranslatePrompt(targetLang: string, input: string) {
-  if (!globalConfig) {
-    throw new Error('No global config when translate text')
-  }
-  const promptsConfig = globalConfig.translate.promptsConfig
+export async function getTranslatePrompt(targetLang: string, input: string) {
+  const config = await getConfigFromStorage() ?? DEFAULT_CONFIG
+  const promptsConfig = config.translate.promptsConfig
   const { patterns = [], prompt: promptId = '' } = promptsConfig
 
   const prompt = patterns.find(pattern => pattern.id === promptId)?.prompt ?? DEFAULT_TRANSLATE_PROMPT

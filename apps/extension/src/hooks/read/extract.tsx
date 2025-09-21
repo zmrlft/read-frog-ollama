@@ -1,12 +1,12 @@
 import type { ExtractedContent } from '@/types/content'
 import { useQuery } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { getDocumentInfo } from '@/utils/content'
 import { logger } from '@/utils/logger'
 
 export function useExtractContent() {
-  const setLanguage = useSetAtom(configFields.language)
+  const setLanguage = useSetAtom(configFieldsAtomMap.language)
 
   return useQuery<ExtractedContent | null>({
     queryKey: ['extractContent'],

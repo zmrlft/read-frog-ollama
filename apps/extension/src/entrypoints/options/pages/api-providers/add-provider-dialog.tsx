@@ -4,7 +4,7 @@ import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@re
 import { useAtom, useSetAtom } from 'jotai'
 import ProviderIcon from '@/components/provider-icon'
 import { CUSTOM_LLM_PROVIDER_NAMES, NON_CUSTOM_LLM_PROVIDER_NAMES, PURE_API_PROVIDER_NAMES } from '@/types/config/provider'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { API_PROVIDER_ITEMS, DEFAULT_PROVIDER_CONFIG } from '@/utils/constants/providers'
 import { isDarkMode } from '@/utils/tailwind'
 import { selectedProviderIdAtom } from './atoms'
@@ -16,7 +16,7 @@ export const PROVIDER_GROUPS = {
 } as const
 
 export default function AddProviderDialog({ onClose }: { onClose: () => void }) {
-  const [providersConfig, setProvidersConfig] = useAtom(configFields.providersConfig)
+  const [providersConfig, setProvidersConfig] = useAtom(configFieldsAtomMap.providersConfig)
   const setSelectedProviderId = useSetAtom(selectedProviderIdAtom)
 
   const handleAddProvider = async (providerType: APIProviderNames) => {

@@ -1,7 +1,9 @@
 import type { Point } from '@/types/dom'
-import { globalConfig } from '@/utils/config/config'
+import { getConfigFromStorage } from '@/utils/config/config'
+import { DEFAULT_CONFIG } from '@/utils/constants/config'
 import { isEditable } from '@/utils/host/dom/filter'
 import { removeOrShowNodeTranslation } from '@/utils/host/translate/node-manipulation'
+import { logger } from '@/utils/logger'
 
 export function registerNodeTranslationTriggers() {
   const mousePosition: Point = { x: 0, y: 0 }
@@ -10,31 +12,39 @@ export function registerNodeTranslationTriggers() {
     isOtherKeyPressed: false,
   }
 
-  const getHotkey = () => globalConfig?.translate.node.hotkey
-  const isEnabled = () => globalConfig?.translate.node.enabled
+  const getHotkey = async () => {
+    const config = await getConfigFromStorage() ?? DEFAULT_CONFIG
+    return config.translate.node.hotkey
+  }
+  const isEnabled = async () => {
+    const config = await getConfigFromStorage() ?? DEFAULT_CONFIG
+    return config.translate.node.enabled
+  }
 
   let timerId: NodeJS.Timeout | null = null
   let actionTriggered = false
 
   // Listen the hotkey means the user can't press or hold any other key during the hotkey is holding
-  document.addEventListener('keydown', (e) => {
-    if (!isEnabled())
+  document.addEventListener('keydown', async (e) => {
+    if (!await isEnabled())
       return
     if (e.target instanceof HTMLElement && isEditable(e.target))
       return
 
-    if (e.key === getHotkey()) {
+    const hotkey = await getHotkey()
+    if (e.key === hotkey) {
       if (!keyState.isHotkeyPressed) {
         keyState.isHotkeyPressed = true
         // If user hold other key, it will trigger keyState.isOtherKeyPressed = true; later by repeat event
         keyState.isOtherKeyPressed = false
-        timerId = setTimeout(() => {
-          if (!globalConfig) {
-            console.warn('Global config is not initialized')
-            return
-          }
+        timerId = setTimeout(async () => {
           if (!keyState.isOtherKeyPressed && keyState.isHotkeyPressed) {
-            void removeOrShowNodeTranslation(mousePosition, globalConfig.translate.mode)
+            const config = await getConfigFromStorage()
+            if (!config) {
+              logger.error('Global config is not initialized')
+              return
+            }
+            void removeOrShowNodeTranslation(mousePosition, config)
             actionTriggered = true
           }
           timerId = null
@@ -51,16 +61,13 @@ export function registerNodeTranslationTriggers() {
     }
   })
 
-  document.addEventListener('keyup', (e) => {
-    if (!isEnabled())
+  document.addEventListener('keyup', async (e) => {
+    if (!await isEnabled())
       return
     if (e.target instanceof HTMLElement && isEditable(e.target))
       return
-    if (!globalConfig) {
-      console.warn('Global config is not initialized')
-      return
-    }
-    if (e.key === getHotkey()) {
+    const hotkey = await getHotkey()
+    if (e.key === hotkey) {
       // translate if user release the hotkey and no other key is pressed
       if (!keyState.isOtherKeyPressed) {
         if (timerId) {
@@ -68,7 +75,12 @@ export function registerNodeTranslationTriggers() {
           timerId = null
         }
         if (!actionTriggered) {
-          void removeOrShowNodeTranslation(mousePosition, globalConfig.translate.mode)
+          const config = await getConfigFromStorage()
+          if (!config) {
+            logger.error('Global config is not initialized')
+            return
+          }
+          void removeOrShowNodeTranslation(mousePosition, config)
         }
       }
       actionTriggered = false

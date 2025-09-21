@@ -1,50 +1,38 @@
 import type { PageTranslationManager } from './page-translation'
 import hotkeys from 'hotkeys-js'
-import { globalConfig } from '@/utils/config/config'
+import { getConfigFromStorage } from '@/utils/config/config'
 import { validateTranslationConfig } from '@/utils/host/translate/translate-text'
 
-interface ITranslationShortcutKeyManager {
-  bindTranslationShortcutKey: () => void
-}
+export async function bindTranslationShortcutKey(pageTranslationManager: PageTranslationManager) {
+  // Clear all existing hotkeys first
+  hotkeys.unbind()
 
-export class TranslationShortcutKeyManager implements ITranslationShortcutKeyManager {
-  private pageTranslationManager: PageTranslationManager
-  private bindingAutoTranslationShortcutKey: string = ''
+  const config = await getConfigFromStorage()
+  if (!config)
+    return
 
-  constructor({ pageTranslationManager }: { pageTranslationManager: PageTranslationManager }) {
-    this.pageTranslationManager = pageTranslationManager
-  }
+  const shortcutKey = config.translate.customAutoTranslateShortcutKey.join('+')
 
-  bindTranslationShortcutKey() {
-    this.bindAutoTranslationShortcutKey()
-  }
-
-  private bindAutoTranslationShortcutKey() {
-    if (!globalConfig)
-      return
-
-    hotkeys.unbind(this.bindingAutoTranslationShortcutKey)
-
-    this.bindingAutoTranslationShortcutKey = globalConfig.translate.customAutoTranslateShortcutKey.join('+')
-
-    hotkeys(this.bindingAutoTranslationShortcutKey, () => {
-      if (!globalConfig)
+  hotkeys(shortcutKey, () => {
+    void (async () => {
+      const currentConfig = await getConfigFromStorage()
+      if (!currentConfig)
         return
 
-      if (this.pageTranslationManager.isActive) {
-        this.pageTranslationManager.stop()
+      if (pageTranslationManager.isActive) {
+        pageTranslationManager.stop()
       }
       else {
         if (!validateTranslationConfig({
-          providersConfig: globalConfig.providersConfig,
-          translate: globalConfig.translate,
-          language: globalConfig.language,
+          providersConfig: currentConfig.providersConfig,
+          translate: currentConfig.translate,
+          language: currentConfig.language,
         })) {
           return
         }
-        this.pageTranslationManager.start()
+        void pageTranslationManager.start()
       }
-      return false
-    })
-  }
+    })()
+    return false
+  })
 }

@@ -3,7 +3,7 @@ import { kebabCase } from 'case-anything'
 import { useAtom, useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { APIConfigWarning } from '@/components/api-config-warning'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { isAnyAPIKeyForReadProviders } from '@/utils/config/config'
 import { APP_NAME } from '@/utils/constants/app'
 import { MIN_SIDE_CONTENT_WIDTH } from '@/utils/constants/side'
@@ -14,9 +14,9 @@ import { TopBar } from './top-bar'
 
 export default function SideContent() {
   const isSideOpen = useAtomValue(isSideOpenAtom)
-  const [sideContent, setSideContent] = useAtom(configFields.sideContent)
+  const [sideContent, setSideContent] = useAtom(configFieldsAtomMap.sideContent)
   const [isResizing, setIsResizing] = useState(false)
-  const providersConfig = useAtomValue(configFields.providersConfig)
+  const providersConfig = useAtomValue(configFieldsAtomMap.providersConfig)
 
   // Setup resize handlers
   useEffect(() => {

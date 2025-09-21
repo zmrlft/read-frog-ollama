@@ -12,7 +12,7 @@ import {
 } from '@repo/ui/components/table'
 import { useAtom } from 'jotai'
 import { useState } from 'react'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { ConfigCard } from '../../components/config-card'
 
 export function FloatingButtonDisabledSites() {
@@ -27,7 +27,7 @@ export function FloatingButtonDisabledSites() {
 }
 
 function PatternTable() {
-  const [floatingButtonConfig, setFloatingButtonConfig] = useAtom(configFields.floatingButton)
+  const [floatingButtonConfig, setFloatingButtonConfig] = useAtom(configFieldsAtomMap.floatingButton)
   const [inputValue, setInputValue] = useState('')
   const { disabledFloatingButtonPatterns = [] } = floatingButtonConfig
 

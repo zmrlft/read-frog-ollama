@@ -9,7 +9,7 @@ import { cn } from '@repo/ui/lib/utils'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import ProviderIcon from '@/components/provider-icon'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { providerConfigAtom, readProviderConfigAtom, translateProviderConfigAtom } from '@/utils/atoms/provider'
 import { getAPIProvidersConfig } from '@/utils/config/helpers'
 import { API_PROVIDER_ITEMS } from '@/utils/constants/providers'
@@ -42,7 +42,7 @@ export function ProvidersConfig() {
 }
 
 function ProviderCardList() {
-  const providersConfig = useAtomValue(configFields.providersConfig)
+  const providersConfig = useAtomValue(configFieldsAtomMap.providersConfig)
   const apiProvidersConfig = getAPIProvidersConfig(providersConfig)
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [canScroll, setCanScroll] = useState(false)

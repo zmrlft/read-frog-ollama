@@ -3,7 +3,7 @@ import { browser, createShadowRootUi, defineContentScript, storage } from '#impo
 import { kebabCase } from 'case-anything'
 import ReactDOM from 'react-dom/client'
 // import eruda from 'eruda'
-import { globalConfig, loadGlobalConfig } from '@/utils/config/config'
+import { getConfigFromStorage } from '@/utils/config/config'
 import { APP_NAME } from '@/utils/constants/app'
 import { CONFIG_STORAGE_KEY } from '@/utils/constants/config'
 import { getDocumentInfo } from '@/utils/content'
@@ -14,7 +14,7 @@ import { protectSelectAllShadowRoot } from '@/utils/select-all'
 import { insertShadowRootUIWrapperInto } from '@/utils/shadow-root'
 import { addStyleToShadow } from '@/utils/styles'
 import App from './app'
-import { TranslationShortcutKeyManager } from './translation-control/bind-translation-shortcut'
+import { bindTranslationShortcutKey } from './translation-control/bind-translation-shortcut'
 import { registerNodeTranslationTriggers } from './translation-control/node-translation'
 import { PageTranslationManager } from './translation-control/page-translation'
 import './listen'
@@ -24,7 +24,6 @@ export default defineContentScript({
   matches: ['*://*/*'],
   cssInjectionMode: 'manifest',
   async main(ctx) {
-    await loadGlobalConfig()
     // eruda.init()
 
     const ui = await createShadowRootUi(ctx, {
@@ -53,7 +52,7 @@ export default defineContentScript({
     // 4. Mount the UI
     ui.mount()
 
-    registerNodeTranslationTriggers()
+    void registerNodeTranslationTriggers()
 
     const port = browser.runtime.connect({ name: 'translation-host.content' })
     const manager = new PageTranslationManager({
@@ -62,9 +61,7 @@ export default defineContentScript({
       threshold: 0,
     })
 
-    const shortcutKeyManager = new TranslationShortcutKeyManager({
-      pageTranslationManager: manager,
-    })
+    // Removed shortcutKeyManager class
 
     manager.registerPageTranslationTriggers()
 
@@ -84,30 +81,31 @@ export default defineContentScript({
       handleUrlChange(from, to)
     })
 
-    shortcutKeyManager.bindTranslationShortcutKey()
+    void bindTranslationShortcutKey(manager)
 
     storage.watch('local:config', () => {
-      shortcutKeyManager.bindTranslationShortcutKey()
+      void bindTranslationShortcutKey(manager)
     })
 
     port.onMessage.addListener((msg) => {
       logger.info('onMessage', msg)
       if (msg.type !== 'STATUS_PUSH' || msg.enabled === manager.isActive)
         return
-      msg.enabled ? manager.start() : manager.stop()
+      msg.enabled ? void manager.start() : manager.stop()
     })
 
-    if (globalConfig) {
+    const config = await getConfigFromStorage()
+    if (config) {
       const { detectedCode } = getDocumentInfo()
       await storage.setItem<Config>(`local:${CONFIG_STORAGE_KEY}`, {
-        ...globalConfig,
-        language: { ...globalConfig.language, detectedCode },
+        ...config,
+        language: { ...config.language, detectedCode },
       })
-    }
 
-    // ! Temporary code for browser has no port.onMessage.addListener api like Orion
-    const autoEnable = globalConfig && await shouldEnableAutoTranslation(window.location.href, globalConfig)
-    if (autoEnable && !manager.isActive)
-      manager.start()
+      // ! Temporary code for browser has no port.onMessage.addListener api like Orion
+      const autoEnable = await shouldEnableAutoTranslation(window.location.href, config)
+      if (autoEnable && !manager.isActive)
+        void manager.start()
+    }
   },
 })
