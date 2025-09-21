@@ -69,12 +69,6 @@ export class PageTranslationManager implements IPageTranslationManager {
   }
 
   async start(): Promise<void> {
-    const config = await getConfigFromStorage()
-    if (!config) {
-      console.warn('Config is not initialized')
-      return
-    }
-
     if (this.isAutoTranslating) {
       console.warn('AutoTranslationManager is already active')
       return
@@ -84,6 +78,12 @@ export class PageTranslationManager implements IPageTranslationManager {
     void sendMessage('setEnablePageTranslationOnContentScript', {
       enabled: true,
     })
+
+    const config = await getConfigFromStorage()
+    if (!config) {
+      console.warn('Config is not initialized')
+      return
+    }
 
     // Listen to existing elements when they enter the viewpoint
     const walkId = crypto.randomUUID()
