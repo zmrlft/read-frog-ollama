@@ -1,13 +1,14 @@
-import type { APIProviderConfig, APIProviderNames } from '@/types/config/provider'
+import type { APIProviderNames } from '@/types/config/provider'
 import { i18n } from '#imports'
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@repo/ui/components/dialog'
 import { useAtom, useSetAtom } from 'jotai'
 import ProviderIcon from '@/components/provider-icon'
 import { CUSTOM_LLM_PROVIDER_NAMES, NON_CUSTOM_LLM_PROVIDER_NAMES, PURE_API_PROVIDER_NAMES } from '@/types/config/provider'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
-import { API_PROVIDER_ITEMS, DEFAULT_PROVIDER_CONFIG } from '@/utils/constants/providers'
+import { API_PROVIDER_ITEMS } from '@/utils/constants/providers'
 import { isDarkMode } from '@/utils/tailwind'
 import { selectedProviderIdAtom } from './atoms'
+import { addProvider } from './utils'
 
 export const PROVIDER_GROUPS = {
   llmProviders: NON_CUSTOM_LLM_PROVIDER_NAMES,
@@ -20,25 +21,7 @@ export default function AddProviderDialog({ onClose }: { onClose: () => void }) 
   const setSelectedProviderId = useSetAtom(selectedProviderIdAtom)
 
   const handleAddProvider = async (providerType: APIProviderNames) => {
-    const existingProviderNameSet = new Set(providersConfig.map(p => p.name))
-    let providerName = API_PROVIDER_ITEMS[providerType].name
-    for (let i = 0; i <= providersConfig.length; i++) {
-      const currentProviderName = i === 0 ? API_PROVIDER_ITEMS[providerType].name : `${API_PROVIDER_ITEMS[providerType].name} ${i}`
-      if (!existingProviderNameSet.has(currentProviderName)) {
-        providerName = currentProviderName
-        break
-      }
-    }
-
-    const newProvider: APIProviderConfig = {
-      ...structuredClone(DEFAULT_PROVIDER_CONFIG[providerType]),
-      id: crypto.randomUUID(),
-      name: providerName,
-    }
-
-    const updatedProviders = [...providersConfig, newProvider]
-    await setProvidersConfig(updatedProviders)
-    setSelectedProviderId(newProvider.id)
+    await addProvider(providerType, providersConfig, setProvidersConfig, setSelectedProviderId)
     onClose()
   }
 

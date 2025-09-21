@@ -36,8 +36,8 @@ options:
     promotion:
       ai302:
         description: 오른쪽 링크를 클릭하여 302.AI에 등록하면 1달러의 무료 API 크레딧을 받을 수 있습니다
-        link: 등록 링크
-        action: 무료 크레딧 받기
+        action: 등록하여 API 키 받기
+        addProvider: 302.AI 구성 추가
     addProvider: 제공업체 추가
     badges:
       publicBeta: 퍼블릭 베타

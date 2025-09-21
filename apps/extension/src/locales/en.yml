@@ -36,8 +36,8 @@ options:
     promotion:
       ai302:
         description: Click the link on the right to register 302.AI and get 1 USD free API credit
-        link: Register
-        action: Get free credit
+        action: Register to Get API Key
+        addProvider: Add 302.AI Configuration
     addProvider: Add Provider
     badges:
       publicBeta: Public Beta
