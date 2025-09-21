@@ -12,7 +12,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/ui/components/tooltip'
 import { useAtom, useAtomValue } from 'jotai'
 import { isLLMTranslateProvider } from '@/types/config/provider'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { translateProviderConfigAtom } from '@/utils/atoms/provider'
 import { DEFAULT_TRANSLATE_PROMPT_ID } from '@/utils/constants/prompt'
 
@@ -22,7 +22,7 @@ function name(prompt: TranslatePromptObj) {
 
 export default function TranslatePromptSelector() {
   const translateProviderConfig = useAtomValue(translateProviderConfigAtom)
-  const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
+  const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
 
   if (!translateProviderConfig?.provider || !isLLMTranslateProvider(translateProviderConfig?.provider))
     return null

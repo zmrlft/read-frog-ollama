@@ -9,10 +9,10 @@ import {
   SelectValue,
 } from '@repo/ui/components/select'
 import { useAtom } from 'jotai'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 
 export default function LanguageLevelSelector() {
-  const [language, setLanguage] = useAtom(configFields.language)
+  const [language, setLanguage] = useAtom(configFieldsAtomMap.language)
 
   return (
     <div className="flex items-center justify-between gap-2">

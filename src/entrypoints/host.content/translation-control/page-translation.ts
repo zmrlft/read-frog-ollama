@@ -1,9 +1,10 @@
-import { globalConfig } from '@/utils/config/config'
+import { getConfigFromStorage } from '@/utils/config/config'
 import { CONTENT_WRAPPER_CLASS } from '@/utils/constants/dom-labels'
 import { isDontWalkIntoButTranslateAsChildElement, isHTMLElement, isIFrameElement } from '@/utils/host/dom/filter'
 import { deepQueryTopLevelSelector } from '@/utils/host/dom/find'
 import { walkAndLabelElement } from '@/utils/host/dom/traversal'
 import { removeAllTranslatedWrapperNodes, translateWalkedElement } from '@/utils/host/translate/node-manipulation'
+import { logger } from '@/utils/logger'
 import { sendMessage } from '@/utils/message'
 
 type SimpleIntersectionOptions = Omit<IntersectionObserverInit, 'threshold'> & {
@@ -20,7 +21,7 @@ interface IPageTranslationManager {
    * Starts the automatic page translation functionality
    * Registers observers, touch triggers and set storage
    */
-  start: () => void
+  start: () => Promise<void>
 
   /**
    * Stops the automatic page translation functionality
@@ -67,9 +68,10 @@ export class PageTranslationManager implements IPageTranslationManager {
     return this.isAutoTranslating
   }
 
-  start(): void {
-    if (!globalConfig) {
-      console.warn('Global config is not initialized')
+  async start(): Promise<void> {
+    const config = await getConfigFromStorage()
+    if (!config) {
+      console.warn('Config is not initialized')
       return
     }
 
@@ -86,26 +88,27 @@ export class PageTranslationManager implements IPageTranslationManager {
     // Listen to existing elements when they enter the viewpoint
     const walkId = crypto.randomUUID()
     this.walkId = walkId
-    this.intersectionObserver = new IntersectionObserver((entries, observer) => {
-      entries.forEach((entry) => {
+    this.intersectionObserver = new IntersectionObserver(async (entries, observer) => {
+      for (const entry of entries) {
         if (entry.isIntersecting) {
           if (isHTMLElement(entry.target)) {
-            if (!globalConfig) {
-              console.warn('Global config is not initialized')
-              return
-            }
             if (!entry.target.closest(`.${CONTENT_WRAPPER_CLASS}`)) {
-              void translateWalkedElement(entry.target, walkId, globalConfig.translate.mode)
+              const currentConfig = await getConfigFromStorage()
+              if (!currentConfig) {
+                logger.error('Global config is not initialized')
+                return
+              }
+              void translateWalkedElement(entry.target, walkId, true, currentConfig)
             }
           }
           observer.unobserve(entry.target)
         }
-      })
+      }
     }, this.intersectionOptions)
 
     // Initialize walkability state for existing elements
     this.addDontWalkIntoElements(document.body)
-    this.observerTopLevelParagraphs(document.body)
+    await this.observerTopLevelParagraphs(document.body)
 
     // Start observing mutations from document.body and all shadow roots
     this.observeMutations(document.body)
@@ -132,7 +135,7 @@ export class PageTranslationManager implements IPageTranslationManager {
     this.mutationObservers.forEach(observer => observer.disconnect())
     this.mutationObservers = []
 
-    removeAllTranslatedWrapperNodes()
+    void removeAllTranslatedWrapperNodes()
   }
 
   registerPageTranslationTriggers(): () => void {
@@ -172,7 +175,7 @@ export class PageTranslationManager implements IPageTranslationManager {
       if (!startTouches)
         return
       if (performance.now() - startTime < PageTranslationManager.MAX_DURATION)
-        this.isAutoTranslating ? this.stop() : this.start()
+        this.isAutoTranslating ? this.stop() : void this.start()
       reset()
     }
 
@@ -190,12 +193,18 @@ export class PageTranslationManager implements IPageTranslationManager {
     }
   }
 
-  private observerTopLevelParagraphs(container: HTMLElement): void {
+  private async observerTopLevelParagraphs(container: HTMLElement): Promise<void> {
     const observer = this.intersectionObserver
     if (!this.walkId || !observer)
       return
 
-    walkAndLabelElement(container, this.walkId)
+    const config = await getConfigFromStorage()
+    if (!config) {
+      logger.error('Global config is not initialized')
+      return
+    }
+
+    walkAndLabelElement(container, this.walkId, config)
     // if container itself has paragraph and the id
     if (container.hasAttribute('data-read-frog-paragraph') && container.getAttribute('data-read-frog-walked') === this.walkId) {
       observer.observe(container)
@@ -295,7 +304,7 @@ export class PageTranslationManager implements IPageTranslationManager {
           rec.addedNodes.forEach((node) => {
             if (isHTMLElement(node)) {
               this.addDontWalkIntoElements(node)
-              this.observerTopLevelParagraphs(node)
+              void this.observerTopLevelParagraphs(node)
               this.observeIsolatedDescendantsMutations(node)
             }
           })
@@ -306,7 +315,7 @@ export class PageTranslationManager implements IPageTranslationManager {
         ) {
           const el = rec.target
           if (isHTMLElement(el) && this.didChangeToWalkable(el)) {
-            this.observerTopLevelParagraphs(el)
+            void this.observerTopLevelParagraphs(el)
           }
         }
       }

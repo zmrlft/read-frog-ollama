@@ -8,12 +8,12 @@ import {
 import { Switch } from '@repo/ui/components/switch'
 import { deepmerge } from 'deepmerge-ts'
 import { useAtom } from 'jotai'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { HOTKEY_ITEMS, HOTKEYS } from '@/utils/constants/hotkeys'
 
 export default function HotkeySelector() {
   const [translateConfig, setTranslateConfig] = useAtom(
-    configFields.translate,
+    configFieldsAtomMap.translate,
   )
 
   return (

@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 import { isAPIProviderConfig, isLLMTranslateProviderConfig, isNonAPIProvider, isPureAPIProvider } from '@/types/config/provider'
 import { getProviderConfigById } from '@/utils/config/helpers'
 import { logger } from '@/utils/logger'
-import { globalConfig } from '../../config/config'
+import { getConfigFromStorage } from '../../config/config'
 import { Sha256Hex } from '../../hash'
 import { sendMessage } from '../../message'
 import { aiTranslate } from './api/ai'
@@ -15,17 +15,18 @@ import { googleTranslate } from './api/google'
 import { microsoftTranslate } from './api/microsoft'
 
 export async function translateText(text: string) {
-  if (!globalConfig) {
+  const config = await getConfigFromStorage()
+  if (!config) {
     throw new Error('No global config when translate text')
   }
-  const providerId = globalConfig.translate.providerId
-  const providerConfig = getProviderConfigById(globalConfig.providersConfig, providerId)
+  const providerId = config.translate.providerId
+  const providerConfig = getProviderConfigById(config.providersConfig, providerId)
 
   if (!providerConfig) {
     throw new Error(`No provider config for id ${providerId} when translate text`)
   }
 
-  const langConfig = globalConfig.language
+  const langConfig = config.language
 
   return await sendMessage('enqueueTranslateRequest', {
     text,
@@ -98,7 +99,7 @@ export function validateTranslationConfig(config: Pick<Config, 'providersConfig'
   }
 
   // check if the API key is configured
-  if (isAPIProviderConfig(providerConfig) && providerConfig.apiKey === undefined) {
+  if (isAPIProviderConfig(providerConfig) && providerConfig.apiKey === undefined && providerConfig.provider !== 'deeplx') {
     toast.error(i18n.t('noAPIKeyConfig.warning'))
     logger.info('validateTranslationConfig: returning false (no API key)')
     return false

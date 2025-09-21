@@ -1,5 +1,5 @@
+import type { Config } from '@/types/config/config'
 import type { TransNode } from '@/types/dom'
-import { globalConfig } from '@/utils/config/config'
 import {
   BLOCK_ATTRIBUTE,
   BLOCK_CONTENT_CLASS,
@@ -103,9 +103,9 @@ export function isDontWalkIntoButTranslateAsChildElement(element: HTMLElement): 
   return dontWalkClass
 }
 
-export function isDontWalkIntoAndDontTranslateAsChildElement(element: HTMLElement): boolean {
+export function isDontWalkIntoAndDontTranslateAsChildElement(element: HTMLElement, config: Config): boolean {
   const dontWalkCustomElement = isCustomDontWalkIntoElement(element)
-  const dontWalkContent = globalConfig && globalConfig.translate.page.range !== 'all' && MAIN_CONTENT_IGNORE_TAGS.has(element.tagName)
+  const dontWalkContent = config.translate.page.range !== 'all' && MAIN_CONTENT_IGNORE_TAGS.has(element.tagName)
   const dontWalkInvalidTag = INVALID_TRANSLATE_TAGS.has(element.tagName)
   const dontWalkCSS
     = window.getComputedStyle(element).display === 'none'

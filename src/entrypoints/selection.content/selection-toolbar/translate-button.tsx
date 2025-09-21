@@ -7,10 +7,10 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { isLLMTranslateProviderConfig, isNonAPIProvider, isPureAPIProvider, THINKING_MODELS } from '@/types/config/provider'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { translateProviderConfigAtom } from '@/utils/atoms/provider'
 import { authClient } from '@/utils/auth/auth-client'
-import { globalConfig } from '@/utils/config/config'
+import { getConfigFromStorage } from '@/utils/config/config'
 import { WEBSITE_URL } from '@/utils/constants/url'
 import { deeplxTranslate, googleTranslate, microsoftTranslate } from '@/utils/host/translate/api'
 import { sendMessage } from '@/utils/message'
@@ -47,7 +47,7 @@ export function TranslatePopover() {
   const [isTranslating, setIsTranslating] = useState(false)
   const [translatedText, setTranslatedText] = useState<string | undefined>(undefined)
   const translateProviderConfig = useAtomValue(translateProviderConfigAtom)
-  const languageConfig = useAtomValue(configFields.language)
+  const languageConfig = useAtomValue(configFieldsAtomMap.language)
   const selectionContent = useAtomValue(selectionContentAtom)
   const [isVisible, setIsVisible] = useAtom(isTranslatePopoverVisibleAtom)
   const { data: session } = authClient.useSession()
@@ -81,7 +81,8 @@ export function TranslatePopover() {
       return
     }
 
-    if (!globalConfig) {
+    const config = await getConfigFromStorage()
+    if (!config) {
       toast.error('Configuration not loaded')
       return
     }
@@ -90,8 +91,8 @@ export function TranslatePopover() {
       await createVocabulary.mutateAsync({
         originalText: selectionContent,
         translation: translatedText,
-        sourceLanguageISO6393: globalConfig.language.sourceCode === 'auto' ? 'eng' : globalConfig.language.sourceCode,
-        targetLanguageISO6393: globalConfig.language.targetCode,
+        sourceLanguageISO6393: config.language.sourceCode === 'auto' ? 'eng' : config.language.sourceCode,
+        targetLanguageISO6393: config.language.targetCode,
       })
     }
     catch {
@@ -106,12 +107,13 @@ export function TranslatePopover() {
         return
       }
 
-      if (!globalConfig) {
+      const config = await getConfigFromStorage()
+      if (!config) {
         throw new Error('No global config when translate text')
       }
 
       if (!translateProviderConfig) {
-        throw new Error(`No provider config for ${globalConfig.translate.providerId} when translate text`)
+        throw new Error(`No provider config for ${config.translate.providerId} when translate text`)
       }
 
       const { provider } = translateProviderConfig
@@ -162,7 +164,7 @@ export function TranslatePopover() {
             },
           }
 
-          const prompt = getTranslatePrompt(targetLangName, cleanText)
+          const prompt = await getTranslatePrompt(targetLangName, cleanText)
 
           // Use streaming for AI providers
           const result = streamText({

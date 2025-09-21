@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom/client'
 import { HashRouter } from 'react-router'
 import FrogToast from '@/components/frog-toast'
 import { configAtom } from '@/utils/atoms/config'
-import { globalConfig, loadGlobalConfig } from '@/utils/config/config'
+import { getConfigFromStorage } from '@/utils/config/config'
 import { isDarkMode } from '@/utils/tailwind'
 import { queryClient } from '@/utils/trpc/client'
 import App from './app'
@@ -31,11 +31,10 @@ function HydrateAtoms({
 }
 
 async function initApp() {
-  await loadGlobalConfig()
   const root = document.getElementById('root')!
   root.className = 'antialiased bg-background'
 
-  const config = globalConfig
+  const config = await getConfigFromStorage()
 
   if (!config) {
     throw new Error('Global config is not loaded')

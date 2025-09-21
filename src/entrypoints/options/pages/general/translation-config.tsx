@@ -16,7 +16,7 @@ import { toast } from 'sonner'
 import TranslateProviderSelector from '@/components/provider/translate-provider-selector'
 import { isAPIProviderConfig, isLLMTranslateProviderConfig, TRANSLATE_PROVIDER_MODELS } from '@/types/config/provider'
 import { pageTranslateRangeSchema } from '@/types/config/translate'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { translateProviderConfigAtom, updateLLMProviderConfig } from '@/utils/atoms/provider'
 import { ConfigCard } from '../../components/config-card'
 import { FieldWithLabel } from '../../components/field-with-label'
@@ -35,7 +35,7 @@ export default function TranslationConfig() {
 }
 
 function RangeSelector() {
-  const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
+  const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
   return (
     <FieldWithLabel id="translateRange" label={i18n.t('options.general.translationConfig.translateRange.title')}>
       <Select

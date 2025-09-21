@@ -10,7 +10,7 @@ import { cn } from '@repo/ui/lib/utils'
 import { useAtom, useAtomValue } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
 import readFrogLogo from '@/assets/icons/read-frog.png'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { APP_NAME } from '@/utils/constants/app'
 import { sendMessage } from '@/utils/message'
 import { shadowWrapper } from '../../'
@@ -21,9 +21,9 @@ import TranslateButton from './translate-button'
 
 export default function FloatingButton() {
   const [floatingButton, setFloatingButton] = useAtom(
-    configFields.floatingButton,
+    configFieldsAtomMap.floatingButton,
   )
-  const sideContent = useAtomValue(configFields.sideContent)
+  const sideContent = useAtomValue(configFieldsAtomMap.sideContent)
   const [isSideOpen, setIsSideOpen] = useAtom(isSideOpenAtom)
   const [isDraggingButton, setIsDraggingButton] = useAtom(isDraggingButtonAtom)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)

@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@repo/ui/components/dropdown-menu'
 import { useAtom } from 'jotai'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { ConfigCard } from '../../components/config-card'
 
 export function AutoTranslateLanguages() {
@@ -29,7 +29,7 @@ export function AutoTranslateLanguages() {
 }
 
 function AutoTranslateLanguagesSelector() {
-  const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
+  const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
   const selectedLanguages = translateConfig.page.autoTranslateLanguages
 
   const allLanguages = langCodeISO6393Schema.options
@@ -72,7 +72,7 @@ function AutoTranslateLanguagesSelector() {
 }
 
 function SelectedLanguageCells() {
-  const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
+  const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
   const selectedLanguages = translateConfig.page.autoTranslateLanguages
 
   const removeLanguage = (language: LangCodeISO6393) => {

@@ -11,7 +11,7 @@ import {
 import { deepmerge } from 'deepmerge-ts'
 import { useAtom } from 'jotai'
 import { TRANSLATION_MODES } from '@/types/config/translate'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { ConfigCard } from '../../components/config-card'
 
 export function TranslationMode() {
@@ -23,7 +23,7 @@ export function TranslationMode() {
 }
 
 function TranslationModeSelector() {
-  const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
+  const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
   const currentMode = translateConfig.mode
 
   return (

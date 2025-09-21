@@ -1,6 +1,6 @@
 import type { Config } from '@/types/config/config'
 import { atom } from 'jotai'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { getActiveTabUrl } from '@/utils/utils'
 
 type TranslateConfig = Config['translate']
@@ -21,7 +21,7 @@ export async function getIsInPatterns(translateConfig: TranslateConfig) {
 export const initIsCurrentSiteInPatternsAtom = atom(
   null,
   async (get, set) => {
-    const translateConfig = get(configFields.translate)
+    const translateConfig = get(configFieldsAtomMap.translate)
     set(isCurrentSiteInPatternsAtom, await getIsInPatterns(translateConfig))
   },
 )
@@ -30,7 +30,7 @@ export const initIsCurrentSiteInPatternsAtom = atom(
 export const toggleCurrentSiteAtom = atom(
   null,
   async (get, set, checked: boolean) => {
-    const translateConfig = get(configFields.translate)
+    const translateConfig = get(configFieldsAtomMap.translate)
     const activeTabUrl = await getActiveTabUrl()
 
     if (!activeTabUrl)
@@ -42,7 +42,7 @@ export const toggleCurrentSiteAtom = atom(
     if (checked) {
       // Add hostname to patterns if not already present
       if (!currentPatterns.some(pattern => hostname.includes(pattern))) {
-        void set(configFields.translate, {
+        void set(configFieldsAtomMap.translate, {
           page: {
             ...translateConfig.page,
             autoTranslatePatterns: [...currentPatterns, hostname],
@@ -55,7 +55,7 @@ export const toggleCurrentSiteAtom = atom(
       const filteredPatterns = currentPatterns.filter(pattern =>
         !hostname.includes(pattern),
       )
-      void set(configFields.translate, {
+      void set(configFieldsAtomMap.translate, {
         page: {
           ...translateConfig.page,
           autoTranslatePatterns: filteredPatterns,

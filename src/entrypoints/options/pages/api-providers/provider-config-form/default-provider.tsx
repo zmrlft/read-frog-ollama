@@ -3,14 +3,14 @@ import { i18n } from '#imports'
 import { Switch } from '@repo/ui/components/switch'
 import { useStore } from '@tanstack/react-form'
 import { useAtom } from 'jotai'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { withForm } from './form'
 
 export const DefaultTranslateProviderSelector = withForm({
   ...{ defaultValues: {} as APIProviderConfig },
   render: function Render({ form }) {
     const providerId = useStore(form.store, state => state.values.id)
-    const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
+    const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
     const isDefaultProvider = translateConfig.providerId === providerId
 
     return (
@@ -34,7 +34,7 @@ export const DefaultReadProviderSelector = withForm({
   ...{ defaultValues: {} as APIProviderConfig },
   render: function Render({ form }) {
     const providerId = useStore(form.store, state => state.values.id)
-    const [readConfig, setReadConfig] = useAtom(configFields.read)
+    const [readConfig, setReadConfig] = useAtom(configFieldsAtomMap.read)
     const isDefaultProvider = readConfig.providerId === providerId
 
     return (

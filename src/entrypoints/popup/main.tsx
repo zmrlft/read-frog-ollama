@@ -6,7 +6,7 @@ import { useHydrateAtoms } from 'jotai/utils'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { configAtom } from '@/utils/atoms/config.ts'
-import { globalConfig, loadGlobalConfig } from '@/utils/config/config.ts'
+import { getConfigFromStorage } from '@/utils/config/config.ts'
 import { DEFAULT_CONFIG } from '@/utils/constants/config.ts'
 import { sendMessage } from '@/utils/message.ts'
 import { isDarkMode } from '@/utils/tailwind.ts'
@@ -34,10 +34,9 @@ function HydrateAtoms({
 }
 
 async function initApp() {
-  await loadGlobalConfig()
   const root = document.getElementById('root')!
   root.className = 'text-base antialiased w-[320px] bg-background'
-  const config = globalConfig ?? DEFAULT_CONFIG
+  const config = (await getConfigFromStorage()) ?? DEFAULT_CONFIG
 
   const activeTab = await browser.tabs.query({
     active: true,

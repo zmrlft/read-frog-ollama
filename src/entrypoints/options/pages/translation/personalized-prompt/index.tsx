@@ -25,7 +25,7 @@ import {
 import { useAtom, useAtomValue } from 'jotai'
 import { useState } from 'react'
 import { QuickInsertableTextarea } from '@/components/ui/insertable-textarea'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { DEFAULT_TRANSLATE_PROMPT_ID, getTokenCellText, TOKENS } from '@/utils/constants/prompt'
 import { ConfigCard } from '../../../components/config-card'
 import { DeletePrompt } from './delete-prompt'
@@ -43,7 +43,7 @@ export function PersonalizedPrompts() {
 }
 
 function PromptList() {
-  const translateConfig = useAtomValue(configFields.translate)
+  const translateConfig = useAtomValue(configFieldsAtomMap.translate)
   const promptsConfig = translateConfig.promptsConfig
   const patterns = promptsConfig.patterns
   const [selectedPrompts, setSelectedPrompts] = useState<string[]>([])
@@ -107,7 +107,7 @@ function PromptList() {
 }
 
 function ConfigurePrompt({ originPrompt }: { originPrompt?: TranslatePromptObj }) {
-  const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
+  const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
 
   const inEdit = !!originPrompt
 

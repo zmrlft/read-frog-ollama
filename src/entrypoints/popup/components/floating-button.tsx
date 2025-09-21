@@ -1,11 +1,11 @@
 import { i18n } from '#imports'
 import { Switch } from '@repo/ui/components/switch'
 import { useAtom } from 'jotai'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 
 export default function FloatingButton() {
   const [floatingButton, setFloatingButton] = useAtom(
-    configFields.floatingButton,
+    configFieldsAtomMap.floatingButton,
   )
 
   return (

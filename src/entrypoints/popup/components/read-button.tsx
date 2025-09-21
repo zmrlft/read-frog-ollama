@@ -5,14 +5,14 @@ import { cn } from '@repo/ui/lib/utils'
 import { useAtomValue } from 'jotai'
 import { toast } from 'sonner'
 
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { isAnyAPIKeyForReadProviders } from '@/utils/config/config'
 import { sendMessage } from '@/utils/message'
 import { isIgnoreTabAtom } from '../atoms/ignore'
 
 export default function ReadButton({ className }: { className?: string }) {
   const isIgnoreTab = useAtomValue(isIgnoreTabAtom)
-  const providersConfig = useAtomValue(configFields.providersConfig)
+  const providersConfig = useAtomValue(configFieldsAtomMap.providersConfig)
 
   const requestReadArticle = async () => {
     if (!isAnyAPIKeyForReadProviders(providersConfig)) {

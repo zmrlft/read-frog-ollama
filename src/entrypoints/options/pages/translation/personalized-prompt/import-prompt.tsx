@@ -6,11 +6,11 @@ import { Input } from '@repo/ui/components/input'
 import { Label } from '@repo/ui/components/label'
 import { useAtom } from 'jotai'
 import { toast } from 'sonner'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { analysisJSONFile } from './utils/prompt-file'
 
 export function ImportPrompts() {
-  const [translateConfig, setTranslateConfig] = useAtom(configFields.translate)
+  const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
 
   const injectPrompts = (list: PromptConfigList) => {
     const originPatterns = translateConfig.promptsConfig.patterns

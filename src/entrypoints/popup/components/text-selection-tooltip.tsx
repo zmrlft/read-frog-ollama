@@ -2,12 +2,12 @@ import { i18n } from '#imports'
 import { Switch } from '@repo/ui/components/switch'
 import { useAtom } from 'jotai'
 import { useId } from 'react'
-import { configFields } from '@/utils/atoms/config'
+import { configFieldsAtomMap } from '@/utils/atoms/config'
 
 export default function SelectionToolbar() {
   const labelId = useId()
   const [selectionToolbar, setSelectionToolbar] = useAtom(
-    configFields.selectionToolbar,
+    configFieldsAtomMap.selectionToolbar,
   )
 
   return (
