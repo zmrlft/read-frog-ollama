@@ -82,6 +82,7 @@ options:
         anthropic: 안전성과 추론 능력이 뛰어난 Claude 모델
         xai: 실시간 데이터 접근이 가능한 Grok 모델을 제공하는 일론 머스크의 AI 회사
         siliconflow: 중국 및 국제 모델을 위한 고성능 추론 플랫폼
+        tensdaq: 혁신적인 경매 AI MaaS 플랫폼으로 시장 수요와 공급에 따라 가격이 결정되어 고비용 고정 요금제를 없앰
         ai302: 여러 프리미엄 모델을 한 곳에서 제공하는 종합 AI 플랫폼
         openaiCompatible: OpenAI API 호환 서드파티
         deeplx: 비공식 DeepL API

@@ -82,6 +82,7 @@ options:
         anthropic: Claude models known for safety and reasoning excellence
         xai: Elon Musk's AI company offering Grok models with real-time data access
         siliconflow: High-performance inference platform for Chinese and international models
+        tensdaq: Revolutionary bidding AI MaaS platform with market-driven pricing, eliminating high-cost fixed pricing
         ai302: Comprehensive AI platform offering multiple premium models in one place
         openaiCompatible: Third-party and OpenAI API compatible
         deeplx: Unofficial DeepL API
