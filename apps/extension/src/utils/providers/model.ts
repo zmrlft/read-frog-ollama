@@ -23,6 +23,7 @@ import { CONFIG_STORAGE_KEY } from '../constants/config'
 
 interface ProviderFactoryMap {
   siliconflow: typeof createOpenAICompatible
+  tensdaq: typeof createOpenAICompatible
   ai302: typeof createOpenAICompatible
   openaiCompatible: typeof createOpenAICompatible
   openai: typeof createOpenAI
@@ -45,6 +46,7 @@ interface ProviderFactoryMap {
 
 const CREATE_AI_MAPPER: ProviderFactoryMap = {
   siliconflow: createOpenAICompatible,
+  tensdaq: createOpenAICompatible,
   ai302: createOpenAICompatible,
   openaiCompatible: createOpenAICompatible,
   openai: createOpenAI,

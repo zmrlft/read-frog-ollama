@@ -4,6 +4,7 @@ import deeplxLogoDark from '@/assets/providers/deeplx-dark.svg'
 import deeplxLogoLight from '@/assets/providers/deeplx-light.svg'
 import openaiCompatibleLogoDark from '@/assets/providers/openai-compatible-dark.svg'
 import openaiCompatibleLogoLight from '@/assets/providers/openai-compatible-light.svg'
+import tensdaqLogoColor from '@/assets/providers/tensdaq-color.svg'
 import { API_PROVIDER_NAMES, NON_API_TRANSLATE_PROVIDERS, NON_API_TRANSLATE_PROVIDERS_MAP, PURE_TRANSLATE_PROVIDERS, READ_PROVIDER_NAMES, TRANSLATE_PROVIDER_NAMES } from '@/types/config/provider'
 import { omit, pick } from '@/types/utils'
 import { getLobeIconsCDNUrlFn } from '../logo'
@@ -11,6 +12,11 @@ import { getLobeIconsCDNUrlFn } from '../logo'
 export const DEFAULT_READ_MODELS: ReadModels = {
   siliconflow: {
     model: 'Qwen/Qwen3-Next-80B-A3B-Instruct',
+    isCustomModel: false,
+    customModel: null,
+  },
+  tensdaq: {
+    model: 'Qwen3-235B-A22B-Instruct-2507',
     isCustomModel: false,
     customModel: null,
   },
@@ -109,6 +115,11 @@ export const DEFAULT_READ_MODELS: ReadModels = {
 export const DEFAULT_TRANSLATE_MODELS: TranslateLLMModels = {
   siliconflow: {
     model: 'Qwen/Qwen3-Next-80B-A3B-Instruct',
+    isCustomModel: false,
+    customModel: null,
+  },
+  tensdaq: {
+    model: 'Qwen3-30B-A3B-Instruct-2507',
     isCustomModel: false,
     customModel: null,
   },
@@ -227,6 +238,18 @@ export const DEFAULT_PROVIDER_CONFIG = {
     models: {
       read: DEFAULT_READ_MODELS.siliconflow,
       translate: DEFAULT_TRANSLATE_MODELS.siliconflow,
+    },
+  },
+  tensdaq: {
+    id: 'tensdaq-default',
+    name: 'Tensdaq',
+    description: i18n.t('options.apiProviders.providers.description.tensdaq'),
+    enabled: true,
+    provider: 'tensdaq',
+    baseURL: 'https://tensdaq-api.x-aio.com/v1',
+    models: {
+      read: DEFAULT_READ_MODELS.tensdaq,
+      translate: DEFAULT_TRANSLATE_MODELS.tensdaq,
     },
   },
   ai302: {
@@ -552,6 +575,10 @@ export const PROVIDER_ITEMS: Record<AllProviderNames, { logo: (isDark: boolean) 
     vercel: {
       logo: getLobeIconsCDNUrlFn('vercel'),
       name: 'Vercel',
+    },
+    tensdaq: {
+      logo: () => tensdaqLogoColor,
+      name: 'Tensdaq',
     },
   }
 
