@@ -32,7 +32,12 @@ options:
     page: 페이지에서
   apiProviders:
     title: API 제공업체
-    description: 번역 및 읽기 기능을 위한 API 제공업체 구성
+    description: 번역 및 읽기 기능을 위한 API 제공업체 구성. 20개 이상의 API 제공업체와 모든 OpenAI 호환 API 제공업체를 지원합니다.
+    promotion:
+      ai302:
+        description: 오른쪽 링크를 클릭하여 302.AI에 등록하면 1달러의 무료 API 크레딧을 받을 수 있습니다
+        link: 등록 링크
+        action: 무료 크레딧 받기
     addProvider: 제공업체 추가
     badges:
       publicBeta: 퍼블릭 베타
