@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { configSchema } from '@/types/config/config'
 import { CONFIG_SCHEMA_VERSION } from '@/utils/constants/config'
 import { logger } from '@/utils/logger'
-import { getMigrations, LATEST_SCHEMA_VERSION, runMigration } from '../../migration'
+import { LATEST_SCHEMA_VERSION, migrationScripts, runMigration } from '../../migration'
 
 describe('all Config Migrations', () => {
   it('should have the valid latest schema version', async () => {
@@ -11,8 +11,7 @@ describe('all Config Migrations', () => {
     expect(typeof LATEST_SCHEMA_VERSION).toBe('number')
     expect(LATEST_SCHEMA_VERSION).toBe(CONFIG_SCHEMA_VERSION)
 
-    const migrations = await getMigrations()
-    const maxKey = Math.max(...Object.keys(migrations).map(Number))
+    const maxKey = Math.max(...Object.keys(migrationScripts).map(Number))
     expect(maxKey).toBe(LATEST_SCHEMA_VERSION)
 
     const latestVersionStr = String(LATEST_SCHEMA_VERSION).padStart(3, '0')
@@ -29,11 +28,9 @@ describe('all Config Migrations', () => {
   })
 
   it('should have migration scripts for all versions', async () => {
-    const migrations = await getMigrations()
-
     for (let version = 2; version <= LATEST_SCHEMA_VERSION; version++) {
-      expect(migrations[version]).toBeDefined()
-      expect(typeof migrations[version]).toBe('function')
+      expect(migrationScripts[version]).toBeDefined()
+      expect(typeof migrationScripts[version]).toBe('function')
     }
   })
 
