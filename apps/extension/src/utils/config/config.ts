@@ -5,16 +5,22 @@ import { configSchema } from '@/types/config/config'
 import { isReadProviderConfig } from '@/types/config/provider'
 import {
   CONFIG_STORAGE_KEY,
+  DEFAULT_CONFIG,
 } from '../constants/config'
 import { logger } from '../logger'
 
 export async function getConfigFromStorage() {
   const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`)
   if (!config) {
-    logger.warn('No config found in storage, using default config')
+    logger.warn('No config found in storage')
     return null
   }
-  return configSchema.parse(config)
+  const parsedConfig = configSchema.safeParse(config)
+  if (!parsedConfig.success) {
+    logger.error('Config is invalid, using default config')
+    return DEFAULT_CONFIG
+  }
+  return parsedConfig.data
 }
 
 export function isAnyAPIKeyForReadProviders(providersConfig: ProvidersConfig) {
