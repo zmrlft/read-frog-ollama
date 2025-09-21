@@ -32,7 +32,12 @@ options:
     page: page
   apiProviders:
     title: API Providers
-    description: Configure the API providers for translation and reading functions here
+    description: Configure the API providers for translation and reading functions here. We have 20+ API providers built-in and support any OpenAI compatible API providers.
+    promotion:
+      ai302:
+        description: Click the link on the right to register 302.AI and get 1 USD free API credit
+        link: Register
+        action: Get free credit
     addProvider: Add Provider
     badges:
       publicBeta: Public Beta

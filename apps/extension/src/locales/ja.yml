@@ -32,7 +32,12 @@ options:
     page: APIキーを設定してください
   apiProviders:
     title: APIプロバイダー
-    description: 翻訳および読解機能用のAPIプロバイダーを設定
+    description: 翻訳および読解機能用のAPIプロバイダーを設定。20以上のAPIプロバイダーに加えて、OpenAI互換のAPIプロバイダーもサポートしています。
+    promotion:
+      ai302:
+        description: 右のリンクをクリックして 302.AI に登録すると、1ドルの無料APIクレジットを受け取ることができます
+        link: 登録リンク
+        action: 無料APIクレジットを受け取る
     addProvider: プロバイダーを追加
     badges:
       publicBeta: パブリックベータ

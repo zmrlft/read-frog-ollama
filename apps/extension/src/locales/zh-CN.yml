@@ -32,7 +32,12 @@ options:
     page: 页设置 API Key
   apiProviders:
     title: API 提供商
-    description: 配置用于翻译和阅读功能的 API 提供商
+    description: 配置用于翻译和阅读功能的 API 提供商。我们内置了 20 多个 API 提供商，并且支持任何 OpenAI 兼容的 API 提供商。
+    promotion:
+      ai302:
+        description: 点击右方链接注册 302.AI 可以获得 1 美元的免费 API 额度
+        link: 注册链接
+        action: 获取免费额度
     addProvider: 添加提供商
     badges:
       publicBeta: 公测版
