@@ -1,67 +1,64 @@
-import type { MigrationFunction, MigrationModule } from './migration-scripts/types'
+import type { MigrationFunction } from './migration-scripts/types'
 import { CONFIG_SCHEMA_VERSION } from '../constants/config'
+import { migrate as migrateV001ToV002 } from './migration-scripts/v001-to-v002'
+import { migrate as migrateV002ToV003 } from './migration-scripts/v002-to-v003'
+import { migrate as migrateV003ToV004 } from './migration-scripts/v003-to-v004'
+import { migrate as migrateV004ToV005 } from './migration-scripts/v004-to-v005'
+import { migrate as migrateV005ToV006 } from './migration-scripts/v005-to-v006'
+import { migrate as migrateV006ToV007 } from './migration-scripts/v006-to-v007'
+import { migrate as migrateV007ToV008 } from './migration-scripts/v007-to-v008'
+import { migrate as migrateV008ToV009 } from './migration-scripts/v008-to-v009'
+import { migrate as migrateV009ToV010 } from './migration-scripts/v009-to-v010'
+import { migrate as migrateV010ToV011 } from './migration-scripts/v010-to-v011'
+import { migrate as migrateV011ToV012 } from './migration-scripts/v011-to-v012'
+import { migrate as migrateV012ToV013 } from './migration-scripts/v012-to-v013'
+import { migrate as migrateV013ToV014 } from './migration-scripts/v013-to-v014'
+import { migrate as migrateV014ToV015 } from './migration-scripts/v014-to-v015'
+import { migrate as migrateV015ToV016 } from './migration-scripts/v015-to-v016'
+import { migrate as migrateV016ToV017 } from './migration-scripts/v016-to-v017'
+import { migrate as migrateV017ToV018 } from './migration-scripts/v017-to-v018'
+import { migrate as migrateV018ToV019 } from './migration-scripts/v018-to-v019'
+import { migrate as migrateV019ToV020 } from './migration-scripts/v019-to-v020'
+import { migrate as migrateV020ToV021 } from './migration-scripts/v020-to-v021'
+import { migrate as migrateV021ToV022 } from './migration-scripts/v021-to-v022'
+import { migrate as migrateV022ToV023 } from './migration-scripts/v022-to-v023'
 
 export const LATEST_SCHEMA_VERSION = CONFIG_SCHEMA_VERSION
 
-// 自动发现和导入所有迁移脚本
-async function discoverMigrations(): Promise<Record<number, MigrationFunction>> {
-  const migrations: Record<number, MigrationFunction> = {}
-
-  // 使用动态导入来加载迁移脚本
-  const migrationModules = import.meta.glob('./migration-scripts/v*.ts')
-
-  for (const [path, importFn] of Object.entries(migrationModules)) {
-    try {
-      // 从文件路径提取版本号
-      const match = path.match(/v\d{3}-to-v(\d{3})\.ts$/)
-      if (match) {
-        const toVersion = Number.parseInt(match[1], 10)
-        const module = await importFn() as MigrationModule
-        const migrationFn = module.migrate
-
-        if (typeof migrationFn === 'function') {
-          migrations[toVersion] = migrationFn
-        }
-        else {
-          console.warn(`Migration file ${path} does not export a valid migrate function`)
-        }
-      }
-      else {
-        console.warn(`Migration file ${path} does not follow naming convention v{from}-to-v{to}.ts`)
-      }
-    }
-    catch (error) {
-      console.error(`Failed to load migration from ${path}:`, error)
-    }
-  }
-
-  return migrations
+// when use `"type": "module"` to change the output format of background script to `esm`
+// we can't use dynamic import here, so we have to use static import
+// https://developer.chrome.com/docs/extensions/develop/concepts/service-workers/basics
+export const migrationScripts: Record<number, MigrationFunction> = {
+  2: migrateV001ToV002,
+  3: migrateV002ToV003,
+  4: migrateV003ToV004,
+  5: migrateV004ToV005,
+  6: migrateV005ToV006,
+  7: migrateV006ToV007,
+  8: migrateV007ToV008,
+  9: migrateV008ToV009,
+  10: migrateV009ToV010,
+  11: migrateV010ToV011,
+  12: migrateV011ToV012,
+  13: migrateV012ToV013,
+  14: migrateV013ToV014,
+  15: migrateV014ToV015,
+  16: migrateV015ToV016,
+  17: migrateV016ToV017,
+  18: migrateV017ToV018,
+  19: migrateV018ToV019,
+  20: migrateV019ToV020,
+  21: migrateV020ToV021,
+  22: migrateV021ToV022,
+  23: migrateV022ToV023,
 }
 
-// 缓存迁移函数以避免重复加载
-let _migrationsCache: Record<number, MigrationFunction> | null = null
-
-// 获取所有可用的迁移函数
-export async function getMigrations(): Promise<Record<number, MigrationFunction>> {
-  if (!_migrationsCache) {
-    _migrationsCache = await discoverMigrations()
-  }
-  return _migrationsCache
-}
-
-// 执行单个迁移
 export async function runMigration(version: number, config: any): Promise<any> {
-  const migrations = await getMigrations()
-  const migrationFn = migrations[version]
+  const migrationFn = migrationScripts[version]
 
   if (!migrationFn) {
     throw new Error(`Migration function for version ${version} not found`)
   }
 
   return migrationFn(config)
-}
-
-// 清除迁移缓存（主要用于测试）
-export function clearMigrationsCache(): void {
-  _migrationsCache = null
 }

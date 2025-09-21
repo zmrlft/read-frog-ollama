@@ -270,4 +270,129 @@ Translate to {{targetLang}}:
       selectionToolbar: { enabled: false },
     },
   },
+  'config-from-v022': {
+    description: 'Config from v022',
+    config: {
+      floatingButton: {
+        disabledFloatingButtonPatterns: [],
+        enabled: true,
+        position: 0.66,
+      },
+      language: {
+        detectedCode: 'eng',
+        level: 'intermediate',
+        sourceCode: 'auto',
+        targetCode: 'cmn',
+      },
+      providersConfig: [
+        {
+          name: 'Google Translate',
+          provider: 'google',
+        },
+        {
+          name: 'Microsoft Translator',
+          provider: 'microsoft',
+        },
+        {
+          apiKey: '123aqe',
+          baseURL: 'https://123',
+          models: {
+            read: {
+              customModel: null,
+              isCustomModel: false,
+              model: 'gpt-4.1-mini',
+            },
+            translate: {
+              customModel: 'gpt-4.1-m',
+              isCustomModel: true,
+              model: 'gpt-4.1-mini',
+            },
+          },
+          name: 'OpenAI',
+          provider: 'openai',
+        },
+        {
+          models: {
+            read: {
+              customModel: null,
+              isCustomModel: false,
+              model: 'deepseek-chat',
+            },
+            translate: {
+              customModel: null,
+              isCustomModel: false,
+              model: 'deepseek-chat',
+            },
+          },
+          name: 'DeepSeek',
+          provider: 'deepseek',
+        },
+        {
+          apiKey: '1',
+          models: {
+            read: {
+              customModel: null,
+              isCustomModel: false,
+              model: 'gemini-2.5-pro',
+            },
+            translate: {
+              customModel: 'gemini-1.5-pro',
+              isCustomModel: true,
+              model: 'gemini-1.5-pro',
+            },
+          },
+          name: 'Gemini',
+          provider: 'gemini',
+        },
+        {
+          apiKey: '11113',
+          name: 'DeepLX',
+          provider: 'deeplx',
+        },
+      ],
+      read: {
+        providerName: 'DeepSeek',
+      },
+      selectionToolbar: {
+        enabled: true,
+      },
+      sideContent: {
+        width: 420,
+      },
+      translate: {
+        customAutoTranslateShortcutKey: [
+          'alt',
+          'q',
+        ],
+        mode: 'translationOnly',
+        node: {
+          enabled: true,
+          hotkey: 'Control',
+        },
+        page: {
+          autoTranslateLanguages: [],
+          autoTranslatePatterns: [
+            'news.ycombinator.com',
+          ],
+          range: 'all',
+        },
+        promptsConfig: {
+          patterns: [
+            {
+              id: 'default',
+              name: 'default',
+              prompt: 'You are a professional {{targetLang}} native translator who needs to fluently translate text into {{targetLang}}.\n\n## Translation Rules\n1. Output only the translated content, without explanations or additional content (such as "Here\'s the translation:" or "Translation as follows:")\n2. The returned translation must maintain exactly the same number of paragraphs and format as the original text.\n3. If the text contains HTML tags, consider where the tags should be placed in the translation while maintaining fluency.\n4. For content that should not be translated (such as proper nouns, code, etc.), keep the original text.\n\nTranslate to {{targetLang}}:\n{{input}}\n',
+            },
+          ],
+          prompt: 'default',
+        },
+        providerName: 'Gemini',
+        requestQueueConfig: {
+          capacity: 200,
+          rate: 2,
+        },
+        translationNodeStyle: 'default',
+      },
+    },
+  },
 }
