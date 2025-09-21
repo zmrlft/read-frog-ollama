@@ -12,7 +12,7 @@ import { filterEnabledProvidersConfig, getReadProvidersConfig } from '@/utils/co
 import { PROVIDER_ITEMS } from '@/utils/constants/providers'
 import { isDarkMode } from '@/utils/tailwind'
 
-export default function ReadProviderSelector({ className, hideChevron = false, customTrigger }: { className?: string, hideChevron?: boolean, customTrigger?: React.ReactNode }) {
+export default function ReadProviderSelector({ className, hideChevron = false, customTrigger, container }: { className?: string, hideChevron?: boolean, customTrigger?: React.ReactNode, container?: HTMLElement | null }) {
   const [readConfig, setReadConfig] = useAtom(configFieldsAtomMap.read)
   const providersConfig = useAtomValue(configFieldsAtomMap.providersConfig)
   const filteredProvidersConfig = filterEnabledProvidersConfig(providersConfig)
@@ -29,7 +29,7 @@ export default function ReadProviderSelector({ className, hideChevron = false, c
       <SelectTrigger className={className} hideChevron={hideChevron}>
         {customTrigger || <SelectValue />}
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent container={container}>
         {getReadProvidersConfig(filteredProvidersConfig).map(({ id, name, provider }) => (
           <SelectItem key={id} value={id}>
             <ProviderIcon logo={PROVIDER_ITEMS[provider].logo(isDarkMode())} name={name} size="sm" />

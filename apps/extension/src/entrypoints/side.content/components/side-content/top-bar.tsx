@@ -57,9 +57,10 @@ export function TopBar({ className }: { className?: string }) {
             <img
               src={READ_PROVIDER_ITEMS[readProviderConfig.provider].logo(isDarkMode())}
               alt={readConfig.providerId}
-              className="size-4 p-0.5 bg-white rounded-full"
+              className="size-4 p-0.5 rounded-full"
             />
           )}
+          container={shadowWrapper}
         />
         <FileExport />
       </div>
