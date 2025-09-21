@@ -36,8 +36,8 @@ options:
     promotion:
       ai302:
         description: 右のリンクをクリックして 302.AI に登録すると、1ドルの無料APIクレジットを受け取ることができます
-        link: 登録リンク
-        action: 無料APIクレジットを受け取る
+        action: 登録してAPIキーを取得
+        addProvider: 302.AI設定を追加
     addProvider: プロバイダーを追加
     badges:
       publicBeta: パブリックベータ

@@ -36,8 +36,8 @@ options:
     promotion:
       ai302:
         description: 点击右方链接注册 302.AI 可以获得 1 美元的免费 API 额度
-        link: 注册链接
-        action: 获取免费额度
+        action: 注册获取 API Key
+        addProvider: 添加 302.AI 配置
     addProvider: 添加提供商
     badges:
       publicBeta: 公测版

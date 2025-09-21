@@ -18,6 +18,7 @@ import { ConfigCard } from '../../components/config-card'
 import AddProviderDialog from './add-provider-dialog'
 import { selectedProviderIdAtom } from './atoms'
 import { ProviderConfigForm } from './provider-config-form'
+import { addProvider } from './utils'
 
 export function ProvidersConfig() {
   return (
@@ -30,7 +31,12 @@ export function ProvidersConfig() {
           </Badge>
         </div>
       )}
-      description={i18n.t('options.apiProviders.description')}
+      description={(
+        <p className="text-sm text-muted-foreground">
+          {i18n.t('options.apiProviders.description')}
+          <Promotion className="mt-2" />
+        </p>
+      )}
       className="lg:flex-col"
     >
       <div className="flex gap-4">
@@ -38,6 +44,29 @@ export function ProvidersConfig() {
         <ProviderConfigForm />
       </div>
     </ConfigCard>
+  )
+}
+
+function Promotion({ className }: { className?: string }) {
+  const [providersConfig, setProvidersConfig] = useAtom(configFieldsAtomMap.providersConfig)
+  const setSelectedProviderId = useSetAtom(selectedProviderIdAtom)
+
+  const handleAddAI302Provider = async () => {
+    await addProvider('ai302', providersConfig, setProvidersConfig, setSelectedProviderId)
+  }
+
+  return (
+    <div className={cn(className, 'flex items-center gap-2')}>
+      <p className="text-sm text-muted-foreground">{i18n.t('options.apiProviders.promotion.ai302.description')}</p>
+      <Button asChild size="sm" className="bg-yellow-500 hover:bg-yellow-500/90">
+        <a href="https://share.302.ai/8o2r7P" target="_blank" rel="noreferrer noopener">
+          {i18n.t('options.apiProviders.promotion.ai302.action')}
+        </a>
+      </Button>
+      <Button size="sm" variant="outline" onClick={handleAddAI302Provider} className="text-black dark:text-white">
+        {i18n.t('options.apiProviders.promotion.ai302.addProvider')}
+      </Button>
+    </div>
   )
 }
 
@@ -167,7 +196,7 @@ function ProviderCard({ providerConfig }: { providerConfig: APIProviderConfig })
           </Badge>
         )}
         {isDefaultReadProvider && (
-          <Badge className="bg-indigo-500" size="sm">
+          <Badge className="bg-blue-500" size="sm">
             {i18n.t('options.apiProviders.badges.read')}
           </Badge>
         )}
