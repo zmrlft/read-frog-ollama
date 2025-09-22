@@ -36,8 +36,8 @@ options:
     description: 配置用於翻譯和閱讀功能的 API 提供商。我們內置了 20 多個 API 提供商，並且支持任何 OpenAI 兼容的 API 提供商。
     promotion:
       ai302:
-        description: 點擊右方鏈接註冊 302.AI 可以獲得 1 美元的免費 API 額度
-        action: 註冊獲取 API Key
+        description: 點擊右方鏈接註冊 302.AI 可以獲得 1 美元 API 額度
+        action: 註冊獲取免費 API Key
         addProvider: 新增 302.AI 配置
     addProvider: 新增提供商
     badges:
