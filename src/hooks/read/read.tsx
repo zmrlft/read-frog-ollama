@@ -24,6 +24,7 @@ import { configAtom, configFieldsAtomMap } from '@/utils/atoms/config'
 import { readProviderConfigAtom } from '@/utils/atoms/provider'
 import { isAnyAPIKeyForReadProviders } from '@/utils/config/config'
 import { getProviderConfigById } from '@/utils/config/helpers'
+import { getFinalSourceCode } from '@/utils/config/languages'
 import { logger } from '@/utils/logger'
 import { getAnalyzePrompt } from '@/utils/prompts/analyze'
 import { getExplainPrompt } from '@/utils/prompts/explain'
@@ -111,11 +112,7 @@ async function explainBatch(batch: string[], articleAnalysis: ArticleAnalysis, c
 
   const targetLang = LANG_CODE_TO_EN_NAME[language.targetCode]
   const sourceLang
-    = LANG_CODE_TO_EN_NAME[
-      language.sourceCode === 'auto'
-        ? language.detectedCode
-        : language.sourceCode
-    ]
+    = LANG_CODE_TO_EN_NAME[getFinalSourceCode(language.sourceCode, language.detectedCode)]
 
   const model = await getReadModelById(readProviderConfig.id)
   while (attempts < MAX_ATTEMPTS) {

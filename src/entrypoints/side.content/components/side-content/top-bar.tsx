@@ -31,6 +31,7 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import ReadProviderSelector from '@/components/provider/read-provider-selector'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { readProviderConfigAtom } from '@/utils/atoms/provider'
+import { getFinalSourceCode } from '@/utils/config/languages'
 import { READ_PROVIDER_ITEMS } from '@/utils/constants/providers'
 import { DOWNLOAD_FILE_ITEMS } from '@/utils/constants/side'
 import { isDarkMode } from '@/utils/tailwind'
@@ -157,9 +158,7 @@ function SourceLangSelect() {
         className="border-border flex !h-7 w-auto items-center gap-2 rounded-md border px-2"
       >
         <div className="max-w-15 min-w-0 truncate">
-          {language.sourceCode === 'auto'
-            ? LANG_CODE_TO_EN_NAME[language.detectedCode]
-            : LANG_CODE_TO_EN_NAME[language.sourceCode]}
+          {LANG_CODE_TO_EN_NAME[getFinalSourceCode(language.sourceCode, language.detectedCode)]}
         </div>
       </SelectTrigger>
       <SelectContent container={shadowWrapper}>

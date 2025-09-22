@@ -1,4 +1,5 @@
 import type { Config } from '@/types/config/config'
+import { getFinalSourceCode } from '@/utils/config/languages'
 
 export async function shouldEnableAutoTranslation(url: string, config: Config): Promise<boolean> {
   const autoTranslatePatterns = config?.translate.page.autoTranslatePatterns
@@ -9,7 +10,7 @@ export async function shouldEnableAutoTranslation(url: string, config: Config): 
     url.toLowerCase().includes(pattern.toLowerCase()),
   ) ?? false
 
-  const doesMatchLanguage = autoTranslateLanguages?.includes(sourceCode === 'auto' ? detectedCode : sourceCode)
+  const doesMatchLanguage = autoTranslateLanguages?.includes(getFinalSourceCode(sourceCode, detectedCode))
 
   return doesMatchPattern || doesMatchLanguage
 }
