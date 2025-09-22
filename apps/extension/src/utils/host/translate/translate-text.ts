@@ -5,6 +5,7 @@ import { ISO6393_TO_6391, LANG_CODE_TO_EN_NAME, LANG_CODE_TO_LOCALE_NAME } from 
 import { toast } from 'sonner'
 import { isAPIProviderConfig, isLLMTranslateProviderConfig, isNonAPIProvider, isPureAPIProvider } from '@/types/config/provider'
 import { getProviderConfigById } from '@/utils/config/helpers'
+import { getFinalSourceCode } from '@/utils/config/languages'
 import { logger } from '@/utils/logger'
 import { getConfigFromStorage } from '../../config/config'
 import { Sha256Hex } from '../../hash'
@@ -33,7 +34,12 @@ export async function translateText(text: string) {
     langConfig,
     providerConfig,
     scheduleAt: Date.now(),
-    hash: Sha256Hex(text, JSON.stringify(providerConfig)),
+    hash: Sha256Hex(
+      text,
+      JSON.stringify(providerConfig),
+      getFinalSourceCode(langConfig.sourceCode, langConfig.detectedCode),
+      langConfig.targetCode,
+    ),
   })
 }
 

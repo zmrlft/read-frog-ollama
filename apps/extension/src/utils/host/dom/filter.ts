@@ -8,7 +8,7 @@ import {
   INLINE_CONTENT_CLASS,
   NOTRANSLATE_CLASS,
 } from '@/utils/constants/dom-labels'
-import { FORCE_BLOCK_TAGS, INVALID_TRANSLATE_TAGS, MAIN_CONTENT_IGNORE_TAGS } from '@/utils/constants/dom-tags'
+import { DONT_WALK_AND_TRANSLATE_TAGS, DONT_WALK_BUT_TRANSLATE_TAGS, FORCE_BLOCK_TAGS, MAIN_CONTENT_IGNORE_TAGS } from '@/utils/constants/dom-tags'
 import { CUSTOM_DONT_WALK_INTO_ELEMENT_SELECTOR_MAP } from '@/utils/constants/translate'
 
 export function isEditable(element: HTMLElement): boolean {
@@ -97,16 +97,18 @@ export function isDontWalkIntoButTranslateAsChildElement(element: HTMLElement): 
     element.classList.contains(className),
   )
 
+  const dontWalkTag = DONT_WALK_BUT_TRANSLATE_TAGS.has(element.tagName)
+
   // issue: https://github.com/mengxi-ream/read-frog/issues/459
   // const dontWalkAttr = element.getAttribute('translate') === 'no'
 
-  return dontWalkClass
+  return dontWalkClass || dontWalkTag
 }
 
 export function isDontWalkIntoAndDontTranslateAsChildElement(element: HTMLElement, config: Config): boolean {
   const dontWalkCustomElement = isCustomDontWalkIntoElement(element)
   const dontWalkContent = config.translate.page.range !== 'all' && MAIN_CONTENT_IGNORE_TAGS.has(element.tagName)
-  const dontWalkInvalidTag = INVALID_TRANSLATE_TAGS.has(element.tagName)
+  const dontWalkInvalidTag = DONT_WALK_AND_TRANSLATE_TAGS.has(element.tagName)
   const dontWalkCSS
     = window.getComputedStyle(element).display === 'none'
       || window.getComputedStyle(element).visibility === 'hidden'

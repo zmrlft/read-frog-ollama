@@ -27,7 +27,7 @@ export const FORCE_BLOCK_TAGS = new Set([
 ])
 
 // Don't walk into these tags
-export const INVALID_TRANSLATE_TAGS = new Set([
+export const DONT_WALK_AND_TRANSLATE_TAGS = new Set([
   'HEAD',
   'HR',
   'INPUT',
@@ -42,6 +42,9 @@ export const INVALID_TRANSLATE_TAGS = new Set([
   'SCRIPT',
   'STYLE',
   'LINK',
+])
+
+export const DONT_WALK_BUT_TRANSLATE_TAGS = new Set([
   'CODE',
 ])
 
