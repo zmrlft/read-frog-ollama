@@ -8,6 +8,7 @@ import { newUserGuide } from './new-user-guide'
 import { proxyFetch } from './proxy-fetch'
 import { setUpRequestQueue } from './request-queue'
 import { translationMessage } from './translation'
+import { setupUninstallSurvey } from './uninstall-survey'
 
 export default defineBackground({
   type: 'module',
@@ -48,6 +49,7 @@ export default defineBackground({
 
     void setUpRequestQueue()
     setUpCacheCleanup()
+    void setupUninstallSurvey()
 
     proxyFetch()
   },
