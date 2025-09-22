@@ -2,6 +2,7 @@ import type { Config } from '@/types/config/config'
 import { deepmergeCustom } from 'deepmerge-ts'
 import { atom } from 'jotai'
 import { selectAtom } from 'jotai/utils'
+import { configSchema } from '@/types/config/config'
 import { CONFIG_STORAGE_KEY, DEFAULT_CONFIG } from '../constants/config'
 import { logger } from '../logger'
 import { storageAdapter } from './storage-adapter'
@@ -16,20 +17,27 @@ export const mergeWithArrayOverwrite = deepmergeCustom({
 export const writeConfigAtom = atom(
   null,
   async (get, set, patch: Partial<Config>) => {
-    const configInStorage = await storageAdapter.get<Config>(CONFIG_STORAGE_KEY, DEFAULT_CONFIG)
+    const configInStorage = await storageAdapter.get<Config>(CONFIG_STORAGE_KEY, DEFAULT_CONFIG, configSchema)
     // Update atom to the newest config from storage
     // This is to prevent the bug that somewhere call setAtom before `unwatch` in `configAtom.onMount`
     // so prevent the race condition that the config is not the newest
     set(configAtom, configInStorage)
 
+    const prev = get(configAtom)
     const next = mergeWithArrayOverwrite(get(configAtom), patch)
     set(configAtom, next)
-    await storageAdapter.set(CONFIG_STORAGE_KEY, next)
+    try {
+      await storageAdapter.set(CONFIG_STORAGE_KEY, next, configSchema)
+    }
+    catch (error) {
+      console.error('Failed to set config to storage:', next, error)
+      set(configAtom, prev)
+    }
   },
 )
 
 configAtom.onMount = (setAtom: (newValue: Config) => void) => {
-  void storageAdapter.get<Config>(CONFIG_STORAGE_KEY, DEFAULT_CONFIG).then(setAtom)
+  void storageAdapter.get<Config>(CONFIG_STORAGE_KEY, DEFAULT_CONFIG, configSchema).then(setAtom)
   const unwatch = storageAdapter.watch<Config>(CONFIG_STORAGE_KEY, setAtom)
 
   const handleVisibilityChange = () => {
@@ -40,7 +48,7 @@ configAtom.onMount = (setAtom: (newValue: Config) => void) => {
       // and when it becomes active, the config is not the newest
       // Github issue: https://github.com/mengxi-ream/read-frog/issues/435
       logger.info('configAtom onMount handleVisibilityChange when: ', new Date())
-      void storageAdapter.get<Config>(CONFIG_STORAGE_KEY, DEFAULT_CONFIG).then(setAtom)
+      void storageAdapter.get<Config>(CONFIG_STORAGE_KEY, DEFAULT_CONFIG, configSchema).then(setAtom)
     }
   }
   document.addEventListener('visibilitychange', handleVisibilityChange)

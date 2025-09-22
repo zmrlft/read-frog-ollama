@@ -69,10 +69,10 @@ export function ProviderConfigForm() {
     }
 
     if (readConfig.providerId === providerConfig.id) {
-      void setReadConfig({ providerId: updatedAllReadProviders[0].id })
+      await setReadConfig({ providerId: updatedAllReadProviders[0].id })
     }
     if (translateConfig.providerId === providerConfig.id) {
-      void setTranslateConfig({ providerId: chooseNextProviderConfig(updatedAllTranslateProviders).id })
+      await setTranslateConfig({ providerId: chooseNextProviderConfig(updatedAllTranslateProviders).id })
     }
     await setAllProvidersConfig(updatedAllProviders)
     setSelectedProviderId(chooseNextProviderConfig(updatedAllProviders).id)

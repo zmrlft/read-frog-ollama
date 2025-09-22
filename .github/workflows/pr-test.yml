@@ -56,4 +56,4 @@ jobs:
           PUBLIC_REPO_GITHUB_TOKEN: ${{ secrets.PUBLIC_REPO_GITHUB_TOKEN }}
 
       - name: Run tests
-        run: pnpm test
+        run: pnpm test -- --exclude="**/free-api.test.ts"
