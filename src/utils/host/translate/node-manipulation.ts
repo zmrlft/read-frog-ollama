@@ -76,12 +76,6 @@ export async function translateNodes(nodes: ChildNode[], walkId: string, toggle:
   }
 }
 
-/**
- * Translate the node
- * @param nodes - The nodes to translate
- * @param walkId - The walk ID for the translation
- * @param toggle - Whether to toggle the translation, if true, the translation will be removed if it already exists
- */
 export async function translateNodesBilingualMode(nodes: ChildNode[], walkId: string, config: Config, toggle: boolean = false) {
   const transNodes = nodes.filter(node => isTransNode(node))
   if (transNodes.length === 0) {

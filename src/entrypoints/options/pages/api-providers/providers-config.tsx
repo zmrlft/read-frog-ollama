@@ -32,10 +32,10 @@ export function ProvidersConfig() {
         </div>
       )}
       description={(
-        <p className="text-sm text-muted-foreground">
+        <>
           {i18n.t('options.apiProviders.description')}
           <Promotion className="mt-2" />
-        </p>
+        </>
       )}
       className="lg:flex-col"
     >
