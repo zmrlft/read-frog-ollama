@@ -4,6 +4,10 @@ on:
   pull_request:
     branches:
       - main
+  pull_request_target:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
 
 jobs:
   test-and-build:
@@ -16,6 +20,8 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
