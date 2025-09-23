@@ -21,7 +21,7 @@
     "syncpack:lint": "syncpack lint",
     "syncpack:fix": "syncpack fix-mismatches",
     "prepare": "husky",
-    "release": "SKIP_FREE_API=true changeset tag && git push origin --tags",
+    "release": "changeset tag && git push origin --tags",
     "test": "turbo test",
     "type-check": "turbo type-check",
     "zip": "turbo zip"

@@ -42,6 +42,7 @@ jobs:
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SKIP_FREE_API: true
 
       - name: Send Discord Notification
         if: steps.changesets.outputs.published == 'true'
