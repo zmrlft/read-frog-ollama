@@ -257,7 +257,7 @@ describe('translate', () => {
         await removeOrShowPageTranslation('bilingual', true)
 
         expectNodeLabels(node, [BLOCK_ATTRIBUTE])
-        expectNodeLabels(node.children[0], [BLOCK_ATTRIBUTE])
+        expectNodeLabels(node.children[0], [INLINE_ATTRIBUTE])
         expectNodeLabels(node.children[0].children[0], [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
         const wrapper = expectTranslationWrapper(node, 'bilingual')
         expect(wrapper).toBe(node.childNodes[0].childNodes[0].childNodes[1])
@@ -277,7 +277,7 @@ describe('translate', () => {
         await removeOrShowPageTranslation('translationOnly', true)
 
         expectNodeLabels(node, [BLOCK_ATTRIBUTE])
-        expectNodeLabels(node.children[0], [BLOCK_ATTRIBUTE])
+        expectNodeLabels(node.children[0], [INLINE_ATTRIBUTE])
         expectNodeLabels(node.children[0].children[0], [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
         const wrapper = expectTranslationWrapper(node, 'translationOnly')
         expect(wrapper).toBe(node.childNodes[0].childNodes[0].childNodes[0])
@@ -722,6 +722,68 @@ describe('translate', () => {
         await removeOrShowPageTranslation('translationOnly', true)
         expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
         expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}`)
+      })
+    })
+    describe('inline node has only one block node child', () => {
+      // Github issue: https://github.com/mengxi-ream/read-frog/issues/530
+      it('bilingual mode: should insert wrapper after the block node', async () => {
+        render(
+          <div data-testid="test-node">
+            {MOCK_ORIGINAL_TEXT}
+            <span style={{ display: 'inline' }}><div style={{ display: 'block' }}>{MOCK_ORIGINAL_TEXT}</div></span>
+            <span style={{ display: 'inline' }}>{MOCK_ORIGINAL_TEXT}</span>
+          </div>,
+        )
+        const node = screen.getByTestId('test-node')
+        await removeOrShowPageTranslation('bilingual', true)
+
+        expectNodeLabels(node, [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+        expectNodeLabels(node.children[1], [INLINE_ATTRIBUTE])
+        const wrapper = expectTranslationWrapper(node, 'bilingual')
+        expect(wrapper).toBe(node.lastChild)
+        expectTranslatedContent(wrapper, BLOCK_CONTENT_CLASS)
+
+        await removeOrShowPageTranslation('bilingual', true)
+        expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+        expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}`)
+      })
+      it('translation only mode: should replace inline nodes with single wrapper', async () => {
+        render(
+          <div data-testid="test-node">
+            {MOCK_ORIGINAL_TEXT}
+            <span style={{ display: 'inline' }}><div style={{ display: 'block' }}>{MOCK_ORIGINAL_TEXT}</div></span>
+            <span style={{ display: 'inline' }}>{MOCK_ORIGINAL_TEXT}</span>
+          </div>,
+        )
+        const node = screen.getByTestId('test-node')
+        await removeOrShowPageTranslation('translationOnly', true)
+
+        expectNodeLabels(node, [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+        const wrapper = expectTranslationWrapper(node, 'translationOnly')
+        expect(wrapper).toBe(node.childNodes[0])
+
+        await removeOrShowPageTranslation('translationOnly', true)
+        expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+        expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}`)
+      })
+      it('should treat inline element with only one block child as inline (not block)', async () => {
+        render(
+          <div data-testid="test-node">
+            <span style={{ display: 'inline' }}>
+              {/* whitespace nodes should not count as meaningful children */}
+              {'\n  '}
+              <div style={{ display: 'block' }}>{MOCK_ORIGINAL_TEXT}</div>
+              {'\n  '}
+            </span>
+          </div>,
+        )
+        const node = screen.getByTestId('test-node')
+        const inlineSpan = node.children[0] as HTMLElement
+        await removeOrShowPageTranslation('bilingual', true)
+
+        // The span should be labeled as INLINE, not BLOCK, because it has only one meaningful child
+        expectNodeLabels(inlineSpan, [INLINE_ATTRIBUTE])
+        expectNodeLabels(inlineSpan.children[0], [BLOCK_ATTRIBUTE])
       })
     })
   })
