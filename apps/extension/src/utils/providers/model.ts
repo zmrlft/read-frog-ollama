@@ -17,6 +17,7 @@ import { createReplicate } from '@ai-sdk/replicate'
 import { createTogetherAI } from '@ai-sdk/togetherai'
 import { createVercel } from '@ai-sdk/vercel'
 import { createXai } from '@ai-sdk/xai'
+import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 import { isCustomLLMProvider } from '@/types/config/provider'
 import { getLLMTranslateProvidersConfig, getProviderConfigById } from '../config/helpers'
 import { CONFIG_STORAGE_KEY } from '../constants/config'
@@ -25,6 +26,7 @@ interface ProviderFactoryMap {
   siliconflow: typeof createOpenAICompatible
   tensdaq: typeof createOpenAICompatible
   ai302: typeof createOpenAICompatible
+  openrouter: typeof createOpenRouter
   openaiCompatible: typeof createOpenAICompatible
   openai: typeof createOpenAI
   deepseek: typeof createDeepSeek
@@ -48,6 +50,7 @@ const CREATE_AI_MAPPER: ProviderFactoryMap = {
   siliconflow: createOpenAICompatible,
   tensdaq: createOpenAICompatible,
   ai302: createOpenAICompatible,
+  openrouter: createOpenRouter,
   openaiCompatible: createOpenAICompatible,
   openai: createOpenAI,
   deepseek: createDeepSeek,

@@ -25,6 +25,11 @@ export const DEFAULT_READ_MODELS: ReadModels = {
     isCustomModel: false,
     customModel: null,
   },
+  openrouter: {
+    model: 'deepseek/deepseek-chat-v3.1:free',
+    isCustomModel: false,
+    customModel: null,
+  },
   openaiCompatible: {
     model: 'use-custom-model',
     isCustomModel: true,
@@ -125,6 +130,11 @@ export const DEFAULT_TRANSLATE_MODELS: TranslateLLMModels = {
   },
   ai302: {
     model: 'gpt-4.1-mini',
+    isCustomModel: false,
+    customModel: null,
+  },
+  openrouter: {
+    model: 'x-ai/grok-4-fast:free',
     isCustomModel: false,
     customModel: null,
   },
@@ -460,6 +470,17 @@ export const DEFAULT_PROVIDER_CONFIG = {
       translate: DEFAULT_TRANSLATE_MODELS.vercel,
     },
   },
+  openrouter: {
+    id: 'openrouter-default',
+    name: 'OpenRouter',
+    description: i18n.t('options.apiProviders.providers.description.openrouter'),
+    enabled: true,
+    provider: 'openrouter',
+    models: {
+      read: DEFAULT_READ_MODELS.openrouter,
+      translate: DEFAULT_TRANSLATE_MODELS.openrouter,
+    },
+  },
 } as const satisfies Record<AllProviderNames, ProviderConfig>
 
 export const DEFAULT_PROVIDER_CONFIG_LIST: ProvidersConfig = [
@@ -507,6 +528,10 @@ export const PROVIDER_ITEMS: Record<AllProviderNames, { logo: (isDark: boolean) 
     ai302: {
       logo: getLobeIconsCDNUrlFn('ai302-color'),
       name: '302.AI',
+    },
+    openrouter: {
+      logo: getLobeIconsCDNUrlFn('openrouter'),
+      name: 'OpenRouter',
     },
     openaiCompatible: {
       logo: (isDark: boolean) => isDark ? openaiCompatibleLogoDark : openaiCompatibleLogoLight,

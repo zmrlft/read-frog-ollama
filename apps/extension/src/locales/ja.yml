@@ -76,7 +76,7 @@ options:
       description:
         openai: GPT-4oなどのモデルを提供
         deepseek: 中国国内での使用を推奨
-        openrouter: 複数のLLMプロバイダを統合するインターフェース
+        openrouter: 複数のLLMプロバイダの統合インターフェース、従量課金制
         ollama: ローカル大規模言語モデルサービス
         gemini: 高度な推論能力を持つGoogleの主力AIモデル
         anthropic: 安全性と推論能力に優れたClaudeモデル
