@@ -77,7 +77,7 @@ options:
       description:
         openai: 提供 GPT-4o 等模型
         deepseek: 推荐在中国使用
-        openrouter: 多个 LLM 提供商的统一接口
+        openrouter: 多个 LLM 提供商的统一接口，按使用量付费
         ollama: 本地大模型服务
         gemini: 具有先进推理能力的谷歌旗舰 AI 模型
         anthropic: 以安全性和推理能力著称的 Claude 模型

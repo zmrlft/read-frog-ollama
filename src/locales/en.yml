@@ -77,7 +77,7 @@ options:
       description:
         openai: Provides models like GPT-4o
         deepseek: Recommend to use in China
-        openrouter: The unified interface for multiple LLM providers
+        openrouter: Unified interface for multiple LLM providers with pay-per-use pricing
         ollama: Local LLM
         gemini: Google's flagship AI models with advanced reasoning capabilities
         anthropic: Claude models known for safety and reasoning excellence
