@@ -106,7 +106,12 @@ export function walkAndLabelElement(
     element.setAttribute(PARAGRAPH_ATTRIBUTE, '')
   }
 
-  if (hasBlockNodeChild || isShallowBlockHTMLElement(element)) {
+  const meaningfulChildCount = Array.from(element.childNodes).filter(child =>
+    child.nodeType === Node.ELEMENT_NODE
+    || (child.nodeType === Node.TEXT_NODE && child.textContent?.trim()),
+  ).length
+
+  if ((hasBlockNodeChild && meaningfulChildCount > 1) || isShallowBlockHTMLElement(element)) {
     element.setAttribute(BLOCK_ATTRIBUTE, '')
     return 'isOrHasBlockNode'
   }
