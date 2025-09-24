@@ -1,9 +1,9 @@
 import { Icon } from '@iconify/react'
 import { useAtomValue } from 'jotai'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useImperativeHandle, useRef } from 'react'
 import { MARGIN } from '@/utils/constants/selection'
-import { mouseClickPositionAtom, selectionContentAtom } from './atom'
-import { useDraggable } from './use-draggable'
+import { mouseClickPositionAtom, selectionContentAtom } from '../atom'
+import { useDraggable } from '../use-draggable'
 
 interface PopoverWrapperProps {
   title: string
@@ -12,17 +12,33 @@ interface PopoverWrapperProps {
   onClose?: () => void
   isVisible: boolean
   setIsVisible: (isVisible: boolean) => void
+  ref?: React.Ref<PopoverWrapperRef>
 }
 
-export function PopoverWrapper({ title, icon, children, onClose, isVisible, setIsVisible }: PopoverWrapperProps) {
+export interface PopoverWrapperRef {
+  scrollToBottom: () => void
+}
+
+export function PopoverWrapper({ title, icon, children, onClose, isVisible, setIsVisible, ref }: PopoverWrapperProps) {
   const mouseClickPosition = useAtomValue(mouseClickPositionAtom)
   const selectionContent = useAtomValue(selectionContentAtom)
+  const contentRef = useRef<HTMLDivElement>(null)
 
   const { dragRef, containerRef: popoverRef, style: popoverStyle, isDragging } = useDraggable({
     initialPosition: mouseClickPosition || { x: 0, y: 0 },
     margin: MARGIN,
     isVisible,
   })
+
+  useImperativeHandle(ref, () => ({
+    scrollToBottom: () => {
+      requestAnimationFrame(() => {
+        if (contentRef.current) {
+          contentRef.current.scrollTop = contentRef.current.scrollHeight
+        }
+      })
+    },
+  }), [])
 
   const handleClose = useCallback(() => {
     setIsVisible(false)
@@ -48,15 +64,44 @@ export function PopoverWrapper({ title, icon, children, onClose, isVisible, setI
     }
   }, [handleClose, popoverRef])
 
+  // Handle scroll-through issues
+  useEffect(() => {
+    const contentElement = contentRef.current
+    if (!contentElement)
+      return
+
+    const handleWheel = (e: WheelEvent) => {
+      const { scrollTop, scrollHeight, clientHeight } = contentElement
+
+      // Prevent scroll-through when at boundaries
+      if ((e.deltaY < 0 && scrollTop === 0)
+        || (e.deltaY > 0 && scrollTop + clientHeight >= scrollHeight - 1)) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+    }
+
+    // Add non-passive event listeners
+    contentElement.addEventListener('wheel', handleWheel, { passive: false })
+
+    return () => {
+      contentElement.removeEventListener('wheel', handleWheel)
+    }
+  }, [isVisible])
+
   if (!isVisible || !mouseClickPosition || !selectionContent) {
     return null
   }
 
   return (
     <div
-      className="fixed z-[2147483647] bg-white dark:bg-zinc-800 border rounded-lg w-[300px] shadow-lg"
+      className="fixed z-[2147483647] bg-white dark:bg-zinc-800 border rounded-lg w-[500px] shadow-lg flex flex-col"
       ref={popoverRef as React.RefObject<HTMLDivElement>}
       style={popoverStyle}
+      onWheel={(e) => {
+        // Prevent scroll-through to background page
+        e.stopPropagation()
+      }}
     >
       <div
         ref={dragRef as React.RefObject<HTMLDivElement>}
@@ -84,7 +129,12 @@ export function PopoverWrapper({ title, icon, children, onClose, isVisible, setI
           <Icon icon="tabler:x" strokeWidth={1} className="size-4 text-zinc-600 dark:text-zinc-400" />
         </button>
       </div>
-      {children}
+      <div
+        ref={contentRef}
+        className="flex-1 overflow-y-auto"
+      >
+        {children}
+      </div>
     </div>
   )
 }

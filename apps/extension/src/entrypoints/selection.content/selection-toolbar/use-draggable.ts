@@ -149,6 +149,7 @@ export function useDraggable(options: UseDraggableOptions): UseDraggableReturn {
     containerRef,
     style: {
       position: 'fixed',
+      maxHeight: `calc(100vh - ${margin * 2}px)`,
     },
   }
 }

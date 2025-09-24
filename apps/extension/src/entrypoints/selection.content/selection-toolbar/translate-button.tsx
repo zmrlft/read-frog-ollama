@@ -18,7 +18,7 @@ import { getTranslatePrompt } from '@/utils/prompts/translate'
 import { getTranslateModelById } from '@/utils/providers/model'
 import { trpc } from '@/utils/trpc/client'
 import { isTooltipVisibleAtom, isTranslatePopoverVisibleAtom, mouseClickPositionAtom, selectionContentAtom } from './atom'
-import { PopoverWrapper } from './popover-wrapper'
+import { PopoverWrapper } from './components/popover-wrapper'
 
 export function TranslateButton() {
   // const selectionContent = useAtomValue(selectionContentAtom)
