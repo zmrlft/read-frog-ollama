@@ -84,7 +84,7 @@ options:
         xai: 马斯克的 AI 公司，提供具有实时数据访问能力的 Grok 模型
         siliconflow: 面向中国和国际模型的高性能推理平台
         tensdaq: 革命性竞价 AI MaaS 平台，价格由市场供需决定，告别高成本固定定价
-        ai302: 在一个平台提供多种高端模型的综合 AI 平台
+        ai302: 提供最新、全面的模型和按量付费 API
         openaiCompatible: OpenAI API 兼容的第三方
         deeplx: 非官方 DeepL API
         amazonBedrock: 面向企业级基础模型的 AWS 托管服务
