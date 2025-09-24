@@ -1,6 +1,7 @@
 import { atom } from 'jotai'
 
 export const selectionContentAtom = atom<string | null>(null)
+export const selectionRangeAtom = atom<Range | null>(null)
 export const isTooltipVisibleAtom = atom<boolean>(false)
 
 // 新增：管理 translate popover 的显示状态

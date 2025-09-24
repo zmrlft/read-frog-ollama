@@ -2,7 +2,8 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { MARGIN } from '@/utils/constants/selection'
-import { isTooltipVisibleAtom, selectionContentAtom } from './atom'
+import { AiButton, AiPopover } from './ai-button'
+import { isTooltipVisibleAtom, selectionContentAtom, selectionRangeAtom } from './atom'
 import { TranslateButton, TranslatePopover } from './translate-button'
 
 export function SelectionToolbar() {
@@ -12,6 +13,7 @@ export function SelectionToolbar() {
   const isDraggingFromTooltipRef = useRef(false) // track if dragging started from tooltip
   const [isTooltipVisible, setIsTooltipVisible] = useAtom(isTooltipVisibleAtom)
   const setSelectionContent = useSetAtom(selectionContentAtom)
+  const setSelectionRange = useSetAtom(selectionRangeAtom)
   const selectionToolbar = useAtomValue(configFieldsAtomMap.selectionToolbar)
 
   const updatePosition = useCallback(() => {
@@ -62,6 +64,7 @@ export function SelectionToolbar() {
 
         if (selection && selectedText.length > 0) {
           setSelectionContent(selectedText)
+          setSelectionRange(selection.getRangeAt(0))
           // calculate the position relative to the document
           const scrollY = window.scrollY
           const scrollX = window.scrollX
@@ -125,7 +128,7 @@ export function SelectionToolbar() {
         cancelAnimationFrame(animationFrameId)
       }
     }
-  }, [isTooltipVisible, setSelectionContent, setIsTooltipVisible, updatePosition])
+  }, [isTooltipVisible, setSelectionContent, setIsTooltipVisible, setSelectionRange, updatePosition])
 
   return (
     <div ref={tooltipContainerRef}>
@@ -134,9 +137,11 @@ export function SelectionToolbar() {
           ref={tooltipRef}
           className="absolute z-[2147483647] bg-zinc-200 dark:bg-zinc-800 rounded-sm shadow-lg overflow-hidden flex items-center"
         >
+          <AiButton />
           <TranslateButton />
         </div>
       )}
+      <AiPopover />
       <TranslatePopover />
     </div>
   )
