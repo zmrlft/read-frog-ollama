@@ -114,6 +114,11 @@ export const DEFAULT_READ_MODELS: ReadModels = {
     isCustomModel: false,
     customModel: null,
   },
+  ollama: {
+    model: 'deepseek-v3',
+    isCustomModel: false,
+    customModel: null,
+  },
 }
 
 export const DEFAULT_TRANSLATE_MODELS: TranslateLLMModels = {
@@ -222,6 +227,11 @@ export const DEFAULT_TRANSLATE_MODELS: TranslateLLMModels = {
     isCustomModel: false,
     customModel: null,
   },
+  ollama: {
+    model: 'gemma3:4b',
+    isCustomModel: false,
+    customModel: null,
+  },
 }
 
 export const PROVIDER_ITEMS: Record<AllProviderNames, { logo: (isDark: boolean) => string, name: string }>
@@ -321,6 +331,10 @@ export const PROVIDER_ITEMS: Record<AllProviderNames, { logo: (isDark: boolean) 
     tensdaq: {
       logo: () => tensdaqLogoColor,
       name: 'Tensdaq',
+    },
+    ollama: {
+      logo: getLobeIconsCDNUrlFn('ollama'),
+      name: 'Ollama',
     },
   }
 
@@ -578,6 +592,17 @@ export const DEFAULT_PROVIDER_CONFIG = {
     models: {
       read: DEFAULT_READ_MODELS.openrouter,
       translate: DEFAULT_TRANSLATE_MODELS.openrouter,
+    },
+  },
+  ollama: {
+    id: 'ollama-default',
+    name: PROVIDER_ITEMS.ollama.name,
+    description: i18n.t('options.apiProviders.providers.description.ollama'),
+    enabled: true,
+    provider: 'ollama',
+    models: {
+      read: DEFAULT_READ_MODELS.ollama,
+      translate: DEFAULT_TRANSLATE_MODELS.ollama,
     },
   },
 } as const satisfies Record<AllProviderNames, ProviderConfig>
