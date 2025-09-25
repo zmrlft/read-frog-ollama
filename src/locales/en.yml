@@ -52,7 +52,7 @@ options:
       title: Add New Provider
       description: Choose an API provider to add to your configuration.
       groups:
-        llmProviders: LLM Providers
+        llmProviders: Built-in LLM Providers
         customProviders: OpenAI Compatible Custom Providers
         pureTranslationProviders: Pure Translation Providers
     form:
