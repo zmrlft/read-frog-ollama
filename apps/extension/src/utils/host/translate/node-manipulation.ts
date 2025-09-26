@@ -38,6 +38,24 @@ const originalContentMap = new Map<Element, string>()
 // Pre-compiled regex for better performance - removes all mark attributes
 const MARK_ATTRIBUTES_REGEX = new RegExp(`\\s*(?:${Array.from(MARK_ATTRIBUTES).join('|')})(?:=['""][^'"]*['""]|=[^\\s>]*)?`, 'g')
 
+// Helper function to check if content is purely numeric
+function isNumericContent(text: string): boolean {
+  // Remove whitespace and check if remaining content is numeric
+  // Allow numbers, decimals, commas, and common numeric separators
+  const cleanedText = text.trim()
+  if (!cleanedText)
+    return false
+
+  // Pattern matches numbers with optional thousand separators and decimal points
+  // Examples: "123", "1,234", "1,234.56", "1 234", "1.234,56" (European format)
+  const numericPattern = /^[\d\s,.-]+$/
+  if (!numericPattern.test(cleanedText))
+    return false
+
+  // Additional check: ensure there's at least one digit
+  return /\d/.test(cleanedText)
+}
+
 export async function removeOrShowNodeTranslation(point: Point, config: Config) {
   const node = findNearestAncestorBlockNodeAt(point)
 
@@ -107,7 +125,7 @@ export async function translateNodesBilingualMode(nodes: ChildNode[], walkId: st
     }
 
     const textContent = transNodes.map(node => extractTextContent(node, config)).join(' ').trim()
-    if (!textContent)
+    if (!textContent || isNumericContent(textContent))
       return
 
     const ownerDoc = getOwnerDocument(targetNode)
@@ -231,7 +249,7 @@ export async function translateNodeTranslationOnlyMode(nodes: ChildNode[], walkI
     }
 
     const innerTextContent = transNodes.map(node => extractTextContent(node, config)).join(' ')
-    if (!innerTextContent.trim())
+    if (!innerTextContent.trim() || isNumericContent(innerTextContent))
       return
 
     const cleanTextContent = (content: string): string => {
