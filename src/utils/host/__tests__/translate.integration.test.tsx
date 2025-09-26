@@ -858,4 +858,150 @@ describe('translate', () => {
       expect(node.textContent).toBe(MOCK_ORIGINAL_TEXT)
     })
   })
+
+  describe('numeric content handling', () => {
+    describe('bilingual mode', () => {
+      it('should not translate pure numbers', async () => {
+        render(
+          <div data-testid="test-node">
+            12345
+          </div>,
+        )
+        const node = screen.getByTestId('test-node')
+        await removeOrShowPageTranslation('bilingual', true)
+
+        // Should not have any translation wrapper
+        expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+        expect(node.textContent).toBe('12345')
+      })
+
+      it('should not translate numbers with thousand separators', async () => {
+        render(
+          <div data-testid="test-node">
+            1,234,567
+          </div>,
+        )
+        const node = screen.getByTestId('test-node')
+        await removeOrShowPageTranslation('bilingual', true)
+
+        expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+        expect(node.textContent).toBe('1,234,567')
+      })
+
+      it('should not translate decimal numbers', async () => {
+        render(
+          <div data-testid="test-node">
+            3.14159
+          </div>,
+        )
+        const node = screen.getByTestId('test-node')
+        await removeOrShowPageTranslation('bilingual', true)
+
+        expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+        expect(node.textContent).toBe('3.14159')
+      })
+
+      it('should translate text with numbers mixed in', async () => {
+        render(
+          <div data-testid="test-node">
+            原文 123 文字
+          </div>,
+        )
+        const node = screen.getByTestId('test-node')
+        await removeOrShowPageTranslation('bilingual', true)
+
+        // Should have translation wrapper since it contains text
+        const wrapper = expectTranslationWrapper(node, 'bilingual')
+        expectTranslatedContent(wrapper, BLOCK_CONTENT_CLASS)
+      })
+    })
+
+    describe('translation only mode', () => {
+      it('should not translate pure numbers', async () => {
+        render(
+          <div data-testid="test-node">
+            67890
+          </div>,
+        )
+        const node = screen.getByTestId('test-node')
+        await removeOrShowPageTranslation('translationOnly', true)
+
+        // Should not have any translation wrapper
+        expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+        expect(node.textContent).toBe('67890')
+      })
+
+      it('should not translate numbers with spaces', async () => {
+        render(
+          <div data-testid="test-node">
+            1 234 567
+          </div>,
+        )
+        const node = screen.getByTestId('test-node')
+        await removeOrShowPageTranslation('translationOnly', true)
+
+        expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+        expect(node.textContent).toBe('1 234 567')
+      })
+
+      it('should not translate European format numbers', async () => {
+        render(
+          <div data-testid="test-node">
+            1.234,56
+          </div>,
+        )
+        const node = screen.getByTestId('test-node')
+        await removeOrShowPageTranslation('translationOnly', true)
+
+        expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+        expect(node.textContent).toBe('1.234,56')
+      })
+
+      it('should translate text with numbers', async () => {
+        render(
+          <div data-testid="test-node">
+            原文包含数字 999
+          </div>,
+        )
+        const node = screen.getByTestId('test-node')
+        await removeOrShowPageTranslation('translationOnly', true)
+
+        // Should have translation wrapper since it contains text
+        const wrapper = expectTranslationWrapper(node, 'translationOnly')
+        expect(wrapper).toBeTruthy()
+      })
+    })
+
+    describe('numeric content with multiple nodes', () => {
+      it('bilingual mode: should not translate when all nodes contain only numbers', async () => {
+        render(
+          <div data-testid="test-node">
+            <span style={{ display: 'inline' }}>123</span>
+            <span style={{ display: 'inline' }}>456</span>
+            <span style={{ display: 'inline' }}>789</span>
+          </div>,
+        )
+        const node = screen.getByTestId('test-node')
+        await removeOrShowPageTranslation('bilingual', true)
+
+        expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+        expect(node.textContent).toBe('123456789')
+      })
+
+      it('translation only mode: should not translate when all nodes contain only numbers', async () => {
+        render(
+          <div data-testid="test-node">
+            <span style={{ display: 'inline' }}>100</span>
+            <span style={{ display: 'inline' }}>200</span>
+            <span style={{ display: 'inline' }}>300</span>
+          </div>,
+        )
+        const node = screen.getByTestId('test-node')
+        await removeOrShowPageTranslation('translationOnly', true)
+
+        expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+        expect(node.textContent).toBe('100200300')
+      })
+    })
+  })
 })
