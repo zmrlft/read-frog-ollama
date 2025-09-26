@@ -27,6 +27,8 @@ export function isAnyAPIKeyForReadProviders(providersConfig: ProvidersConfig) {
   const readProvidersConfig = providersConfig.filter(isReadProviderConfig)
   return readProvidersConfig.some((providerConfig) => {
     return providerConfig.apiKey
+  }) || readProvidersConfig.some((providerConfig) => {
+    return providerConfig.provider === 'ollama'
   })
 }
 
