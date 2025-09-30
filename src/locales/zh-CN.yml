@@ -104,6 +104,7 @@ options:
         vercel: 针对网页内容翻译和分析优化的 AI 模型
     apiKey:
       showAPIKey: 显示 API Key
+    howToConfigure: 如何配置?
     testConnection:
       button: 测试连接
       testing: 测试中...

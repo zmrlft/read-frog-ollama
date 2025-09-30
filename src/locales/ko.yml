@@ -103,6 +103,7 @@ options:
         vercel: 웹 콘텐츠 번역과 분석에 최적화된 AI 모델
     apiKey:
       showAPIKey: API Key 표시
+    howToConfigure: 구성 방법은?
     testConnection:
       button: 연결 테스트
       testing: 테스트 중...
