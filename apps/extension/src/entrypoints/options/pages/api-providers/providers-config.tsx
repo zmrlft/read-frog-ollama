@@ -56,16 +56,18 @@ function Promotion({ className }: { className?: string }) {
   }
 
   return (
-    <div className={cn(className, 'flex items-center gap-2')}>
+    <div className={cn('flex items-center gap-2 flex-wrap', className)}>
       <p className="text-sm text-muted-foreground">{i18n.t('options.apiProviders.promotion.ai302.description')}</p>
-      <Button asChild size="sm" className="bg-yellow-500 hover:bg-yellow-500/90">
-        <a href="https://share.302.ai/8o2r7P" target="_blank" rel="noreferrer noopener">
-          {i18n.t('options.apiProviders.promotion.ai302.action')}
-        </a>
-      </Button>
-      <Button size="sm" variant="outline" onClick={handleAddAI302Provider} className="text-black dark:text-white">
-        {i18n.t('options.apiProviders.promotion.ai302.addProvider')}
-      </Button>
+      <div className="flex items-center gap-2">
+        <Button asChild size="sm" className="bg-yellow-500 hover:bg-yellow-500/90">
+          <a href="https://share.302.ai/8o2r7P" target="_blank" rel="noreferrer noopener">
+            {i18n.t('options.apiProviders.promotion.ai302.action')}
+          </a>
+        </Button>
+        <Button size="sm" variant="outline" onClick={handleAddAI302Provider} className="text-black dark:text-white">
+          {i18n.t('options.apiProviders.promotion.ai302.addProvider')}
+        </Button>
+      </div>
     </div>
   )
 }
