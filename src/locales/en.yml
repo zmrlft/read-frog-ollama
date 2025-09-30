@@ -52,8 +52,8 @@ options:
       title: Add New Provider
       description: Choose an API provider to add to your configuration.
       groups:
-        llmProviders: Built-in LLM Providers
-        customProviders: OpenAI Compatible Custom Providers
+        builtInProviders: Built-in LLM Providers
+        openaiCompatibleProviders: OpenAI Compatible Custom Providers
         pureTranslationProviders: Pure Translation Providers
     form:
       fields:

@@ -51,8 +51,8 @@ options:
       title: 新しいプロバイダーを追加
       description: 設定に追加するAPIプロバイダーを選択してください
       groups:
-        llmProviders: 組み込みLLMプロバイダー
-        customProviders: OpenAI互換カスタムプロバイダー
+        builtInProviders: 組み込みLLMプロバイダー
+        openaiCompatibleProviders: OpenAI互換カスタムプロバイダー
         pureTranslationProviders: 純粋翻訳プロバイダー
     form:
       fields:

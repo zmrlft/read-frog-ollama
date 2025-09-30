@@ -52,8 +52,8 @@ options:
       title: 添加新提供商
       description: 选择要添加到配置中的 API 提供商
       groups:
-        llmProviders: 内置 LLM 提供商
-        customProviders: OpenAI 兼容自定义提供商
+        builtInProviders: 内置 LLM 提供商
+        openaiCompatibleProviders: OpenAI 兼容自定义提供商
         pureTranslationProviders: 纯翻译提供商
     form:
       fields:
