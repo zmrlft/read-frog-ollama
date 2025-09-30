@@ -7,6 +7,7 @@ import tensdaqLogoColor from '@/assets/providers/tensdaq-color.svg'
 import { API_PROVIDER_TYPES, CUSTOM_LLM_PROVIDER_TYPES, NON_API_TRANSLATE_PROVIDERS, NON_API_TRANSLATE_PROVIDERS_MAP, NON_CUSTOM_LLM_PROVIDER_TYPES, PURE_API_PROVIDER_TYPES, PURE_TRANSLATE_PROVIDERS, READ_PROVIDER_TYPES, TRANSLATE_PROVIDER_TYPES } from '@/types/config/provider'
 import { omit, pick } from '@/types/utils'
 import { getLobeIconsCDNUrlFn } from '../logo'
+import { WEBSITE_URL } from './url'
 
 export const DEFAULT_READ_MODELS: ReadModels = {
   siliconflow: {
@@ -269,7 +270,7 @@ export const PROVIDER_ITEMS: Record<AllProviderTypes, { logo: (isDark: boolean) 
     openaiCompatible: {
       logo: () => customProviderLogo,
       name: 'Custom Provider',
-      website: 'http://www.readfrog.app/tutorial/providers/openai-compatible',
+      website: `${WEBSITE_URL}/tutorial/providers/openai-compatible`,
     },
     openai: {
       logo: getLobeIconsCDNUrlFn('openai'),
