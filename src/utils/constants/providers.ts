@@ -51,7 +51,7 @@ export const DEFAULT_READ_MODELS: ReadModels = {
     customModel: null,
   },
   anthropic: {
-    model: 'claude-3-5-sonnet-20241022',
+    model: 'claude-sonnet-4-5',
     isCustomModel: false,
     customModel: null,
   },
@@ -164,7 +164,7 @@ export const DEFAULT_TRANSLATE_MODELS: TranslateLLMModels = {
     customModel: null,
   },
   anthropic: {
-    model: 'claude-3-5-haiku-20241022',
+    model: 'claude-sonnet-4-5',
     isCustomModel: false,
     customModel: null,
   },
@@ -260,7 +260,7 @@ export const PROVIDER_ITEMS: Record<AllProviderTypes, { logo: (isDark: boolean) 
     ai302: {
       logo: getLobeIconsCDNUrlFn('ai302-color'),
       name: '302.AI',
-      website: 'https://302.ai/',
+      website: 'https://share.302.ai/8o2r7P',
     },
     openrouter: {
       logo: getLobeIconsCDNUrlFn('openrouter'),
@@ -355,7 +355,7 @@ export const PROVIDER_ITEMS: Record<AllProviderTypes, { logo: (isDark: boolean) 
     tensdaq: {
       logo: () => tensdaqLogoColor,
       name: 'Tensdaq',
-      website: 'https://tensdaq.ai',
+      website: 'https://dashboard.x-aio.com/zh/register?ref=c356c1daba9a4641a18e',
     },
     ollama: {
       logo: getLobeIconsCDNUrlFn('ollama'),
