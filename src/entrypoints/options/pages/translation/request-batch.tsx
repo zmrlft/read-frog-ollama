@@ -1,7 +1,7 @@
 import type { BatchQueueConfig } from '@/types/config/translate'
 import { i18n } from '#imports'
 import { Input } from '@repo/ui/components/input'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { toast } from 'sonner'
 import { batchQueueConfigSchema } from '@/types/config/translate'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
@@ -13,6 +13,12 @@ import { FieldWithLabel } from '../../components/field-with-label'
 type KeyOfBatchQueueConfig = keyof BatchQueueConfig
 
 export function RequestBatch() {
+  const betaExperience = useAtomValue(configFieldsAtomMap.betaExperience)
+
+  if (!betaExperience.enabled) {
+    return null
+  }
+
   return (
     <ConfigCard
       title={i18n.t('options.translation.batchQueueConfig.title')}
@@ -34,7 +40,7 @@ function BatchCharactersDescription() {
   return (
     <div className="flex flex-col gap-2">
       <h2>{i18n.t('options.translation.batchQueueConfig.maxCharactersPerBatch.title')}</h2>
-      <p className="text-xs text-gray-500">{i18n.t('options.translation.batchQueueConfig.maxCharactersPerBatch.description')}</p>
+      <p className="text-xs text-muted-foreground">{i18n.t('options.translation.batchQueueConfig.maxCharactersPerBatch.description')}</p>
     </div>
   )
 }
@@ -43,7 +49,7 @@ function BatchSizeDescription() {
   return (
     <div className="flex flex-col gap-2 flex-auto">
       <h2>{i18n.t('options.translation.batchQueueConfig.maxItemsPerBatch.title')}</h2>
-      <p className="text-xs text-gray-500">{i18n.t('options.translation.batchQueueConfig.maxItemsPerBatch.description')}</p>
+      <p className="text-xs text-muted-foreground">{i18n.t('options.translation.batchQueueConfig.maxItemsPerBatch.description')}</p>
     </div>
   )
 }

@@ -48,7 +48,11 @@ export async function initializeConfig() {
     storage.setItem<number>(`local:__configSchemaVersion`, currentVersion),
   ])
 
-  await loadAPIKeyFromEnv()
+  // eslint-disable-next-line turbo/no-undeclared-env-vars
+  if (import.meta.env.DEV) {
+    await loadAPIKeyFromEnv()
+    await enableBetaExperience()
+  }
 }
 
 async function loadAPIKeyFromEnv() {
@@ -57,34 +61,40 @@ async function loadAPIKeyFromEnv() {
     return
   }
 
-  // eslint-disable-next-line turbo/no-undeclared-env-vars
-  if (import.meta.env.DEV) {
-    // Use reduce to maintain type safety with the new array-based providersConfig
-    const updatedProvidersConfig: ProvidersConfig = config.providersConfig.reduce<ProvidersConfig>(
-      (acc, providerConfig) => {
-        // Only add API key for providers that support it
-        if (isAPIProviderConfig(providerConfig)) {
-          const apiKeyEnvName = `WXT_${providerConfig.provider.toUpperCase()}_API_KEY`
-          const envApiKey = import.meta.env[apiKeyEnvName] as string | undefined
+  // Use reduce to maintain type safety with the new array-based providersConfig
+  const updatedProvidersConfig: ProvidersConfig = config.providersConfig.reduce<ProvidersConfig>(
+    (acc, providerConfig) => {
+      // Only add API key for providers that support it
+      if (isAPIProviderConfig(providerConfig)) {
+        const apiKeyEnvName = `WXT_${providerConfig.provider.toUpperCase()}_API_KEY`
+        const envApiKey = import.meta.env[apiKeyEnvName] as string | undefined
 
-          // If env variable exists, update the config with the API key
-          if (envApiKey) {
-            return [...acc, {
-              ...providerConfig,
-              apiKey: envApiKey,
-            }]
-          }
+        // If env variable exists, update the config with the API key
+        if (envApiKey) {
+          return [...acc, {
+            ...providerConfig,
+            apiKey: envApiKey,
+          }]
         }
+      }
 
-        // Keep the original config if no API key needed or not found
-        return [...acc, providerConfig]
-      },
-      [],
-    )
+      // Keep the original config if no API key needed or not found
+      return [...acc, providerConfig]
+    },
+    [],
+  )
 
-    await storage.setItem(`local:${CONFIG_STORAGE_KEY}`, {
-      ...config,
-      providersConfig: updatedProvidersConfig,
-    })
+  await storage.setItem(`local:${CONFIG_STORAGE_KEY}`, {
+    ...config,
+    providersConfig: updatedProvidersConfig,
+  })
+}
+
+async function enableBetaExperience() {
+  const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`)
+  if (!config) {
+    return
   }
+  config.betaExperience.enabled = true
+  await storage.setItem(`local:${CONFIG_STORAGE_KEY}`, config)
 }

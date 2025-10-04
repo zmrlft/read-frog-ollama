@@ -36,7 +36,7 @@ function CapacityDescription() {
   return (
     <div className="flex flex-col gap-2">
       <h2>{i18n.t('options.translation.requestQueueConfig.capacity.title')}</h2>
-      <p className="text-xs text-gray-500">{i18n.t('options.translation.requestQueueConfig.capacity.description')}</p>
+      <p className="text-xs text-muted-foreground">{i18n.t('options.translation.requestQueueConfig.capacity.description')}</p>
     </div>
   )
 }
@@ -45,7 +45,7 @@ function RateDescription() {
   return (
     <div className="flex flex-col gap-2 flex-auto">
       <h2>{i18n.t('options.translation.requestQueueConfig.rate.title')}</h2>
-      <p className="text-xs text-gray-500">{i18n.t('options.translation.requestQueueConfig.rate.description')}</p>
+      <p className="text-xs text-muted-foreground">{i18n.t('options.translation.requestQueueConfig.rate.description')}</p>
     </div>
   )
 }
