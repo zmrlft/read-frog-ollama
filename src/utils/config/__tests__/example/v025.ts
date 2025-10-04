@@ -1,8 +1,9 @@
 import type { TestSeriesObject } from './types'
+import type { Config } from '@/types/config/config'
 
 export const testSeries: TestSeriesObject = {
   'complex-config-from-v020': {
-    description: 'Add beta experience configuration',
+    description: 'Add batch queue configuration for translation requests',
     config: {
       language: {
         detectedCode: 'spa',
@@ -136,6 +137,10 @@ Translate to {{targetLang}}:
           capacity: 400,
           rate: 8,
         },
+        batchQueueConfig: {
+          maxCharactersPerBatch: 1000,
+          maxItemsPerBatch: 4,
+        },
         translationNodeStyle: 'blur',
         customAutoTranslateShortcutKey: ['alt', 'b'],
       },
@@ -151,10 +156,10 @@ Translate to {{targetLang}}:
       betaExperience: {
         enabled: false,
       },
-    },
+    } satisfies Config,
   },
   'config-from-v022': {
-    description: 'Add beta experience configuration with disabled state',
+    description: 'Add batch queue configuration for translation requests',
     config: {
       floatingButton: {
         disabledFloatingButtonPatterns: [],
@@ -286,11 +291,15 @@ Translate to {{targetLang}}:
           capacity: 200,
           rate: 2,
         },
+        batchQueueConfig: {
+          maxCharactersPerBatch: 1000,
+          maxItemsPerBatch: 4,
+        },
         translationNodeStyle: 'default',
       },
       betaExperience: {
         enabled: false,
       },
-    },
+    } satisfies Config,
   },
 }
