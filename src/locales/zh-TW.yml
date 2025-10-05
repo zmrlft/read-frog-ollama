@@ -30,6 +30,9 @@ popup:
   blog:
     notification: 陪讀蛙更新動態
 options:
+  sidebar:
+    settings: 設定
+    product: 產品
   setAPIKeyWarning:
     please: 請在
     page: 頁設置 API Key
@@ -254,6 +257,8 @@ options:
         description: 此操作將清空您的所有自定義配置，並將其重置為預設值，請確認是否清除。
   whatsNew:
     title: 最近更新
+  survey:
+    title: 你的想法很重要
 side:
   sourceLang: 來源語言
   targetLang: 目標語言

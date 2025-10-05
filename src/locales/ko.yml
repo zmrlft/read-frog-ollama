@@ -29,6 +29,9 @@ popup:
   blog:
     notification: Read Frog의 새로운 소식
 options:
+  sidebar:
+    settings: 설정
+    product: 제품
   setAPIKeyWarning:
     please: API Key를 설정해 주세요
     page: 페이지에서
@@ -253,6 +256,8 @@ options:
         description: 이 작업은 모든 사용자 지정 설정을 지우고 기본값으로 재설정합니다. 삭제하시겠습니까?
   whatsNew:
     title: 새로운 기능
+  survey:
+    title: 의견을 들려주세요
 side:
   sourceLang: 원본 언어
   targetLang: 대상 언어

@@ -30,6 +30,9 @@ popup:
   blog:
     notification: What's new in Read Frog
 options:
+  sidebar:
+    settings: Settings
+    product: Product
   setAPIKeyWarning:
     please: Please set API Key on
     page: page
@@ -254,6 +257,8 @@ options:
         description: This operation will clear all your custom configurations and reset them to default values. Please confirm.
   whatsNew:
     title: What's New
+  survey:
+    title: Your Voice Matters
 side:
   sourceLang: Source Language
   targetLang: Target Language

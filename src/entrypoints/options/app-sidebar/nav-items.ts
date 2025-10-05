@@ -5,11 +5,12 @@ import { FloatingButtonPage } from '../pages/floating-button'
 import { GeneralPage } from '../pages/general'
 import { TranslationPage } from '../pages/translation'
 
-type NavItemTitle = 'general' | 'apiProviders' | 'translation' | 'floatingButton' | 'config' | 'whatsNew'
+type NavItemTitle = 'general' | 'apiProviders' | 'translation' | 'floatingButton' | 'config' | 'whatsNew' | 'survey'
 
 interface ComponentNavItem {
   type: 'component'
   title: NavItemTitle
+  action?: boolean
   url: string
   icon: string
   component: React.ComponentType
@@ -18,6 +19,7 @@ interface ComponentNavItem {
 interface ExternalNavItem {
   type: 'external'
   title: NavItemTitle
+  action?: boolean
   externalUrl: string
   icon: string
 }
@@ -66,7 +68,15 @@ export const PRODUCT_NAV_ITEMS = {
   'whats-new': {
     type: 'external',
     title: 'whatsNew',
+    action: true,
     externalUrl: `${WEBSITE_URL}/blog?latest-indicator=true`,
-    icon: 'tabler:news',
+    icon: 'tabler:sparkles',
+  },
+  'survey': {
+    type: 'external',
+    title: 'survey',
+    action: true,
+    externalUrl: 'https://tally.so/r/m6aRVO',
+    icon: 'tabler:message-question',
   },
 } as const satisfies Record<string, NavItem>

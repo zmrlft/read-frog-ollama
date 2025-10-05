@@ -29,6 +29,9 @@ popup:
   blog:
     notification: 読書カエルの最新情報
 options:
+  sidebar:
+    settings: 設定
+    product: 製品
   setAPIKeyWarning:
     please: 設定ページで
     page: APIキーを設定してください
@@ -252,6 +255,8 @@ options:
         description: この操作は、すべての設定をデフォルト値にリセットします。ご確認ください。
   whatsNew:
     title: 新機能
+  survey:
+    title: 意見を聞かせて
 side:
   sourceLang: ソース言語
   targetLang: 翻訳言語

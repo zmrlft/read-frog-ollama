@@ -19,6 +19,7 @@ import { Link, useLocation } from 'react-router'
 import readFrogLogo from '@/assets/icons/read-frog.png'
 import { getLastViewedBlogDate, getLatestBlogDate, hasNewBlogPost, saveLastViewedBlogDate } from '@/utils/blog'
 import { WEBSITE_URL } from '@/utils/constants/url'
+import { getLastViewedSurvey, hasNewSurvey, saveLastViewedSurvey } from '@/utils/survey'
 import { version } from '../../../../package.json'
 import { AnimatedIndicator } from './animated-indicator'
 import { PRODUCT_NAV_ITEMS, SETTING_NAV_ITEMS } from './nav-items'
@@ -89,6 +90,11 @@ export function AppSidebar() {
     queryFn: () => getLatestBlogDate(`${WEBSITE_URL}/api/blog/latest`, 'en'),
   })
 
+  const { data: lastViewedSurveyUrl } = useQuery({
+    queryKey: ['last-viewed-survey'],
+    queryFn: getLastViewedSurvey,
+  })
+
   const handleWhatsNewClick = async () => {
     if (latestBlogPost) {
       await saveLastViewedBlogDate(latestBlogPost.date)
@@ -96,12 +102,35 @@ export function AppSidebar() {
     }
   }
 
-  const showIndicator = hasNewBlogPost(
+  const handleSurveyClick = async () => {
+    const surveyItem = PRODUCT_NAV_ITEMS.survey
+    if (surveyItem.type === 'external') {
+      await saveLastViewedSurvey(surveyItem.externalUrl)
+      await queryClient.invalidateQueries({ queryKey: ['last-viewed-survey'] })
+    }
+  }
+
+  const showBlogIndicator = hasNewBlogPost(
     lastViewedDate ?? null,
     latestBlogPost?.date ?? null,
     version,
     latestBlogPost?.extensionVersion ?? null,
   )
+
+  const surveyItem = PRODUCT_NAV_ITEMS.survey
+  const showSurveyIndicator = surveyItem.type === 'external'
+    ? hasNewSurvey(lastViewedSurveyUrl ?? null, surveyItem.externalUrl)
+    : false
+
+  const indicatorMap: Record<string, boolean> = {
+    'whats-new': showBlogIndicator,
+    'survey': showSurveyIndicator,
+  }
+
+  const clickHandlerMap: Record<string, () => void> = {
+    'whats-new': handleWhatsNewClick,
+    'survey': handleSurveyClick,
+  }
 
   return (
     <Sidebar collapsible="icon">
@@ -116,7 +145,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent className="group-data-[state=expanded]:px-2 transition-all">
         <SidebarGroup>
-          <SidebarGroupLabel>Settings</SidebarGroupLabel>
+          <SidebarGroupLabel>{i18n.t('options.sidebar.settings')}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {Object.entries(SETTING_NAV_ITEMS).map(([key, item]) =>
@@ -126,19 +155,21 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Product</SidebarGroupLabel>
+          <SidebarGroupLabel>{i18n.t('options.sidebar.product')}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {Object.entries(PRODUCT_NAV_ITEMS).map(([key, item]) =>
-                renderNavItem(
+              {Object.entries(PRODUCT_NAV_ITEMS).map(([key, item]) => {
+                const shouldShowIndicator = indicatorMap[key] ?? false
+                const handleClick = clickHandlerMap[key]
+                return renderNavItem(
                   key,
                   item,
                   location.pathname,
                   open,
-                  key === 'whats-new' && showIndicator,
-                  key === 'whats-new' ? handleWhatsNewClick : undefined,
-                ),
-              )}
+                  item.action && shouldShowIndicator,
+                  item.action ? handleClick : undefined,
+                )
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
