@@ -5,6 +5,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/ui/components/too
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getLastViewedBlogDate, getLatestBlogDate, hasNewBlogPost, saveLastViewedBlogDate } from '@/utils/blog'
 import { WEBSITE_URL } from '@/utils/constants/url'
+import { version } from '../../../../package.json'
 
 export default function BlogNotification() {
   const queryClient = useQueryClient()
@@ -14,20 +15,25 @@ export default function BlogNotification() {
     queryFn: getLastViewedBlogDate,
   })
 
-  const { data: latestBlogDate } = useQuery({
+  const { data: latestBlogPost } = useQuery({
     queryKey: ['latest-blog-date'],
     queryFn: () => getLatestBlogDate(`${WEBSITE_URL}/api/blog/latest`, 'en'),
   })
 
   const handleClick = async () => {
-    if (latestBlogDate) {
-      await saveLastViewedBlogDate(latestBlogDate)
+    if (latestBlogPost) {
+      await saveLastViewedBlogDate(latestBlogPost.date)
       await queryClient.invalidateQueries({ queryKey: ['last-viewed-blog-date'] })
     }
     window.open(`${WEBSITE_URL}/blog?latest-indicator=true`, '_blank')
   }
 
-  const showIndicator = hasNewBlogPost(lastViewedDate ?? null, latestBlogDate ?? null)
+  const showIndicator = hasNewBlogPost(
+    lastViewedDate ?? null,
+    latestBlogPost?.date ?? null,
+    version,
+    latestBlogPost?.extensionVersion ?? null,
+  )
 
   return (
     <Tooltip>

@@ -84,19 +84,24 @@ export function AppSidebar() {
     queryFn: getLastViewedBlogDate,
   })
 
-  const { data: latestBlogDate } = useQuery({
+  const { data: latestBlogPost } = useQuery({
     queryKey: ['latest-blog-date'],
     queryFn: () => getLatestBlogDate(`${WEBSITE_URL}/api/blog/latest`, 'en'),
   })
 
   const handleWhatsNewClick = async () => {
-    if (latestBlogDate) {
-      await saveLastViewedBlogDate(latestBlogDate)
+    if (latestBlogPost) {
+      await saveLastViewedBlogDate(latestBlogPost.date)
       await queryClient.invalidateQueries({ queryKey: ['last-viewed-blog-date'] })
     }
   }
 
-  const showIndicator = hasNewBlogPost(lastViewedDate ?? null, latestBlogDate ?? null)
+  const showIndicator = hasNewBlogPost(
+    lastViewedDate ?? null,
+    latestBlogPost?.date ?? null,
+    version,
+    latestBlogPost?.extensionVersion ?? null,
+  )
 
   return (
     <Sidebar collapsible="icon">
