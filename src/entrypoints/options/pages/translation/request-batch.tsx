@@ -3,6 +3,7 @@ import { i18n } from '#imports'
 import { Input } from '@repo/ui/components/input'
 import { useAtom, useAtomValue } from 'jotai'
 import { toast } from 'sonner'
+import { BetaBadge } from '@/components/beta-badge'
 import { batchQueueConfigSchema } from '@/types/config/translate'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { MIN_BATCH_CHARACTERS, MIN_BATCH_ITEMS } from '@/utils/constants/translate'
@@ -21,12 +22,13 @@ export function RequestBatch() {
 
   return (
     <ConfigCard
-      title={i18n.t('options.translation.batchQueueConfig.title')}
-      description={(
-        <div>
-          {i18n.t('options.translation.batchQueueConfig.description')}
+      title={(
+        <div className="flex items-center gap-2">
+          {i18n.t('options.translation.batchQueueConfig.title')}
+          <BetaBadge />
         </div>
       )}
+      description={i18n.t('options.translation.batchQueueConfig.description')}
     >
       <div className="flex flex-col gap-4">
         <BatchNumberSelector property="maxCharactersPerBatch" />

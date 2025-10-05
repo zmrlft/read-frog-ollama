@@ -26,6 +26,8 @@ popup:
     description: Discord 서버에 참여하여 개발자 및 다른 사용자들과 소통하세요
   github:
     description: ⭐️ 새로운 릴리스 알림을 지체 없이 받으려면 별표를 눌러주세요!
+  blog:
+    notification: Read Frog의 새로운 소식
 options:
   setAPIKeyWarning:
     please: API Key를 설정해 주세요
@@ -44,7 +46,6 @@ options:
         addProvider: 302.AI 구성 추가
     addProvider: 제공업체 추가
     badges:
-      publicBeta: 퍼블릭 베타
       translate: 번역
       read: 읽기
     dialog:
@@ -250,6 +251,8 @@ options:
         confirm: 확인
         cancel: 취소
         description: 이 작업은 모든 사용자 지정 설정을 지우고 기본값으로 재설정합니다. 삭제하시겠습니까?
+  whatsNew:
+    title: 새로운 기능
 side:
   sourceLang: 원본 언어
   targetLang: 대상 언어

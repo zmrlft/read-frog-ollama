@@ -2,6 +2,7 @@ import { browser, defineBackground } from '#imports'
 import { WEBSITE_URL } from '@/utils/constants/url'
 import { logger } from '@/utils/logger'
 import { onMessage, sendMessage } from '@/utils/message'
+import { SessionCacheGroupRegistry } from '@/utils/session-cache/session-cache-group-registry'
 import { cleanupAllCache, setUpCacheCleanup } from './cache-cleanup'
 import { ensureInitializedConfig } from './config'
 import { newUserGuide } from './new-user-guide'
@@ -17,11 +18,18 @@ export default defineBackground({
 
     browser.runtime.onInstalled.addListener(async (details) => {
       await ensureInitializedConfig()
+
       // Open tutorial page when extension is installed
       if (details.reason === 'install') {
         await browser.tabs.create({
           url: `${WEBSITE_URL}/guide/step-1`,
         })
+      }
+
+      // Clear blog cache on extension update to fetch latest blog posts
+      if (details.reason === 'update') {
+        logger.info('[Background] Extension updated, clearing blog cache')
+        await SessionCacheGroupRegistry.removeCacheGroup('blog-fetch')
       }
     })
 

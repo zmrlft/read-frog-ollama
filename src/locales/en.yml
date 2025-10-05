@@ -27,6 +27,8 @@ popup:
     description: Join Discord server to connect with developers and other users
   github:
     description: ⭐️ Star us for new release notifications without delay!
+  blog:
+    notification: What's new in Read Frog
 options:
   setAPIKeyWarning:
     please: Please set API Key on
@@ -45,7 +47,6 @@ options:
         addProvider: Add 302.AI Configuration
     addProvider: Add Provider
     badges:
-      publicBeta: Public Beta
       translate: Translate
       read: Read
     dialog:
@@ -251,6 +252,8 @@ options:
         confirm: Confirm
         cancel: Cancel
         description: This operation will clear all your custom configurations and reset them to default values. Please confirm.
+  whatsNew:
+    title: What's New
 side:
   sourceLang: Source Language
   targetLang: Target Language

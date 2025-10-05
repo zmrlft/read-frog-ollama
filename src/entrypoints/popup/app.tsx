@@ -8,6 +8,7 @@ import { UserAccount } from '@/components/user-account'
 import { version } from '../../../package.json'
 import { initIsIgnoreTabAtom } from './atoms/ignore'
 import { AlwaysTranslate } from './components/always-translate'
+import BlogNotification from './components/blog-notification'
 import FloatingButton from './components/floating-button'
 import LanguageOptionsSelector from './components/language-options-selector'
 import Hotkey from './components/node-translation-hotkey-selector'
@@ -29,7 +30,10 @@ function App() {
   return (
     <>
       <div className="bg-background flex flex-col gap-4 px-6 pt-5 pb-4">
-        <UserAccount />
+        <div className="flex items-center justify-between">
+          <UserAccount />
+          <BlogNotification />
+        </div>
         <LanguageOptionsSelector />
         {/* <LanguageLevelSelector /> */}
         <TranslateProviderField />

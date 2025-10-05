@@ -1,5 +1,4 @@
 import { i18n } from '#imports'
-import { Badge } from '@repo/ui/components/badge'
 import { Switch } from '@repo/ui/components/switch'
 import { useAtom } from 'jotai'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
@@ -10,14 +9,7 @@ export function BetaExperienceConfig() {
 
   return (
     <ConfigCard
-      title={(
-        <div className="flex items-center gap-2">
-          {i18n.t('options.betaExperience.title')}
-          <Badge variant="secondary" className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
-            Beta
-          </Badge>
-        </div>
-      )}
+      title={i18n.t('options.betaExperience.title')}
       description={i18n.t('options.betaExperience.description')}
     >
       <div className="w-full flex justify-end">

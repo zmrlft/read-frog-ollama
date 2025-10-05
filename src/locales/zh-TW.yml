@@ -27,6 +27,8 @@ popup:
     description: 加入 Discord 服務器，與開發者和其他用戶交流
   github:
     description: ⭐️ 為我們加星，獲取及時 GitHub 發布通知！
+  blog:
+    notification: 陪讀蛙更新動態
 options:
   setAPIKeyWarning:
     please: 請在
@@ -45,7 +47,6 @@ options:
         addProvider: 新增 302.AI 配置
     addProvider: 新增提供商
     badges:
-      publicBeta: 公測版
       translate: 翻譯
       read: 閱讀
     dialog:
@@ -251,6 +252,8 @@ options:
         confirm: 確認
         cancel: 取消
         description: 此操作將清空您的所有自定義配置，並將其重置為預設值，請確認是否清除。
+  whatsNew:
+    title: 最近更新
 side:
   sourceLang: 來源語言
   targetLang: 目標語言

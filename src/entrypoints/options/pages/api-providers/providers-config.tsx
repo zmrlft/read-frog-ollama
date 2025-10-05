@@ -22,20 +22,8 @@ import { ProviderConfigForm } from './provider-config-form'
 export function ProvidersConfig() {
   return (
     <ConfigCard
-      title={(
-        <div className="flex items-center gap-2">
-          {i18n.t('options.apiProviders.title')}
-          <Badge variant="secondary" className="bg-input">
-            {i18n.t('options.apiProviders.badges.publicBeta')}
-          </Badge>
-        </div>
-      )}
-      description={(
-        <>
-          {i18n.t('options.apiProviders.description')}
-          {/* <Promotion className="mt-2" /> */}
-        </>
-      )}
+      title={i18n.t('options.apiProviders.title')}
+      description={i18n.t('options.apiProviders.description')}
       className="lg:flex-col"
     >
       <div className="flex gap-4">

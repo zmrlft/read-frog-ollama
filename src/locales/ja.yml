@@ -26,6 +26,8 @@ popup:
     description: 開発者や他のユーザーとつながる
   github:
     description: ⭐️ スターを付けると、新しいリリース通知をすぐに受け取れます！
+  blog:
+    notification: 読書カエルの最新情報
 options:
   setAPIKeyWarning:
     please: 設定ページで
@@ -44,7 +46,6 @@ options:
         addProvider: 302.AI設定を追加
     addProvider: プロバイダーを追加
     badges:
-      publicBeta: パブリックベータ
       translate: 翻訳
       read: 読解
     dialog:
@@ -249,6 +250,8 @@ options:
         confirm: 確認
         cancel: キャンセル
         description: この操作は、すべての設定をデフォルト値にリセットします。ご確認ください。
+  whatsNew:
+    title: 新機能
 side:
   sourceLang: ソース言語
   targetLang: 翻訳言語

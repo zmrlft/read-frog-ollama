@@ -1,6 +1,7 @@
 import type { Config } from '@/types/config/config.ts'
 import { browser } from '#imports'
 import { TooltipProvider } from '@repo/ui/components/tooltip'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { Provider as JotaiProvider } from 'jotai'
 import { useHydrateAtoms } from 'jotai/utils'
 import React from 'react'
@@ -10,6 +11,7 @@ import { getConfigFromStorage } from '@/utils/config/config.ts'
 import { DEFAULT_CONFIG } from '@/utils/constants/config.ts'
 import { sendMessage } from '@/utils/message.ts'
 import { isDarkMode } from '@/utils/tailwind.ts'
+import { queryClient } from '@/utils/trpc/client.ts'
 import App from './app.tsx'
 import { getIsInPatterns, isCurrentSiteInPatternsAtom, isPageTranslatedAtom } from './atoms/auto-translate.ts'
 import '@/assets/tailwind/text-small.css'
@@ -59,19 +61,21 @@ async function initApp() {
 
   ReactDOM.createRoot(root).render(
     <React.StrictMode>
-      <JotaiProvider>
-        <HydrateAtoms
-          initialValues={[
-            [configAtom, config],
-            [isPageTranslatedAtom, isPageTranslated],
-            [isCurrentSiteInPatternsAtom, isInPatterns],
-          ]}
-        >
-          <TooltipProvider>
-            <App />
-          </TooltipProvider>
-        </HydrateAtoms>
-      </JotaiProvider>
+      <QueryClientProvider client={queryClient}>
+        <JotaiProvider>
+          <HydrateAtoms
+            initialValues={[
+              [configAtom, config],
+              [isPageTranslatedAtom, isPageTranslated],
+              [isCurrentSiteInPatternsAtom, isInPatterns],
+            ]}
+          >
+            <TooltipProvider>
+              <App />
+            </TooltipProvider>
+          </HydrateAtoms>
+        </JotaiProvider>
+      </QueryClientProvider>
     </React.StrictMode>,
   )
 }
