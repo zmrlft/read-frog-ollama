@@ -58,9 +58,19 @@ export function SelectionToolbar() {
       // Use requestAnimationFrame to delay selection check
       // This ensures selectionchange event fires first if text selection was cleared
       requestAnimationFrame(() => {
+        const isInputOrTextarea = document.activeElement instanceof HTMLInputElement || document.activeElement instanceof HTMLTextAreaElement
+
+        if (isInputOrTextarea && e.target !== document.activeElement) {
+          return
+        }
+
         // check if there is text selected
         const selection = window.getSelection()
         const selectedText = selection?.toString().trim() || ''
+
+        if (!isInputOrTextarea && !selection?.containsNode(e.target as Node, true)) {
+          return
+        }
 
         if (selection && selectedText.length > 0) {
           setSelectionContent(selectedText)
