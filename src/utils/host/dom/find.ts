@@ -127,11 +127,15 @@ export function unwrapDeepestOnlyHTMLChild(element: HTMLElement) {
   while (currentElement) {
     smashTruncationStyle(currentElement)
 
+    // create array from currentElement.childNodes
+    const effectiveChildNodes = Array.from(currentElement.childNodes).filter(child => child.textContent?.trim())
+    const effectiveChildren = Array.from(currentElement.children).filter(child => child.textContent?.trim())
+
     // Only have one HTML child and no Text Child
-    if (!(currentElement.children.length === 1 && currentElement.childNodes.length === 1))
+    if (!(effectiveChildren.length === 1 && effectiveChildNodes.length === 1))
       break
 
-    const onlyChildElement = currentElement.children[0]
+    const onlyChildElement = effectiveChildren[0]
     if (!isHTMLElement(onlyChildElement))
       break
 

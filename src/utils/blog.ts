@@ -1,5 +1,6 @@
 import { storage } from '#imports'
 import { z } from 'zod'
+import { logger } from './logger'
 import { sendMessage } from './message'
 
 const LAST_VIEWED_BLOG_DATE_KEY = 'lastViewedBlogDate'
@@ -83,10 +84,10 @@ export function hasNewBlogPost(
       // Catch any error from version comparison (validation errors, unexpected errors, etc.)
       // Skip version check and proceed with date-only comparison
       if (error instanceof z.ZodError) {
-        console.error('Version validation failed, skipping version check:', error.issues)
+        logger.error('Version validation failed, skipping version check:', error.issues)
       }
       else {
-        console.error('Version comparison failed, skipping version check:', error)
+        logger.error('Version comparison failed, skipping version check:', error)
       }
     }
   }
@@ -187,7 +188,7 @@ export async function getLatestBlogDate(
     }
   }
   catch (error) {
-    console.error('Error fetching latest blog post:', error)
+    logger.error('Error fetching latest blog post:', error)
     return null
   }
 }

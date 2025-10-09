@@ -12,7 +12,9 @@ import {
   isHTMLElement,
   isIFrameElement,
   isShallowBlockHTMLElement,
+  isShallowBlockTransNode,
   isShallowInlineHTMLElement,
+  isShallowInlineTransNode,
   isTextNode,
 } from './filter'
 
@@ -43,23 +45,16 @@ export function extractTextContent(node: TransNode, config: Config): string {
   }, '')
 }
 
-/**
- * Walk and label the element
- * @param element - The element to walk and label
- * @param walkId - The walk id
- * @returns "hasBlock" if the element has a block node child or is block node, false otherwise (has inline node child or is inline node or other nodes should be ignored)
- */
 export function walkAndLabelElement(
   element: HTMLElement,
   walkId: string,
   config: Config,
-): 'isOrHasBlockNode' | 'isShallowInlineNode' | false {
-  if (isDontWalkIntoButTranslateAsChildElement(element)) {
-    return false
-  }
-
-  if (isDontWalkIntoAndDontTranslateAsChildElement(element, config)) {
-    return false
+): { forceBlock: boolean, isInlineNode: boolean } {
+  if (isDontWalkIntoButTranslateAsChildElement(element) || isDontWalkIntoAndDontTranslateAsChildElement(element, config)) {
+    return {
+      forceBlock: false,
+      isInlineNode: false,
+    }
   }
 
   element.setAttribute(WALKED_ATTRIBUTE, walkId)
@@ -80,7 +75,7 @@ export function walkAndLabelElement(
   }
 
   let hasInlineNodeChild = false
-  let hasBlockNodeChild = false
+  let forceBlock = false
 
   for (const child of element.childNodes) {
     if (child.nodeType === Node.TEXT_NODE) {
@@ -93,10 +88,9 @@ export function walkAndLabelElement(
     if (isHTMLElement(child)) {
       const result = walkAndLabelElement(child, walkId, config)
 
-      if (result === 'isOrHasBlockNode') {
-        hasBlockNodeChild = true
-      }
-      else if (result === 'isShallowInlineNode') {
+      forceBlock = forceBlock || result.forceBlock
+
+      if (result.isInlineNode) {
         hasInlineNodeChild = true
       }
     }
@@ -106,19 +100,30 @@ export function walkAndLabelElement(
     element.setAttribute(PARAGRAPH_ATTRIBUTE, '')
   }
 
-  const meaningfulChildCount = Array.from(element.childNodes).filter(child =>
-    child.nodeType === Node.ELEMENT_NODE
-    || (child.nodeType === Node.TEXT_NODE && child.textContent?.trim()),
+  const translateChildCount = Array.from(element.childNodes).filter(child =>
+    isShallowBlockTransNode(child) || isShallowInlineTransNode(child),
+  ).length
+  const blockChildCount = Array.from(element.childNodes).filter(child =>
+    isShallowBlockTransNode(child),
   ).length
 
-  if ((hasBlockNodeChild && meaningfulChildCount > 1) || isShallowBlockHTMLElement(element)) {
-    element.setAttribute(BLOCK_ATTRIBUTE, '')
-    return 'isOrHasBlockNode'
+  forceBlock = forceBlock || (blockChildCount >= 1 && translateChildCount > 1)
+  const isInlineNode = isShallowInlineHTMLElement(element)
+
+  if (isInlineNode) {
+    if (forceBlock) {
+      element.setAttribute(BLOCK_ATTRIBUTE, '')
+    }
+    else {
+      element.setAttribute(INLINE_ATTRIBUTE, '')
+    }
   }
-  else if (isShallowInlineHTMLElement(element)) {
-    element.setAttribute(INLINE_ATTRIBUTE, '')
-    return 'isShallowInlineNode'
+  else if (isShallowBlockHTMLElement(element)) {
+    element.setAttribute(BLOCK_ATTRIBUTE, '')
   }
 
-  return false
+  return {
+    forceBlock,
+    isInlineNode,
+  }
 }

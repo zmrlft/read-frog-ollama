@@ -23,7 +23,7 @@ export function isEditable(element: HTMLElement): boolean {
 // shallow means only check the node itself, not the children
 // if a shallow inline node has children are block node, then it's block node rather than inline node
 export function isShallowInlineTransNode(node: Node): boolean {
-  if (isTextNode(node)) {
+  if (isTextNode(node) && node.textContent?.trim()) {
     return true
   }
   else if (isHTMLElement(node)) {

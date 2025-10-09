@@ -767,6 +767,7 @@ describe('translate', () => {
         expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}`)
       })
       it('should treat inline element with only one block child as inline (not block)', async () => {
+        // https://github.com/mengxi-ream/read-frog/issues/530
         render(
           <div data-testid="test-node">
             <span style={{ display: 'inline' }}>
@@ -785,9 +786,109 @@ describe('translate', () => {
         expectNodeLabels(inlineSpan, [INLINE_ATTRIBUTE])
         expectNodeLabels(inlineSpan.children[0], [BLOCK_ATTRIBUTE])
       })
+      it('should treat inline element with only one block child and other nodes as block', async () => {
+        render(
+          <div data-testid="test-node">
+            <span style={{ display: 'inline' }}>
+              <div style={{ display: 'block' }}>{MOCK_ORIGINAL_TEXT}</div>
+              {MOCK_ORIGINAL_TEXT}
+            </span>
+          </div>,
+        )
+        const node = screen.getByTestId('test-node')
+        await removeOrShowPageTranslation('bilingual', true)
+
+        expectNodeLabels(node.children[0], [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+        expectNodeLabels(node.children[0].children[0], [BLOCK_ATTRIBUTE])
+
+        const wrapper = expectTranslationWrapper(node.children[0].children[0], 'bilingual')
+        expect(wrapper).toBe(node.children[0].children[0].lastChild)
+        expectTranslatedContent(wrapper, BLOCK_CONTENT_CLASS)
+
+        const wrapper2 = node.children[0].lastChild as Element
+        expect(wrapper2).toHaveClass(CONTENT_WRAPPER_CLASS)
+        expectTranslatedContent(wrapper2, INLINE_CONTENT_CLASS)
+
+        await removeOrShowPageTranslation('bilingual', true)
+        expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+        expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}`)
+      })
+      it('should treat inline element with only one block child which one block child and other nodes as block', async () => {
+        render(
+          <div data-testid="test-node">
+            <span style={{ display: 'inline' }}>
+              <div style={{ display: 'block' }}>
+                <div style={{ display: 'block' }}>{MOCK_ORIGINAL_TEXT}</div>
+                <div style={{ display: 'block' }}>{MOCK_ORIGINAL_TEXT}</div>
+                <div style={{ display: 'block' }}>{MOCK_ORIGINAL_TEXT}</div>
+              </div>
+            </span>
+          </div>,
+        )
+        const node = screen.getByTestId('test-node')
+        await removeOrShowPageTranslation('bilingual', true)
+
+        expectNodeLabels(node.children[0], [BLOCK_ATTRIBUTE])
+        expectNodeLabels(node.children[0].children[0], [BLOCK_ATTRIBUTE])
+
+        const wrapper = expectTranslationWrapper(node.children[0].children[0].children[0], 'bilingual')
+        expect(wrapper).toBe(node.children[0].children[0].children[0].lastChild)
+        expectTranslatedContent(wrapper, BLOCK_CONTENT_CLASS)
+        const wrapper2 = expectTranslationWrapper(node.children[0].children[0].children[1], 'bilingual')
+        expect(wrapper2).toBe(node.children[0].children[0].children[1].lastChild)
+        expectTranslatedContent(wrapper2, BLOCK_CONTENT_CLASS)
+        const wrapper3 = expectTranslationWrapper(node.children[0].children[0].children[2], 'bilingual')
+        expect(wrapper3).toBe(node.children[0].children[0].children[2].lastChild)
+        expectTranslatedContent(wrapper3, BLOCK_CONTENT_CLASS)
+
+        await removeOrShowPageTranslation('bilingual', true)
+        expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+        expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}`)
+      })
     })
   })
-  describe('empty text nodes with no need to translate node in middle', () => {
+  describe('empty text nodes with only one inline node in middle', () => {
+    it('bilingual mode: should insert translation wrapper in inline node', async () => {
+      render(
+        <div data-testid="test-node">
+          {' '}
+          <div style={{ display: 'inline' }}>{MOCK_ORIGINAL_TEXT}</div>
+          {'\n '}
+        </div>,
+      )
+      const node = screen.getByTestId('test-node')
+      await removeOrShowPageTranslation('bilingual', true)
+
+      expectNodeLabels(node.children[0], [INLINE_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+      const wrapper = expectTranslationWrapper(node.children[0], 'bilingual')
+      expect(wrapper).toBe(node.children[0].lastChild)
+      expectTranslatedContent(wrapper, INLINE_CONTENT_CLASS)
+
+      await removeOrShowPageTranslation('bilingual', true)
+      expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+      expect(node.textContent).toBe(` ${MOCK_ORIGINAL_TEXT}\n `)
+    })
+    it('translation only mode: should have translation wrapper in inline node', async () => {
+      render(
+        <div data-testid="test-node">
+          {' '}
+          <div style={{ display: 'inline' }}>{MOCK_ORIGINAL_TEXT}</div>
+          {'\n '}
+        </div>,
+      )
+      const node = screen.getByTestId('test-node')
+      await removeOrShowPageTranslation('translationOnly', true)
+
+      expectNodeLabels(node.children[0], [INLINE_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+      const wrapper = expectTranslationWrapper(node.children[0], 'translationOnly')
+      expect(wrapper).toBe(node.children[0].childNodes[0])
+
+      await removeOrShowPageTranslation('translationOnly', true)
+      expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+      expect(node.textContent).toBe(` ${MOCK_ORIGINAL_TEXT}\n `)
+    })
+  })
+  describe('empty text nodes with "no need to translate" node in middle', () => {
     it('bilingual mode: should not insert translation wrapper', async () => {
       render(
         <div data-testid="test-node">
@@ -807,10 +908,8 @@ describe('translate', () => {
       expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
       expect(node.textContent).toBe(` ${MOCK_TRANSLATION} `)
     })
-  })
-  describe('translation only mode', () => {
     it('translation only mode: should have translation wrapper', async () => {
-      // Mock translateText to return the exact HTML string with spaces
+    // Mock translateText to return the exact HTML string with spaces
       const TRANSLATED_TEXT = `<div>${MOCK_TRANSLATION}</div>`
       vi.mocked(translateText).mockResolvedValueOnce(TRANSLATED_TEXT)
 

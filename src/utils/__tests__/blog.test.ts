@@ -1,6 +1,13 @@
 import { describe, expect, it, vi } from 'vitest'
 import { z } from 'zod'
 import { hasNewBlogPost, semanticVersionSchema } from '../blog'
+import { logger } from '../logger'
+
+vi.mock('../logger', () => ({
+  logger: {
+    error: vi.fn(),
+  },
+}))
 
 describe('hasNewBlogPost', () => {
   const baseDate = new Date('2025-01-01')
@@ -166,27 +173,24 @@ describe('hasNewBlogPost', () => {
     })
 
     it('should log ZodError details when version validation fails', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+      vi.mocked(logger.error).mockClear()
 
       hasNewBlogPost(null, baseDate, 'invalid', '1.11.0')
 
-      expect(consoleSpy).toHaveBeenCalledWith(
+      expect(logger.error).toHaveBeenCalledWith(
         'Version validation failed, skipping version check:',
         expect.any(Array),
       )
-
-      consoleSpy.mockRestore()
     })
 
     it('should log generic error for non-ZodError exceptions', () => {
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+      vi.mocked(logger.error).mockClear()
 
       // This won't actually throw a non-Zod error in the current implementation,
       // but we can verify the error logging path exists
       hasNewBlogPost(null, baseDate, 'invalid', '1.11.0')
 
-      expect(consoleSpy).toHaveBeenCalled()
-      consoleSpy.mockRestore()
+      expect(logger.error).toHaveBeenCalled()
     })
   })
 })
