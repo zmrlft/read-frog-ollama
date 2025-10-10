@@ -1,33 +1,11 @@
 import { storage } from '#imports'
+import { semanticVersionSchema } from '@repo/definitions'
 import { z } from 'zod'
 import { logger } from './logger'
 import { sendMessage } from './message'
 
 const LAST_VIEWED_BLOG_DATE_KEY = 'lastViewedBlogDate'
 const ONE_DAY_MS = 24 * 60 * 60 * 1000
-
-/**
- * Semantic version regex pattern
- * Matches versions like: 1.0.0, 1.11, 10.20.30
- * Does NOT match: v1.0.0, 1.0.0-alpha, 1.-1.0
- */
-const SEMANTIC_VERSION_REGEX = /^\d+(\.\d+)*$/
-
-/**
- * Zod schema for semantic version validation
- * Exported for testing purposes
- */
-export const semanticVersionSchema = z.string().regex(
-  SEMANTIC_VERSION_REGEX,
-  'Must be a valid semantic version (e.g., 1.0.0, 1.11, 10.20.30)',
-).refine(
-  (version) => {
-    // Additional validation: ensure all parts are non-negative numbers
-    const parts = version.split('.')
-    return parts.every(part => !Number.isNaN(Number(part)) && Number(part) >= 0)
-  },
-  { message: 'Version parts must be non-negative numbers' },
-)
 
 /**
  * Zod schema for validating blog API response
@@ -58,13 +36,13 @@ export async function getLastViewedBlogDate(): Promise<Date | null> {
 /**
  * Checks if there's a new blog post by comparing last viewed date with latest blog date
  * and extension version compatibility
- * @param lastViewedDate - The last date the user viewed the blog
+ * @param latestViewedDate - The last date the user viewed the blog
  * @param latestDate - The date of the latest blog post
  * @param currentExtensionVersion - Current extension version (e.g., "1.10.0")
  * @param blogExtensionVersion - Minimum extension version required for the blog post (e.g., "1.11.0")
  */
 export function hasNewBlogPost(
-  lastViewedDate: Date | null,
+  latestViewedDate: Date | null,
   latestDate: Date | null,
   currentExtensionVersion?: string,
   blogExtensionVersion?: string | null,
@@ -92,9 +70,9 @@ export function hasNewBlogPost(
     }
   }
 
-  if (!lastViewedDate)
+  if (!latestViewedDate)
     return true
-  return latestDate > lastViewedDate
+  return latestDate > latestViewedDate
 }
 
 /**
@@ -112,9 +90,10 @@ function compareVersions(v1: string, v2: string): number {
   const parts1 = v1.split('.').map(Number)
   const parts2 = v2.split('.').map(Number)
 
-  for (let i = 0; i < Math.max(parts1.length, parts2.length); i++) {
-    const part1 = parts1[i] || 0
-    const part2 = parts2[i] || 0
+  // After validation, both versions are guaranteed to have exactly 3 parts
+  for (let i = 0; i < 3; i++) {
+    const part1 = parts1[i]!
+    const part2 = parts2[i]!
 
     if (part1 < part2)
       return -1
