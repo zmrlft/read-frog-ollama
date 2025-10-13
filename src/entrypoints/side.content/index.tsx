@@ -78,7 +78,7 @@ export default defineContentScript({
             </JotaiProvider>
             <ReactQueryDevtools
               initialIsOpen={false}
-              buttonPosition="bottom-left"
+              buttonPosition="bottom-right"
             />
           </QueryClientProvider>,
         )

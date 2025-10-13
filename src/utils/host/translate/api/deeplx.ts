@@ -10,7 +10,7 @@ export async function deeplxTranslate(
   providerConfig: PureAPIProviderConfig,
   options?: { forceBackgroundFetch?: boolean },
 ): Promise<string> {
-  const baseURL = providerConfig.baseURL ?? DEFAULT_PROVIDER_CONFIG.deeplx.baseURL
+  const baseURL = providerConfig.baseURL || DEFAULT_PROVIDER_CONFIG.deeplx.baseURL
   const apiKey = providerConfig.apiKey
 
   if (!baseURL) {

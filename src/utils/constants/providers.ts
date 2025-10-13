@@ -486,7 +486,7 @@ export const DEFAULT_PROVIDER_CONFIG = {
     description: i18n.t('options.apiProviders.providers.description.deeplx'),
     enabled: true,
     provider: 'deeplx',
-    baseURL: 'https://deeplx.vercel.app',
+    baseURL: 'https://api.deeplx.org',
   },
   amazonBedrock: {
     id: 'amazon-bedrock-default',
