@@ -4,7 +4,7 @@ import { deepmerge } from 'deepmerge-ts'
 import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import { llmProviderConfigItemSchema, providerConfigItemSchema } from '@/types/config/provider'
-import { getLLMTranslateProvidersConfig, getProviderConfigById } from '../config/helpers'
+import { getProviderConfigById, getReadProvidersConfig, getTranslateProvidersConfig, getTTSProvidersConfig } from '../config/helpers'
 import { configFieldsAtomMap } from './config'
 
 // Derived atom for read provider config
@@ -12,8 +12,8 @@ export const readProviderConfigAtom = atom(
   (get) => {
     const readConfig = get(configFieldsAtomMap.read)
     const providersConfig = get(configFieldsAtomMap.providersConfig)
-    const LLMProvidersConfig = getLLMTranslateProvidersConfig(providersConfig)
-    const providerConfig = getProviderConfigById(LLMProvidersConfig, readConfig.providerId)
+    const readProvidersConfig = getReadProvidersConfig(providersConfig)
+    const providerConfig = getProviderConfigById(readProvidersConfig, readConfig.providerId)
     if (!providerConfig) {
       throw new Error(`Provider ${readConfig.providerId} not found`)
     }
@@ -36,13 +36,13 @@ export const translateProviderConfigAtom = atom(
   (get) => {
     const translateConfig = get(configFieldsAtomMap.translate)
     const providersConfig = get(configFieldsAtomMap.providersConfig)
+    const translateProvidersConfig = getTranslateProvidersConfig(providersConfig)
+    const providerConfig = getProviderConfigById(translateProvidersConfig, translateConfig.providerId)
+    if (!providerConfig) {
+      throw new Error(`Provider ${translateConfig.providerId} not found`)
+    }
 
-    const providerConfig = getProviderConfigById(providersConfig, translateConfig.providerId)
-    if (providerConfig)
-      return providerConfig
-
-    // Non API translate providers (google, microsoft) don't have config
-    return undefined
+    return providerConfig
   },
   async (get, set, newProviderConfig: ProviderConfig) => {
     const translateConfig = get(configFieldsAtomMap.translate)
@@ -52,6 +52,26 @@ export const translateProviderConfigAtom = atom(
       provider.id === translateConfig.providerId ? newProviderConfig : provider,
     )
 
+    await set(configFieldsAtomMap.providersConfig, updatedProviders)
+  },
+)
+
+export const ttsProviderConfigAtom = atom(
+  (get) => {
+    const ttsConfig = get(configFieldsAtomMap.tts)
+    const providersConfig = get(configFieldsAtomMap.providersConfig)
+    const ttsProvidersConfig = getTTSProvidersConfig(providersConfig)
+    if (ttsConfig.providerId) {
+      return getProviderConfigById(ttsProvidersConfig, ttsConfig.providerId)
+    }
+    return undefined
+  },
+  async (get, set, newProviderConfig: ProviderConfig) => {
+    const ttsConfig = get(configFieldsAtomMap.tts)
+    const providersConfig = get(configFieldsAtomMap.providersConfig)
+    const updatedProviders = providersConfig.map(provider =>
+      provider.id === ttsConfig.providerId ? newProviderConfig : provider,
+    )
     await set(configFieldsAtomMap.providersConfig, updatedProviders)
   },
 )

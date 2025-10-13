@@ -1,14 +1,17 @@
 import type { TextUIPart } from 'ai'
+import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
 import { ISO6393_TO_6391, LANG_CODE_TO_EN_NAME } from '@repo/definitions'
+import { IconLoader2, IconVolume } from '@tabler/icons-react'
 import { useMutation } from '@tanstack/react-query'
 import { readUIMessageStream, streamText } from 'ai'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { useTextToSpeech } from '@/hooks/use-text-to-speech'
 import { isLLMTranslateProviderConfig, isNonAPIProvider, isPureAPIProvider } from '@/types/config/provider'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
-import { translateProviderConfigAtom } from '@/utils/atoms/provider'
+import { translateProviderConfigAtom, ttsProviderConfigAtom } from '@/utils/atoms/provider'
 import { authClient } from '@/utils/auth/auth-client'
 import { getConfigFromStorage } from '@/utils/config/config'
 import { getProviderOptions } from '@/utils/constants/model'
@@ -18,12 +21,12 @@ import { sendMessage } from '@/utils/message'
 import { getTranslatePrompt } from '@/utils/prompts/translate'
 import { getTranslateModelById } from '@/utils/providers/model'
 import { trpc } from '@/utils/trpc/client'
-import { isTooltipVisibleAtom, isTranslatePopoverVisibleAtom, mouseClickPositionAtom, selectionContentAtom } from './atom'
+import { isSelectionToolbarVisibleAtom, isTranslatePopoverVisibleAtom, mouseClickPositionAtom, selectionContentAtom } from './atom'
 import { PopoverWrapper } from './components/popover-wrapper'
 
 export function TranslateButton() {
   // const selectionContent = useAtomValue(selectionContentAtom)
-  const setIsTooltipVisible = useSetAtom(isTooltipVisibleAtom)
+  const setIsSelectionToolbarVisible = useSetAtom(isSelectionToolbarVisibleAtom)
   const setIsTranslatePopoverVisible = useSetAtom(isTranslatePopoverVisibleAtom)
   const setMousePosition = useSetAtom(mouseClickPositionAtom)
 
@@ -33,7 +36,7 @@ export function TranslateButton() {
     const y = rect.top
 
     setMousePosition({ x, y })
-    setIsTooltipVisible(false)
+    setIsSelectionToolbarVisible(false)
     setIsTranslatePopoverVisible(true)
   }
 
@@ -231,14 +234,60 @@ export function TranslatePopover() {
               )}
           {createVocabulary.isPending ? 'Saving...' : 'Save'}
         </button>
-        <button
-          type="button"
-          onClick={handleCopy}
-          className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded"
-        >
-          <Icon icon="tabler:copy" strokeWidth={1} className="size-4 text-zinc-600 dark:text-zinc-400" />
-        </button>
+        <div className="flex items-center gap-2">
+          <SpeakOriginalButton />
+          <button
+            type="button"
+            onClick={handleCopy}
+            className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded"
+          >
+            <Icon icon="tabler:copy" strokeWidth={1} className="size-4 text-zinc-600 dark:text-zinc-400" />
+          </button>
+        </div>
       </div>
     </PopoverWrapper>
+  )
+}
+
+function SpeakOriginalButton() {
+  const selectionContent = useAtomValue(selectionContentAtom)
+  const ttsConfig = useAtomValue(configFieldsAtomMap.tts)
+  const ttsProviderConfig = useAtomValue(ttsProviderConfigAtom)
+  const { play, isFetching, isPlaying } = useTextToSpeech()
+
+  const handleSpeak = useCallback(async () => {
+    if (!selectionContent) {
+      toast.error(i18n.t('speak.noTextSelected'))
+      return
+    }
+
+    if (!ttsProviderConfig) {
+      toast.error(i18n.t('speak.openaiNotConfigured'))
+      return
+    }
+
+    void play(selectionContent, ttsConfig, ttsProviderConfig)
+  }, [selectionContent, ttsConfig, ttsProviderConfig, play])
+
+  if (!ttsProviderConfig) {
+    return null
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleSpeak}
+      disabled={isFetching || isPlaying}
+      className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+      title={isFetching ? 'Fetching audio…' : isPlaying ? 'Playing audio…' : 'Speak original text'}
+    >
+      {isFetching || isPlaying
+        ? (
+            <IconLoader2 className="size-4 text-zinc-600 dark:text-zinc-400 animate-spin" strokeWidth={1.6} />
+          )
+        : (
+            <IconVolume className="size-4 text-zinc-600 dark:text-zinc-400" strokeWidth={1.6} />
+          )}
+    </button>
   )
 }

@@ -10,7 +10,7 @@ import { toast } from 'sonner'
 import { isAPIProviderConfig, isNonAPIProvider, isReadProvider, isTranslateProvider } from '@/types/config/provider'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { providerConfigAtom } from '@/utils/atoms/provider'
-import { getReadProvidersConfig, getTranslateProvidersConfig } from '@/utils/config/helpers'
+import { getReadProvidersConfig, getTranslateProvidersConfig, getTTSProvidersConfig } from '@/utils/config/helpers'
 import { selectedProviderIdAtom } from '../atoms'
 import { APIKeyField } from './api-key-field'
 import { BaseURLField } from './base-url-field'
@@ -26,6 +26,7 @@ export function ProviderConfigForm() {
   const [allProvidersConfig, setAllProvidersConfig] = useAtom(configFieldsAtomMap.providersConfig)
   const [readConfig, setReadConfig] = useAtom(configFieldsAtomMap.read)
   const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
+  const [ttsConfig, setTtsConfig] = useAtom(configFieldsAtomMap.tts)
 
   const specificFormOpts = {
     ...formOpts,
@@ -64,6 +65,7 @@ export function ProviderConfigForm() {
     const updatedAllProviders = allProvidersConfig.filter(provider => provider.id !== providerConfig.id)
     const updatedAllReadProviders = getReadProvidersConfig(updatedAllProviders)
     const updatedAllTranslateProviders = getTranslateProvidersConfig(updatedAllProviders)
+    const updatedAllTTSProviders = getTTSProvidersConfig(updatedAllProviders)
     if (updatedAllReadProviders.length === 0 || updatedAllTranslateProviders.length === 0) {
       toast.error(i18n.t('options.apiProviders.form.atLeastOneProvider'))
       return
@@ -74,6 +76,14 @@ export function ProviderConfigForm() {
     }
     if (translateConfig.providerId === providerConfig.id) {
       await setTranslateConfig({ providerId: chooseNextProviderConfig(updatedAllTranslateProviders).id })
+    }
+    if (ttsConfig.providerId === providerConfig.id) {
+      if (updatedAllTTSProviders.length === 0) {
+        await setTtsConfig({ providerId: null })
+      }
+      else {
+        await setTtsConfig({ providerId: updatedAllTTSProviders[0].id })
+      }
     }
     await setAllProvidersConfig(updatedAllProviders)
     setSelectedProviderId(chooseNextProviderConfig(updatedAllProviders).id)

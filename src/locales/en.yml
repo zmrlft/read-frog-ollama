@@ -224,6 +224,24 @@ options:
       title: Auto translate based on language
       description: Automatically translate page content when specific languages are detected
       selectLanguages: Select languages
+  tts:
+    title: Text to Speech
+    description: Customize the Speak button with your preferred OpenAI voice settings.
+    provider:
+      label: Provider
+      selectPlaceholder: Select a provider
+      noProvider: Please add OpenAI provider
+    model:
+      label: model
+    voice:
+      label: Voice
+      selectPlaceholder: Select a voice
+      preview: Preview
+      previewSample: Hello from Read Frog! This is how I will sound when reading aloud.
+    speed:
+      label: Speed
+      hint: Accepts values between 0.25 and 4.0
+    betaDisabled: Enable Beta Experience to customize text-to-speech settings.
   config:
     title: Config
     sync:
@@ -290,5 +308,12 @@ noAPIKeyConfig:
 translation:
   sameLanguage: Source and target languages must be different
   autoModeSameLanguage: Detected language '$1' is the same as target language
+speak:
+  fetchingAudio: Generating audio...
+  playingAudio: Playing audio...
+  failedToGenerateSpeech: Failed to generate speech
+  noTextSelected: No text selected
+  openaiNotConfigured: OpenAI provider is not configured or enabled
+  openaiApiKeyNotConfigured: OpenAI API key is not configured
 shortcutKeySelector:
   placeholder: Please enter the shortcut

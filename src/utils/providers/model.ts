@@ -20,7 +20,7 @@ import { createXai } from '@ai-sdk/xai'
 import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 import { createOllama } from 'ollama-ai-provider-v2'
 import { isCustomLLMProvider } from '@/types/config/provider'
-import { getLLMTranslateProvidersConfig, getProviderConfigById } from '../config/helpers'
+import { getLLMTranslateProvidersConfig, getProviderConfigById, getTTSProvidersConfig } from '../config/helpers'
 import { CONFIG_STORAGE_KEY } from '../constants/config'
 
 interface ProviderFactoryMap {
@@ -122,4 +122,27 @@ export async function getTranslateModelById(providerId: string) {
 
 export async function getReadModelById(providerId: string) {
   return getLanguageModelById(providerId, 'read')
+}
+
+export async function getTTSProviderById(providerId: string) {
+  const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`)
+  if (!config) {
+    throw new Error('Config not found')
+  }
+
+  const ttsProvidersConfig = getTTSProvidersConfig(config.providersConfig)
+  const providerConfig = getProviderConfigById(ttsProvidersConfig, providerId)
+  if (!providerConfig) {
+    throw new Error(`Provider ${providerId} not found`)
+  }
+
+  const customHeaders = CUSTOM_HEADER_MAP[providerConfig.provider]
+
+  const provider = CREATE_AI_MAPPER[providerConfig.provider]({
+    ...(providerConfig.baseURL && { baseURL: providerConfig.baseURL }),
+    ...(providerConfig.apiKey && { apiKey: providerConfig.apiKey }),
+    ...(customHeaders && { headers: customHeaders }),
+  })
+
+  return provider
 }

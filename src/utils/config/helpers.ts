@@ -1,6 +1,6 @@
 import type { Config } from '@/types/config/config'
-import type { APIProviderConfig, LLMTranslateProviderConfig, NonAPIProviderConfig, ProviderConfig, ProvidersConfig, PureAPIProviderConfig, ReadProviderConfig, TranslateProviderConfig } from '@/types/config/provider'
-import { isAPIProviderConfig, isLLMTranslateProviderConfig, isNonAPIProviderConfig, isPureAPIProviderConfig, isReadProviderConfig, isTranslateProviderConfig } from '@/types/config/provider'
+import type { APIProviderConfig, LLMTranslateProviderConfig, NonAPIProviderConfig, ProviderConfig, ProvidersConfig, PureAPIProviderConfig, ReadProviderConfig, TranslateProviderConfig, TTSProviderConfig } from '@/types/config/provider'
+import { isAPIProviderConfig, isLLMTranslateProviderConfig, isNonAPIProviderConfig, isPureAPIProviderConfig, isReadProviderConfig, isTranslateProviderConfig, isTTSProviderConfig } from '@/types/config/provider'
 
 export function getProviderConfigById<T extends ProviderConfig>(providersConfig: T[], providerId: string): T | undefined {
   return providersConfig.find(p => p.id === providerId)
@@ -28,6 +28,10 @@ export function getReadProvidersConfig(providersConfig: ProvidersConfig): ReadPr
 
 export function getTranslateProvidersConfig(providersConfig: ProvidersConfig): TranslateProviderConfig[] {
   return providersConfig.filter(isTranslateProviderConfig)
+}
+
+export function getTTSProvidersConfig(providersConfig: ProvidersConfig): TTSProviderConfig[] {
+  return providersConfig.filter(isTTSProviderConfig)
 }
 
 export function filterEnabledProvidersConfig(providersConfig: ProvidersConfig): ProvidersConfig {

@@ -222,6 +222,24 @@ options:
       title: 言語に基づく自動翻訳
       description: 特定の言語が検出された場合にページコンテンツを自動翻訳します
       selectLanguages: 言語を選択
+  tts:
+    title: テキスト読み上げ
+    description: お好みの OpenAI 音声設定で読み上げボタンをカスタマイズします。
+    provider:
+      label: プロバイダー
+      selectPlaceholder: プロバイダーを選択
+      noProvider: OpenAI プロバイダーを追加してください
+    model:
+      label: モデル
+    voice:
+      label: ボイス
+      selectPlaceholder: ボイスを選択
+      preview: 試聴
+      previewSample: Read Frog からこんにちは！朗読するときはこのように聞こえます。
+    speed:
+      label: 速度
+      hint: 0.25〜4.0 の値を入力できます
+    betaDisabled: テキスト読み上げ設定をカスタマイズするには Beta 体験を有効にしてください。
   config:
     title: 設定
     sync:
@@ -288,5 +306,12 @@ noAPIKeyConfig:
 translation:
   sameLanguage: ソース言語とターゲット言語は異なる必要があります
   autoModeSameLanguage: 検出された言語 '$1' はターゲット言語と同じです
+speak:
+  fetchingAudio: 音声を生成しています...
+  playingAudio: 音声を再生しています...
+  failedToGenerateSpeech: 音声生成に失敗しました
+  noTextSelected: テキストが選択されていません
+  openaiNotConfigured: OpenAIプロバイダーが設定されていないか有効になっていません
+  openaiApiKeyNotConfigured: OpenAI APIキーが設定されていません
 shortcutKeySelector:
   placeholder: ショートカットを入力してください

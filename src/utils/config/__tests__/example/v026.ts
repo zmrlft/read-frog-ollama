@@ -1,4 +1,5 @@
 import type { TestSeriesObject } from './types'
+import type { Config } from '@/types/config/config'
 
 export const testSeries: TestSeriesObject = {
   'complex-config-from-v020': {
@@ -143,6 +144,12 @@ Translate to {{targetLang}}:
         translationNodeStyle: 'blur',
         customAutoTranslateShortcutKey: ['alt', 'b'],
       },
+      tts: {
+        providerId: 'openai-default',
+        model: 'tts-1',
+        voice: 'alloy',
+        speed: 1,
+      },
       floatingButton: {
         enabled: true,
         position: 0.75,
@@ -155,7 +162,7 @@ Translate to {{targetLang}}:
       betaExperience: {
         enabled: false,
       },
-    },
+    } satisfies Config,
   },
   'config-from-v022': {
     description: 'Add batch queue configuration for translation requests',
@@ -296,9 +303,15 @@ Translate to {{targetLang}}:
         },
         translationNodeStyle: 'default',
       },
+      tts: {
+        providerId: 'openai-default',
+        model: 'tts-1',
+        voice: 'alloy',
+        speed: 1,
+      },
       betaExperience: {
         enabled: false,
       },
-    },
+    } satisfies Config,
   },
 }

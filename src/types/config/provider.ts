@@ -162,6 +162,17 @@ export function isNonAPIProviderConfig(config: ProviderConfig): config is NonAPI
   return isNonAPIProvider(config.provider)
 }
 
+export const TTS_PROVIDER_TYPES = ['openai'] as const satisfies Readonly<
+  (keyof typeof READ_PROVIDER_MODELS)[]
+>
+export type TTSProviderTypes = typeof TTS_PROVIDER_TYPES[number]
+export function isTTSProvider(provider: string): provider is TTSProviderTypes {
+  return TTS_PROVIDER_TYPES.includes(provider as TTSProviderTypes)
+}
+export function isTTSProviderConfig(config: ProviderConfig): config is TTSProviderConfig {
+  return isTTSProvider(config.provider)
+}
+
 // all provider names
 export const ALL_PROVIDER_TYPES = ['google', 'microsoft', 'deeplx', 'siliconflow', 'tensdaq', 'ai302', 'openaiCompatible', 'openai', 'deepseek', 'gemini', 'anthropic', 'grok', 'amazonBedrock', 'groq', 'deepinfra', 'mistral', 'togetherai', 'cohere', 'fireworks', 'cerebras', 'replicate', 'perplexity', 'vercel', 'openrouter', 'ollama'] as const satisfies Readonly<
   (typeof READ_PROVIDER_TYPES[number] | typeof TRANSLATE_PROVIDER_TYPES[number])[]
@@ -374,6 +385,7 @@ export type TranslateProviderConfig = Extract<ProviderConfig, { provider: Transl
 export type ReadProviderConfig = Extract<ProviderConfig, { provider: ReadProviderTypes }>
 export type NonCustomLLMProviderConfig = Extract<ProviderConfig, { provider: NonCustomLLMProviderTypes }>
 export type CustomLLMProviderConfig = Extract<ProviderConfig, { provider: CustomLLMProviderTypes }>
+export type TTSProviderConfig = Extract<ProviderConfig, { provider: TTSProviderTypes }>
 
 /* ──────────────────────────────
   read or translate config helpers
