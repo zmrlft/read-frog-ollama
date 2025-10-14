@@ -1257,4 +1257,91 @@ describe('translate', () => {
       })
     })
   })
+  describe('flex parent', () => {
+    it('flex parent: should force the translation style to be inline', async () => {
+      render(
+        <div data-testid="test-node">
+          <div style={{ display: 'flex' }}>{MOCK_ORIGINAL_TEXT}</div>
+        </div>,
+      )
+      const node = screen.getByTestId('test-node')
+      await removeOrShowPageTranslation('bilingual', true)
+
+      expectNodeLabels(node, [BLOCK_ATTRIBUTE])
+      expectNodeLabels(node.children[0], [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+      const wrapper = expectTranslationWrapper(node.children[0], 'bilingual')
+      expect(wrapper).toBe(node.children[0].lastChild)
+      expectTranslatedContent(wrapper, INLINE_CONTENT_CLASS)
+
+      await removeOrShowPageTranslation('bilingual', true)
+      expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+      expect(node.textContent).toBe(MOCK_ORIGINAL_TEXT)
+    })
+    it('flex parent: should translate the inline children to be inline style even have block children', async () => {
+      render(
+        <div data-testid="test-node">
+          <div style={{ display: 'flex' }}>
+            {MOCK_ORIGINAL_TEXT}
+            <div>{MOCK_ORIGINAL_TEXT}</div>
+            {MOCK_ORIGINAL_TEXT}
+          </div>
+        </div>,
+      )
+      const node = screen.getByTestId('test-node')
+      await removeOrShowPageTranslation('bilingual', true)
+
+      expectNodeLabels(node, [BLOCK_ATTRIBUTE])
+      expectNodeLabels(node.children[0], [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+      // First inline group wrapper (text node before block div)
+      const wrapper1 = node.children[0].childNodes[1]
+      expect(wrapper1).toHaveClass(CONTENT_WRAPPER_CLASS)
+      expectTranslatedContent(wrapper1 as Element, INLINE_CONTENT_CLASS)
+      // Block child should have its own wrapper
+      expectNodeLabels(node.children[0].children[1], [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+      const wrapper2 = expectTranslationWrapper(node.children[0].children[1], 'bilingual')
+      expect(wrapper2).toBe(node.children[0].children[1].lastChild)
+      expectTranslatedContent(wrapper2, BLOCK_CONTENT_CLASS)
+      // Second inline group wrapper (text node after block div)
+      const wrapper3 = node.children[0].lastChild
+      expect(wrapper3).toHaveClass(CONTENT_WRAPPER_CLASS)
+      expectTranslatedContent(wrapper3 as Element, INLINE_CONTENT_CLASS)
+
+      await removeOrShowPageTranslation('bilingual', true)
+      expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+      expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}`)
+    })
+    it('inline-flex parent: should translate the inline children to be inline style even have block children', async () => {
+      render(
+        <div data-testid="test-node">
+          <div style={{ display: 'inline-flex' }}>
+            {MOCK_ORIGINAL_TEXT}
+            <div>{MOCK_ORIGINAL_TEXT}</div>
+            {MOCK_ORIGINAL_TEXT}
+          </div>
+        </div>,
+      )
+      const node = screen.getByTestId('test-node')
+      await removeOrShowPageTranslation('bilingual', true)
+
+      expectNodeLabels(node, [BLOCK_ATTRIBUTE])
+      expectNodeLabels(node.children[0], [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+      // First inline group wrapper (text node before block div)
+      const wrapper1 = node.children[0].childNodes[1]
+      expect(wrapper1).toHaveClass(CONTENT_WRAPPER_CLASS)
+      expectTranslatedContent(wrapper1 as Element, INLINE_CONTENT_CLASS)
+      // Block child should have its own wrapper
+      expectNodeLabels(node.children[0].children[1], [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+      const wrapper2 = expectTranslationWrapper(node.children[0].children[1], 'bilingual')
+      expect(wrapper2).toBe(node.children[0].children[1].lastChild)
+      expectTranslatedContent(wrapper2, BLOCK_CONTENT_CLASS)
+      // Second inline group wrapper (text node after block div)
+      const wrapper3 = node.children[0].lastChild
+      expect(wrapper3).toHaveClass(CONTENT_WRAPPER_CLASS)
+      expectTranslatedContent(wrapper3 as Element, INLINE_CONTENT_CLASS)
+
+      await removeOrShowPageTranslation('bilingual', true)
+      expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+      expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}`)
+    })
+  })
 })
