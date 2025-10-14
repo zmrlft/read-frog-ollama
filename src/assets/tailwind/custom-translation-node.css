@@ -24,7 +24,7 @@
 }
 
 [data-read-frog-custom-translation-style='dashedLine'] {
-  text-decoration: underline dashed var(--read-frog-primary);
+  text-decoration: underline dashed var(--read-frog-primary) !important;
   text-underline-offset: 5px;
 }
 

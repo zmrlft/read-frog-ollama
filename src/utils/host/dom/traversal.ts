@@ -6,6 +6,7 @@ import {
   PARAGRAPH_ATTRIBUTE,
   WALKED_ATTRIBUTE,
 } from '@/utils/constants/dom-labels'
+import { FORCE_BLOCK_TAGS } from '@/utils/constants/dom-tags'
 import {
   isDontWalkIntoAndDontTranslateAsChildElement,
   isDontWalkIntoButTranslateAsChildElement,
@@ -107,19 +108,15 @@ export function walkAndLabelElement(
     isShallowBlockTransNode(child),
   ).length
 
-  forceBlock = forceBlock || (blockChildCount >= 1 && translateChildCount > 1)
+  // force block will force the current and ancestor elements to be block node
+  forceBlock = forceBlock || (blockChildCount >= 1 && translateChildCount > 1) || FORCE_BLOCK_TAGS.has(element.tagName)
   const isInlineNode = isShallowInlineHTMLElement(element)
 
-  if (isInlineNode) {
-    if (forceBlock) {
-      element.setAttribute(BLOCK_ATTRIBUTE, '')
-    }
-    else {
-      element.setAttribute(INLINE_ATTRIBUTE, '')
-    }
-  }
-  else if (isShallowBlockHTMLElement(element)) {
+  if (isShallowBlockHTMLElement(element) || forceBlock) {
     element.setAttribute(BLOCK_ATTRIBUTE, '')
+  }
+  else if (isInlineNode) {
+    element.setAttribute(INLINE_ATTRIBUTE, '')
   }
 
   return {

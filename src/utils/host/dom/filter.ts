@@ -38,6 +38,10 @@ export function isShallowInlineHTMLElement(element: HTMLElement): boolean {
     return false
   }
 
+  if (FORCE_BLOCK_TAGS.has(element.tagName)) {
+    return false
+  }
+
   const computedStyle = window.getComputedStyle(element)
 
   // treat large floating letter on some news websites as inline node
@@ -48,10 +52,7 @@ export function isShallowInlineHTMLElement(element: HTMLElement): boolean {
 
   const isInlineDisplay = ['inline', 'contents'].some(display => computedStyle.display.includes(display))
 
-  return (
-    isInlineDisplay
-    && !FORCE_BLOCK_TAGS.has(element.tagName)
-  )
+  return isInlineDisplay
 }
 
 // Note: !(inline node) != block node because of `notranslate` class and all cases not in the if else block
@@ -68,6 +69,10 @@ export function isShallowBlockTransNode(node: Node): boolean {
 export function isShallowBlockHTMLElement(element: HTMLElement): boolean {
   const computedStyle = window.getComputedStyle(element)
 
+  if (FORCE_BLOCK_TAGS.has(element.tagName)) {
+    return true
+  }
+
   // treat large floating letter on some news websites as block node
   if (computedStyle.float !== 'none') {
     return false
@@ -75,10 +80,7 @@ export function isShallowBlockHTMLElement(element: HTMLElement): boolean {
 
   const isInlineDisplay = ['inline', 'contents'].some(display => computedStyle.display.includes(display))
 
-  return (
-    !isInlineDisplay
-    || FORCE_BLOCK_TAGS.has(element.tagName)
-  )
+  return !isInlineDisplay
 }
 
 export function isCustomDontWalkIntoElement(element: HTMLElement): boolean {

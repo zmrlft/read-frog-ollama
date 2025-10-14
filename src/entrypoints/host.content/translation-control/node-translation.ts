@@ -48,7 +48,7 @@ export function registerNodeTranslationTriggers() {
             actionTriggered = true
           }
           timerId = null
-        }, 500)
+        }, 1000)
       }
     }
     else if (keyState.isHotkeyPressed) {
