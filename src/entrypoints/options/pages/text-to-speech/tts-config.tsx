@@ -56,6 +56,8 @@ function TtsProviderField() {
   const ttsProviderConfig = useAtomValue(ttsProviderConfigAtom)
   const ttsProvidersConfig = getTTSProvidersConfig(providersConfig)
 
+  const selectorPlaceholder = ttsProvidersConfig.length === 0 ? i18n.t('options.tts.provider.noProvider') : i18n.t('options.tts.provider.selectPlaceholder')
+
   return (
     <FieldWithLabel
       id="ttsProvider"
@@ -74,7 +76,7 @@ function TtsProviderField() {
         disabled={ttsProvidersConfig.length === 0}
       >
         <SelectTrigger className="w-full">
-          {ttsProvidersConfig.length === 0 ? <SelectValue placeholder={i18n.t('options.tts.provider.noProvider')} /> : <SelectValue />}
+          <SelectValue placeholder={selectorPlaceholder} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>

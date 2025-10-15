@@ -2,7 +2,7 @@ export function migrate(oldConfig: any): any {
   return {
     ...oldConfig,
     tts: {
-      providerId: 'openai-default',
+      providerId: null,
       model: 'tts-1',
       voice: 'alloy',
       speed: 1,
