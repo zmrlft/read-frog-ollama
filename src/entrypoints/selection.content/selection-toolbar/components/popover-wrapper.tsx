@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect, useImperativeHandle, useRef } from 'react'
+import { NOTRANSLATE_CLASS } from '@/utils/constants/dom-labels'
 import { MARGIN } from '@/utils/constants/selection'
 import { mouseClickPositionAtom, selectionContentAtom } from '../atom'
 import { useDraggable } from '../use-draggable'
@@ -95,7 +96,7 @@ export function PopoverWrapper({ title, icon, children, onClose, isVisible, setI
 
   return (
     <div
-      className="fixed z-[2147483647] bg-white dark:bg-zinc-800 border rounded-lg w-[500px] shadow-lg flex flex-col"
+      className={`fixed z-[2147483647] bg-white dark:bg-zinc-800 border rounded-lg w-[500px] shadow-lg flex flex-col ${NOTRANSLATE_CLASS}`}
       ref={popoverRef as React.RefObject<HTMLDivElement>}
       style={popoverStyle}
       onWheel={(e) => {

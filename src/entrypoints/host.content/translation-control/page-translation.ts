@@ -1,6 +1,6 @@
 import { getConfigFromStorage } from '@/utils/config/config'
 import { CONTENT_WRAPPER_CLASS } from '@/utils/constants/dom-labels'
-import { isDontWalkIntoButTranslateAsChildElement, isHTMLElement, isIFrameElement } from '@/utils/host/dom/filter'
+import { hasNoWalkAncestor, isDontWalkIntoButTranslateAsChildElement, isHTMLElement, isIFrameElement } from '@/utils/host/dom/filter'
 import { deepQueryTopLevelSelector } from '@/utils/host/dom/find'
 import { walkAndLabelElement } from '@/utils/host/dom/traversal'
 import { removeAllTranslatedWrapperNodes, translateWalkedElement } from '@/utils/host/translate/node-manipulation'
@@ -203,6 +203,10 @@ export class PageTranslationManager implements IPageTranslationManager {
       logger.error('Global config is not initialized')
       return
     }
+
+    // Skip if container has an ancestor that should not be walked into
+    if (hasNoWalkAncestor(container, config))
+      return
 
     walkAndLabelElement(container, this.walkId, config)
     // if container itself has paragraph and the id

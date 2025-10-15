@@ -181,3 +181,17 @@ export function isTranslatedWrapperNode(node: Node) {
 export function isTranslatedContentNode(node: Node): boolean {
   return isHTMLElement(node) && (node.classList.contains(BLOCK_CONTENT_CLASS) || node.classList.contains(INLINE_CONTENT_CLASS))
 }
+
+/**
+ * Check if an element has an ancestor that should not be walked into
+ */
+export function hasNoWalkAncestor(element: HTMLElement, config: Config): boolean {
+  let current: HTMLElement | null = element.parentElement
+  while (current) {
+    if (isDontWalkIntoButTranslateAsChildElement(current) || isDontWalkIntoAndDontTranslateAsChildElement(current, config)) {
+      return true
+    }
+    current = current.parentElement
+  }
+  return false
+}

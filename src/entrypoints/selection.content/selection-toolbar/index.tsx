@@ -1,6 +1,7 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
+import { NOTRANSLATE_CLASS } from '@/utils/constants/dom-labels'
 import { MARGIN } from '@/utils/constants/selection'
 import { AiButton, AiPopover } from './ai-button'
 import { isSelectionToolbarVisibleAtom, selectionContentAtom, selectionRangeAtom } from './atom'
@@ -142,7 +143,7 @@ export function SelectionToolbar() {
   }, [isSelectionToolbarVisible, setSelectionContent, setIsSelectionToolbarVisible, setSelectionRange, updatePosition])
 
   return (
-    <div ref={tooltipContainerRef}>
+    <div ref={tooltipContainerRef} className={NOTRANSLATE_CLASS}>
       {isSelectionToolbarVisible && selectionToolbar.enabled && (
         <div
           ref={tooltipRef}
