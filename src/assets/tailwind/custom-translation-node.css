@@ -15,7 +15,7 @@
 
 .read-frog-translated-block-content[data-read-frog-custom-translation-style='blockquote'] {
   border-left: 4px solid var(--read-frog-primary);
-  padding: 4px 0 4px 12px;
+  padding: 4px 0 4px 8px;
 }
 
 [data-read-frog-custom-translation-style='weakened'] {
@@ -30,6 +30,16 @@
 
 [data-read-frog-custom-translation-style='border'] {
   border: 1px solid var(--read-frog-primary);
-  padding: 4px;
-  border-radius: 2px;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+[data-read-frog-custom-translation-style='textColor'] {
+  color: var(--read-frog-primary) !important;
+}
+
+[data-read-frog-custom-translation-style='background'] {
+  background-color: color-mix(in srgb, var(--read-frog-primary) 15%, transparent);
+  padding: 2px 4px;
+  border-radius: 4px;
 }

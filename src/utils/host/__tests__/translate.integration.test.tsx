@@ -702,6 +702,7 @@ describe('translate', () => {
           expectNodeLabels(node.children[0], [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
         })
         it('bilingual mode: should treat float left with block next sibling as block node', async () => {
+          // https://theqoo.net/genrefiction/1771494967
           render(
             <div data-testid="test-node">
               <span style={{ float: 'left' }}>{MOCK_ORIGINAL_TEXT}</span>

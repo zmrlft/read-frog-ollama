@@ -215,6 +215,8 @@ options:
         weakened: Weakened
         dashedLine: Dashed Line
         border: Border
+        textColor: Text Color
+        background: Background
     translationMode:
       title: Translation Mode
       description: 'Choose how the translated text is displayed: bilingual or translation only.'
