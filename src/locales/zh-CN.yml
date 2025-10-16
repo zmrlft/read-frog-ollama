@@ -188,6 +188,7 @@ options:
       importSuccess: 导入成功
       import: 导入
       export: 导出
+      current: 正在使用
       editPrompt:
         title: 编辑 Prompt
         name: 标题
@@ -200,6 +201,9 @@ options:
         title: 删除 Prompt
         description: 确认删除该 Prompt
         confirm: 确认
+        cancel: 取消
+      exportPrompt:
+        exportSelected: 导出所选
         cancel: 取消
     translationStyle:
       title: 翻译显示样式

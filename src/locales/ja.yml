@@ -186,6 +186,7 @@ options:
       importSuccess: インポート成功
       import: インポート
       export: エクスポート
+      current: 使用中
       editPrompt:
         title: プロンプトを編集
         name: 名前
@@ -198,6 +199,9 @@ options:
         title: プロンプトを削除
         description: このプロンプトを削除しますか
         confirm: 確認
+        cancel: キャンセル
+      exportPrompt:
+        exportSelected: 選択したものをエクスポート
         cancel: キャンセル
     translationStyle:
       title: 翻訳表示スタイル

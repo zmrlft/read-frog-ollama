@@ -188,6 +188,7 @@ options:
       importSuccess: Import Success
       import: Import
       export: Export
+      current: in use
       editPrompt:
         title: Edit Prompt
         name: Name
@@ -200,6 +201,9 @@ options:
         title: Delete Prompt
         description: Confirm delete prompt
         confirm: Confirm
+        cancel: Cancel
+      exportPrompt:
+        exportSelected: Export Selected
         cancel: Cancel
     translationStyle:
       title: Translation Display Style

@@ -1,14 +1,17 @@
 import { i18n } from '#imports'
-import { Icon } from '@iconify/react/dist/iconify.js'
+import { Icon } from '@iconify/react'
 import { Button } from '@repo/ui/components/button'
-import { useAtomValue } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
+import { isExportPromptModeAtom, selectedPromptsToExportAtom } from './atoms'
 import { downloadJSONFile } from './utils/prompt-file'
 
-export function ExportPrompts({ selectedPrompts }: { selectedPrompts: string[] }) {
+export function ExportPrompts() {
   const translateConfig = useAtomValue(configFieldsAtomMap.translate)
   const promptsConfig = translateConfig.promptsConfig
   const patterns = promptsConfig.patterns
+  const [selectedPrompts, setSelectedPrompts] = useAtom(selectedPromptsToExportAtom)
+  const setIsExportMode = useSetAtom(isExportPromptModeAtom)
 
   const sortOutDownloadPrompts = patterns
     .filter(pattern => selectedPrompts.includes(pattern.id))
@@ -19,14 +22,15 @@ export function ExportPrompts({ selectedPrompts }: { selectedPrompts: string[] }
 
   return (
     <Button
-      variant="outline"
       onClick={() => {
         downloadJSONFile(sortOutDownloadPrompts)
+        setIsExportMode(false)
+        setSelectedPrompts([])
       }}
       disabled={!selectedPrompts.length}
     >
-      <Icon icon="tabler:file-upload" className="size-4" />
-      {i18n.t('options.translation.personalizedPrompts.export')}
+      <Icon icon="tabler:check" className="size-4" />
+      {i18n.t('options.translation.personalizedPrompts.exportPrompt.exportSelected')}
     </Button>
   )
 }
