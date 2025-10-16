@@ -32,6 +32,13 @@ export function isShallowInlineTransNode(node: Node): boolean {
   return false
 }
 
+// treat large floating letter on some news websites as inline node
+// for example: https://www.economist.com/business/2025/08/21/china-is-quietly-upstaging-america-with-its-open-models
+function isLargeInitialFloatingLetter(element: HTMLElement): boolean {
+  const computedStyle = window.getComputedStyle(element)
+  return computedStyle.float === 'left' && !!element.nextSibling && isShallowInlineTransNode(element.nextSibling)
+}
+
 export function isShallowInlineHTMLElement(element: HTMLElement): boolean {
   // to prevent too many inline nodes that make <body> as a paragraph node
   if (!element.textContent?.trim()) {
@@ -44,9 +51,7 @@ export function isShallowInlineHTMLElement(element: HTMLElement): boolean {
 
   const computedStyle = window.getComputedStyle(element)
 
-  // treat large floating letter on some news websites as inline node
-  // for example: https://www.economist.com/business/2025/08/21/china-is-quietly-upstaging-america-with-its-open-models
-  if (computedStyle.float !== 'none') {
+  if (isLargeInitialFloatingLetter(element)) {
     return true
   }
 
@@ -73,8 +78,7 @@ export function isShallowBlockHTMLElement(element: HTMLElement): boolean {
     return true
   }
 
-  // treat large floating letter on some news websites as block node
-  if (computedStyle.float !== 'none') {
+  if (isLargeInitialFloatingLetter(element)) {
     return false
   }
 

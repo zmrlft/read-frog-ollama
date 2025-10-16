@@ -53,9 +53,14 @@ describe('translate', () => {
 
     window.getComputedStyle = vi.fn((element) => {
       const originalStyle = originalGetComputedStyle(element)
+
+      // Check if element has inline style float property
+      const inlineFloat = (element as HTMLElement).style?.float
+
       if (originalStyle.float === '') {
         Object.defineProperty(originalStyle, 'float', {
-          value: 'none',
+          // Use inline style float if present, otherwise default to 'none'
+          value: inlineFloat || 'none',
           writable: true,
           enumerable: true,
           configurable: true,
@@ -626,42 +631,90 @@ describe('translate', () => {
       })
     })
     describe('floating inline HTML nodes', () => {
-      it('bilingual mode: should insert wrapper after the last inline node', async () => {
-        render(
-          <div data-testid="test-node">
-            <span style={{ float: 'left' }}>{MOCK_ORIGINAL_TEXT}</span>
-            <span style={{ display: 'inline' }}>{MOCK_ORIGINAL_TEXT}</span>
-          </div>,
-        )
-        const node = screen.getByTestId('test-node')
-        await removeOrShowPageTranslation('bilingual', true)
+      describe('large initial floating letter (float: left + inline next sibling)', () => {
+        it('bilingual mode: should treat float left with inline next sibling as large initial letter', async () => {
+          render(
+            <div data-testid="test-node">
+              <span style={{ float: 'left' }}>{MOCK_ORIGINAL_TEXT}</span>
+              <span style={{ display: 'inline' }}>{MOCK_ORIGINAL_TEXT}</span>
+            </div>,
+          )
+          const node = screen.getByTestId('test-node')
+          await removeOrShowPageTranslation('bilingual', true)
 
-        expectNodeLabels(node, [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
-        const wrapper = expectTranslationWrapper(node, 'bilingual')
-        expect(wrapper).toBe(node.childNodes[2])
-        expectTranslatedContent(wrapper, BLOCK_CONTENT_CLASS)
+          expectNodeLabels(node, [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+          expectNodeLabels(node.children[0], [INLINE_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+          expectNodeLabels(node.children[1], [INLINE_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+          const wrapper = expectTranslationWrapper(node, 'bilingual')
+          expect(wrapper).toBe(node.lastChild)
+          expectTranslatedContent(wrapper, BLOCK_CONTENT_CLASS)
 
-        await removeOrShowPageTranslation('bilingual', true)
-        expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
-        expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}`)
+          await removeOrShowPageTranslation('bilingual', true)
+          expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+          expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}`)
+        })
+        it('translation only mode: should treat float left with inline next sibling as large initial letter', async () => {
+          render(
+            <div data-testid="test-node">
+              <span style={{ float: 'left' }}>{MOCK_ORIGINAL_TEXT}</span>
+              <span style={{ display: 'inline' }}>{MOCK_ORIGINAL_TEXT}</span>
+            </div>,
+          )
+          const node = screen.getByTestId('test-node')
+          await removeOrShowPageTranslation('translationOnly', true)
+
+          expectNodeLabels(node, [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+          const wrapper = expectTranslationWrapper(node, 'translationOnly')
+          expect(wrapper).toBe(node.childNodes[0])
+
+          await removeOrShowPageTranslation('translationOnly', true)
+          expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+          expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}`)
+        })
       })
-      it('translation only mode: should replace floating and inline nodes with single wrapper', async () => {
-        render(
-          <div data-testid="test-node">
-            <span style={{ float: 'left' }}>{MOCK_ORIGINAL_TEXT}</span>
-            <span style={{ display: 'inline' }}>{MOCK_ORIGINAL_TEXT}</span>
-          </div>,
-        )
-        const node = screen.getByTestId('test-node')
-        await removeOrShowPageTranslation('translationOnly', true)
+      describe('float: right should NOT be treated as large initial letter', () => {
+        it('bilingual mode: should treat float right as block node', async () => {
+          render(
+            <div data-testid="test-node">
+              <span style={{ float: 'right' }}>{MOCK_ORIGINAL_TEXT}</span>
+              <span style={{ display: 'inline' }}>{MOCK_ORIGINAL_TEXT}</span>
+            </div>,
+          )
+          const node = screen.getByTestId('test-node')
+          await removeOrShowPageTranslation('bilingual', true)
 
-        expectNodeLabels(node, [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
-        const wrapper = expectTranslationWrapper(node, 'translationOnly')
-        expect(wrapper).toBe(node.childNodes[0])
+          expectNodeLabels(node, [BLOCK_ATTRIBUTE])
+          expectNodeLabels(node.children[0], [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+          expectNodeLabels(node.children[1], [INLINE_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+        })
+      })
+      describe('float: left without inline next sibling should NOT be treated as large initial letter', () => {
+        it('bilingual mode: should treat float left without next sibling as block node', async () => {
+          render(
+            <div data-testid="test-node">
+              <span style={{ float: 'left' }}>{MOCK_ORIGINAL_TEXT}</span>
+            </div>,
+          )
+          const node = screen.getByTestId('test-node')
+          await removeOrShowPageTranslation('bilingual', true)
 
-        await removeOrShowPageTranslation('translationOnly', true)
-        expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
-        expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}`)
+          expectNodeLabels(node, [BLOCK_ATTRIBUTE])
+          expectNodeLabels(node.children[0], [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+        })
+        it('bilingual mode: should treat float left with block next sibling as block node', async () => {
+          render(
+            <div data-testid="test-node">
+              <span style={{ float: 'left' }}>{MOCK_ORIGINAL_TEXT}</span>
+              <div>{MOCK_ORIGINAL_TEXT}</div>
+            </div>,
+          )
+          const node = screen.getByTestId('test-node')
+          await removeOrShowPageTranslation('bilingual', true)
+
+          expectNodeLabels(node, [BLOCK_ATTRIBUTE])
+          expectNodeLabels(node.children[0], [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+          expectNodeLabels(node.children[1], [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+        })
       })
     })
     describe('br dom between inline nodes', () => {
