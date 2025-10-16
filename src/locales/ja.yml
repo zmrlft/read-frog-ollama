@@ -278,7 +278,7 @@ options:
   whatsNew:
     title: 新機能
   survey:
-    title: 意見を聞かせて
+    title: 新機能の提案
 side:
   sourceLang: ソース言語
   targetLang: 翻訳言語

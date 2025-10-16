@@ -28,7 +28,7 @@ export const DEFAULT_CONFIG: Config = {
     mode: 'bilingual',
     node: {
       enabled: true,
-      hotkey: 'Shift',
+      hotkey: 'Control',
     },
     page: {
       range: 'main',
@@ -45,6 +45,7 @@ export const DEFAULT_CONFIG: Config = {
       maxItemsPerBatch: DEFAULT_BATCH_CONFIG.maxItemsPerBatch,
     },
     translationNodeStyle: DEFAULT_TRANSLATION_NODE_STYLE,
+    // TODO: move this to translate.page config
     customAutoTranslateShortcutKey: DEFAULT_AUTO_TRANSLATE_SHORTCUT_KEY,
   },
   tts: DEFAULT_TTS_CONFIG,

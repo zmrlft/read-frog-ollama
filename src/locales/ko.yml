@@ -279,7 +279,7 @@ options:
   whatsNew:
     title: 새로운 기능
   survey:
-    title: 의견을 들려주세요
+    title: 새로운 기능 제안
 side:
   sourceLang: 원본 언어
   targetLang: 대상 언어

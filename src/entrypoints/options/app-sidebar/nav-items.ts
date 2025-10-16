@@ -84,7 +84,7 @@ export const PRODUCT_NAV_ITEMS = {
     type: 'external',
     title: 'survey',
     action: true,
-    externalUrl: 'https://tally.so/r/m6aRVO',
+    externalUrl: 'https://tally.so/r/nrxr6L',
     icon: 'tabler:message-question',
   },
 } as const satisfies Record<string, NavItem>

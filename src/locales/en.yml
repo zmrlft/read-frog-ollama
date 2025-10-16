@@ -280,7 +280,7 @@ options:
   whatsNew:
     title: What's New
   survey:
-    title: Your Voice Matters
+    title: New Feature Suggestion
 side:
   sourceLang: Source Language
   targetLang: Target Language
