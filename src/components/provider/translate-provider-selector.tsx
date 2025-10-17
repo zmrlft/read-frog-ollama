@@ -20,6 +20,12 @@ export default function TranslateProviderSelector({ className }: { className?: s
   const providersConfig = useAtomValue(configFieldsAtomMap.providersConfig)
   const filteredProvidersConfig = filterEnabledProvidersConfig(providersConfig)
 
+  const isTranslationOnlyMode = translateConfig.mode === 'translationOnly'
+  const nonAPIProviders = getNonAPIProvidersConfig(filteredProvidersConfig)
+  const filteredNonAPIProviders = isTranslationOnlyMode
+    ? nonAPIProviders.filter(p => p.provider !== 'google')
+    : nonAPIProviders
+
   return (
     <Select
       value={translateConfig.providerId}
@@ -43,7 +49,7 @@ export default function TranslateProviderSelector({ className }: { className?: s
         </SelectGroup>
         <SelectGroup>
           <SelectLabel>{i18n.t('translateService.normalTranslator')}</SelectLabel>
-          {getNonAPIProvidersConfig(filteredProvidersConfig).map(({ id, name, provider }) => (
+          {filteredNonAPIProviders.map(({ id, name, provider }) => (
             <SelectItem key={id} value={id}>
               <ProviderIcon logo={PROVIDER_ITEMS[provider].logo(isDarkMode())} name={name} size="sm" />
             </SelectItem>
