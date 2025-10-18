@@ -268,6 +268,32 @@ options:
       viewConfig:
         expand: 設定を展開
         collapse: 設定を折りたたむ
+    backup:
+      title: 設定のバックアップ
+      description: 設定が変更された場合、1時間ごとに自動的にバックアップが作成されます。以前の設定をここで復元できます。（最大 $1 個のバックアップ）
+      loading: バックアップを読み込んでいます...
+      backupNow: 今すぐバックアップ
+      backupSuccess: バックアップが作成されました
+      restoreSuccess: 設定が復元されました
+      empty:
+        title: まだバックアップがありません
+        description: 設定が変更された場合、1時間ごとに自動的にバックアップが作成されます。
+      item:
+        extensionVersion: 拡張機能のバージョン：
+        schemaVersion: 設定のバージョン：
+        restore: 復元
+        export: エクスポート
+        delete: 削除
+      restore:
+        title: 設定のバックアップを復元しますか？
+        description: 現在の設定が最新のバックアップと異なる場合、自動的に現在の設定がバックアップされます。バックアップ数が上限を超える場合、最も古いバックアップが削除される可能性があります。
+        cancel: キャンセル
+        confirm: 復元
+      delete:
+        title: バックアップを削除しますか？
+        description: このバックアップを削除してもよろしいですか？この操作は元に戻せません。
+        cancel: キャンセル
+        confirm: 削除
     resetConfig:
       title: 設定をリセット
       description: すべての設定をデフォルト値にリセットします。

@@ -3,7 +3,7 @@ import type { ProvidersConfig } from '@/types/config/provider'
 import { storage } from '#imports'
 import { configSchema } from '@/types/config/config'
 import { isAPIProviderConfig } from '@/types/config/provider'
-import { CONFIG_SCHEMA_VERSION, CONFIG_STORAGE_KEY, DEFAULT_CONFIG } from '../constants/config'
+import { CONFIG_SCHEMA_VERSION, CONFIG_SCHEMA_VERSION_STORAGE_KEY, CONFIG_STORAGE_KEY, DEFAULT_CONFIG } from '../constants/config'
 import { logger } from '../logger'
 import { runMigration } from './migration'
 
@@ -14,7 +14,7 @@ import { runMigration } from './migration'
 export async function initializeConfig() {
   const [storedConfig, storedConfigSchemaVersion] = await Promise.all([
     storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`),
-    storage.getItem<number>(`local:__configSchemaVersion`),
+    storage.getItem<number>(`local:${CONFIG_SCHEMA_VERSION_STORAGE_KEY}`),
   ])
 
   let config: Config | null = storedConfig
@@ -45,7 +45,7 @@ export async function initializeConfig() {
 
   await Promise.all([
     storage.setItem<Config>(`local:${CONFIG_STORAGE_KEY}`, config),
-    storage.setItem<number>(`local:__configSchemaVersion`, currentVersion),
+    storage.setItem<number>(`local:${CONFIG_SCHEMA_VERSION_STORAGE_KEY}`, currentVersion),
   ])
 
   // eslint-disable-next-line turbo/no-undeclared-env-vars

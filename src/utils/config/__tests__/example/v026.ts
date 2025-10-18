@@ -3,7 +3,7 @@ import type { Config } from '@/types/config/config'
 
 export const testSeries: TestSeriesObject = {
   'complex-config-from-v020': {
-    description: 'Add batch queue configuration for translation requests',
+    description: 'Add default tts config',
     config: {
       language: {
         detectedCode: 'spa',
@@ -164,8 +164,8 @@ Translate to {{targetLang}}:
       },
     } satisfies Config,
   },
-  'config-from-v022': {
-    description: 'Add batch queue configuration for translation requests',
+  'config-with-no-default-openai-model': {
+    description: 'Add default tts config',
     config: {
       floatingButton: {
         disabledFloatingButtonPatterns: [],
@@ -190,44 +190,6 @@ Translate to {{targetLang}}:
           enabled: true,
           name: 'Microsoft Translator',
           provider: 'microsoft',
-        },
-        {
-          id: 'openai-default',
-          enabled: true,
-          apiKey: '123aqe',
-          baseURL: 'https://123',
-          models: {
-            read: {
-              customModel: null,
-              isCustomModel: false,
-              model: 'gpt-4.1-mini',
-            },
-            translate: {
-              customModel: 'gpt-4.1-m',
-              isCustomModel: true,
-              model: 'gpt-4.1-mini',
-            },
-          },
-          name: 'OpenAI',
-          provider: 'openai',
-        },
-        {
-          id: 'deepseek-default',
-          enabled: true,
-          models: {
-            read: {
-              customModel: null,
-              isCustomModel: false,
-              model: 'deepseek-chat',
-            },
-            translate: {
-              customModel: null,
-              isCustomModel: false,
-              model: 'deepseek-chat',
-            },
-          },
-          name: 'DeepSeek',
-          provider: 'deepseek',
         },
         {
           id: 'gemini-default',
@@ -257,7 +219,7 @@ Translate to {{targetLang}}:
         },
       ],
       read: {
-        providerId: 'deepseek-default',
+        providerId: 'gemini-default',
       },
       selectionToolbar: {
         enabled: true,

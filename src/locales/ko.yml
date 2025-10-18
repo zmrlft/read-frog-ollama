@@ -269,6 +269,32 @@ options:
       viewConfig:
         expand: 설정 펼치기
         collapse: 설정 접기
+    backup:
+      title: 설정 백업
+      description: 설정이 변경되면 매시간 자동으로 백업이 생성됩니다. 여기에서 이전 설정을 복원할 수 있습니다. (최대 $1개 백업)
+      loading: 백업을 불러오는 중...
+      backupNow: 지금 백업
+      backupSuccess: 백업이 생성되었습니다
+      restoreSuccess: 설정이 복원되었습니다
+      empty:
+        title: 아직 사용 가능한 백업이 없습니다
+        description: 설정이 변경되면 매시간 자동으로 백업이 생성됩니다.
+      item:
+        extensionVersion: 확장 프로그램 버전：
+        schemaVersion: 설정 버전：
+        restore: 복원
+        export: 내보내기
+        delete: 삭제
+      restore:
+        title: 설정 백업을 복원하시겠습니까?
+        description: 현재 설정이 최신 백업과 다른 경우 자동으로 현재 설정이 백업됩니다. 백업 수가 제한을 초과하면 가장 오래된 백업이 삭제될 수 있습니다.
+        cancel: 취소
+        confirm: 복원
+      delete:
+        title: 백업을 삭제하시겠습니까?
+        description: 이 백업을 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.
+        cancel: 취소
+        confirm: 삭제
     resetConfig:
       title: 기본 설정 복원
       description: 모든 설정을 기본값으로 재설정

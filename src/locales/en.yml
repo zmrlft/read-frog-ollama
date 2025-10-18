@@ -270,6 +270,32 @@ options:
       viewConfig:
         expand: Expand Config
         collapse: Collapse Config
+    backup:
+      title: Config Backup
+      description: Automatic backups are created every hour if the config is changed. You can restore previous configurations here. (Maximum $1 backups)
+      loading: Loading backups...
+      backupNow: Backup now
+      backupSuccess: Backup created successfully
+      restoreSuccess: Config restored successfully
+      empty:
+        title: No backups available yet
+        description: Backups are created automatically every hour if the config is changed.
+      item:
+        extensionVersion: 'Extension version:'
+        schemaVersion: 'Schema version:'
+        restore: Restore
+        export: Export
+        delete: Delete
+      restore:
+        title: Restore config backup?
+        description: Your current config will be automatically backed up if it is different from the latest backup. The oldest backup may be removed if the number of backups exceeds the limit.
+        cancel: Cancel
+        confirm: Restore
+      delete:
+        title: Delete backup?
+        description: Are you sure you want to delete this backup? This action cannot be undone.
+        cancel: Cancel
+        confirm: Delete
     resetConfig:
       title: Reset Config
       description: Reset all config to default value

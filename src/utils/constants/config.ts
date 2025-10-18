@@ -8,6 +8,7 @@ import { DEFAULT_TRANSLATION_NODE_STYLE } from './translation-node-style'
 import { DEFAULT_TTS_CONFIG } from './tts'
 
 export const CONFIG_STORAGE_KEY = 'config'
+export const CONFIG_SCHEMA_VERSION_STORAGE_KEY = '__configSchemaVersion'
 export const CONFIG_SCHEMA_VERSION = 26
 
 export const DEFAULT_FLOATING_BUTTON_POSITION = 0.66

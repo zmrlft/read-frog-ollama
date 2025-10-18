@@ -13,6 +13,15 @@ vi.mock('wxt/testing', async () => {
         ...actual.fakeBrowser.i18n,
         getMessage: (key: string) => key.replaceAll('_', '.'),
       },
+      runtime: {
+        ...actual.fakeBrowser.runtime,
+        getManifest: () => ({
+          manifest_version: 3,
+          name: 'Read Frog',
+          version: '1.0.0',
+          description: 'Test manifest',
+        }),
+      },
     },
   }
 })

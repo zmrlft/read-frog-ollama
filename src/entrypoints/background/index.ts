@@ -5,6 +5,7 @@ import { onMessage, sendMessage } from '@/utils/message'
 import { SessionCacheGroupRegistry } from '@/utils/session-cache/session-cache-group-registry'
 import { cleanupAllCache, setUpCacheCleanup } from './cache-cleanup'
 import { ensureInitializedConfig } from './config'
+import { setUpConfigBackup } from './config-backup'
 import { newUserGuide } from './new-user-guide'
 import { proxyFetch } from './proxy-fetch'
 import { setUpRequestQueue } from './translation-queues'
@@ -57,6 +58,7 @@ export default defineBackground({
 
     void setUpRequestQueue()
     setUpCacheCleanup()
+    setUpConfigBackup()
     void setupUninstallSurvey()
 
     proxyFetch()

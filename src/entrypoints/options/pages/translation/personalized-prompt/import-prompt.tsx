@@ -53,7 +53,7 @@ export function ImportPrompts() {
   return (
     <Button variant="outline" className="p-0">
       <Label htmlFor="import-file" className="w-full px-3">
-        <Icon icon="tabler:file-download" className="size-4" />
+        <Icon icon="tabler:file-import" className="size-4" />
         {i18n.t('options.translation.personalizedPrompts.import')}
       </Label>
       <Input

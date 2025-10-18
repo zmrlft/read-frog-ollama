@@ -91,7 +91,7 @@ function PromptList() {
                     onClick={() => setIsExportMode(true)}
                     disabled={patterns.length === 0}
                   >
-                    <Icon icon="tabler:file-upload" className="size-4" />
+                    <Icon icon="tabler:file-import" className="size-4" />
                     {i18n.t('options.translation.personalizedPrompts.export')}
                   </Button>
                   <ConfigurePrompt />
@@ -218,7 +218,7 @@ function ConfigurePrompt({
 } & React.ComponentProps<'button'>) {
   const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
   const isExportMode = useAtomValue(isExportPromptModeAtom)
-
+  const isDefault = isDefaultPrompt(originPrompt?.id ?? '')
   const inEdit = !!originPrompt
 
   const defaultPrompt = { id: crypto.randomUUID(), name: '', prompt: '' }
@@ -230,7 +230,7 @@ function ConfigurePrompt({
     setPrompt(originPrompt ?? defaultPrompt)
   }
 
-  const promptName = isDefaultPrompt(prompt.id)
+  const promptName = isDefault
     ? i18n.t('options.translation.personalizedPrompts.default')
     : prompt.name
 
@@ -278,7 +278,7 @@ function ConfigurePrompt({
           inEdit
             ? (
                 <Button variant="ghost" className={cn('size-8', className)} disabled={isExportMode} {...props}>
-                  <Icon icon="tabler:pencil" className="size-4" />
+                  <Icon icon={isDefault ? 'tabler:eye' : 'tabler:pencil'} className="size-4" />
                 </Button>
               )
             : (
@@ -322,14 +322,16 @@ function ConfigurePrompt({
             </div>
           </div>
         </SheetHeader>
-        <SheetFooter>
-          <SheetClose asChild>
-            <Button disabled={isDefaultPrompt(prompt.id)} onClick={configurePrompt}>{i18n.t('options.translation.personalizedPrompts.editPrompt.save')}</Button>
-          </SheetClose>
-          <SheetClose asChild>
-            <Button disabled={isDefaultPrompt(prompt.id)} variant="outline">{i18n.t('options.translation.personalizedPrompts.editPrompt.close')}</Button>
-          </SheetClose>
-        </SheetFooter>
+        {!isDefault && (
+          <SheetFooter>
+            <SheetClose asChild>
+              <Button disabled={isDefaultPrompt(prompt.id)} onClick={configurePrompt}>{i18n.t('options.translation.personalizedPrompts.editPrompt.save')}</Button>
+            </SheetClose>
+            <SheetClose asChild>
+              <Button disabled={isDefaultPrompt(prompt.id)} variant="outline">{i18n.t('options.translation.personalizedPrompts.editPrompt.close')}</Button>
+            </SheetClose>
+          </SheetFooter>
+        )}
       </SheetContent>
     </Sheet>
   )

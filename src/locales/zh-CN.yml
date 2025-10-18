@@ -270,6 +270,32 @@ options:
       viewConfig:
         expand: 展开配置
         collapse: 收起配置
+    backup:
+      title: 配置备份
+      description: 如果配置发生变化，每小时会自动创建备份。您可以在这里恢复之前的配置。（最多 $1 个备份）
+      loading: 正在加载备份...
+      backupNow: 立即备份
+      backupSuccess: 备份创建成功
+      restoreSuccess: 配置恢复成功
+      empty:
+        title: 暂无可用备份
+        description: 如果配置发生变化，每小时会自动创建备份。
+      item:
+        extensionVersion: 扩展版本：
+        schemaVersion: 配置版本：
+        restore: 恢复
+        export: 导出
+        delete: 删除
+      restore:
+        title: 恢复配置备份？
+        description: 如果当前配置与最新备份不同，将自动备份您的当前配置。如果备份数量超过限制，最旧的备份可能会被删除。
+        cancel: 取消
+        confirm: 恢复
+      delete:
+        title: 删除备份？
+        description: 您确定要删除此备份吗？此操作无法撤销。
+        cancel: 取消
+        confirm: 删除
     resetConfig:
       title: 恢复默认配置
       description:

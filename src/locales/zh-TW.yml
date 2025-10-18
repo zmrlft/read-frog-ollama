@@ -270,6 +270,32 @@ options:
       viewConfig:
         expand: 展開設定
         collapse: 收起設定
+    backup:
+      title: 設定備份
+      description: 如果設定發生變化，每小時會自動建立備份。您可以在這裡還原之前的設定。（最多 $1 個備份）
+      loading: 正在載入備份...
+      backupNow: 立即備份
+      backupSuccess: 備份建立成功
+      restoreSuccess: 設定還原成功
+      empty:
+        title: 尚無可用備份
+        description: 如果設定發生變化，每小時會自動建立備份。
+      item:
+        extensionVersion: 擴充功能版本：
+        schemaVersion: 設定版本：
+        restore: 還原
+        export: 匯出
+        delete: 刪除
+      restore:
+        title: 還原設定備份？
+        description: 如果目前設定與最新備份不同，將自動備份您的目前設定。如果備份數量超過限制，最舊的備份可能會被刪除。
+        cancel: 取消
+        confirm: 還原
+      delete:
+        title: 刪除備份？
+        description: 您確定要刪除此備份嗎？此操作無法復原。
+        cancel: 取消
+        confirm: 刪除
     resetConfig:
       title: 重置配置
       description: 重置所有配置為預設值
