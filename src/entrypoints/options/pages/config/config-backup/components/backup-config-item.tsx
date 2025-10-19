@@ -13,6 +13,7 @@ import {
   AlertDialogTrigger,
 } from '@repo/ui/components/alert-dialog'
 import { Button } from '@repo/ui/components/button'
+import { ButtonGroup } from '@repo/ui/components/button-group'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@repo/ui/components/dropdown-menu'
 import { Item, ItemActions, ItemContent, ItemDescription, ItemFooter, ItemTitle } from '@repo/ui/components/item'
 import { Spinner } from '@repo/ui/components/spinner'
@@ -36,6 +37,39 @@ interface BackupConfigItemProps {
 }
 
 export function BackupConfigItem({ backupId, backupMetadata, backup }: BackupConfigItemProps) {
+  const formatDate = (timestamp: number) => {
+    return new Date(timestamp).toLocaleString()
+  }
+
+  return (
+    <Item variant="muted">
+      <ItemContent>
+        <ItemTitle>{formatDate(backupMetadata.createdAt)}</ItemTitle>
+        <ItemDescription className="text-xs flex flex-wrap items-center gap-x-4">
+          <span>
+            {i18n.t('options.config.backup.item.extensionVersion')}
+            {' '}
+            {backupMetadata.extensionVersion}
+          </span>
+          <span>
+            {i18n.t('options.config.backup.item.schemaVersion')}
+            {' '}
+            {backup[CONFIG_SCHEMA_VERSION_STORAGE_KEY]}
+          </span>
+        </ItemDescription>
+      </ItemContent>
+      <ItemActions>
+        <ButtonGroup>
+          <RestoreButton backup={backup} />
+          <MoreOptions backupId={backupId} backup={backup} />
+        </ButtonGroup>
+      </ItemActions>
+      <ItemFooter><ViewConfig config={backup.config} size="sm" /></ItemFooter>
+    </Item>
+  )
+}
+
+function RestoreButton({ backup }: { backup: ConfigBackup }) {
   const currentConfig = useAtomValue(configAtom)
   const setConfig = useSetAtom(writeConfigAtom)
 
@@ -56,52 +90,29 @@ export function BackupConfigItem({ backupId, backupMetadata, backup }: BackupCon
     },
   })
 
-  const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleString()
-  }
-
   return (
-    <Item variant="muted">
-      <ItemContent>
-        <ItemTitle>{formatDate(backupMetadata.createdAt)}</ItemTitle>
-        <ItemDescription className="text-xs flex flex-wrap items-center gap-x-4">
-          <span>
-            {i18n.t('options.config.backup.item.extensionVersion')}
-            {backupMetadata.extensionVersion}
-          </span>
-          <span>
-            {i18n.t('options.config.backup.item.schemaVersion')}
-            {backup[CONFIG_SCHEMA_VERSION_STORAGE_KEY]}
-          </span>
-        </ItemDescription>
-      </ItemContent>
-      <ItemActions>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button variant="outline" size="sm" disabled={isRestoring}>
-              {isRestoring ? <Spinner /> : <Icon icon="tabler:restore" />}
-              {i18n.t('options.config.backup.item.restore')}
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>{i18n.t('options.config.backup.restore.title')}</AlertDialogTitle>
-              <AlertDialogDescription>
-                {i18n.t('options.config.backup.restore.description')}
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>{i18n.t('options.config.backup.restore.cancel')}</AlertDialogCancel>
-              <AlertDialogAction onClick={() => restoreBackup(backup)} disabled={isRestoring}>
-                {i18n.t('options.config.backup.restore.confirm')}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-        <MoreOptions backupId={backupId} backup={backup} />
-      </ItemActions>
-      <ItemFooter><ViewConfig config={backup.config} size="sm" /></ItemFooter>
-    </Item>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="outline" size="sm" disabled={isRestoring}>
+          {isRestoring ? <Spinner /> : <Icon icon="tabler:restore" />}
+          {i18n.t('options.config.backup.item.restore')}
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{i18n.t('options.config.backup.restore.title')}</AlertDialogTitle>
+          <AlertDialogDescription>
+            {i18n.t('options.config.backup.restore.description')}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>{i18n.t('options.config.backup.restore.cancel')}</AlertDialogCancel>
+          <AlertDialogAction onClick={() => restoreBackup(backup)} disabled={isRestoring}>
+            {i18n.t('options.config.backup.restore.confirm')}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   )
 }
 
