@@ -1,8 +1,9 @@
 import type { TestSeriesObject } from './types'
+import type { Config } from '@/types/config/config'
 
 export const testSeries: TestSeriesObject = {
   'complex-config-from-v020': {
-    description: 'Add default tts config',
+    description: 'Migrate Gemini models from 1.5 to 2.5',
     config: {
       language: {
         detectedCode: 'spa',
@@ -161,10 +162,10 @@ Translate to {{targetLang}}:
       betaExperience: {
         enabled: false,
       },
-    },
+    } satisfies Config,
   },
   'config-with-no-default-openai-model': {
-    description: 'Add default tts config',
+    description: 'Migrate Gemini models from 1.5 to 2.5',
     config: {
       floatingButton: {
         disabledFloatingButtonPatterns: [],
@@ -203,7 +204,7 @@ Translate to {{targetLang}}:
             translate: {
               customModel: 'gemini-1.5-pro',
               isCustomModel: true,
-              model: 'gemini-1.5-pro',
+              model: 'gemini-2.5-pro',
             },
           },
           name: 'Gemini',
@@ -273,6 +274,6 @@ Translate to {{targetLang}}:
       betaExperience: {
         enabled: false,
       },
-    },
+    } satisfies Config,
   },
 }

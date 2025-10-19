@@ -159,7 +159,7 @@ export const DEFAULT_TRANSLATE_MODELS: TranslateLLMModels = {
     customModel: null,
   },
   gemini: {
-    model: 'gemini-1.5-flash',
+    model: 'gemini-2.5-flash',
     isCustomModel: false,
     customModel: null,
   },

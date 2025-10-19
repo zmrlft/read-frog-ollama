@@ -29,7 +29,7 @@ export const READ_PROVIDER_MODELS = {
 export const TRANSLATE_PROVIDER_MODELS = {
   openai: ['gpt-5-mini', 'gpt-4.1-mini', 'gpt-4o-mini', 'gpt-5-nano', 'gpt-4.1-nano', 'gpt-5', 'gpt-4.1', 'gpt-4o'],
   deepseek: ['deepseek-chat'],
-  gemini: ['gemini-2.5-pro', 'gemini-2.5-flash', 'gemini-1.5-pro', 'gemini-1.5-flash', 'gemini-2.0-flash-exp'],
+  gemini: ['gemini-2.5-pro', 'gemini-2.5-flash', 'gemini-2.0-flash-exp'],
   anthropic: ['claude-sonnet-4-5', 'claude-opus-4-1', 'claude-sonnet-4-0', 'claude-3-7-sonnet-latest', 'claude-3-5-haiku-latest'],
   siliconflow: ['Qwen/Qwen3-Next-80B-A3B-Instruct'],
   tensdaq: ['Qwen3-30B-A3B-Instruct-2507', 'deepseek-v3.1'],
@@ -57,7 +57,7 @@ export const NON_API_TRANSLATE_PROVIDERS_MAP: Record<typeof NON_API_TRANSLATE_PR
 }
 export const PURE_TRANSLATE_PROVIDERS = ['google', 'microsoft', 'deeplx'] as const
 
-export const THINKING_MODELS = ['gemini-2.5-pro', 'gemini-1.5-pro'] as const
+export const THINKING_MODELS = ['gemini-2.5-pro'] as const
 
 /* ──────────────────────────────
   Derived provider names
