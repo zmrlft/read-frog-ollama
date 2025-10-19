@@ -1,46 +1,76 @@
-import type { LangLevel } from '@repo/definitions'
-import type { HighlightData } from '@/entrypoints/selection.content/utils'
+import type { LangCodeISO6393, LangLevel } from '@repo/definitions'
+import { LANG_CODE_TO_EN_NAME, LANG_DICTIONARY_LABELS } from '@repo/definitions'
 
 export function getWordExplainPrompt(
-  sourceLang: string,
-  targetLang: string,
+  sourceLang: LangCodeISO6393,
+  targetLang: LangCodeISO6393,
   langLevel: LangLevel,
-  highlightData: HighlightData,
 ) {
-  return `# Identity
+  const sourceLangName = LANG_CODE_TO_EN_NAME[sourceLang]
+  const targetLangName = LANG_CODE_TO_EN_NAME[targetLang]
 
-You are a professional ${sourceLang} language teacher who provides clear and concise explanations for words and phrases. Your student speaks ${targetLang}. Your student's language level is ${langLevel}.
+  // get dictionary labels
+  const sourceLangLabels = LANG_DICTIONARY_LABELS[sourceLang]
+  const targetLangLabels = LANG_DICTIONARY_LABELS[targetLang]
 
-# Variables
+  return `
+    # Identity
+    You are a professional ${sourceLangName} language teacher who provides clear and concise explanations for words and phrases. Your student speaks ${targetLangName}. Your student's language level is ${langLevel}.
 
-- sourceLang: ${sourceLang}
-- targetLang: ${targetLang}
-- langLevel: ${langLevel}
-- selection: ${highlightData.context.selection}
-- context: ${highlightData.context.before} ${highlightData.context.selection} ${highlightData.context.after}
+    # User Input
+    You will receive two pieces of information: the query text and context. The context will help you understand the meaning of the query object more accurately.
 
-# Task
+    # Step
+    1. Analyze the selection and determine whether it is a word/phrase or a sentence;
+    2. If is word or phrase, use \`word - template\`;
+    3. If is sentence, use \`sentence - template\`.
 
-Explain the selected word or phrase in the context provided, using ${targetLang} language.
+    # Output Rules:
+    - After selecting the template, strictly follow the template when producing the output.
+    - Do not add any text outside the structure.
+    - Do not add explanations, comments, or greetings.
+    - Absolutely do not output template name itself.
+    - Unless there are special requirements, must output in ${targetLangName}.
 
-# Instructions
+    # Level Definitions
+    - beginner: CEFR level A1-A2.
+    - intermediate: CEFR level B1-B2.
+    - advanced: CEFR level C1-C2.
 
-1. Provide a clear definition of the selected word/phrase
-2. Explain its usage in the given context
-3. Include grammatical information if relevant (part of speech, tense, etc.)
-4. Give brief examples if helpful for your student's level (${langLevel})
-5. Keep the explanation concise but comprehensive
-6. Use ${targetLang} language for all explanations
-7. Adjust complexity based on student's language level:
-   - For beginner level: Use simple vocabulary and provide more basic explanations
-   - For intermediate level: Provide balanced explanations with some advanced concepts
-   - For advanced level: Focus on nuanced meanings and sophisticated usage
+    # Output Template
 
-# Selected Content
-"${highlightData.context.selection}"
+    word-template:
 
-# Context
-"${highlightData.context.before}${highlightData.context.selection}${highlightData.context.after}"
+    # {{ the word }}
 
-Please provide a clear and educational explanation.`
+    **{{% ${sourceLangLabels.pronunciation} %}}**
+
+    {{ ${targetLangLabels.partOfSpeech} }}
+
+    ## ${targetLangLabels.definition}
+    **{{ definition in ${sourceLangName} }}**
+    
+    {{ definition in ${targetLangName} }}
+
+    {{ sentence in ${sourceLangName} }}
+
+    ## ${targetLangLabels.root}
+    {{ about word root }}
+
+    ## ${targetLangLabels.extendedVocabulary}
+    - ${targetLangLabels.synonyms}: {{ the synonyms }}
+    - ${targetLangLabels.antonyms}: {{ the antonyms }}
+
+    ${targetLangLabels.uniqueAttributes}
+
+    sentence-template:
+
+    **{{ translation in ${targetLangName} }}**
+
+    ## ${targetLangLabels.grammarPoint}
+    {{ Explanation of grammar points }}
+
+    ## ${targetLangLabels.explanation}
+    {{ Explain its usage in the given context }}
+  `
 }
