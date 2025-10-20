@@ -3,6 +3,7 @@ import { cn } from '@repo/ui/lib/utils'
 import { useAtomValue } from 'jotai'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { validateTranslationConfig } from '@/utils/host/translate/translate-text'
+import { logger } from '@/utils/logger'
 import { sendMessage } from '@/utils/message'
 import { enablePageTranslationAtom } from '../../atoms'
 import HiddenButton from './components/hidden-button'
@@ -24,6 +25,7 @@ export default function TranslateButton({ className }: { className: string }) {
             translate: translateConfig,
             language: languageConfig,
           })) {
+            logger.error('validateTranslationConfig returned false; aborting enablePageTranslation')
             return
           }
           void sendMessage('setEnablePageTranslationOnContentScript', {

@@ -1,5 +1,5 @@
 import type { Config } from '@/types/config/config'
-import { browser, createShadowRootUi, defineContentScript, storage } from '#imports'
+import { createShadowRootUi, defineContentScript, storage } from '#imports'
 import { kebabCase } from 'case-anything'
 import ReactDOM from 'react-dom/client'
 // import eruda from 'eruda'
@@ -7,9 +7,8 @@ import { getConfigFromStorage } from '@/utils/config/config'
 import { APP_NAME } from '@/utils/constants/app'
 import { CONFIG_STORAGE_KEY } from '@/utils/constants/config'
 import { getDocumentInfo } from '@/utils/content'
-import { shouldEnableAutoTranslation } from '@/utils/host/translate/auto-translation'
 import { logger } from '@/utils/logger'
-import { sendMessage } from '@/utils/message'
+import { onMessage, sendMessage } from '@/utils/message'
 import { protectSelectAllShadowRoot } from '@/utils/select-all'
 import { insertShadowRootUIWrapperInto } from '@/utils/shadow-root'
 import { addStyleToShadow } from '@/utils/styles'
@@ -54,7 +53,6 @@ export default defineContentScript({
 
     void registerNodeTranslationTriggers()
 
-    const port = browser.runtime.connect({ name: 'translation-host.content' })
     const manager = new PageTranslationManager({
       root: null,
       rootMargin: '1000px',
@@ -72,7 +70,7 @@ export default defineContentScript({
           manager.stop()
         }
         // Notify background script that URL has changed, let it decide whether to automatically enable translation
-        void sendMessage('resetPageTranslationOnNavigation', { url: to })
+        void sendMessage('checkAndSetAutoTranslation', { url: to })
       }
     }
 
@@ -83,15 +81,18 @@ export default defineContentScript({
 
     void bindTranslationShortcutKey(manager)
 
-    storage.watch('local:config', () => {
+    // This may not work when the tab is not active, if so, need refresh the webpage
+    storage.watch(`local:${CONFIG_STORAGE_KEY}`, () => {
       void bindTranslationShortcutKey(manager)
     })
 
-    port.onMessage.addListener((msg) => {
-      logger.info('onMessage', msg)
-      if (msg.type !== 'STATUS_PUSH' || msg.enabled === manager.isActive)
+    // Listen for translation state changes from background
+    onMessage('translationStateChanged', (msg) => {
+      logger.info('translationStateChanged', msg.data)
+      const { enabled } = msg.data
+      if (enabled === manager.isActive)
         return
-      msg.enabled ? void manager.start() : manager.stop()
+      enabled ? void manager.start() : manager.stop()
     })
 
     const config = await getConfigFromStorage()
@@ -102,10 +103,8 @@ export default defineContentScript({
         language: { ...config.language, detectedCode },
       })
 
-      // ! Temporary code for browser has no port.onMessage.addListener api like Orion
-      const autoEnable = await shouldEnableAutoTranslation(window.location.href, config)
-      if (autoEnable && !manager.isActive)
-        void manager.start()
+      // Check if auto-translation should be enabled for initial page load
+      void sendMessage('checkAndSetAutoTranslation', { url: window.location.href })
     }
   },
 })

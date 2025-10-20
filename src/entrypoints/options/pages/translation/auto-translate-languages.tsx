@@ -54,7 +54,7 @@ function AutoTranslateLanguagesSelector() {
             <Icon icon="tabler:chevron-down" className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="max-h-60 overflow-y-auto">
+        <DropdownMenuContent className="max-h-60 overflow-y-auto" align="end">
           {allLanguages.map(language => (
             <DropdownMenuCheckboxItem
               key={language}

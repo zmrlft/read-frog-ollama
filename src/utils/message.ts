@@ -12,9 +12,11 @@ interface ProtocolMap {
   getInitialConfig: () => Config | null
   // translation state
   getEnablePageTranslation: (data: { tabId: number }) => boolean | undefined
+  getEnablePageTranslationFromContentScript: () => Promise<boolean>
   setEnablePageTranslation: (data: { tabId: number, enabled: boolean }) => void
   setEnablePageTranslationOnContentScript: (data: { enabled: boolean }) => void
-  resetPageTranslationOnNavigation: (data: { url: string }) => void
+  checkAndSetAutoTranslation: (data: { url: string }) => void
+  translationStateChanged: (data: { enabled: boolean }) => void
   // read article
   readArticle: () => void
   popupRequestReadArticle: (data: { tabId: number }) => void
