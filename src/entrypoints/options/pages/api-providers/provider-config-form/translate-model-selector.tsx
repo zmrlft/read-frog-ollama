@@ -5,6 +5,7 @@ import { SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } fr
 import { cn } from '@repo/ui/lib/utils'
 import { useStore } from '@tanstack/react-form'
 import { useSetAtom } from 'jotai'
+import { Activity } from 'react'
 import { toast } from 'sonner'
 import { isLLMTranslateProviderConfig, TRANSLATE_PROVIDER_MODELS } from '@/types/config/provider'
 import { providerConfigAtom, updateLLMProviderConfig } from '@/utils/atoms/provider'
@@ -18,45 +19,43 @@ export const TranslateModelSelector = withForm({
     if (!isLLMTranslateProviderConfig(providerConfig))
       return <></>
 
-    const { isCustomModel, customModel } = providerConfig.models.translate
+    const { isCustomModel, customModel, model } = providerConfig.models.translate
 
     return (
       <div>
-        {
-          isCustomModel
-            ? (
-                <form.AppField name="models.translate.customModel">
-                  {field => <field.InputField formForSubmit={form} label={i18n.t('options.apiProviders.form.models.translate.customTitle')} value={customModel ?? ''} />}
-                </form.AppField>
-              )
-            : (
-                <form.AppField name="models.translate.model">
-                  {field => (
-                    <field.SelectField formForSubmit={form} label={i18n.t('options.apiProviders.form.models.translate.title')}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder={i18n.t('options.apiProviders.form.models.translate.placeholder')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          {TRANSLATE_PROVIDER_MODELS[providerConfig.provider].map(model => (
-                            <SelectItem key={model} value={model}>
-                              {model}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </field.SelectField>
-                  )}
-                </form.AppField>
-              )
-        }
+        <Activity mode={isCustomModel ? 'visible' : 'hidden'}>
+          <form.AppField name="models.translate.customModel">
+            {field => <field.InputField formForSubmit={form} label={i18n.t('options.apiProviders.form.models.translate.customTitle')} value={customModel ?? ''} />}
+          </form.AppField>
+        </Activity>
+
+        <Activity mode={isCustomModel ? 'hidden' : 'visible'}>
+          <form.AppField name="models.translate.model">
+            {field => (
+              <field.SelectField formForSubmit={form} label={i18n.t('options.apiProviders.form.models.translate.title')}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder={i18n.t('options.apiProviders.form.models.translate.placeholder')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {TRANSLATE_PROVIDER_MODELS[providerConfig.provider].map(model => (
+                      <SelectItem key={model} value={model}>
+                        {model}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </field.SelectField>
+            )}
+          </form.AppField>
+        </Activity>
         <div className="mt-2.5 flex items-center space-x-2">
-          <form.Field name="models.translate">
+          <form.Field name="models.translate.isCustomModel">
             { field => (
               <div className={cn('flex items-center space-x-2', providerConfig.provider === 'openaiCompatible' && 'hidden')}>
                 <Checkbox
                   id="isCustomModel-translate"
-                  checked={field.state.value.isCustomModel}
+                  checked={field.state.value}
                   onCheckedChange={(checked) => {
                     try {
                       if (checked === false) {
@@ -76,7 +75,7 @@ export const TranslateModelSelector = withForm({
                           updateLLMProviderConfig(providerConfig, {
                             models: {
                               translate: {
-                                customModel: field.state.value.model,
+                                customModel: model,
                                 isCustomModel: true,
                               },
                             },

@@ -5,6 +5,7 @@ import { SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } fr
 import { cn } from '@repo/ui/lib/utils'
 import { useStore } from '@tanstack/react-form'
 import { useSetAtom } from 'jotai'
+import { Activity } from 'react'
 import { toast } from 'sonner'
 import { isReadProviderConfig, READ_PROVIDER_MODELS } from '@/types/config/provider'
 import { providerConfigAtom, updateLLMProviderConfig } from '@/utils/atoms/provider'
@@ -17,45 +18,43 @@ export const ReadModelSelector = withForm({
     const setProviderConfig = useSetAtom(providerConfigAtom(providerConfig.id))
     if (!isReadProviderConfig(providerConfig))
       return <></>
-    const { isCustomModel, customModel } = providerConfig.models.read
+    const { isCustomModel, customModel, model } = providerConfig.models.read
 
     return (
       <div>
-        {
-          isCustomModel
-            ? (
-                <form.AppField name="models.read.customModel">
-                  {field => <field.InputField formForSubmit={form} label={i18n.t('options.apiProviders.form.models.read.customTitle')} value={customModel ?? ''} />}
-                </form.AppField>
-              )
-            : (
-                <form.AppField name="models.read.model">
-                  {field => (
-                    <field.SelectField formForSubmit={form} label={i18n.t('options.apiProviders.form.models.read.title')}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder={i18n.t('options.apiProviders.form.models.read.placeholder')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          {READ_PROVIDER_MODELS[providerConfig.provider].map(model => (
-                            <SelectItem key={model} value={model}>
-                              {model}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </field.SelectField>
-                  )}
-                </form.AppField>
-              )
-        }
+        <Activity mode={isCustomModel ? 'visible' : 'hidden'}>
+          <form.AppField name="models.read.customModel">
+            {field => <field.InputField formForSubmit={form} label={i18n.t('options.apiProviders.form.models.read.customTitle')} value={customModel ?? ''} />}
+          </form.AppField>
+        </Activity>
+
+        <Activity mode={isCustomModel ? 'hidden' : 'visible'}>
+          <form.AppField name="models.read.model">
+            {field => (
+              <field.SelectField formForSubmit={form} label={i18n.t('options.apiProviders.form.models.read.title')}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder={i18n.t('options.apiProviders.form.models.read.placeholder')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {READ_PROVIDER_MODELS[providerConfig.provider].map(model => (
+                      <SelectItem key={model} value={model}>
+                        {model}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </field.SelectField>
+            )}
+          </form.AppField>
+        </Activity>
         <div className="mt-2.5 flex items-center space-x-2">
-          <form.Field name="models.read">
+          <form.Field name="models.read.isCustomModel">
             { field => (
               <div className={cn('flex items-center space-x-2', providerConfig.provider === 'openaiCompatible' && 'hidden')}>
                 <Checkbox
                   id="isCustomModel-read"
-                  checked={field.state.value.isCustomModel}
+                  checked={field.state.value}
                   onCheckedChange={(checked) => {
                     try {
                       if (checked === false) {
@@ -75,7 +74,7 @@ export const ReadModelSelector = withForm({
                           updateLLMProviderConfig(providerConfig, {
                             models: {
                               read: {
-                                customModel: field.state.value.model,
+                                customModel: model,
                                 isCustomModel: true,
                               },
                             },
