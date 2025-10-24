@@ -192,6 +192,7 @@ options:
       maxItemsPerBatch:
         title: Maximum Paragraph Count
         description: Maximum number of paragraphs for each batch translation to control the content volume of each translation
+      statisticsLink: Saved approximately $1 cost in the past 7 days
     alwaysTranslate:
       title: Always Translate
       description: Always translate this website
@@ -265,6 +266,13 @@ options:
       label: Speed
       hint: Accepts values between 0.25 and 4.0
     betaDisabled: Enable Beta Experience to customize text-to-speech settings.
+  statistics:
+    title: Statistics
+    batchRequest:
+      title: Batch Translation Requests Saved
+      description: Percentage of requests saved by batch translation in the period
+      originalRequestCount: Original Request Count
+      batchRequestCount: Batch Request Count
   config:
     title: Config
     sync:

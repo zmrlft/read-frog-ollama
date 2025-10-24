@@ -192,6 +192,7 @@ options:
       maxItemsPerBatch:
         title: 最大段落数
         description: 每个批量翻译的最大段落数，用于控制单次翻译的内容量
+      statisticsLink: 过去 7 天已为您节省约 $1 成本
     alwaysTranslate:
       title: 总是翻译
       description: 总是翻译这个网站
@@ -265,6 +266,13 @@ options:
       label: 语速
       hint: 支持的取值范围为 0.25 到 4.0
     betaDisabled: 启用测试体验后即可自定义文本转语音设置。
+  statistics:
+    title: 统计
+    batchRequest:
+      title: 批量翻译已节省请求
+      description: 周期内批量翻译节省的请求百分比
+      originalRequestCount: 原始请求数量
+      batchRequestCount: 批量请求数量
   config:
     title: 配置
     sync:

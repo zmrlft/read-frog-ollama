@@ -15,3 +15,17 @@ export function ensureKeyInMap<K, V>(map: Map<K, V>, key: K, factory: () => V): 
   }
   return val
 }
+
+export function addThousandsSeparator(num: number) {
+  return num.toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ',')
+}
+
+export function numberToPercentage(num: number) {
+  return `${(num * 100).toFixed(2)}%`
+}
+
+export function getDateFromDaysBack(daysBack: number) {
+  const date = new Date()
+  date.setDate(date.getDate() - daysBack)
+  return date
+}

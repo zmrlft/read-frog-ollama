@@ -190,6 +190,7 @@ options:
       maxItemsPerBatch:
         title: 最大段落数
         description: 各バッチ翻訳の最大段落数、各翻訳のコンテンツ量を制御します
+      statisticsLink: 過去 7 日間で約 $1 のコストを節約しました
     alwaysTranslate:
       title: 常に翻訳
       description: このサイトを常に翻訳する
@@ -263,6 +264,13 @@ options:
       label: 速度
       hint: 0.25〜4.0 の値を入力できます
     betaDisabled: テキスト読み上げ設定をカスタマイズするには Beta 体験を有効にしてください。
+  statistics:
+    title: 統計
+    batchRequest:
+      title: バッチ翻訳で節約されたリクエスト
+      description: 期間内にバッチ翻訳で節約されたリクエストの割合
+      originalRequestCount: 元のリクエスト数
+      batchRequestCount: バッチリクエスト数
   config:
     title: 設定
     sync:

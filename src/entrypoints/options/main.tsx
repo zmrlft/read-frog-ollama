@@ -7,17 +7,15 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { HashRouter } from 'react-router'
 import FrogToast from '@/components/frog-toast'
+import { ChartThemeProvider } from '@/components/providers/chart-theme-provider'
+import { ThemeProvider } from '@/components/providers/theme-provider'
 import { configAtom } from '@/utils/atoms/config'
 import { getConfigFromStorage } from '@/utils/config/config'
-import { isDarkMode } from '@/utils/tailwind'
 import { queryClient } from '@/utils/trpc/client'
 import App from './app'
 import { AppSidebar } from './app-sidebar'
 import '@/assets/tailwind/theme.css'
 import './style.css'
-
-document.documentElement.classList.toggle('dark', isDarkMode())
-document.documentElement.style.colorScheme = isDarkMode() ? 'dark' : 'light'
 
 function HydrateAtoms({
   initialValues,
@@ -47,9 +45,13 @@ async function initApp() {
           <QueryClientProvider client={queryClient}>
             <HashRouter>
               <SidebarProvider>
-                <AppSidebar />
-                <App />
-                <FrogToast />
+                <ThemeProvider>
+                  <ChartThemeProvider>
+                    <AppSidebar />
+                    <App />
+                    <FrogToast />
+                  </ChartThemeProvider>
+                </ThemeProvider>
               </SidebarProvider>
             </HashRouter>
           </QueryClientProvider>

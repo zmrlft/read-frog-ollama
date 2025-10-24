@@ -3,9 +3,10 @@ import { WEBSITE_URL } from '@/utils/constants/url'
 import { logger } from '@/utils/logger'
 import { onMessage, sendMessage } from '@/utils/message'
 import { SessionCacheGroupRegistry } from '@/utils/session-cache/session-cache-group-registry'
-import { cleanupAllCache, setUpCacheCleanup } from './cache-cleanup'
 import { ensureInitializedConfig } from './config'
 import { setUpConfigBackup } from './config-backup'
+import { cleanupAllCache, setUpDatabaseCleanup } from './db-cleanup'
+import { initMockData } from './mock-data'
 import { newUserGuide } from './new-user-guide'
 import { proxyFetch } from './proxy-fetch'
 import { setUpRequestQueue } from './translation-queues'
@@ -57,10 +58,11 @@ export default defineBackground({
     translationMessage()
 
     void setUpRequestQueue()
-    setUpCacheCleanup()
+    void setUpDatabaseCleanup()
     setUpConfigBackup()
     void setupUninstallSurvey()
 
     proxyFetch()
+    void initMockData()
   },
 })

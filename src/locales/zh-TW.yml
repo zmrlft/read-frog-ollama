@@ -192,6 +192,7 @@ options:
       maxItemsPerBatch:
         title: 最大段落數
         description: 每個批量翻譯的最大段落數，用於控制單次翻譯的內容量
+      statisticsLink: 過去 7 天已為您節省約 $1 成本
     alwaysTranslate:
       title: 總是翻譯
       description: 總是翻譯這個網站
@@ -265,6 +266,13 @@ options:
       label: 速度
       hint: 可輸入 0.25 至 4.0 的數值
     betaDisabled: 啟用 Beta 體驗即可自訂文字轉語音設定。
+  statistics:
+    title: 統計
+    batchRequest:
+      title: 批量翻譯已節省請求
+      description: 週期內批量翻譯節省的請求百分比
+      originalRequestCount: 原始請求數量
+      batchRequestCount: 批量請求數量
   config:
     title: 設定
     sync:
