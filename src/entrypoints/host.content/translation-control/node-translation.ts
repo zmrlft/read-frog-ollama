@@ -7,10 +7,8 @@ import { logger } from '@/utils/logger'
 
 export function registerNodeTranslationTriggers() {
   const mousePosition: Point = { x: 0, y: 0 }
-  const keyState = {
-    isHotkeyPressed: false,
-    isOtherKeyPressed: false,
-  }
+  let isHotkeyPressed = false
+  let isHotkeySessionPure = true // tracks if any other key was pressed during this hotkey session
 
   const getHotkey = async () => {
     const config = await getConfigFromStorage() ?? DEFAULT_CONFIG
@@ -33,12 +31,11 @@ export function registerNodeTranslationTriggers() {
 
     const hotkey = await getHotkey()
     if (e.key === hotkey) {
-      if (!keyState.isHotkeyPressed) {
-        keyState.isHotkeyPressed = true
-        // If user hold other key, it will trigger keyState.isOtherKeyPressed = true; later by repeat event
-        keyState.isOtherKeyPressed = false
+      if (!isHotkeyPressed) {
+        isHotkeyPressed = true
+        // isHotkeySessionPure will be false if any key was pressed before hotkey
         timerId = setTimeout(async () => {
-          if (!keyState.isOtherKeyPressed && keyState.isHotkeyPressed) {
+          if (isHotkeySessionPure && isHotkeyPressed) {
             const config = await getConfigFromStorage()
             if (!config) {
               logger.error('Global config is not initialized')
@@ -49,12 +46,17 @@ export function registerNodeTranslationTriggers() {
           }
           timerId = null
         }, 1000)
+        // Cancel timer immediately if session is already impure
+        if (!isHotkeySessionPure && timerId) {
+          clearTimeout(timerId)
+          timerId = null
+        }
       }
     }
-    else if (keyState.isHotkeyPressed) {
-      // don't translate if user press other key
-      keyState.isOtherKeyPressed = true
-      if (timerId) {
+    else {
+      // Any other key press marks the session as impure
+      isHotkeySessionPure = false
+      if (isHotkeyPressed && timerId) {
         clearTimeout(timerId)
         timerId = null
       }
@@ -68,8 +70,8 @@ export function registerNodeTranslationTriggers() {
       return
     const hotkey = await getHotkey()
     if (e.key === hotkey) {
-      // translate if user release the hotkey and no other key is pressed
-      if (!keyState.isOtherKeyPressed) {
+      // translate if user releases the hotkey and session is pure
+      if (isHotkeySessionPure) {
         if (timerId) {
           clearTimeout(timerId)
           timerId = null
@@ -84,8 +86,8 @@ export function registerNodeTranslationTriggers() {
         }
       }
       actionTriggered = false
-      keyState.isHotkeyPressed = false
-      keyState.isOtherKeyPressed = false
+      isHotkeyPressed = false
+      isHotkeySessionPure = true
     }
   })
 
