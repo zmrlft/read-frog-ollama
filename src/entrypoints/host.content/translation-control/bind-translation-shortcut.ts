@@ -11,9 +11,9 @@ export async function bindTranslationShortcutKey(pageTranslationManager: PageTra
   if (!config)
     return
 
-  const shortcutKey = config.translate.customAutoTranslateShortcutKey.join('+')
+  const shortcut = config.translate.page.shortcut.join('+')
 
-  hotkeys(shortcutKey, () => {
+  hotkeys(shortcut, () => {
     void (async () => {
       const currentConfig = await getConfigFromStorage()
       if (!currentConfig)

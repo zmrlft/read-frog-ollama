@@ -49,12 +49,12 @@ export const translateConfigSchema = z.object({
     range: pageTranslateRangeSchema,
     autoTranslatePatterns: z.array(z.string()),
     autoTranslateLanguages: z.array(langCodeISO6393Schema),
+    shortcut: z.array(z.string()),
   }),
   promptsConfig: promptsConfigSchema,
   requestQueueConfig: requestQueueConfigSchema,
   batchQueueConfig: batchQueueConfigSchema,
   translationNodeStyle: translationNodeStyleSchema,
-  customAutoTranslateShortcutKey: z.array(z.string()),
 })
 
 export type RequestQueueConfig = z.infer<typeof requestQueueConfigSchema>

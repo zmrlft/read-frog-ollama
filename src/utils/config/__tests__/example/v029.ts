@@ -1,8 +1,9 @@
 import type { TestSeriesObject } from './types'
+import type { Config } from '@/types/config/config'
 
 export const testSeries: TestSeriesObject = {
   'complex-config-from-v020': {
-    description: 'Add selection toolbar enabled config',
+    description: 'Move customAutoTranslateShortcutKey to page.shortcut',
     config: {
       language: {
         detectedCode: 'spa',
@@ -106,6 +107,7 @@ export const testSeries: TestSeriesObject = {
           range: 'all',
           autoTranslatePatterns: ['spanish-news.com', 'elmundo.es'],
           autoTranslateLanguages: [],
+          shortcut: ['alt', 'b'],
         },
         promptsConfig: {
           prompt: '123e4567-e89b-12d3-a456-426614174000',
@@ -141,7 +143,6 @@ Translate to {{targetLang}}:
           maxItemsPerBatch: 4,
         },
         translationNodeStyle: 'blur',
-        customAutoTranslateShortcutKey: ['alt', 'b'],
       },
       tts: {
         providerId: null,
@@ -164,10 +165,10 @@ Translate to {{targetLang}}:
       betaExperience: {
         enabled: false,
       },
-    },
+    } satisfies Config,
   },
   'config-with-no-default-openai-model': {
-    description: 'Add selection toolbar disabled patterns config',
+    description: 'Move customAutoTranslateShortcutKey to page.shortcut',
     config: {
       floatingButton: {
         disabledFloatingButtonPatterns: [],
@@ -231,10 +232,6 @@ Translate to {{targetLang}}:
         width: 420,
       },
       translate: {
-        customAutoTranslateShortcutKey: [
-          'alt',
-          'q',
-        ],
         mode: 'translationOnly',
         node: {
           enabled: true,
@@ -246,6 +243,10 @@ Translate to {{targetLang}}:
             'news.ycombinator.com',
           ],
           range: 'all',
+          shortcut: [
+            'alt',
+            'q',
+          ],
         },
         promptsConfig: {
           patterns: [
@@ -277,6 +278,6 @@ Translate to {{targetLang}}:
       betaExperience: {
         enabled: false,
       },
-    },
+    } satisfies Config,
   },
 }

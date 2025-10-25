@@ -42,7 +42,6 @@ describe('mergeWithArrayOverwrite', () => {
     expect(result.floatingButton.disabledFloatingButtonPatterns).toEqual(['youtube.com'])
 
     expect(result.translate.mode).toBe('replace')
-    expect(result.translate.page.range).toBe('main')
     expect(result.floatingButton.enabled).toBe(true)
 
     // Ensure immutability

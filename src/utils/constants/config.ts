@@ -9,7 +9,7 @@ import { DEFAULT_TTS_CONFIG } from './tts'
 
 export const CONFIG_STORAGE_KEY = 'config'
 export const CONFIG_SCHEMA_VERSION_STORAGE_KEY = '__configSchemaVersion'
-export const CONFIG_SCHEMA_VERSION = 28
+export const CONFIG_SCHEMA_VERSION = 29
 
 export const DEFAULT_FLOATING_BUTTON_POSITION = 0.66
 
@@ -32,9 +32,10 @@ export const DEFAULT_CONFIG: Config = {
       hotkey: 'Control',
     },
     page: {
-      range: 'main',
+      range: 'all',
       autoTranslatePatterns: ['news.ycombinator.com'],
       autoTranslateLanguages: [],
+      shortcut: DEFAULT_AUTO_TRANSLATE_SHORTCUT_KEY,
     },
     promptsConfig: DEFAULT_TRANSLATE_PROMPTS_CONFIG,
     requestQueueConfig: {
@@ -46,8 +47,6 @@ export const DEFAULT_CONFIG: Config = {
       maxItemsPerBatch: DEFAULT_BATCH_CONFIG.maxItemsPerBatch,
     },
     translationNodeStyle: DEFAULT_TRANSLATION_NODE_STYLE,
-    // TODO: move this to translate.page config
-    customAutoTranslateShortcutKey: DEFAULT_AUTO_TRANSLATE_SHORTCUT_KEY,
   },
   tts: DEFAULT_TTS_CONFIG,
   floatingButton: {
