@@ -241,9 +241,12 @@ options:
       mode:
         bilingual: 雙語對照
         translationOnly: 僅顯示翻譯
-    customAutoTranslateShortcutKey:
-      title: 自訂翻譯快捷鍵
-      description: 允許您自訂全文翻譯快捷鍵
+    pageTranslationShortcut:
+      title: 網頁翻譯快捷鍵
+      description: 自訂翻譯整個網頁的快捷鍵
+    nodeTranslationHotkey:
+      title: 懸停翻譯快捷鍵
+      description: 自訂懸停在文字上翻譯段落的修飾鍵
     autoTranslateLanguages:
       title: 基於語言的自動翻譯
       description: 當檢測到特定語言時自動翻譯頁面內容

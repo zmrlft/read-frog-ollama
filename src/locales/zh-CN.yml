@@ -241,9 +241,12 @@ options:
       mode:
         bilingual: 双语对照
         translationOnly: 仅显示翻译
-    customAutoTranslateShortcutKey:
-      title: 自定义翻译快捷键
-      description: 允许您自定义网页翻译快捷键
+    pageTranslationShortcut:
+      title: 网页翻译快捷键
+      description: 自定义翻译整个网页的快捷键
+    nodeTranslationHotkey:
+      title: 悬停翻译快捷键
+      description: 自定义悬停在文本上翻译段落的修饰键
     autoTranslateLanguages:
       title: 基于语言的自动翻译
       description: 当检测到指定语言时自动翻译页面内容

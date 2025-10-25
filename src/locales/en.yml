@@ -241,9 +241,12 @@ options:
       mode:
         bilingual: Bilingual
         translationOnly: Translation Only
-    customAutoTranslateShortcutKey:
-      title: Customize translation shortcut
-      description: Allows you to customize the full-text translation shortcut
+    pageTranslationShortcut:
+      title: Page translation shortcut
+      description: Customize the shortcut key for translating entire web pages
+    nodeTranslationHotkey:
+      title: Hover translation shortcut
+      description: Customize the modifier key for hovering over text to translate paragraphs
     autoTranslateLanguages:
       title: Auto translate based on language
       description: Automatically translate page content when specific languages are detected

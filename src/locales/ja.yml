@@ -239,9 +239,12 @@ options:
       mode:
         bilingual: バイリンガル
         translationOnly: 翻訳のみ
-    customAutoTranslateShortcutKey:
-      title: 翻訳ショートカットキーをカスタマイズ
-      description: ウェブページ翻訳のショートカットキーをカスタマイズできます
+    pageTranslationShortcut:
+      title: ページ翻訳ショートカットキー
+      description: ウェブページ全体を翻訳するショートカットキーをカスタマイズします
+    nodeTranslationHotkey:
+      title: ホバー翻訳ショートカットキー
+      description: テキストにホバーして段落を翻訳する際の修飾キーをカスタマイズします
     autoTranslateLanguages:
       title: 言語に基づく自動翻訳
       description: 特定の言語が検出された場合にページコンテンツを自動翻訳します
