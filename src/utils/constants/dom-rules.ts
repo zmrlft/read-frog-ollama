@@ -26,6 +26,41 @@ export const FORCE_BLOCK_TAGS = new Set([
   'NAV',
 ])
 
+export const MATH_TAGS = new Set([
+  'math',
+  'maction',
+  'annotation',
+  'annotation-xml',
+  'menclose',
+  'merror',
+  'mfenced',
+  'mfrac',
+  'mi',
+  'mmultiscripts',
+  'mn',
+  'mo',
+  'mover',
+  'mpadded',
+  'mphantom',
+  'mprescripts',
+  'mroot',
+  'mrow',
+  'ms',
+  'mspace',
+  'msqrt',
+  'mstyle',
+  'msub',
+  'msubsup',
+  'msup',
+  'mtable',
+  'mtd',
+  'mtext',
+  'mtr',
+  'munder',
+  'munderover',
+  'semantics',
+])
+
 // Don't walk into these tags
 export const DONT_WALK_AND_TRANSLATE_TAGS = new Set([
   'HEAD',
@@ -44,6 +79,7 @@ export const DONT_WALK_AND_TRANSLATE_TAGS = new Set([
   'LINK',
   'PRE',
   'svg',
+  ...MATH_TAGS,
 ])
 
 export const DONT_WALK_BUT_TRANSLATE_TAGS = new Set([
@@ -59,3 +95,12 @@ export const FORCE_INLINE_TRANSLATION_TAGS = new Set([
 ])
 
 export const MAIN_CONTENT_IGNORE_TAGS = new Set(['HEADER', 'FOOTER', 'NAV', 'NOSCRIPT'])
+
+export const CUSTOM_DONT_WALK_INTO_ELEMENT_SELECTOR_MAP: Record<string, string[]> = {
+  'chatgpt.com': [
+    '.ProseMirror',
+  ],
+  'arxiv.org': [
+    '.ltx_listing',
+  ],
+}

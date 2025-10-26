@@ -6,7 +6,7 @@ import {
   PARAGRAPH_ATTRIBUTE,
   WALKED_ATTRIBUTE,
 } from '@/utils/constants/dom-labels'
-import { FORCE_BLOCK_TAGS } from '@/utils/constants/dom-tags'
+import { FORCE_BLOCK_TAGS } from '@/utils/constants/dom-rules'
 import {
   isDontWalkIntoAndDontTranslateAsChildElement,
   isDontWalkIntoButTranslateAsChildElement,

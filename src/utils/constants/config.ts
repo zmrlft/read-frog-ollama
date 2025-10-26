@@ -32,7 +32,7 @@ export const DEFAULT_CONFIG: Config = {
       hotkey: 'Control',
     },
     page: {
-      range: 'all',
+      range: 'main',
       autoTranslatePatterns: ['news.ycombinator.com'],
       autoTranslateLanguages: [],
       shortcut: DEFAULT_AUTO_TRANSLATE_SHORTCUT_KEY,

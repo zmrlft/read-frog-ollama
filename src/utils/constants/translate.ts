@@ -15,9 +15,3 @@ export const DEFAULT_BATCH_CONFIG = {
 }
 
 export const DEFAULT_AUTO_TRANSLATE_SHORTCUT_KEY = ['alt', 'e']
-
-export const CUSTOM_DONT_WALK_INTO_ELEMENT_SELECTOR_MAP: Record<string, string[]> = {
-  'chatgpt.com': [
-    '.ProseMirror',
-  ],
-}

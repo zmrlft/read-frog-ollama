@@ -21,7 +21,7 @@ import {
   TRANSLATION_MODE_ATTRIBUTE,
   WALKED_ATTRIBUTE,
 } from '../../constants/dom-labels'
-import { FORCE_INLINE_TRANSLATION_TAGS } from '../../constants/dom-tags'
+import { FORCE_INLINE_TRANSLATION_TAGS } from '../../constants/dom-rules'
 import { isBlockTransNode, isHTMLElement, isInlineTransNode, isTextNode, isTranslatedWrapperNode, isTransNode } from '../dom/filter'
 import { deepQueryTopLevelSelector, findNearestAncestorBlockNodeAt, unwrapDeepestOnlyHTMLChild } from '../dom/find'
 import { getOwnerDocument } from '../dom/node'
