@@ -53,11 +53,16 @@ options:
       read: Read
     dialog:
       title: Add New Provider
-      description: Choose an API provider to add to your configuration.
       groups:
-        builtInProviders: Built-in LLM Providers
-        openaiCompatibleProviders: OpenAI Compatible Custom Providers
-        pureTranslationProviders: Pure Translation Providers
+        builtInProviders:
+          title: Built-in LLM Providers
+          description: Built-in large language model providers, no need to fill in most configurations like Base URL
+        openaiCompatibleProviders:
+          title: OpenAI Compatible Custom Providers
+          description: If you can't find your desired AI provider, select Custom Provider to configure any OpenAI-compatible provider, such as Zhipu AI
+        pureTranslationProviders:
+          title: Pure Translation Providers
+          description: Providers focused on translation features without large language model capabilities
     form:
       fields:
         name: Name

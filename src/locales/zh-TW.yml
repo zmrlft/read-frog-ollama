@@ -53,11 +53,16 @@ options:
       read: 閱讀
     dialog:
       title: 新增提供商
-      description: 選擇要新增到配置中的 API 提供商
       groups:
-        builtInProviders: 內建 LLM 提供商
-        openaiCompatibleProviders: OpenAI 相容自定義提供商
-        pureTranslationProviders: 純翻譯提供商
+        builtInProviders:
+          title: 內建 LLM 提供商
+          description: 內建的大型語言模型提供商，無需填寫大部分配置如 Base URL
+        openaiCompatibleProviders:
+          title: OpenAI 相容自定義提供商
+          description: 如果找不到你想要的 AI 提供商，請選擇 Custom Provider 來配置任何 OpenAI 介面相容的提供商，例如智譜
+        pureTranslationProviders:
+          title: 純翻譯提供商
+          description: 專注於翻譯功能的提供商，沒有大型語言模型能力
     form:
       fields:
         name: 名稱

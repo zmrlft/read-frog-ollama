@@ -52,11 +52,16 @@ options:
       read: 読解
     dialog:
       title: 新しいプロバイダーを追加
-      description: 設定に追加するAPIプロバイダーを選択してください
       groups:
-        builtInProviders: 組み込みLLMプロバイダー
-        openaiCompatibleProviders: OpenAI互換カスタムプロバイダー
-        pureTranslationProviders: 純粋翻訳プロバイダー
+        builtInProviders:
+          title: 組み込みLLMプロバイダー
+          description: 組み込みの大規模言語モデルプロバイダー、Base URLなどの設定が不要
+        openaiCompatibleProviders:
+          title: OpenAI互換カスタムプロバイダー
+          description: 希望するAIプロバイダーが見つからない場合は、Custom Providerを選択してZhipu AIなどのOpenAI互換プロバイダーを設定できます
+        pureTranslationProviders:
+          title: 純粋翻訳プロバイダー
+          description: 大規模言語モデル機能を持たない翻訳専門のプロバイダー
     form:
       fields:
         name: 名前

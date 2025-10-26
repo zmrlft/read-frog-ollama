@@ -52,11 +52,16 @@ options:
       read: 읽기
     dialog:
       title: 새 제공업체 추가
-      description: 구성에 추가할 API 제공업체를 선택하세요
       groups:
-        builtInProviders: 내장 LLM 제공업체
-        openaiCompatibleProviders: OpenAI 호환 사용자 정의 제공업체
-        pureTranslationProviders: 순수 번역 제공업체
+        builtInProviders:
+          title: 내장 LLM 제공업체
+          description: 내장된 대규모 언어 모델 제공업체, Base URL과 같은 대부분의 설정이 필요 없음
+        openaiCompatibleProviders:
+          title: OpenAI 호환 사용자 정의 제공업체
+          description: 원하는 AI 제공업체를 찾을 수 없는 경우 Custom Provider를 선택하여 Zhipu AI와 같은 OpenAI 호환 제공업체를 구성할 수 있습니다
+        pureTranslationProviders:
+          title: 순수 번역 제공업체
+          description: 대규모 언어 모델 기능이 없는 번역 전문 제공업체
     form:
       fields:
         name: 이름
