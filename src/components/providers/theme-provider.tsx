@@ -29,7 +29,7 @@ export function ThemeProvider({
     const target = container ?? document.documentElement
     target.classList.remove('light', 'dark')
     target.classList.add(theme)
-    target.style.colorScheme = theme
+    target.setAttribute('style', `color-scheme: ${theme}`)
   }, [theme, container])
 
   // Listen for system theme changes

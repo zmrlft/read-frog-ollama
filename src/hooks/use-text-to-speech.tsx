@@ -123,7 +123,7 @@ export function useTextToSpeech() {
               outputFormat: 'wav',
             })
 
-            return new Blob([result.audio.uint8Array], {
+            return new Blob([result.audio.uint8Array.buffer as ArrayBuffer], {
               type: result.audio.mediaType || 'audio/wav',
             })
           },

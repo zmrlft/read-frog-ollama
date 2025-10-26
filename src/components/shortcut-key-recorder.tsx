@@ -17,12 +17,14 @@ export function ShortcutKeyRecorder(
   { shortcutKey: initialShortcutKey, onChange, className }:
   { shortcutKey: string[], onChange?: (shortcutKey: string[]) => void, className?: string },
 ) {
-  hotkeys.filter = (event: KeyboardEvent) => {
-    return (event.target as HTMLInputElement).tagName === 'INPUT'
-  }
-
   const [inRecording, setInRecording] = useState(false)
   const [shortcutKey, setShortcutKey] = useState(initialShortcutKey)
+
+  useEffect(() => {
+    hotkeys.filter = (event: KeyboardEvent) => {
+      return (event.target as HTMLInputElement).tagName === 'INPUT'
+    }
+  }, [])
 
   const formatShortcut = formatHotkey(shortcutKey)
 
