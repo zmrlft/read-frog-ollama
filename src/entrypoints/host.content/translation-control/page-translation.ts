@@ -98,7 +98,7 @@ export class PageTranslationManager implements IPageTranslationManager {
                 logger.error('Global config is not initialized')
                 return
               }
-              void translateWalkedElement(entry.target, walkId, currentConfig, true)
+              void translateWalkedElement(entry.target, walkId, currentConfig)
             }
           }
           observer.unobserve(entry.target)

@@ -117,7 +117,10 @@ export function isDontWalkIntoAndDontTranslateAsChildElement(element: HTMLElemen
   const dontWalkCSS
     = window.getComputedStyle(element).display === 'none'
       || window.getComputedStyle(element).visibility === 'hidden'
-
+  const dontWalkRedditScreenReader = element.parentElement?.tagName === 'FACEPLATE-SCREEN-READER-CONTENT'
+  if (dontWalkRedditScreenReader) {
+    return true
+  }
   return dontWalkCustomElement || dontWalkContent || dontWalkInvalidTag || dontWalkCSS
 }
 

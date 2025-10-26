@@ -64,6 +64,7 @@ export const MATH_TAGS = new Set([
 // Don't walk into these tags
 export const DONT_WALK_AND_TRANSLATE_TAGS = new Set([
   'HEAD',
+  'TITLE',
   'HR',
   'INPUT',
   'TEXTAREA',
@@ -102,5 +103,9 @@ export const CUSTOM_DONT_WALK_INTO_ELEMENT_SELECTOR_MAP: Record<string, string[]
   ],
   'arxiv.org': [
     '.ltx_listing',
+  ],
+  'www.reddit.com': [
+    'faceplate-screen-reader-content > *',
+    'reddit-header-large *',
   ],
 }

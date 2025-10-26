@@ -32,7 +32,9 @@ export const DEFAULT_CONFIG: Config = {
       hotkey: 'Control',
     },
     page: {
-      range: 'main',
+      // TODO: change this to "all" for users once our translation algorithm can handle most cases elegantly
+      // eslint-disable-next-line turbo/no-undeclared-env-vars
+      range: import.meta.env.DEV ? 'all' : 'main',
       autoTranslatePatterns: ['news.ycombinator.com'],
       autoTranslateLanguages: [],
       shortcut: DEFAULT_AUTO_TRANSLATE_SHORTCUT_KEY,
