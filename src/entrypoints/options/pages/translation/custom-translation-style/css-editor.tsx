@@ -17,6 +17,7 @@ import { CSSCodeEditor } from '@/components/ui/css-code-editor'
 import { useDebouncedValue } from '@/hooks/use-debounced-value'
 import { MAX_CUSTOM_CSS_LENGTH } from '@/types/config/translate'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
+import { WEBSITE_URL } from '@/utils/constants/url'
 import { lintCSS } from '@/utils/css/lint-css'
 
 export function CSSEditor() {
@@ -33,8 +34,7 @@ export function CSSEditor() {
     if (!debouncedCssInput.trim()) {
       return { valid: true, errors: [] }
     }
-    const wrappedCSS = `.dummy { ${debouncedCssInput} }`
-    return lintCSS(wrappedCSS)
+    return lintCSS(debouncedCssInput)
   }, [debouncedCssInput])
 
   // Check CSS length
@@ -63,9 +63,14 @@ export function CSSEditor() {
   return (
     <Activity mode={translationNodeStyle.isCustom ? 'visible' : 'hidden'}>
       <Field>
-        <FieldLabel htmlFor="css-editor" data-invalid>
-          {i18n.t('options.translation.translationStyle.cssEditor')}
-        </FieldLabel>
+        <div className="flex items-start justify-between">
+          <FieldLabel htmlFor="css-editor" data-invalid>
+            {i18n.t('options.translation.translationStyle.cssEditor')}
+          </FieldLabel>
+          <a href={`${WEBSITE_URL}/tutorial/custom-css`} className="text-xs text-link hover:opacity-90" target="_blank" rel="noreferrer">
+            {i18n.t('options.apiProviders.howToConfigure')}
+          </a>
+        </div>
         <CSSCodeEditor
           value={cssInput}
           onChange={setCssInput}
@@ -104,7 +109,7 @@ export function CSSEditor() {
           </Alert>
         </Activity> */}
         <div className="flex items-center gap-2 justify-between">
-          <div className={cn('text-sm text-green-600 dark:text-green-400', isValidating && 'text-muted-foreground', (hasSyntaxError || hasLengthError) && 'text-destructive')}>
+          <div className={cn('text-sm text-green-500', isValidating && 'text-muted-foreground', (hasSyntaxError || hasLengthError) && 'text-destructive')}>
             {cssInput.trim().length > 0 ? getValidationMessage(isValidating, hasSyntaxError, hasLengthError, hasChanges) : ''}
           </div>
           <Button onClick={handleSave} disabled={isValidating || hasSyntaxError || hasLengthError || !hasChanges}>
