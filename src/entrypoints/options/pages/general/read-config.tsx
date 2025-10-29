@@ -1,5 +1,6 @@
 import { i18n } from '#imports'
 import { Checkbox } from '@repo/ui/components/checkbox'
+import { Field, FieldLabel } from '@repo/ui/components/field'
 import { Input } from '@repo/ui/components/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/components/select'
 import { cn } from '@repo/ui/lib/utils'
@@ -9,7 +10,6 @@ import ReadProviderSelector from '@/components/llm-providers/read-provider-selec
 import { READ_PROVIDER_MODELS } from '@/types/config/provider'
 import { readProviderConfigAtom, updateLLMProviderConfig } from '@/utils/atoms/provider'
 import { ConfigCard } from '../../components/config-card'
-import { FieldWithLabel } from '../../components/field-with-label'
 import { SetApiKeyWarning } from '../../components/set-api-key-warning'
 
 export function ReadConfig() {
@@ -27,17 +27,13 @@ function ReadProviderSelectorField() {
   const readProviderConfig = useAtomValue(readProviderConfigAtom)
 
   return (
-    <FieldWithLabel
-      id="readProvider"
-      label={(
-        <div className="flex gap-2">
-          {i18n.t('options.general.readConfig.provider')}
-          {!readProviderConfig.apiKey && <SetApiKeyWarning />}
-        </div>
-      )}
-    >
+    <Field>
+      <FieldLabel htmlFor="readProvider">
+        {i18n.t('options.general.readConfig.provider')}
+        {!readProviderConfig.apiKey && <SetApiKeyWarning />}
+      </FieldLabel>
       <ReadProviderSelector className="w-full" />
-    </FieldWithLabel>
+    </Field>
   )
 }
 
@@ -47,7 +43,10 @@ function ReadModelSelector() {
   const modelConfig = readProviderConfig.models.read
 
   return (
-    <FieldWithLabel id="readModel" label={i18n.t('options.general.readConfig.model.title')}>
+    <Field>
+      <FieldLabel htmlFor="readModel">
+        {i18n.t('options.general.readConfig.model.title')}
+      </FieldLabel>
       {modelConfig.isCustomModel
         ? (
             <Input
@@ -147,6 +146,6 @@ function ReadModelSelector() {
           {i18n.t('options.general.readConfig.model.enterCustomModel')}
         </label>
       </div>
-    </FieldWithLabel>
+    </Field>
   )
 }

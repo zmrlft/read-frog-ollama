@@ -1,6 +1,7 @@
 import type { PageTranslateRange } from '@/types/config/translate'
 import { i18n } from '#imports'
 import { Checkbox } from '@repo/ui/components/checkbox'
+import { Field, FieldLabel } from '@repo/ui/components/field'
 import { Input } from '@repo/ui/components/input'
 import {
   Select,
@@ -20,7 +21,6 @@ import { pageTranslateRangeSchema } from '@/types/config/translate'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { translateProviderConfigAtom, updateLLMProviderConfig } from '@/utils/atoms/provider'
 import { ConfigCard } from '../../components/config-card'
-import { FieldWithLabel } from '../../components/field-with-label'
 import { SetApiKeyWarning } from '../../components/set-api-key-warning'
 
 export default function TranslationConfig() {
@@ -38,7 +38,10 @@ export default function TranslationConfig() {
 function RangeSelector() {
   const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
   return (
-    <FieldWithLabel id="translateRange" label={i18n.t('options.general.translationConfig.translateRange.title')}>
+    <Field>
+      <FieldLabel htmlFor="translateRange">
+        {i18n.t('options.general.translationConfig.translateRange.title')}
+      </FieldLabel>
       <Select
         value={translateConfig.page.range}
         onValueChange={(value: PageTranslateRange) =>
@@ -48,7 +51,7 @@ function RangeSelector() {
       >
         <SelectTrigger className="w-full">
           <SelectValue asChild>
-            <span>
+            <span id="translateRange">
               {i18n.t(
                 `options.general.translationConfig.translateRange.range.${translateConfig.page.range}`,
               )}
@@ -67,7 +70,7 @@ function RangeSelector() {
           </SelectGroup>
         </SelectContent>
       </Select>
-    </FieldWithLabel>
+    </Field>
   )
 }
 
@@ -75,20 +78,16 @@ function TranslateProviderSelectorField() {
   const translateProviderConfig = useAtomValue(translateProviderConfigAtom)
 
   // some deeplx providers don't need api key
-  const needSetAPIKey = translateProviderConfig && isAPIProviderConfig(translateProviderConfig) && translateProviderConfig.provider !== 'deeplx' && translateProviderConfig.apiKey === undefined
+  const needSetAPIKey = translateProviderConfig && isAPIProviderConfig(translateProviderConfig) && translateProviderConfig.provider !== 'deeplx' && !translateProviderConfig.apiKey
 
   return (
-    <FieldWithLabel
-      id="translateProvider"
-      label={(
-        <div className="flex gap-2">
-          {i18n.t('options.general.translationConfig.provider')}
-          {needSetAPIKey && <SetApiKeyWarning />}
-        </div>
-      )}
-    >
+    <Field>
+      <FieldLabel htmlFor="translateProvider">
+        {i18n.t('options.general.translationConfig.provider')}
+        {needSetAPIKey && <SetApiKeyWarning />}
+      </FieldLabel>
       <TranslateProviderSelector className="w-full" />
-    </FieldWithLabel>
+    </Field>
   )
 }
 
@@ -103,7 +102,10 @@ function TranslateModelSelector() {
   const modelConfig = translateProviderConfig.models.translate
 
   return (
-    <FieldWithLabel id="translateModel" label={i18n.t('options.general.translationConfig.model.title')}>
+    <Field>
+      <FieldLabel htmlFor="translateModel">
+        {i18n.t('options.general.translationConfig.model.title')}
+      </FieldLabel>
       {modelConfig.isCustomModel
         ? (
             <Input
@@ -203,6 +205,6 @@ function TranslateModelSelector() {
           {i18n.t('options.general.translationConfig.model.enterCustomModel')}
         </label>
       </div>
-    </FieldWithLabel>
+    </Field>
   )
 }

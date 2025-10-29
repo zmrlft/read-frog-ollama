@@ -27,7 +27,7 @@ export default function ReadProviderSelector({ className, hideChevron = false, c
         })
       }}
     >
-      <SelectTrigger className={className} hideChevron={hideChevron}>
+      <SelectTrigger className={className} hideChevron={hideChevron} id="readProvider">
         {customTrigger || <SelectValue />}
       </SelectTrigger>
       <SelectContent container={container}>

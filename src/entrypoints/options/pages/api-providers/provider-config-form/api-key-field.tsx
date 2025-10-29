@@ -26,7 +26,7 @@ export const APIKeyField = withForm({
               formForSubmit={form}
               label={
                 (
-                  <div className="flex items-end justify-between">
+                  <div className="flex w-full items-end justify-between">
                     <span className="text-sm font-medium">
                       API Key
                     </span>

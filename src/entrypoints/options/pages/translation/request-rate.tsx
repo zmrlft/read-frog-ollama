@@ -1,5 +1,6 @@
 import type { RequestQueueConfig } from '@/types/config/translate'
 import { i18n } from '#imports'
+import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel } from '@repo/ui/components/field'
 import { Input } from '@repo/ui/components/input'
 import { useAtom } from 'jotai'
 import { toast } from 'sonner'
@@ -8,7 +9,6 @@ import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { MIN_TRANSLATE_CAPACITY, MIN_TRANSLATE_RATE } from '@/utils/constants/translate'
 import { sendMessage } from '@/utils/message'
 import { ConfigCard } from '../../components/config-card'
-import { FieldWithLabel } from '../../components/field-with-label'
 
 type KeyOfRequestQueueConfig = keyof RequestQueueConfig
 
@@ -24,35 +24,23 @@ export function RequestRate() {
         </div>
       )}
     >
-      <div className="flex flex-col gap-4">
+      <FieldGroup>
         <TranslateNumberSelector property="capacity" />
         <TranslateNumberSelector property="rate" />
-      </div>
+      </FieldGroup>
     </ConfigCard>
   )
 }
 
-function CapacityDescription() {
-  return (
-    <div className="flex flex-col gap-2">
-      <h2>{i18n.t('options.translation.requestQueueConfig.capacity.title')}</h2>
-      <p className="text-xs text-muted-foreground">{i18n.t('options.translation.requestQueueConfig.capacity.description')}</p>
-    </div>
-  )
-}
-
-function RateDescription() {
-  return (
-    <div className="flex flex-col gap-2 flex-auto">
-      <h2>{i18n.t('options.translation.requestQueueConfig.rate.title')}</h2>
-      <p className="text-xs text-muted-foreground">{i18n.t('options.translation.requestQueueConfig.rate.description')}</p>
-    </div>
-  )
-}
-
-const propertyDescription = {
-  capacity: CapacityDescription,
-  rate: RateDescription,
+const propertyInfo = {
+  capacity: {
+    label: i18n.t('options.translation.requestQueueConfig.capacity.title'),
+    description: i18n.t('options.translation.requestQueueConfig.capacity.description'),
+  },
+  rate: {
+    label: i18n.t('options.translation.requestQueueConfig.rate.title'),
+    description: i18n.t('options.translation.requestQueueConfig.rate.description'),
+  },
 }
 
 const propertyMinAllowedValue = {
@@ -67,12 +55,21 @@ function TranslateNumberSelector({ property }: { property: KeyOfRequestQueueConf
   const currentConfigValue = requestQueueConfig[property]
   const minAllowedValue = propertyMinAllowedValue[property]
 
-  const Description = propertyDescription[property]
+  const info = propertyInfo[property]
 
   return (
-    <FieldWithLabel className="flex-row items-center justify-between gap-4" id={`translate-${property}`} label={<Description />}>
+    <Field orientation="responsive">
+      <FieldContent>
+        <FieldLabel htmlFor={`translate-${property}`}>
+          {info.label}
+        </FieldLabel>
+        <FieldDescription>
+          {info.description}
+        </FieldDescription>
+      </FieldContent>
       <Input
-        className="mt-1 mb-2 w-40 flex-shrink-0"
+        id={`translate-${property}`}
+        className="w-40 shrink-0"
         type="number"
         min={minAllowedValue}
         value={currentConfigValue}
@@ -96,6 +93,6 @@ function TranslateNumberSelector({ property }: { property: KeyOfRequestQueueConf
           }
         }}
       />
-    </FieldWithLabel>
+    </Field>
   )
 }

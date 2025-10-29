@@ -2,6 +2,7 @@ import type { TTSModel, TTSVoice } from '@/types/config/tts'
 import { i18n } from '#imports'
 import { Badge } from '@repo/ui/components/badge'
 import { Button } from '@repo/ui/components/button'
+import { Field, FieldLabel } from '@repo/ui/components/field'
 import {
   Select,
   SelectContent,
@@ -21,7 +22,6 @@ import { ttsProviderConfigAtom } from '@/utils/atoms/provider'
 import { getTTSProvidersConfig } from '@/utils/config/helpers'
 import { TTS_VOICES_ITEMS } from '@/utils/constants/tts'
 import { ConfigCard } from '../../components/config-card'
-import { FieldWithLabel } from '../../components/field-with-label'
 import { SetApiKeyWarning } from '../../components/set-api-key-warning'
 
 export function TtsConfig() {
@@ -59,15 +59,11 @@ function TtsProviderField() {
   const selectorPlaceholder = ttsProvidersConfig.length === 0 ? i18n.t('options.tts.provider.noProvider') : i18n.t('options.tts.provider.selectPlaceholder')
 
   return (
-    <FieldWithLabel
-      id="ttsProvider"
-      label={(
-        <div className="flex gap-2">
-          {i18n.t('options.tts.provider.label')}
-          {ttsProviderConfig && !ttsProviderConfig.apiKey && <SetApiKeyWarning />}
-        </div>
-      )}
-    >
+    <Field>
+      <FieldLabel htmlFor="ttsProvider">
+        {i18n.t('options.tts.provider.label')}
+        {ttsProviderConfig && !ttsProviderConfig.apiKey && <SetApiKeyWarning />}
+      </FieldLabel>
       <Select
         value={ttsConfig.providerId || undefined}
         onValueChange={(value: string) => {
@@ -76,7 +72,7 @@ function TtsProviderField() {
         disabled={ttsProvidersConfig.length === 0}
       >
         <SelectTrigger className="w-full">
-          <SelectValue placeholder={selectorPlaceholder} />
+          <SelectValue placeholder={selectorPlaceholder} id="ttsProvider" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
@@ -88,7 +84,7 @@ function TtsProviderField() {
           </SelectGroup>
         </SelectContent>
       </Select>
-    </FieldWithLabel>
+    </Field>
   )
 }
 
@@ -96,10 +92,10 @@ function TtsModelField() {
   const [ttsConfig, setTtsConfig] = useAtom(configFieldsAtomMap.tts)
 
   return (
-    <FieldWithLabel
-      id="ttsModel"
-      label={i18n.t('options.tts.model.label')}
-    >
+    <Field>
+      <FieldLabel htmlFor="ttsModel">
+        {i18n.t('options.tts.model.label')}
+      </FieldLabel>
       <Select
         value={ttsConfig.model}
         onValueChange={(value: TTSModel) => {
@@ -132,7 +128,7 @@ function TtsModelField() {
           </SelectGroup>
         </SelectContent>
       </Select>
-    </FieldWithLabel>
+    </Field>
   )
 }
 
@@ -158,7 +154,10 @@ function TtsVoiceField() {
   const isFetchingOrPlaying = isFetching || isPlaying
 
   return (
-    <FieldWithLabel id="ttsVoice" label={i18n.t('options.tts.voice.label')}>
+    <Field>
+      <FieldLabel htmlFor="ttsVoice">
+        {i18n.t('options.tts.voice.label')}
+      </FieldLabel>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
         <div className="flex flex-1 items-center gap-2">
           <Select
@@ -195,7 +194,7 @@ function TtsVoiceField() {
           {i18n.t('options.tts.voice.preview')}
         </Button>
       </div>
-    </FieldWithLabel>
+    </Field>
   )
 }
 
@@ -203,7 +202,10 @@ function TtsSpeedField() {
   const [ttsConfig, setTtsConfig] = useAtom(configFieldsAtomMap.tts)
 
   return (
-    <FieldWithLabel id="ttsSpeed" label={i18n.t('options.tts.speed.label')}>
+    <Field>
+      <FieldLabel htmlFor="ttsSpeed">
+        {i18n.t('options.tts.speed.label')}
+      </FieldLabel>
       <ValidatedInput
         id="ttsSpeed"
         type="number"
@@ -219,6 +221,6 @@ function TtsSpeedField() {
       <p className="text-xs text-muted-foreground">
         {i18n.t('options.tts.speed.hint')}
       </p>
-    </FieldWithLabel>
+    </Field>
   )
 }
