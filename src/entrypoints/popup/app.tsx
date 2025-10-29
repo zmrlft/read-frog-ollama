@@ -9,16 +9,15 @@ import { version } from '../../../package.json'
 import { initIsIgnoreTabAtom } from './atoms/ignore'
 import { AlwaysTranslate } from './components/always-translate'
 import BlogNotification from './components/blog-notification'
-import FloatingButton from './components/floating-button'
 import LanguageOptionsSelector from './components/language-options-selector'
 import Hotkey from './components/node-translation-hotkey-selector'
 import QuickLinks from './components/quick-links'
 import ReadButton from './components/read-button'
 import ReadProviderField from './components/read-provider-field'
-import SelectionToolbar from './components/text-selection-tooltip'
 import TranslateButton from './components/translate-button'
 import TranslatePromptSelector from './components/translate-prompt-selector'
 import TranslateProviderField from './components/translate-provider-field'
+import TranslationModeSelector from './components/translation-mode-selector'
 
 function App() {
   const initIsIgnoreTab = useSetAtom(initIsIgnoreTabAtom)
@@ -36,6 +35,7 @@ function App() {
         </div>
         <LanguageOptionsSelector />
         {/* <LanguageLevelSelector /> */}
+        <TranslationModeSelector />
         <TranslateProviderField />
         <TranslatePromptSelector />
         <ReadProviderField />
@@ -45,8 +45,8 @@ function App() {
         </div>
         <AlwaysTranslate />
         <Hotkey />
-        <FloatingButton />
-        <SelectionToolbar />
+        {/* <FloatingButton />
+        <SelectionToolbar /> */}
         <QuickLinks />
       </div>
       <div className="flex items-center justify-between bg-neutral-200 px-2 py-1 dark:bg-neutral-800">
