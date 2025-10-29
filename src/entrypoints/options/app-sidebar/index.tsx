@@ -88,7 +88,7 @@ export function AppSidebar() {
 
   const { data: latestBlogPost } = useQuery({
     queryKey: ['latest-blog-post'],
-    queryFn: () => getLatestBlogDate(`${WEBSITE_URL}/api/blog/latest`, 'en'),
+    queryFn: () => getLatestBlogDate(`${WEBSITE_URL}/api/blog/latest`, 'en', version),
   })
 
   const { data: lastViewedSurveyUrl } = useQuery({
@@ -114,8 +114,6 @@ export function AppSidebar() {
   const showBlogIndicator = hasNewBlogPost(
     lastViewedDate ?? null,
     latestBlogPost?.date ?? null,
-    version,
-    latestBlogPost?.extensionVersion ?? null,
   )
 
   const surveyItem = PRODUCT_NAV_ITEMS.survey

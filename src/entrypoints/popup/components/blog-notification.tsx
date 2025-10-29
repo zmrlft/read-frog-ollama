@@ -17,7 +17,7 @@ export default function BlogNotification() {
 
   const { data: latestBlogPost } = useQuery({
     queryKey: ['latest-blog-post'],
-    queryFn: () => getLatestBlogDate(`${WEBSITE_URL}/api/blog/latest`, 'en'),
+    queryFn: () => getLatestBlogDate(`${WEBSITE_URL}/api/blog/latest`, 'en', version),
   })
 
   const handleClick = async () => {
@@ -36,8 +36,6 @@ export default function BlogNotification() {
   const showIndicator = hasNewBlogPost(
     lastViewedDate ?? null,
     latestBlogPost?.date ?? null,
-    version,
-    latestBlogPost?.extensionVersion ?? null,
   )
 
   return (

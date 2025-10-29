@@ -1,14 +1,7 @@
 import { semanticVersionSchema } from '@repo/definitions'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { z } from 'zod'
 import { hasNewBlogPost } from '../blog'
-import { logger } from '../logger'
-
-vi.mock('../logger', () => ({
-  logger: {
-    error: vi.fn(),
-  },
-}))
 
 describe('hasNewBlogPost', () => {
   const baseDate = new Date('2025-01-01')
@@ -37,163 +30,9 @@ describe('hasNewBlogPost', () => {
     })
   })
 
-  describe('version compatibility check', () => {
-    it('should return false if current version is lower than required version', () => {
-      const result = hasNewBlogPost(null, baseDate, '1.10.0', '1.11.0')
-      expect(result).toBe(false)
-    })
-
-    it('should return true if current version equals required version', () => {
-      const result = hasNewBlogPost(null, baseDate, '1.11.0', '1.11.0')
-      expect(result).toBe(true)
-    })
-
-    it('should return true if current version is higher than required version', () => {
-      const result = hasNewBlogPost(null, baseDate, '1.12.0', '1.11.0')
-      expect(result).toBe(true)
-    })
-
-    it('should ignore version check if blogExtensionVersion is null', () => {
-      const result = hasNewBlogPost(null, baseDate, '1.10.0', null)
-      expect(result).toBe(true)
-    })
-
-    it('should ignore version check if blogExtensionVersion is undefined', () => {
-      const result = hasNewBlogPost(null, baseDate, '1.10.0', undefined)
-      expect(result).toBe(true)
-    })
-
-    it('should ignore version check if currentExtensionVersion is undefined', () => {
-      const result = hasNewBlogPost(null, baseDate, undefined, '1.11.0')
-      expect(result).toBe(true)
-    })
-
-    it('should handle major version differences', () => {
-      expect(hasNewBlogPost(null, baseDate, '1.0.0', '2.0.0')).toBe(false)
-      expect(hasNewBlogPost(null, baseDate, '2.0.0', '1.0.0')).toBe(true)
-    })
-
-    it('should handle minor version differences', () => {
-      expect(hasNewBlogPost(null, baseDate, '1.10.0', '1.11.0')).toBe(false)
-      expect(hasNewBlogPost(null, baseDate, '1.11.0', '1.10.0')).toBe(true)
-    })
-
-    it('should handle patch version differences', () => {
-      expect(hasNewBlogPost(null, baseDate, '1.11.0', '1.11.1')).toBe(false)
-      expect(hasNewBlogPost(null, baseDate, '1.11.1', '1.11.0')).toBe(true)
-    })
-
-    it('should handle version strings with different segment counts', () => {
-      // Invalid versions (not 3 segments) should be treated as invalid and skip version check
-      expect(hasNewBlogPost(null, baseDate, '1.11', '1.11.0')).toBe(true) // '1.11' is invalid, skips check
-      expect(hasNewBlogPost(null, baseDate, '1.11.0', '1.11')).toBe(true) // '1.11' is invalid, skips check
-      expect(hasNewBlogPost(null, baseDate, '1.10', '1.11.0')).toBe(true) // '1.10' is invalid, skips check
-    })
-  })
-
-  describe('combined date and version checks', () => {
-    it('should return false if version is incompatible even with newer date', () => {
-      const result = hasNewBlogPost(olderDate, newerDate, '1.10.0', '1.11.0')
-      expect(result).toBe(false)
-    })
-
-    it('should return true if version is compatible and date is newer', () => {
-      const result = hasNewBlogPost(olderDate, newerDate, '1.11.0', '1.11.0')
-      expect(result).toBe(true)
-    })
-
-    it('should return false if version is compatible but date is older', () => {
-      const result = hasNewBlogPost(newerDate, olderDate, '1.11.0', '1.11.0')
-      expect(result).toBe(false)
-    })
-
-    it('should prioritize version check over date check', () => {
-      const result = hasNewBlogPost(null, newerDate, '1.10.0', '1.11.0')
-      expect(result).toBe(false)
-    })
-  })
-
   describe('edge cases', () => {
     it('should handle all null/undefined parameters', () => {
       expect(hasNewBlogPost(null, null)).toBe(false)
-      expect(hasNewBlogPost(null, null, undefined, undefined)).toBe(false)
-    })
-
-    it('should reject zero-padded versions as invalid and skip version check', () => {
-      // Zero-padded versions are invalid per semver spec, so version check is skipped
-      expect(hasNewBlogPost(null, baseDate, '1.09.0', '1.10.0')).toBe(true) // '1.09.0' is invalid
-      expect(hasNewBlogPost(null, baseDate, '1.10.0', '1.09.0')).toBe(true) // '1.09.0' is invalid
-    })
-
-    it('should handle large version numbers', () => {
-      expect(hasNewBlogPost(null, baseDate, '10.20.30', '11.0.0')).toBe(false)
-      expect(hasNewBlogPost(null, baseDate, '11.0.0', '10.20.30')).toBe(true)
-    })
-  })
-
-  describe('version validation', () => {
-    it('should gracefully handle invalid current version format', () => {
-      // Invalid version should skip version check and proceed with date check
-      const result = hasNewBlogPost(null, baseDate, 'invalid', '1.11.0')
-      expect(result).toBe(true)
-    })
-
-    it('should gracefully handle invalid blog version format', () => {
-      // Invalid version should skip version check and proceed with date check
-      const result = hasNewBlogPost(null, baseDate, '1.11.0', 'invalid')
-      expect(result).toBe(true)
-    })
-
-    it('should gracefully handle invalid version with special characters', () => {
-      const result = hasNewBlogPost(null, baseDate, 'v1.11.0', '1.11.0')
-      expect(result).toBe(true)
-    })
-
-    it('should gracefully handle version with letters', () => {
-      const result = hasNewBlogPost(null, baseDate, '1.11.0-alpha', '1.11.0')
-      expect(result).toBe(true)
-    })
-
-    it('should gracefully handle empty version string', () => {
-      const result = hasNewBlogPost(null, baseDate, '', '1.11.0')
-      expect(result).toBe(true)
-    })
-
-    it('should gracefully handle version with negative numbers', () => {
-      const result = hasNewBlogPost(null, baseDate, '1.-1.0', '1.11.0')
-      expect(result).toBe(true)
-    })
-
-    it('should gracefully handle both invalid versions', () => {
-      const result = hasNewBlogPost(null, baseDate, 'invalid1', 'invalid2')
-      expect(result).toBe(true)
-    })
-
-    it('should still check dates when version validation fails', () => {
-      // Even with invalid versions, date check should still work
-      const result = hasNewBlogPost(newerDate, olderDate, 'invalid', '1.11.0')
-      expect(result).toBe(false)
-    })
-
-    it('should log ZodError details when version validation fails', () => {
-      vi.mocked(logger.error).mockClear()
-
-      hasNewBlogPost(null, baseDate, 'invalid', '1.11.0')
-
-      expect(logger.error).toHaveBeenCalledWith(
-        'Version validation failed, skipping version check:',
-        expect.any(Array),
-      )
-    })
-
-    it('should log generic error for non-ZodError exceptions', () => {
-      vi.mocked(logger.error).mockClear()
-
-      // This won't actually throw a non-Zod error in the current implementation,
-      // but we can verify the error logging path exists
-      hasNewBlogPost(null, baseDate, 'invalid', '1.11.0')
-
-      expect(logger.error).toHaveBeenCalled()
     })
   })
 })

@@ -35,73 +35,19 @@ export async function getLastViewedBlogDate(): Promise<Date | null> {
 
 /**
  * Checks if there's a new blog post by comparing last viewed date with latest blog date
- * and extension version compatibility
  * @param latestViewedDate - The last date the user viewed the blog
  * @param latestDate - The date of the latest blog post
- * @param currentExtensionVersion - Current extension version (e.g., "1.10.0")
- * @param blogExtensionVersion - Minimum extension version required for the blog post (e.g., "1.11.0")
  */
 export function hasNewBlogPost(
   latestViewedDate: Date | null,
   latestDate: Date | null,
-  currentExtensionVersion?: string,
-  blogExtensionVersion?: string | null,
 ): boolean {
   if (!latestDate)
     return false
 
-  // If blog post requires a specific extension version, check version compatibility
-  if (blogExtensionVersion && currentExtensionVersion) {
-    try {
-      if (compareVersions(currentExtensionVersion, blogExtensionVersion) < 0) {
-        // Current extension version is older than required version
-        return false
-      }
-    }
-    catch (error) {
-      // Catch any error from version comparison (validation errors, unexpected errors, etc.)
-      // Skip version check and proceed with date-only comparison
-      if (error instanceof z.ZodError) {
-        logger.error('Version validation failed, skipping version check:', error.issues)
-      }
-      else {
-        logger.error('Version comparison failed, skipping version check:', error)
-      }
-    }
-  }
-
   if (!latestViewedDate)
     return true
   return latestDate > latestViewedDate
-}
-
-/**
- * Compares two semantic version strings
- * @param v1 - First version string (e.g., "1.10.0")
- * @param v2 - Second version string (e.g., "1.11.0")
- * @returns -1 if v1 < v2, 0 if v1 === v2, 1 if v1 > v2
- * @throws ZodError if either version string is invalid
- */
-function compareVersions(v1: string, v2: string): number {
-  // Validate using Zod schema
-  semanticVersionSchema.parse(v1)
-  semanticVersionSchema.parse(v2)
-
-  const parts1 = v1.split('.').map(Number)
-  const parts2 = v2.split('.').map(Number)
-
-  // After validation, both versions are guaranteed to have exactly 3 parts
-  for (let i = 0; i < 3; i++) {
-    const part1 = parts1[i]!
-    const part2 = parts2[i]!
-
-    if (part1 < part2)
-      return -1
-    if (part1 > part2)
-      return 1
-  }
-
-  return 0
 }
 
 /**
@@ -110,26 +56,31 @@ function compareVersions(v1: string, v2: string): number {
  *
  * @param apiUrl - The URL of the blog API endpoint (default: production URL)
  * @param locale - The locale to fetch the latest post for (default: 'en')
+ * @param extensionVersion - The current extension version to filter compatible posts
  * @param useCache - Whether to use cache (default: true)
  * @returns Promise resolving to the latest blog post data (date, url, and extensionVersion), or null if no posts found
  *
  * @example
  * ```ts
- * const latestPost = await getLatestBlogDate('http://localhost:8888/api/blog/latest', 'en')
+ * const latestPost = await getLatestBlogDate('http://localhost:8888/api/blog/latest', 'en', '1.10.0')
  * console.log(latestPost) // { date: Date, url: '/blog/post-slug', extensionVersion: '1.11.0' }
  *
  * // Without cache
- * const freshPost = await getLatestBlogDate('http://localhost:8888/api/blog/latest', 'en', false)
+ * const freshPost = await getLatestBlogDate('http://localhost:8888/api/blog/latest', 'en', '1.10.0', false)
  * ```
  */
 export async function getLatestBlogDate(
   apiUrl: string = 'https://readfrog.app/api/blog/latest',
   locale: string = 'en',
+  extensionVersion?: string,
   useCache: boolean = true,
 ): Promise<{ date: Date, url: string, extensionVersion?: string | null } | null> {
   try {
     const url = new URL(apiUrl)
     url.searchParams.set('locale', locale)
+    if (extensionVersion) {
+      url.searchParams.set('extensionVersion', extensionVersion)
+    }
 
     const response = await sendMessage('backgroundFetch', {
       url: url.toString(),
