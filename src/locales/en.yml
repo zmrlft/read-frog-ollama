@@ -371,7 +371,7 @@ side:
   fileExport: File Export
 readService:
   title: Read Service
-  description: For read and explain content
+  description: For read and explain articles
 translateService:
   title: Translation Service
   description: For translate the webpage only
