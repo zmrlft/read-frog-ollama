@@ -28,18 +28,29 @@ export function protectSelectAllShadowRoot(shadowHost: HTMLElement, wrapper: HTM
           return
         }
 
+        // C. 当焦点在其他 shadow root 内（active 是其他 shadow host）→ 放行默认行为
+        if (active && (active as HTMLElement).shadowRoot) {
+          return
+        }
+
         if (pointerInside) {
-          // C. 鼠标悬停在组件里 → 自定义"组件专选"
+          // D. 鼠标悬停在组件里 → 自定义"组件专选"
           e.preventDefault()
           e.stopPropagation()
           requestAnimationFrame(() => selectAllInside(wrapper))
           return
         }
 
-        // D. 其它情况（宿主页面全选，但排除组件）
-        e.preventDefault()
-        e.stopPropagation()
-        requestAnimationFrame(() => rebuildSelectionWithoutHost(shadowHost))
+        // E. 其它情况（宿主页面全选，但排除组件）
+        // 没有任何交互时 → active = document.body
+        // 只有当焦点在 body 或无焦点时，才执行"排除组件的全选"
+        // 如果焦点在其他元素上（如 canvas 等），可能有应用自己的处理逻辑，不应干预
+        // 点击了 canvas（如 Excalidraw） → <canvas> 元素
+        if (active === document.body || !active) {
+          e.preventDefault()
+          e.stopPropagation()
+          requestAnimationFrame(() => rebuildSelectionWithoutHost(shadowHost))
+        }
       }
     },
     true, // capture
@@ -86,6 +97,7 @@ function selectAllInside(root: HTMLElement) {
   sel.addRange(range) // 立即呈现高亮
 }
 
+// 选中整个页面，但跳过你的 shadow host 组件。
 function rebuildSelectionWithoutHost(shadowHost: HTMLElement) {
   const sel = window.getSelection()
   if (!sel)
