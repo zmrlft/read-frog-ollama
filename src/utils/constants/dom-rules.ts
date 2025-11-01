@@ -76,6 +76,7 @@ export const DONT_WALK_AND_TRANSLATE_TAGS = new Set([
   'TRACK',
   'META',
   'SCRIPT',
+  'NOSCRIPT',
   'STYLE',
   'LINK',
   'PRE',
