@@ -15,7 +15,7 @@ import { extractTextContent } from '../../dom/traversal'
 import { removeTranslatedWrapperWithRestore } from '../dom/translation-cleanup'
 import { insertTranslatedNodeIntoWrapper } from '../dom/translation-insertion'
 import { findPreviousTranslatedWrapperInside } from '../dom/translation-wrapper'
-import { setTranslationDir } from '../translation-attributes'
+import { setTranslationDirAndLang } from '../translation-attributes'
 import { createSpinnerInside, getTranslatedTextAndRemoveSpinner } from '../ui/spinner'
 import { isNumericContent } from '../ui/translation-utils'
 import { MARK_ATTRIBUTES_REGEX, originalContentMap, translatingNodes } from './translation-state'
@@ -81,7 +81,7 @@ export async function translateNodesBilingualMode(
     translatedWrapperNode.className = `${NOTRANSLATE_CLASS} ${CONTENT_WRAPPER_CLASS}`
     translatedWrapperNode.setAttribute(TRANSLATION_MODE_ATTRIBUTE, 'bilingual' satisfies TranslationMode)
     translatedWrapperNode.setAttribute(WALKED_ATTRIBUTE, walkId)
-    setTranslationDir(translatedWrapperNode, config)
+    setTranslationDirAndLang(translatedWrapperNode, config)
     const spinner = createSpinnerInside(translatedWrapperNode)
 
     // Batch DOM insertion to reduce layout thrashing
@@ -244,7 +244,7 @@ export async function translateNodeTranslationOnlyMode(
     translatedWrapperNode.setAttribute(TRANSLATION_MODE_ATTRIBUTE, 'translationOnly' satisfies TranslationMode)
     translatedWrapperNode.setAttribute(WALKED_ATTRIBUTE, walkId)
     translatedWrapperNode.style.display = 'contents'
-    setTranslationDir(translatedWrapperNode, config)
+    setTranslationDirAndLang(translatedWrapperNode, config)
     const spinner = createSpinnerInside(translatedWrapperNode)
 
     // Batch DOM insertion to reduce layout thrashing
