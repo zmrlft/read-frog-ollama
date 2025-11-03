@@ -5,7 +5,7 @@ import { NOTRANSLATE_CLASS } from '@/utils/constants/dom-labels'
 import { MARGIN } from '@/utils/constants/selection'
 import { AiButton, AiPopover } from './ai-button'
 import { isSelectionToolbarVisibleAtom, selectionContentAtom, selectionRangeAtom } from './atom'
-import { CloseButton } from './close-button'
+import { CloseButton, DropEvent } from './close-button'
 import { SpeakButton } from './speak-button'
 import { TranslateButton, TranslatePopover } from './translate-button'
 
@@ -18,6 +18,7 @@ export function SelectionToolbar() {
   const setSelectionContent = useSetAtom(selectionContentAtom)
   const setSelectionRange = useSetAtom(selectionRangeAtom)
   const selectionToolbar = useAtomValue(configFieldsAtomMap.selectionToolbar)
+  const dropdownOpenRef = useRef(false)
 
   const updatePosition = useCallback(() => {
     if (!isSelectionToolbarVisible || !tooltipRef.current || !selectionPositionRef.current)
@@ -113,7 +114,10 @@ export function SelectionToolbar() {
       // if the selected content is cleared, hide the tooltip
       const selection = window.getSelection()
       if (!selection || selection.toString().trim().length === 0) {
-        setIsSelectionToolbarVisible(false)
+        // Don't hide toolbar when dropdown is open to prevent unwanted dismissal
+        // (Firefox clears selection when dropdown gains focus)
+        if (!dropdownOpenRef.current)
+          setIsSelectionToolbarVisible(false)
       }
     }
 
@@ -142,6 +146,14 @@ export function SelectionToolbar() {
       }
     }
   }, [isSelectionToolbarVisible, setSelectionContent, setIsSelectionToolbarVisible, setSelectionRange, updatePosition])
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      dropdownOpenRef.current = Boolean((e as CustomEvent).detail?.open)
+    }
+    window.addEventListener(DropEvent, handler)
+    return () => window.removeEventListener(DropEvent, handler)
+  }, [])
 
   // Check if current site is disabled
   const isSiteDisabled = selectionToolbar.disabledSelectionToolbarPatterns?.some(pattern =>

@@ -6,6 +6,7 @@ import { SessionCacheGroupRegistry } from '@/utils/session-cache/session-cache-g
 import { ensureInitializedConfig } from './config'
 import { setUpConfigBackup } from './config-backup'
 import { cleanupAllCache, setUpDatabaseCleanup } from './db-cleanup'
+import { handleAnalyzeSelectionPort, handleTranslateStreamPort, runAnalyzeSelectionStream } from './firefox-stream'
 import { initMockData } from './mock-data'
 import { newUserGuide } from './new-user-guide'
 import { proxyFetch } from './proxy-fetch'
@@ -48,6 +49,27 @@ export default defineBackground({
 
     onMessage('popupRequestReadArticle', async (message) => {
       void sendMessage('readArticle', undefined, message.data.tabId)
+    })
+
+    onMessage('analyzeSelection', async (message) => {
+      try {
+        return await runAnalyzeSelectionStream(message.data)
+      }
+      catch (error) {
+        logger.error('[Background] analyzeSelection failed', error)
+        throw error
+      }
+    })
+
+    browser.runtime.onConnect.addListener((port) => {
+      if (port.name === 'analyze-selection-stream') {
+        handleAnalyzeSelectionPort(port)
+        return
+      }
+
+      if (port.name === 'translate-text-stream') {
+        handleTranslateStreamPort(port)
+      }
     })
 
     onMessage('clearAllCache', async () => {

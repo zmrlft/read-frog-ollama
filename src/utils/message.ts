@@ -24,6 +24,8 @@ interface ProtocolMap {
   pinStateChanged: (data: { isPinned: boolean }) => void
   getPinState: () => boolean
   returnPinState: (data: { isPinned: boolean }) => void
+  // selection helpers
+  analyzeSelection: (data: { providerId: string, systemPrompt: string, userMessage: string, temperature?: number }) => Promise<string>
   // request
   enqueueTranslateRequest: (data: { text: string, langConfig: Config['language'], providerConfig: ProviderConfig, scheduleAt: number, hash: string }) => Promise<string>
   setTranslateRequestQueueConfig: (data: Partial<RequestQueueConfig>) => void

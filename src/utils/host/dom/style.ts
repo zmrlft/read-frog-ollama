@@ -3,7 +3,23 @@
  * @param element - The node to smash the truncation style
  */
 export function smashTruncationStyle(element: HTMLElement) {
-  const scheduleIdleTask = window.requestIdleCallback ?? window.requestAnimationFrame
+  // Ensure we're in a window context
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  // Use a wrapper function to ensure proper `this` binding
+  const scheduleIdleTask = (callback: () => void) => {
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(callback)
+    }
+    else if (typeof window.requestAnimationFrame === 'function') {
+      window.requestAnimationFrame(callback)
+    }
+    else {
+      setTimeout(callback, 0)
+    }
+  }
 
   scheduleIdleTask(() => {
     const computedStyle = window.getComputedStyle(element)

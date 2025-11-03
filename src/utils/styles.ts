@@ -40,10 +40,41 @@ function isInternalStyleElement(node: Node) {
  * @param shadowRoot - Target shadow root to mirror styles to
  * @param contentMatch - Optional text content to match within the style element
  */
-export function mirrorDynamicStyles(selector: string, shadowRoot: ShadowRoot, contentMatch?: string) {
+export function mirrorDynamicStyles(selector: string, shadowRoot: ShadowRoot, contentMatch?: string): () => void {
   // TODO: 目前函数只会把找到的第一个 style 放进来，但是可能存在多个 style 匹配，那其实要全部放进来，并且对应不同的 mirrorSheet
-  const mirrorSheet = new CSSStyleSheet()
-  shadowRoot.adoptedStyleSheets.push(mirrorSheet)
+
+  // Check if adoptedStyleSheets is supported
+  let supportsAdoptedStyleSheets = false
+  try {
+    supportsAdoptedStyleSheets = 'adoptedStyleSheets' in shadowRoot
+      && shadowRoot.adoptedStyleSheets !== undefined
+      && Array.isArray(shadowRoot.adoptedStyleSheets)
+  }
+  catch {
+    supportsAdoptedStyleSheets = false
+  }
+
+  let mirrorSheet: CSSStyleSheet | null = null
+  let mirrorStyleElement: HTMLStyleElement | null = null
+
+  if (supportsAdoptedStyleSheets) {
+    try {
+      mirrorSheet = new CSSStyleSheet()
+      // Use assignment instead of push for better compatibility
+      shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, mirrorSheet]
+    }
+    catch {
+      // Fallback if adoptedStyleSheets fails
+      supportsAdoptedStyleSheets = false
+    }
+  }
+
+  if (!supportsAdoptedStyleSheets) {
+    // Fallback for browsers that don't support adoptedStyleSheets
+    mirrorStyleElement = document.createElement('style')
+    mirrorStyleElement.setAttribute('data-mirror-styles', selector)
+    shadowRoot.appendChild(mirrorStyleElement)
+  }
 
   // Find all elements matching selector, then filter by content if contentMatch is provided
   const findMatchingElement = () => {
@@ -68,16 +99,25 @@ export function mirrorDynamicStyles(selector: string, shadowRoot: ShadowRoot, co
     attributes: true,
   }
 
+  const updateStyles = (textContent: string) => {
+    if (mirrorSheet && supportsAdoptedStyleSheets) {
+      mirrorSheet.replaceSync(textContent.trim())
+    }
+    else if (mirrorStyleElement) {
+      mirrorStyleElement.textContent = textContent.trim()
+    }
+  }
+
   const srcObserver = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
-      mirrorSheet.replaceSync(mutation.target.textContent?.trim() ?? '')
+      updateStyles(mutation.target.textContent ?? '')
     })
   })
 
   // If src is found, observe it
   if (src) {
     srcObserver.observe(src, opts)
-    mirrorSheet.replaceSync(src.textContent?.trim() ?? '')
+    updateStyles(src.textContent ?? '')
   }
 
   // Observe the head for added style elements
@@ -92,7 +132,7 @@ export function mirrorDynamicStyles(selector: string, shadowRoot: ShadowRoot, co
               srcObserver.disconnect()
             }
             src = node
-            mirrorSheet.replaceSync(node.textContent?.trim() ?? '')
+            updateStyles(node.textContent ?? '')
             srcObserver.observe(src, opts)
           }
         }
@@ -101,6 +141,24 @@ export function mirrorDynamicStyles(selector: string, shadowRoot: ShadowRoot, co
   })
 
   headObserver.observe(document.head, { childList: true })
+
+  return () => {
+    headObserver.disconnect()
+    srcObserver.disconnect()
+
+    if (mirrorSheet && supportsAdoptedStyleSheets) {
+      try {
+        shadowRoot.adoptedStyleSheets = shadowRoot.adoptedStyleSheets.filter(sheet => sheet !== mirrorSheet)
+      }
+      catch {
+        // ignore cleanup failures
+      }
+    }
+
+    if (mirrorStyleElement?.isConnected) {
+      mirrorStyleElement.remove()
+    }
+  }
 }
 
 /**

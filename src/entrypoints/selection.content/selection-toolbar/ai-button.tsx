@@ -1,6 +1,7 @@
 import type { PopoverWrapperRef } from './components/popover-wrapper'
 import { useMemo, useRef, useState } from '#imports'
 import { Icon } from '@iconify/react'
+import { getIsFirefoxExtensionEnv } from '@repo/ui/utils/firefox-compat'
 import { useQuery } from '@tanstack/react-query'
 import { streamText } from 'ai'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
@@ -9,6 +10,7 @@ import { MarkdownRenderer } from '@/components/markdown-renderer'
 import { configAtom, configFieldsAtomMap } from '@/utils/atoms/config'
 import { readProviderConfigAtom } from '@/utils/atoms/provider'
 import { getFinalSourceCode } from '@/utils/config/languages'
+import { createPortStreamPromise } from '@/utils/firefox-streaming'
 import { logger } from '@/utils/logger'
 import { getWordExplainPrompt } from '@/utils/prompts/word-explain'
 import { getReadModelById } from '@/utils/providers/model'
@@ -51,6 +53,7 @@ export function AiPopover() {
   const readProviderConfig = useAtomValue(readProviderConfigAtom)
   const popoverRef = useRef<PopoverWrapperRef>(null)
   const [aiResponse, setAiResponse] = useState('')
+  const isFirefoxExtensionEnv = useMemo(() => getIsFirefoxExtensionEnv(), [])
 
   const highlightData = useMemo(() => {
     if (!selectionRange || !isVisible) {
@@ -70,46 +73,85 @@ export function AiPopover() {
       highlightData,
       readProviderConfig,
       config,
+      isFirefoxExtensionEnv,
     ],
-    queryFn: async () => {
+    queryFn: async ({ signal }) => {
       if (!highlightData || !readProviderConfig || !config) {
         throw new Error('AI配置未找到或没有选中内容')
       }
 
       setAiResponse('')
 
-      const model = await getReadModelById(readProviderConfig.id)
-      const actualSourceCode = getFinalSourceCode(config.language.sourceCode, config.language.detectedCode)
-      const systemPrompt = getWordExplainPrompt(
-        actualSourceCode,
-        config.language.targetCode,
-        config.language.level,
-      )
+      try {
+        if (signal?.aborted) {
+          return false
+        }
 
-      const result = await streamText({
-        model,
-        temperature: 0.2,
-        system: systemPrompt,
-        messages: [
-          {
-            role: 'user',
-            content:
-              `query: ${highlightData.context.selection}\n`
-              + `context: ${highlightData.context.before} ${highlightData.context.selection} ${highlightData.context.after}`,
-          },
-        ],
-      })
+        const actualSourceCode = getFinalSourceCode(config.language.sourceCode, config.language.detectedCode)
+        const systemPrompt = getWordExplainPrompt(
+          actualSourceCode,
+          config.language.targetCode,
+          config.language.level,
+        )
+        const userMessage
+          = `query: ${highlightData.context.selection}\n`
+            + `context: ${highlightData.context.before} ${highlightData.context.selection} ${highlightData.context.after}`
 
-      let fullResponse = ''
-      for await (const delta of result.textStream) {
-        fullResponse += delta
-        setAiResponse(fullResponse)
-        popoverRef.current?.scrollToBottom()
+        if (isFirefoxExtensionEnv) {
+          const finalResponse = await createPortStreamPromise<string>(
+            'analyze-selection-stream',
+            {
+              providerId: readProviderConfig.id,
+              systemPrompt,
+              userMessage,
+              temperature: 0.2,
+            },
+            {
+              signal,
+              onChunk: (data) => {
+                setAiResponse(data)
+                popoverRef.current?.scrollToBottom()
+              },
+            },
+          )
+
+          logger.log('aiResponse', '\n', finalResponse)
+          return true
+        }
+
+        const model = await getReadModelById(readProviderConfig.id)
+        const result = await streamText({
+          model,
+          temperature: 0.2,
+          system: systemPrompt,
+          messages: [
+            {
+              role: 'user',
+              content: userMessage,
+            },
+          ],
+          abortSignal: signal,
+        })
+
+        let fullResponse = ''
+        for await (const delta of result.textStream) {
+          if (signal?.aborted) {
+            throw new DOMException('aborted', 'AbortError')
+          }
+          fullResponse += delta
+          setAiResponse(fullResponse)
+          popoverRef.current?.scrollToBottom()
+        }
+
+        logger.log('aiResponse', '\n', fullResponse)
+        return true
       }
-
-      logger.log('aiResponse', '\n', fullResponse)
-
-      return true
+      catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') {
+          return false
+        }
+        throw error
+      }
     },
     enabled: !!highlightData,
   })
