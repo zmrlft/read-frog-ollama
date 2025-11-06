@@ -1,6 +1,6 @@
 <div align="center"><a name="readme-top"></a>
 
-[![][image-banner]][website]
+<!-- [![][image-banner]][website] -->
 
 An open-source AI-powered language learning extension for browsers.<br/>
 Supports immersive translation, article analysis, multiple AI models, and more.<br/>
