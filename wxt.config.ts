@@ -11,6 +11,11 @@ export default defineConfig({
     plugins: [],
     resolve: {
       alias: {
+        // 开发时直接指向 monorepo 源码，文件变化立即生效
+        '@read-frog/definitions': path.resolve(__dirname, '../read-frog-monorepo/packages/definitions/src'),
+        '@read-frog/ui': path.resolve(__dirname, '../read-frog-monorepo/packages/ui/src'),
+        '@read-frog/orpc': path.resolve(__dirname, '../read-frog-monorepo/packages/orpc/src'),
+        // 保留 React 单例
         'react': path.resolve(__dirname, './node_modules/react'),
         'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
       },
