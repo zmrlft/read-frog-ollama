@@ -1,24 +1,13 @@
 import type { Config } from '@/types/config/config'
-import type {
-  ArticleAnalysis,
-  ArticleExplanation,
-  ExtractedContent,
-} from '@/types/content'
+import type { ArticleAnalysis, ArticleExplanation, ExtractedContent } from '@/types/content'
 import { i18n } from '#imports'
-import { LANG_CODE_TO_EN_NAME } from '@repo/definitions'
+import { LANG_CODE_TO_EN_NAME } from '@read-frog/definitions'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { generateObject } from 'ai'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { toast } from 'sonner'
-import {
-  progressAtom,
-  readStateAtom,
-  store,
-} from '@/entrypoints/side.content/atoms'
-import {
-  articleAnalysisSchema,
-  articleExplanationSchema,
-} from '@/types/content'
+import { progressAtom, readStateAtom, store } from '@/entrypoints/side.content/atoms'
+import { articleAnalysisSchema, articleExplanationSchema } from '@/types/content'
 import { sendInBatchesWithFixedDelay } from '@/utils/ai-request'
 import { configAtom, configFieldsAtomMap } from '@/utils/atoms/config'
 import { readProviderConfigAtom } from '@/utils/atoms/provider'
@@ -73,9 +62,7 @@ export function useAnalyzeContent() {
           // TODO: if und, then UI need to show UI to ask user to select the language or not continue
           void setLanguage({
             detectedCode:
-              articleAnalysis.detectedLang === 'und'
-                ? 'eng'
-                : articleAnalysis.detectedLang,
+              articleAnalysis.detectedLang === 'und' ? 'eng' : articleAnalysis.detectedLang,
           })
           logger.log('articleAnalysis', articleAnalysis)
 
@@ -85,10 +72,7 @@ export function useAnalyzeContent() {
           lastError = error
           attempts++
 
-          logger.error(
-            `error when attempt ${attempts} to analyze content`,
-            error,
-          )
+          logger.error(`error when attempt ${attempts} to analyze content`, error)
         }
       }
 
@@ -119,11 +103,7 @@ async function explainBatch(batch: string[], articleAnalysis: ArticleAnalysis, c
     try {
       const { object: articleExplanation } = await generateObject({
         model,
-        system: getExplainPrompt(
-          sourceLang,
-          targetLang,
-          language.level ?? 'intermediate',
-        ),
+        system: getExplainPrompt(sourceLang, targetLang, language.level ?? 'intermediate'),
         prompt: JSON.stringify({
           overallSummary: articleAnalysis.summary,
           paragraphs: batch,
@@ -144,11 +124,7 @@ async function explainBatch(batch: string[], articleAnalysis: ArticleAnalysis, c
       lastError = error
       attempts++
 
-      logger.error(
-        `error when attempt ${attempts} to explain batch`,
-        batch,
-        error,
-      )
+      logger.error(`error when attempt ${attempts} to explain batch`, batch, error)
     }
   }
 
@@ -158,18 +134,12 @@ async function explainBatch(batch: string[], articleAnalysis: ArticleAnalysis, c
 export function useExplainArticle() {
   const setReadState = useSetAtom(readStateAtom)
   const config = useAtomValue(configAtom)
-  return useMutation<
-    ArticleExplanation['paragraphs'],
-    Error,
-    ExplainArticleParams
-  >({
+  return useMutation<ArticleExplanation['paragraphs'], Error, ExplainArticleParams>({
     mutationKey: ['explainArticle'],
     mutationFn: async (params: ExplainArticleParams) => {
       const { extractedContent, articleAnalysis } = params
       if (!extractedContent?.paragraphs.length || !articleAnalysis) {
-        throw new Error(
-          'No content or summary available for explanation generation',
-        )
+        throw new Error('No content or summary available for explanation generation')
       }
       setReadState('explaining')
       // Process paragraphs in batches of 3

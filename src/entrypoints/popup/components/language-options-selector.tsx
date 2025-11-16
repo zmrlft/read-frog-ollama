@@ -1,20 +1,18 @@
-import type {
-  LangCodeISO6393,
-} from '@repo/definitions'
+import type { LangCodeISO6393 } from '@read-frog/definitions'
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
 import {
   LANG_CODE_TO_EN_NAME,
   LANG_CODE_TO_LOCALE_NAME,
   langCodeISO6393Schema,
-} from '@repo/definitions'
+} from '@read-frog/definitions'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@repo/ui/components/select'
+} from '@read-frog/ui/components/select'
 import { useAtom } from 'jotai'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 
@@ -37,9 +35,10 @@ export default function LanguageOptionsSelector() {
     void setLanguage({ targetCode: newLangCode })
   }
 
-  const sourceLangLabel = language.sourceCode === 'auto'
-    ? `${langCodeLabel(language.detectedCode)} (auto)`
-    : langCodeLabel(language.sourceCode)
+  const sourceLangLabel
+    = language.sourceCode === 'auto'
+      ? `${langCodeLabel(language.detectedCode)} (auto)`
+      : langCodeLabel(language.sourceCode)
 
   const targetLangLabel = langCodeLabel(language.targetCode)
 
@@ -78,9 +77,7 @@ export default function LanguageOptionsSelector() {
             <SelectValue asChild>
               <span className="truncate w-full">{targetLangLabel}</span>
             </SelectValue>
-            <span className="text-sm text-neutral-500">
-              {i18n.t('popup.targetLang')}
-            </span>
+            <span className="text-sm text-neutral-500">{i18n.t('popup.targetLang')}</span>
           </div>
           <LangCodeSelectorChevronDownIcon />
         </SelectTrigger>
@@ -97,11 +94,7 @@ export default function LanguageOptionsSelector() {
 }
 
 function AutoLangCell() {
-  return (
-    <span className="rounded-full bg-neutral-200 px-1 text-xs dark:bg-neutral-800">
-      auto
-    </span>
-  )
+  return <span className="rounded-full bg-neutral-200 px-1 text-xs dark:bg-neutral-800">auto</span>
 }
 
 function LangCodeSelectorChevronDownIcon() {

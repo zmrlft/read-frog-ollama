@@ -1,7 +1,7 @@
 module.exports = {
   plugins: {
     '@tailwindcss/postcss': {},
-    '@repo/ui/plugins/postcss-rename-custom-props.cjs': {
+    '@read-frog/ui/plugins/postcss-rename-custom-props.cjs': {
       fromPrefix: '--tw-',
       toPrefix: '--rf-tw-',
     },

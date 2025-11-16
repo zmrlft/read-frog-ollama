@@ -1,3 +1,4 @@
+import path from 'node:path'
 import { defineConfig } from 'wxt'
 
 // See https://wxt.dev/api/config.html
@@ -8,6 +9,12 @@ export default defineConfig({
   manifestVersion: 3,
   vite: () => ({
     plugins: [],
+    resolve: {
+      alias: {
+        'react': path.resolve(__dirname, './node_modules/react'),
+        'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
+      },
+    },
   }),
   manifest: ({ mode, browser }) => ({
     name: '__MSG_extName__',

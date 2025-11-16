@@ -5,7 +5,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@repo/ui/components/dropdown-menu'
+} from '@read-frog/ui/components/dropdown-menu'
 import { useAtom } from 'jotai'
 import { useState } from 'react'
 import { configFieldsAtomMap } from '@/utils/atoms/config'

@@ -1,4 +1,4 @@
-import type { LangCodeISO6391 } from '@repo/definitions'
+import type { LangCodeISO6391 } from '@read-frog/definitions'
 import type { PureAPIProviderConfig } from '@/types/config/provider'
 import { DEFAULT_PROVIDER_CONFIG } from '@/utils/constants/providers'
 import { sendMessage } from '@/utils/message'
@@ -75,8 +75,7 @@ async function parseDeepLXResponse(resp: { ok: boolean, status: number, statusTe
   if (!resp.ok) {
     const errorText = await resp.text().catch(() => 'Unable to read error response')
     throw new Error(
-      `DeepLX translation request failed: ${resp.status} ${resp.statusText}${
-        errorText ? ` - ${errorText}` : ''
+      `DeepLX translation request failed: ${resp.status} ${resp.statusText}${errorText ? ` - ${errorText}` : ''
       }`,
     )
   }

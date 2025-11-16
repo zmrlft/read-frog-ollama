@@ -1,5 +1,5 @@
 import { i18n } from '#imports'
-import { Input } from '@repo/ui/components/input'
+import { Input } from '@read-frog/ui/components/input'
 import hotkeys from 'hotkeys-js'
 import { useEffect, useRef, useState } from 'react'
 import { formatHotkey } from '@/utils/os'

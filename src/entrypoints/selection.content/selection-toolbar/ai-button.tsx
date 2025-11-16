@@ -1,7 +1,7 @@
 import type { PopoverWrapperRef } from './components/popover-wrapper'
 import { useMemo, useRef, useState } from '#imports'
 import { Icon } from '@iconify/react'
-import { getIsFirefoxExtensionEnv } from '@repo/ui/utils/firefox-compat'
+import { getIsFirefoxExtensionEnv } from '@read-frog/ui/utils/firefox-compat'
 import { useQuery } from '@tanstack/react-query'
 import { streamText } from 'ai'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'

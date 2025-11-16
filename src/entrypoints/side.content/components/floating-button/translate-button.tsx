@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react'
-import { cn } from '@repo/ui/lib/utils'
+import { cn } from '@read-frog/ui/lib/utils'
 import { useAtomValue } from 'jotai'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { validateTranslationConfig } from '@/utils/host/translate/translate-text'

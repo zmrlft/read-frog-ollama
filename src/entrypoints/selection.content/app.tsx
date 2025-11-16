@@ -1,4 +1,4 @@
-import { cn } from '@repo/ui/lib/utils'
+import { cn } from '@read-frog/ui/lib/utils'
 import { Toaster } from 'sonner'
 import { NOTRANSLATE_CLASS } from '@/utils/constants/dom-labels'
 import { SelectionToolbar } from './selection-toolbar'

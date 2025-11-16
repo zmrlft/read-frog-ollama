@@ -1,4 +1,4 @@
-import { Badge } from '@repo/ui/components/badge'
+import { Badge } from '@read-frog/ui/components/badge'
 
 export function BetaBadge() {
   return (

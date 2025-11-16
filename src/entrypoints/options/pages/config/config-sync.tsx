@@ -10,10 +10,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@repo/ui/components/alert-dialog'
-import { Button } from '@repo/ui/components/button'
-import { Input } from '@repo/ui/components/input'
-import { Label } from '@repo/ui/components/label'
+} from '@read-frog/ui/components/alert-dialog'
+import { Button } from '@read-frog/ui/components/button'
+import { Input } from '@read-frog/ui/components/input'
+import { Label } from '@read-frog/ui/components/label'
 import { useMutation } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { toast } from 'sonner'

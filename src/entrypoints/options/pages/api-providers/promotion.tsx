@@ -1,6 +1,6 @@
 import { i18n } from '#imports'
-import { Button } from '@repo/ui/components/button'
-import { cn } from '@repo/ui/lib/utils'
+import { Button } from '@read-frog/ui/components/button'
+import { cn } from '@read-frog/ui/lib/utils'
 import { useAtom, useSetAtom } from 'jotai'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { selectedProviderIdAtom } from './atoms'

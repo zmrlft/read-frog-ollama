@@ -1,8 +1,8 @@
 import type { TTSModel, TTSVoice } from '@/types/config/tts'
 import { i18n } from '#imports'
-import { Badge } from '@repo/ui/components/badge'
-import { Button } from '@repo/ui/components/button'
-import { Field, FieldLabel } from '@repo/ui/components/field'
+import { Badge } from '@read-frog/ui/components/badge'
+import { Button } from '@read-frog/ui/components/button'
+import { Field, FieldLabel } from '@read-frog/ui/components/field'
 import {
   Select,
   SelectContent,
@@ -10,7 +10,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@repo/ui/components/select'
+} from '@read-frog/ui/components/select'
 import { IconLoader2, IconPlayerPlayFilled } from '@tabler/icons-react'
 import { useAtom, useAtomValue } from 'jotai'
 import { toast } from 'sonner'

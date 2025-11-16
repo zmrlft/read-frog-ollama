@@ -1,4 +1,4 @@
-import { semanticVersionSchema } from '@repo/definitions'
+import { semanticVersionSchema } from '@read-frog/definitions'
 import { describe, expect, it } from 'vitest'
 import { z } from 'zod'
 import { hasNewBlogPost } from '../blog'

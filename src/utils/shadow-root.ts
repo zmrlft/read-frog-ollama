@@ -1,4 +1,4 @@
-import { cn } from '@repo/ui/lib/utils'
+import { cn } from '@read-frog/ui/lib/utils'
 import { isDarkMode } from './theme'
 
 export function insertShadowRootUIWrapperInto(container: HTMLElement) {

@@ -1,7 +1,7 @@
 import type { Config } from '@/types/config/config'
 import type { ProviderConfig } from '@/types/config/provider'
 import { i18n } from '#imports'
-import { ISO6393_TO_6391, LANG_CODE_TO_EN_NAME, LANG_CODE_TO_LOCALE_NAME } from '@repo/definitions'
+import { ISO6393_TO_6391, LANG_CODE_TO_EN_NAME, LANG_CODE_TO_LOCALE_NAME } from '@read-frog/definitions'
 import { toast } from 'sonner'
 import { isAPIProviderConfig, isLLMTranslateProviderConfig, isNonAPIProvider, isPureAPIProvider } from '@/types/config/provider'
 import { getProviderConfigById } from '@/utils/config/helpers'

@@ -8,8 +8,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@repo/ui/components/select'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/ui/components/tooltip'
+} from '@read-frog/ui/components/select'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@read-frog/ui/components/tooltip'
 import { useAtom, useAtomValue } from 'jotai'
 import { isLLMTranslateProvider } from '@/types/config/provider'
 import { configFieldsAtomMap } from '@/utils/atoms/config'

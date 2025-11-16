@@ -1,6 +1,6 @@
 import type { Config } from '@/types/config/config'
 import { createShadowRootUi, defineContentScript } from '#imports'
-import { TooltipProvider } from '@repo/ui/components/tooltip'
+import { TooltipProvider } from '@read-frog/ui/components/tooltip'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { kebabCase } from 'case-anything'

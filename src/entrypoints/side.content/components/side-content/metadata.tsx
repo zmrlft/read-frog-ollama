@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react'
-import { Button } from '@repo/ui/components/button'
-import { cn } from '@repo/ui/lib/utils'
+import { Button } from '@read-frog/ui/components/button'
+import { cn } from '@read-frog/ui/lib/utils'
 import { useMutationState } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'

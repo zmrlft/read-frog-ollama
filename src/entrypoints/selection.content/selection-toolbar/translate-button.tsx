@@ -1,15 +1,19 @@
 import type { TextUIPart } from 'ai'
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
-import { ISO6393_TO_6391, LANG_CODE_TO_EN_NAME } from '@repo/definitions'
-import { getIsFirefoxExtensionEnv } from '@repo/ui/utils/firefox-compat'
+import { ISO6393_TO_6391, LANG_CODE_TO_EN_NAME } from '@read-frog/definitions'
+import { getIsFirefoxExtensionEnv } from '@read-frog/ui/utils/firefox-compat'
 import { IconLoader2, IconVolume } from '@tabler/icons-react'
 import { readUIMessageStream, streamText } from 'ai'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { useTextToSpeech } from '@/hooks/use-text-to-speech'
-import { isLLMTranslateProviderConfig, isNonAPIProvider, isPureAPIProvider } from '@/types/config/provider'
+import {
+  isLLMTranslateProviderConfig,
+  isNonAPIProvider,
+  isPureAPIProvider,
+} from '@/types/config/provider'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { translateProviderConfigAtom, ttsProviderConfigAtom } from '@/utils/atoms/provider'
 import { getConfigFromStorage } from '@/utils/config/config'
@@ -19,7 +23,12 @@ import { deeplxTranslate, googleTranslate, microsoftTranslate } from '@/utils/ho
 import { translateText } from '@/utils/host/translate/translate-text'
 import { getTranslatePrompt } from '@/utils/prompts/translate'
 import { getTranslateModelById } from '@/utils/providers/model'
-import { isSelectionToolbarVisibleAtom, isTranslatePopoverVisibleAtom, mouseClickPositionAtom, selectionContentAtom } from './atom'
+import {
+  isSelectionToolbarVisibleAtom,
+  isTranslatePopoverVisibleAtom,
+  mouseClickPositionAtom,
+  selectionContentAtom,
+} from './atom'
 import { PopoverWrapper } from './components/popover-wrapper'
 
 export function TranslateButton() {
@@ -39,7 +48,11 @@ export function TranslateButton() {
   }
 
   return (
-    <button type="button" className="size-6 flex items-center justify-center hover:bg-zinc-300 dark:hover:bg-zinc-700 cursor-pointer" onClick={handleClick}>
+    <button
+      type="button"
+      className="size-6 flex items-center justify-center hover:bg-zinc-300 dark:hover:bg-zinc-700 cursor-pointer"
+      onClick={handleClick}
+    >
       <Icon icon="ri:translate" strokeWidth={0.8} className="size-4" />
     </button>
   )
@@ -81,7 +94,9 @@ export function TranslatePopover() {
       }
 
       if (!translateProviderConfig) {
-        throw new Error(`No provider config for ${config.translate.providerId} when translate text`)
+        throw new Error(
+          `No provider config for ${config.translate.providerId} when translate text`,
+        )
       }
 
       const { provider } = translateProviderConfig
@@ -92,7 +107,10 @@ export function TranslatePopover() {
       try {
         if (isFirefoxExtensionEnv && isLLMTranslateProviderConfig(translateProviderConfig)) {
           const targetLangName = LANG_CODE_TO_EN_NAME[languageConfig.targetCode]
-          const { id: providerId, models: { translate } } = translateProviderConfig
+          const {
+            id: providerId,
+            models: { translate },
+          } = translateProviderConfig
           const translateModel = translate.isCustomModel ? translate.customModel : translate.model
           const providerOptions = getProviderOptions(translateModel ?? '')
           const prompt = await getTranslatePrompt(targetLangName, cleanText)
@@ -139,7 +157,10 @@ export function TranslatePopover() {
         let translatedText = ''
 
         if (isNonAPIProvider(provider)) {
-          const sourceLang = languageConfig.sourceCode === 'auto' ? 'auto' : (ISO6393_TO_6391[languageConfig.sourceCode] ?? 'auto')
+          const sourceLang
+            = languageConfig.sourceCode === 'auto'
+              ? 'auto'
+              : ISO6393_TO_6391[languageConfig.sourceCode] ?? 'auto'
           const targetLang = ISO6393_TO_6391[languageConfig.targetCode]
           if (!targetLang) {
             throw new Error(`Invalid target language code: ${languageConfig.targetCode}`)
@@ -153,19 +174,31 @@ export function TranslatePopover() {
           }
         }
         else if (isPureAPIProvider(provider)) {
-          const sourceLang = languageConfig.sourceCode === 'auto' ? 'auto' : (ISO6393_TO_6391[languageConfig.sourceCode] ?? 'auto')
+          const sourceLang
+            = languageConfig.sourceCode === 'auto'
+              ? 'auto'
+              : ISO6393_TO_6391[languageConfig.sourceCode] ?? 'auto'
           const targetLang = ISO6393_TO_6391[languageConfig.targetCode]
           if (!targetLang) {
             throw new Error(`Invalid target language code: ${languageConfig.targetCode}`)
           }
 
           if (provider === 'deeplx') {
-            translatedText = await deeplxTranslate(cleanText, sourceLang, targetLang, translateProviderConfig, { forceBackgroundFetch: true })
+            translatedText = await deeplxTranslate(
+              cleanText,
+              sourceLang,
+              targetLang,
+              translateProviderConfig,
+              { forceBackgroundFetch: true },
+            )
           }
         }
         else if (isLLMTranslateProviderConfig(translateProviderConfig)) {
           const targetLangName = LANG_CODE_TO_EN_NAME[languageConfig.targetCode]
-          const { id: providerId, models: { translate } } = translateProviderConfig
+          const {
+            id: providerId,
+            models: { translate },
+          } = translateProviderConfig
           const translateModel = translate.isCustomModel ? translate.customModel : translate.model
           const model = await getTranslateModelById(providerId)
 
@@ -231,7 +264,14 @@ export function TranslatePopover() {
       cancelTranslation?.()
       cancelTranslation = undefined
     }
-  }, [isVisible, selectionContent, languageConfig.sourceCode, languageConfig.targetCode, translateProviderConfig, isFirefoxExtensionEnv])
+  }, [
+    isVisible,
+    selectionContent,
+    languageConfig.sourceCode,
+    languageConfig.targetCode,
+    translateProviderConfig,
+    isFirefoxExtensionEnv,
+  ])
 
   return (
     <PopoverWrapper
@@ -242,7 +282,9 @@ export function TranslatePopover() {
       setIsVisible={setIsVisible}
     >
       <div className="p-4 border-b">
-        <div className="border-b pb-4"><p className="text-sm text-zinc-600 dark:text-zinc-400">{selectionContent}</p></div>
+        <div className="border-b pb-4">
+          <p className="text-sm text-zinc-600 dark:text-zinc-400">{selectionContent}</p>
+        </div>
         <div className="pt-4">
           <p className="text-sm">
             {isTranslating && !translatedText && <Icon icon="svg-spinners:3-dots-bounce" />}
@@ -260,7 +302,11 @@ export function TranslatePopover() {
             onClick={handleCopy}
             className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded"
           >
-            <Icon icon="tabler:copy" strokeWidth={1} className="size-4 text-zinc-600 dark:text-zinc-400" />
+            <Icon
+              icon="tabler:copy"
+              strokeWidth={1}
+              className="size-4 text-zinc-600 dark:text-zinc-400"
+            />
           </button>
         </div>
       </div>
@@ -302,7 +348,10 @@ function SpeakOriginalButton() {
     >
       {isFetching || isPlaying
         ? (
-            <IconLoader2 className="size-4 text-zinc-600 dark:text-zinc-400 animate-spin" strokeWidth={1.6} />
+            <IconLoader2
+              className="size-4 text-zinc-600 dark:text-zinc-400 animate-spin"
+              strokeWidth={1.6}
+            />
           )
         : (
             <IconVolume className="size-4 text-zinc-600 dark:text-zinc-400" strokeWidth={1.6} />

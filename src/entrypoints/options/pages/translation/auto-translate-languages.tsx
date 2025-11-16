@@ -1,14 +1,18 @@
-import type { LangCodeISO6393 } from '@repo/definitions'
+import type { LangCodeISO6393 } from '@read-frog/definitions'
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
-import { LANG_CODE_TO_EN_NAME, LANG_CODE_TO_LOCALE_NAME, langCodeISO6393Schema } from '@repo/definitions'
-import { Button } from '@repo/ui/components/button'
+import {
+  LANG_CODE_TO_EN_NAME,
+  LANG_CODE_TO_LOCALE_NAME,
+  langCodeISO6393Schema,
+} from '@read-frog/definitions'
+import { Button } from '@read-frog/ui/components/button'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from '@repo/ui/components/dropdown-menu'
+} from '@read-frog/ui/components/dropdown-menu'
 import { useAtom } from 'jotai'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { ConfigCard } from '../../components/config-card'
@@ -50,7 +54,9 @@ function AutoTranslateLanguagesSelector() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="w-40 justify-between">
-            <span className="truncate">{i18n.t('options.translation.autoTranslateLanguages.selectLanguages')}</span>
+            <span className="truncate">
+              {i18n.t('options.translation.autoTranslateLanguages.selectLanguages')}
+            </span>
             <Icon icon="tabler:chevron-down" className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>

@@ -1,4 +1,4 @@
-import { LOCALHOST_DOMAIN, READFROG_DOMAIN, WEBSITE_DEV_URL, WEBSITE_PROD_URL } from '@repo/definitions'
+import { LOCALHOST_DOMAIN, READFROG_DOMAIN, WEBSITE_DEV_URL, WEBSITE_PROD_URL } from '@read-frog/definitions'
 
 export const OFFICIAL_SITE_URL_PATTERNS = [
   `https://*.${READFROG_DOMAIN}/*`,

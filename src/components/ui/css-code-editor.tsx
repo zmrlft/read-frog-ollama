@@ -8,7 +8,7 @@
 import type { ReactCodeMirrorProps } from '@uiw/react-codemirror'
 import { css } from '@codemirror/lang-css'
 import { lintGutter } from '@codemirror/lint'
-import { cn } from '@repo/ui/lib/utils'
+import { cn } from '@read-frog/ui/lib/utils'
 import { color } from '@uiw/codemirror-extensions-color'
 import CodeMirror from '@uiw/react-codemirror'
 import { useTheme } from '@/components/providers/theme-provider'

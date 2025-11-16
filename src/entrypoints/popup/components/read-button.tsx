@@ -1,7 +1,7 @@
 import { browser, i18n } from '#imports'
-import { Button } from '@repo/ui/components/button'
+import { Button } from '@read-frog/ui/components/button'
 
-import { cn } from '@repo/ui/lib/utils'
+import { cn } from '@read-frog/ui/lib/utils'
 import { useAtomValue } from 'jotai'
 import { toast } from 'sonner'
 

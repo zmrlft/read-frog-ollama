@@ -1,7 +1,7 @@
 import type { APICallError } from 'ai'
 import { Icon } from '@iconify/react'
-import { Alert, AlertDescription, AlertTitle } from '@repo/ui/components/alert'
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@repo/ui/components/hover-card'
+import { Alert, AlertDescription, AlertTitle } from '@read-frog/ui/components/alert'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@read-frog/ui/components/hover-card'
 import { use } from 'react'
 import { ShadowWrapperContext } from '@/utils/react-shadow-host/create-shadow-host'
 

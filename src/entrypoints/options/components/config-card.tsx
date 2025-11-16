@@ -1,4 +1,4 @@
-import { cn } from '@repo/ui/lib/utils'
+import { cn } from '@read-frog/ui/lib/utils'
 
 export function ConfigCard(
   { title, description, children, className, titleClassName }:

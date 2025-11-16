@@ -1,6 +1,6 @@
 import type { APIProviderTypes } from '@/types/config/provider'
 import { i18n } from '#imports'
-import { DialogContent, DialogHeader, DialogTitle } from '@repo/ui/components/dialog'
+import { DialogContent, DialogHeader, DialogTitle } from '@read-frog/ui/components/dialog'
 import { useAtom, useSetAtom } from 'jotai'
 import ProviderIcon from '@/components/provider-icon'
 import { useTheme } from '@/components/providers/theme-provider'

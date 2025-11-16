@@ -1,5 +1,5 @@
-import type { LangCodeISO6393, LangLevel } from '@repo/definitions'
-import { LANG_CODE_TO_EN_NAME, LANG_DICTIONARY_LABELS } from '@repo/definitions'
+import type { LangCodeISO6393, LangLevel } from '@read-frog/definitions'
+import { LANG_CODE_TO_EN_NAME, LANG_DICTIONARY_LABELS } from '@read-frog/definitions'
 
 export function getWordExplainPrompt(
   sourceLang: LangCodeISO6393,

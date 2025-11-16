@@ -1,4 +1,4 @@
-import { TooltipProvider } from '@repo/ui/components/tooltip'
+import { TooltipProvider } from '@read-frog/ui/components/tooltip'
 import { createContext } from 'react'
 
 import ReactDOM from 'react-dom/client'

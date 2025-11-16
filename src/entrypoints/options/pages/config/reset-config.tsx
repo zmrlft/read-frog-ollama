@@ -9,8 +9,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@repo/ui/components/alert-dialog'
-import { Button } from '@repo/ui/components/button'
+} from '@read-frog/ui/components/alert-dialog'
+import { Button } from '@read-frog/ui/components/button'
 import { IconRefresh } from '@tabler/icons-react'
 import { useSetAtom } from 'jotai'
 import { writeConfigAtom } from '@/utils/atoms/config'

@@ -1,0 +1,34 @@
+# Check if SKIP_PRE_PUSH environment variable is set
+if [ "$SKIP_HUSKY" = "true" ]; then
+  echo "⏭️  Skipping pre-push checks (SKIP_HUSKY=true)"
+  exit 0
+fi
+
+echo "🔍 Checking for uncommented eruda imports..."
+if grep -r "import.*eruda" src/ --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" | grep -v ":.*[[:space:]]*//.*import.*eruda"; then
+  echo "❌ Found uncommented eruda imports in the codebase!"
+  echo "Please comment out or remove eruda imports before pushing."
+  exit 1
+else
+  echo "✅ No uncommented eruda imports found."
+fi
+
+echo "🔍 Checking for pnpm-lock.yaml overrides..."
+if grep -r "overrides:" pnpm-lock.yaml; then
+  echo "❌ Found pnpm-lock.yaml overrides!"
+  echo "Please remove pnpm-lock.yaml overrides before pushing. Use pnpm unlink:local"
+  exit 1
+else
+  echo "✅ No pnpm-lock.yaml overrides found."
+fi
+
+pnpm lint
+pnpm type-check
+pnpm build
+
+# Check if SKIP_FREE_API environment variable is set
+if [ "$SKIP_FREE_API" = "true" ]; then
+  pnpm test -- --exclude="**/free-api.test.ts"
+else
+  pnpm test
+fi

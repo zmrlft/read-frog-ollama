@@ -1,4 +1,4 @@
-import type { LangLevel } from '@repo/definitions'
+import type { LangLevel } from '@read-frog/definitions'
 
 import { i18n } from '#imports'
 import {
@@ -7,7 +7,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@repo/ui/components/select'
+} from '@read-frog/ui/components/select'
 import { useAtom } from 'jotai'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 
@@ -21,22 +21,13 @@ export default function LanguageLevelSelector() {
         value={language.level}
         onValueChange={(value: LangLevel) => setLanguage({ level: value })}
       >
-        <SelectTrigger
-          size="sm"
-          className="!h-7 w-29 pr-1.5 pl-2.5"
-        >
+        <SelectTrigger size="sm" className="!h-7 w-29 pr-1.5 pl-2.5">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="beginner">
-            {i18n.t('languageLevels.beginner')}
-          </SelectItem>
-          <SelectItem value="intermediate">
-            {i18n.t('languageLevels.intermediate')}
-          </SelectItem>
-          <SelectItem value="advanced">
-            {i18n.t('languageLevels.advanced')}
-          </SelectItem>
+          <SelectItem value="beginner">{i18n.t('languageLevels.beginner')}</SelectItem>
+          <SelectItem value="intermediate">{i18n.t('languageLevels.intermediate')}</SelectItem>
+          <SelectItem value="advanced">{i18n.t('languageLevels.advanced')}</SelectItem>
         </SelectContent>
       </Select>
     </div>

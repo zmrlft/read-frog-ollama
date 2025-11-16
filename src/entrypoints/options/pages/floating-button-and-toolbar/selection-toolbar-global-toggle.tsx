@@ -1,5 +1,5 @@
 import { i18n } from '#imports'
-import { Switch } from '@repo/ui/components/switch'
+import { Switch } from '@read-frog/ui/components/switch'
 import { useAtom } from 'jotai'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { ConfigCard } from '../../components/config-card'

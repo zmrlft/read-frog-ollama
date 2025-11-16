@@ -1,5 +1,5 @@
 import type { Config } from '@/types/config/config'
-import { SidebarProvider } from '@repo/ui/components/sidebar'
+import { SidebarProvider } from '@read-frog/ui/components/sidebar'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { Provider as JotaiProvider } from 'jotai'
 import { useHydrateAtoms } from 'jotai/utils'

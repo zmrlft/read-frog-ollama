@@ -1,4 +1,4 @@
-import type { LangLevel } from '@repo/definitions'
+import type { LangLevel } from '@read-frog/definitions'
 import { syntacticCategoryAbbr } from '@/types/content'
 
 export function getExplainPrompt(sourceLang: string, targetLang: string, langLevel: LangLevel) {

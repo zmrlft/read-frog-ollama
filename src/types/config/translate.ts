@@ -1,4 +1,4 @@
-import { langCodeISO6393Schema } from '@repo/definitions'
+import { langCodeISO6393Schema } from '@read-frog/definitions'
 import { z } from 'zod'
 import { HOTKEYS } from '@/utils/constants/hotkeys'
 import { MIN_BATCH_CHARACTERS, MIN_BATCH_ITEMS, MIN_TRANSLATE_CAPACITY, MIN_TRANSLATE_RATE } from '@/utils/constants/translate'

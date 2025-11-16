@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react'
-import { Card, CardContent } from '@repo/ui/components/card'
+import { Card, CardContent } from '@read-frog/ui/components/card'
 import { IconCircleArrowDownRightFilled, IconCircleArrowUpRightFilled, IconMinus } from '@tabler/icons-react'
 import { Activity } from 'react'
 import { addThousandsSeparator, numberToPercentage } from '@/utils/utils'

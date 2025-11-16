@@ -1,5 +1,5 @@
-import { Field, FieldError, FieldLabel } from '@repo/ui/components/field'
-import { Input } from '@repo/ui/components/input'
+import { Field, FieldError, FieldLabel } from '@read-frog/ui/components/field'
+import { Input } from '@read-frog/ui/components/input'
 import { useStore } from '@tanstack/react-form'
 import { useFieldContext } from '../form-context'
 

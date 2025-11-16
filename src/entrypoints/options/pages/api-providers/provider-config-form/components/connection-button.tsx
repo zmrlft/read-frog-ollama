@@ -1,7 +1,7 @@
 import type { APIProviderConfig } from '@/types/config/provider'
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
-import { Button } from '@repo/ui/components/button'
+import { Button } from '@read-frog/ui/components/button'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import LoadingDots from '@/components/loading-dots'

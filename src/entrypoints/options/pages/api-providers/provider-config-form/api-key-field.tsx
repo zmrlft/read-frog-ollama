@@ -1,6 +1,6 @@
 import type { APIProviderConfig } from '@/types/config/provider'
 import { i18n } from '#imports'
-import { Checkbox } from '@repo/ui/components/checkbox'
+import { Checkbox } from '@read-frog/ui/components/checkbox'
 import { useStore } from '@tanstack/react-form'
 import { useState } from 'react'
 import { ConnectionTestButton } from './components/connection-button'

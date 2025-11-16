@@ -1,7 +1,4 @@
-import type {
-  LangCodeISO6393,
-  LangLevel,
-} from '@repo/definitions'
+import type { LangCodeISO6393, LangLevel } from '@read-frog/definitions'
 import type { DOWNLOAD_FILE_TYPES } from '../../utils/downloader'
 import type { ArticleExplanation } from '@/types/content'
 import { i18n } from '#imports'
@@ -11,7 +8,7 @@ import {
   LANG_CODE_TO_LOCALE_NAME,
   langCodeISO6393Schema,
   langLevel,
-} from '@repo/definitions'
+} from '@read-frog/definitions'
 import {
   Select,
   SelectContent,
@@ -19,13 +16,9 @@ import {
   SelectItem,
   SelectLabel,
   SelectTrigger,
-} from '@repo/ui/components/select'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@repo/ui/components/tooltip'
-import { cn } from '@repo/ui/lib/utils'
+} from '@read-frog/ui/components/select'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@read-frog/ui/components/tooltip'
+import { cn } from '@read-frog/ui/lib/utils'
 import { useMutationState } from '@tanstack/react-query'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import ReadProviderSelector from '@/components/llm-providers/read-provider-selector'
@@ -120,15 +113,16 @@ function TargetLangSelect() {
   return (
     <Select
       value={language.targetCode}
-      onValueChange={(newTargetCode: LangCodeISO6393) =>
-        setLanguage({ targetCode: newTargetCode })}
+      onValueChange={(newTargetCode: LangCodeISO6393) => setLanguage({ targetCode: newTargetCode })}
     >
       <SelectTrigger
         hideChevron
         className="border-border flex !h-7 w-auto items-center gap-2 rounded-md border px-2"
       >
         <div className="max-w-15 min-w-0 truncate">
-          {`${LANG_CODE_TO_EN_NAME[language.targetCode]} (${LANG_CODE_TO_LOCALE_NAME[language.targetCode]})`}
+          {`${LANG_CODE_TO_EN_NAME[language.targetCode]} (${
+            LANG_CODE_TO_LOCALE_NAME[language.targetCode]
+          })`}
         </div>
       </SelectTrigger>
       <SelectContent container={shadowWrapper}>
@@ -166,7 +160,9 @@ function SourceLangSelect() {
         <SelectGroup>
           <SelectLabel>{i18n.t('side.sourceLang')}</SelectLabel>
           <SelectItem value="auto">
-            {`${LANG_CODE_TO_EN_NAME[language.detectedCode]} (${LANG_CODE_TO_LOCALE_NAME[language.detectedCode]})`}
+            {`${LANG_CODE_TO_EN_NAME[language.detectedCode]} (${
+              LANG_CODE_TO_LOCALE_NAME[language.detectedCode]
+            })`}
             <span className="rounded-full bg-neutral-200 px-1 text-xs dark:bg-neutral-800">
               auto
             </span>
@@ -205,17 +201,14 @@ function FileExport() {
         hideChevron
         className="rounded-md flex !size-7 items-center justify-center p-0 shadow-xs border focus-visible:ring-ring/50 dark:bg-input/30 dark:hover:bg-input/50 border-input"
       >
-        <Icon
-          icon="tabler:download"
-          className="size-4 p-0.5 bg-white rounded-full"
-        />
+        <Icon icon="tabler:download" className="size-4 p-0.5 bg-white rounded-full" />
       </SelectTrigger>
       <SelectContent container={shadowWrapper}>
         <SelectGroup>
           <SelectLabel>{i18n.t('side.fileExport')}</SelectLabel>
           {Object.entries(DOWNLOAD_FILE_ITEMS).map(([fileType, { label }]) => (
             <SelectItem key={fileType} value={fileType}>
-              { label }
+              {label}
             </SelectItem>
           ))}
         </SelectGroup>

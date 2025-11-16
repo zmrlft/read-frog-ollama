@@ -1,5 +1,5 @@
 import { storage } from '#imports'
-import { semanticVersionSchema } from '@repo/definitions'
+import { semanticVersionSchema } from '@read-frog/definitions'
 import { z } from 'zod'
 import { logger } from './logger'
 import { sendMessage } from './message'

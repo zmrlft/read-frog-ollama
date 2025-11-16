@@ -7,7 +7,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@repo/ui/components/select'
+} from '@read-frog/ui/components/select'
 import { useAtom, useAtomValue } from 'jotai'
 import ProviderIcon from '@/components/provider-icon'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
