@@ -63,14 +63,12 @@ describe('all Config Migrations', () => {
             seriesProcessed++
 
             // Output success info in verbose mode
-            // eslint-disable-next-line turbo/no-undeclared-env-vars
             if (process.env.VITEST_VERBOSE) {
               logger.info(`✓ Migration v${fromVersion} -> v${toVersion} [${seriesId}]: ${oldSeriesData.description}`)
             }
           }
           else {
             // Series doesn't exist in new version - skip migration test for this series
-            // eslint-disable-next-line turbo/no-undeclared-env-vars
             if (process.env.VITEST_VERBOSE) {
               logger.info(`⚠ Skipping series "${seriesId}" - not present in v${toVersion}`)
             }

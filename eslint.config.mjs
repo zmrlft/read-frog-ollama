@@ -1,6 +1,5 @@
 import antfu from '@antfu/eslint-config'
 import pluginQuery from '@tanstack/eslint-plugin-query'
-import turboPlugin from 'eslint-plugin-turbo'
 
 export default antfu({
   formatters: {
@@ -30,14 +29,6 @@ export default antfu({
   },
   react: true,
 }, [
-  {
-    plugins: {
-      turbo: turboPlugin,
-    },
-    rules: {
-      'turbo/no-undeclared-env-vars': 'warn',
-    },
-  },
   {
     files: ['**/*.ts', '**/*.tsx'],
     ignores: ['**/*.md/**'],

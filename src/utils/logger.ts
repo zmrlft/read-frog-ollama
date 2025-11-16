@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 
-// eslint-disable-next-line turbo/no-undeclared-env-vars
 const isDev = import.meta.env.DEV
 
 /** ANSI 颜色码（Node 控制台） */

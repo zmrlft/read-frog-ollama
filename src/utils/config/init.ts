@@ -48,7 +48,6 @@ export async function initializeConfig() {
     storage.setItem<number>(`local:${CONFIG_SCHEMA_VERSION_STORAGE_KEY}`, currentVersion),
   ])
 
-  // eslint-disable-next-line turbo/no-undeclared-env-vars
   if (import.meta.env.DEV) {
     await loadAPIKeyFromEnv()
     await enableBetaExperience()

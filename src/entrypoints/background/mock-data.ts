@@ -7,7 +7,6 @@ import { logger } from '@/utils/logger'
  * Only runs when WXT_MOCK_DATA=true is set in environment variables
  */
 export async function initMockData() {
-  // eslint-disable-next-line turbo/no-undeclared-env-vars
   if (import.meta.env.DEV && import.meta.env.WXT_MOCK_DATA === 'true') {
     const existingCount = await db.batchRequestRecord.count()
     if (existingCount > 0) {
