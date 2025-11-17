@@ -1,1 +1,4 @@
-@import '@read-frog/ui/styles/theme.css';
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import '@read-frog/ui/styles/theme-base.css';
+@source "../**/*.{ts,tsx}";

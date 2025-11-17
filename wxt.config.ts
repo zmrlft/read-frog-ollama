@@ -23,7 +23,7 @@ export default defineConfig({
       plugins: [],
       resolve: {
         alias: {
-          // 保留 React 单例（Vite 专用配置）
+          // 保留 React 单例（Vite 专用配置，不影响 tsconfig.json 的 paths）
           'react': path.resolve(__dirname, './node_modules/react'),
           'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
         },

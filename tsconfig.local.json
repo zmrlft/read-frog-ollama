@@ -1,0 +1,25 @@
+{
+  // "compilerOptions": {
+  //   "baseUrl": ".",
+  //   "paths": {
+  //     "@read-frog/definitions": ["../read-frog-monorepo/packages/definitions/src"],
+  //     "@read-frog/definitions/*": ["../read-frog-monorepo/packages/definitions/src/*"],
+  //     "@read-frog/ui": ["../read-frog-monorepo/packages/ui/src"],
+  //     "@read-frog/ui/*": ["../read-frog-monorepo/packages/ui/src/*"],
+  //     "@read-frog/orpc": ["../read-frog-monorepo/packages/orpc/src"],
+  //     "@read-frog/orpc/*": ["../read-frog-monorepo/packages/orpc/src/*"],
+  //     "@": ["./src"],
+  //     "@/*": ["./src/*"],
+  //     "~": ["./src"],
+  //     "~/*": ["./src/*"],
+  //     "@@": ["."],
+  //     "@@/*": ["./*"],
+  //     "~~": ["."],
+  //     "~~/*": ["./*"],
+  //     "#i18n": [".wxt/i18n/index.ts"],
+  //     "#i18n/*": [".wxt/i18n/index.ts/*"],
+  //     "react": ["./node_modules/@types/react"],
+  //     "react-dom": ["./node_modules/@types/react-dom"]
+  //   }
+  // }
+}

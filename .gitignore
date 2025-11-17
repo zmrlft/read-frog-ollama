@@ -34,4 +34,4 @@ web-ext.config.ts
 coverage/
 .turbo/
 
-pnpm-workspace.yaml
+tsconfig.local.json
