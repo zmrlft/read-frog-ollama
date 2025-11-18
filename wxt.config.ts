@@ -14,7 +14,7 @@ export default defineConfig({
     ? {
         '@read-frog/definitions': path.resolve(__dirname, '../read-frog-monorepo/packages/definitions/src'),
         '@read-frog/ui': path.resolve(__dirname, '../read-frog-monorepo/packages/ui/src'),
-        '@read-frog/orpc': path.resolve(__dirname, '../read-frog-monorepo/packages/orpc/src'),
+        '@read-frog/api-contract': path.resolve(__dirname, '../read-frog-monorepo/packages/api-contract/src'),
       }
     : {},
 

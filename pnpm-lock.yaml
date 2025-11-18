@@ -83,12 +83,12 @@ importers:
       '@orpc/client':
         specifier: ^1.10.3
         version: 1.11.2(@opentelemetry/api@1.9.0)
+      '@read-frog/api-contract':
+        specifier: 0.0.2
+        version: 0.0.2(@opentelemetry/api@1.9.0)
       '@read-frog/definitions':
         specifier: 0.0.5
         version: 0.0.5
-      '@read-frog/orpc':
-        specifier: 0.0.6
-        version: 0.0.6(@opentelemetry/api@1.9.0)(kysely@0.28.8)(ws@8.18.3)
       '@read-frog/ui':
         specifier: 0.0.8
         version: 0.0.8(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -1169,20 +1169,6 @@ packages:
   '@orpc/contract@1.11.2':
     resolution: {integrity: sha512-NYSpoZ6KiZ5eqsbTAoB64SGXGk6Mdpk22Ju5taOpiPDOk2oZya6wtPBPdSIQ5iV7/JfkstuRptjhnlEpoDsZWw==}
 
-  '@orpc/interop@1.11.2':
-    resolution: {integrity: sha512-I10qsBOHcHltEek4DTYN3w8hl6Us3+aH1q3Yj+dqPhtA1dQ/uTDxcT4+XPnzrv4a4CflE6yDxnAREIZIdVz0BQ==}
-
-  '@orpc/server@1.11.2':
-    resolution: {integrity: sha512-3VG6K58AyxeLYLf78cCUzEoa1ntUFpNN++2E8JsYRSgCWRFg8S7pRhXyC4E+6dnzx44SZv42V8hiLR1v3OmXhg==}
-    peerDependencies:
-      crossws: '>=0.3.4'
-      ws: '>=8.18.1'
-    peerDependenciesMeta:
-      crossws:
-        optional: true
-      ws:
-        optional: true
-
   '@orpc/shared@1.11.2':
     resolution: {integrity: sha512-XOz4cHtxNKsMnVz7THzmwOwXYsaE55Vd4BLc2Y898ZqiWhwzj3bwLtZen9X0FdquytDBz7CBWKqgU2vmOITxew==}
     peerDependencies:
@@ -1191,22 +1177,8 @@ packages:
       '@opentelemetry/api':
         optional: true
 
-  '@orpc/standard-server-aws-lambda@1.11.2':
-    resolution: {integrity: sha512-6BnsGRPRwlLLRm7vigddr/VW19+pQw1iAZ9nCF6WHp2kUwKbdcF9O1ksxvvJhAW2pncyPBPjEpli8MZ1hG3oyA==}
-
-  '@orpc/standard-server-fastify@1.11.2':
-    resolution: {integrity: sha512-zxCcbQAhNCUKQuYB1LOchiHkbl0i3h19wbiY6KjAvu6cdZ74/8DJ6ARrkjCCHe/uHR5NW6u32CulO2/ohNXKVg==}
-    peerDependencies:
-      fastify: '>=5.6.1'
-    peerDependenciesMeta:
-      fastify:
-        optional: true
-
   '@orpc/standard-server-fetch@1.11.2':
     resolution: {integrity: sha512-FhA9oLEejd7ebqN5vxx2l3L8g5djhgVodGykwHiDSQJo0erXIZ0n5S+YpvW6fFiRe+3k8h+U6K2ERaAL5wZXxw==}
-
-  '@orpc/standard-server-node@1.11.2':
-    resolution: {integrity: sha512-Zae1WwhWfTS+1bfGx6IqHem2uuDsUMntpp+ymh+U9AlOzzCLdFtfYwScPNsuZhhuyGU9rBJpRjh1YCgeBZSanw==}
 
   '@orpc/standard-server-peer@1.11.2':
     resolution: {integrity: sha512-TAnhNiaNN5e6UHxdT5D1ZY8fseKDXnr3UmZidX2CghJj967f9+SLl1FFtuzJ7SO06uGBdARyV6azIoKlFpt+gA==}
@@ -1774,11 +1746,11 @@ packages:
   '@radix-ui/rect@1.1.1':
     resolution: {integrity: sha512-HPwpGIzkl28mWyZqG52jiqDJ12waP11Pa1lGoiyUkIEuMLBP0oeK/C89esbXrxsky5we7dfd8U58nm0SgAWpVw==}
 
+  '@read-frog/api-contract@0.0.2':
+    resolution: {integrity: sha512-6JuC7ZSfa1vgc5FJa7ZgjNRUcldEKHkO2nQfF8oJMIwVnoRvzn+EBvJ9xSp9IF/py6FzfHi3AEkd1nifIqw/CA==}
+
   '@read-frog/definitions@0.0.5':
     resolution: {integrity: sha512-jBp/8Hyi/eNSTTRfYXYoAPtOJ0vgEYym7rpNuw9IGj9ObX+5J7/Gw9dEjN4xlltj61ml2O/O9vPudtXUni9QBg==}
-
-  '@read-frog/orpc@0.0.6':
-    resolution: {integrity: sha512-0zUWPM/U74BXY6C9IYiXpMBNuNgxYtZF3V0oZP2JsLW95LcibV/agy6ulvcoub2Rx9JXBqORBk4xy87/Z/s8Qw==}
 
   '@read-frog/ui@0.0.8':
     resolution: {integrity: sha512-rwV73SKUtBI96k3KKjiuP0nUBJHQWG2ljcAlJwf8u1tvIOJLdwphdKhl0jtMgJtzAwfrtrPiegB1jRltu+/Knw==}
@@ -3197,98 +3169,6 @@ packages:
   dotenv@17.2.3:
     resolution: {integrity: sha512-JVUnt+DUIzu87TABbhPmNfVdBDt18BLOWjMUFJMSi/Qqg7NTYtabbvSNJGOJ7afbRuv9D/lngizHtP7QyLQ+9w==}
     engines: {node: '>=12'}
-
-  drizzle-orm@0.44.7:
-    resolution: {integrity: sha512-quIpnYznjU9lHshEOAYLoZ9s3jweleHlZIAWR/jX9gAWNg/JhQ1wj0KGRf7/Zm+obRrYd9GjPVJg790QY9N5AQ==}
-    peerDependencies:
-      '@aws-sdk/client-rds-data': '>=3'
-      '@cloudflare/workers-types': '>=4'
-      '@electric-sql/pglite': '>=0.2.0'
-      '@libsql/client': '>=0.10.0'
-      '@libsql/client-wasm': '>=0.10.0'
-      '@neondatabase/serverless': '>=0.10.0'
-      '@op-engineering/op-sqlite': '>=2'
-      '@opentelemetry/api': ^1.4.1
-      '@planetscale/database': '>=1.13'
-      '@prisma/client': '*'
-      '@tidbcloud/serverless': '*'
-      '@types/better-sqlite3': '*'
-      '@types/pg': '*'
-      '@types/sql.js': '*'
-      '@upstash/redis': '>=1.34.7'
-      '@vercel/postgres': '>=0.8.0'
-      '@xata.io/client': '*'
-      better-sqlite3: '>=7'
-      bun-types: '*'
-      expo-sqlite: '>=14.0.0'
-      gel: '>=2'
-      knex: '*'
-      kysely: '*'
-      mysql2: '>=2'
-      pg: '>=8'
-      postgres: '>=3'
-      prisma: '*'
-      sql.js: '>=1'
-      sqlite3: '>=5'
-    peerDependenciesMeta:
-      '@aws-sdk/client-rds-data':
-        optional: true
-      '@cloudflare/workers-types':
-        optional: true
-      '@electric-sql/pglite':
-        optional: true
-      '@libsql/client':
-        optional: true
-      '@libsql/client-wasm':
-        optional: true
-      '@neondatabase/serverless':
-        optional: true
-      '@op-engineering/op-sqlite':
-        optional: true
-      '@opentelemetry/api':
-        optional: true
-      '@planetscale/database':
-        optional: true
-      '@prisma/client':
-        optional: true
-      '@tidbcloud/serverless':
-        optional: true
-      '@types/better-sqlite3':
-        optional: true
-      '@types/pg':
-        optional: true
-      '@types/sql.js':
-        optional: true
-      '@upstash/redis':
-        optional: true
-      '@vercel/postgres':
-        optional: true
-      '@xata.io/client':
-        optional: true
-      better-sqlite3:
-        optional: true
-      bun-types:
-        optional: true
-      expo-sqlite:
-        optional: true
-      gel:
-        optional: true
-      knex:
-        optional: true
-      kysely:
-        optional: true
-      mysql2:
-        optional: true
-      pg:
-        optional: true
-      postgres:
-        optional: true
-      prisma:
-        optional: true
-      sql.js:
-        optional: true
-      sqlite3:
-        optional: true
 
   electron-to-chromium@1.5.250:
     resolution: {integrity: sha512-/5UMj9IiGDMOFBnN4i7/Ry5onJrAGSbOGo3s9FEKmwobGq6xw832ccET0CE3CkkMBZ8GJSlUIesZofpyurqDXw==}
@@ -4907,10 +4787,6 @@ packages:
   postcss@8.5.6:
     resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
     engines: {node: ^10 || ^12 || >=14}
-
-  postgres@3.4.7:
-    resolution: {integrity: sha512-Jtc2612XINuBjIl/QTWsV5UvE8UHuNblcO3vVADSrKsrc6RqGX6lOW1cEo3CM2v0XG4Nat8nI+YM7/f26VxXLw==}
-    engines: {node: '>=12'}
 
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
@@ -6929,27 +6805,6 @@ snapshots:
     transitivePeerDependencies:
       - '@opentelemetry/api'
 
-  '@orpc/interop@1.11.2': {}
-
-  '@orpc/server@1.11.2(@opentelemetry/api@1.9.0)(ws@8.18.3)':
-    dependencies:
-      '@orpc/client': 1.11.2(@opentelemetry/api@1.9.0)
-      '@orpc/contract': 1.11.2(@opentelemetry/api@1.9.0)
-      '@orpc/interop': 1.11.2
-      '@orpc/shared': 1.11.2(@opentelemetry/api@1.9.0)
-      '@orpc/standard-server': 1.11.2(@opentelemetry/api@1.9.0)
-      '@orpc/standard-server-aws-lambda': 1.11.2(@opentelemetry/api@1.9.0)
-      '@orpc/standard-server-fastify': 1.11.2(@opentelemetry/api@1.9.0)
-      '@orpc/standard-server-fetch': 1.11.2(@opentelemetry/api@1.9.0)
-      '@orpc/standard-server-node': 1.11.2(@opentelemetry/api@1.9.0)
-      '@orpc/standard-server-peer': 1.11.2(@opentelemetry/api@1.9.0)
-      cookie: 1.0.2
-    optionalDependencies:
-      ws: 8.18.3
-    transitivePeerDependencies:
-      - '@opentelemetry/api'
-      - fastify
-
   '@orpc/shared@1.11.2(@opentelemetry/api@1.9.0)':
     dependencies:
       radash: 12.1.1
@@ -6957,35 +6812,10 @@ snapshots:
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
 
-  '@orpc/standard-server-aws-lambda@1.11.2(@opentelemetry/api@1.9.0)':
-    dependencies:
-      '@orpc/shared': 1.11.2(@opentelemetry/api@1.9.0)
-      '@orpc/standard-server': 1.11.2(@opentelemetry/api@1.9.0)
-      '@orpc/standard-server-fetch': 1.11.2(@opentelemetry/api@1.9.0)
-      '@orpc/standard-server-node': 1.11.2(@opentelemetry/api@1.9.0)
-    transitivePeerDependencies:
-      - '@opentelemetry/api'
-
-  '@orpc/standard-server-fastify@1.11.2(@opentelemetry/api@1.9.0)':
-    dependencies:
-      '@orpc/shared': 1.11.2(@opentelemetry/api@1.9.0)
-      '@orpc/standard-server': 1.11.2(@opentelemetry/api@1.9.0)
-      '@orpc/standard-server-node': 1.11.2(@opentelemetry/api@1.9.0)
-    transitivePeerDependencies:
-      - '@opentelemetry/api'
-
   '@orpc/standard-server-fetch@1.11.2(@opentelemetry/api@1.9.0)':
     dependencies:
       '@orpc/shared': 1.11.2(@opentelemetry/api@1.9.0)
       '@orpc/standard-server': 1.11.2(@opentelemetry/api@1.9.0)
-    transitivePeerDependencies:
-      - '@opentelemetry/api'
-
-  '@orpc/standard-server-node@1.11.2(@opentelemetry/api@1.9.0)':
-    dependencies:
-      '@orpc/shared': 1.11.2(@opentelemetry/api@1.9.0)
-      '@orpc/standard-server': 1.11.2(@opentelemetry/api@1.9.0)
-      '@orpc/standard-server-fetch': 1.11.2(@opentelemetry/api@1.9.0)
     transitivePeerDependencies:
       - '@opentelemetry/api'
 
@@ -7628,50 +7458,16 @@ snapshots:
 
   '@radix-ui/rect@1.1.1': {}
 
+  '@read-frog/api-contract@0.0.2(@opentelemetry/api@1.9.0)':
+    dependencies:
+      '@orpc/contract': 1.11.2(@opentelemetry/api@1.9.0)
+      zod: 4.1.12
+    transitivePeerDependencies:
+      - '@opentelemetry/api'
+
   '@read-frog/definitions@0.0.5':
     dependencies:
       zod: 4.1.12
-
-  '@read-frog/orpc@0.0.6(@opentelemetry/api@1.9.0)(kysely@0.28.8)(ws@8.18.3)':
-    dependencies:
-      '@orpc/server': 1.11.2(@opentelemetry/api@1.9.0)(ws@8.18.3)
-      '@read-frog/definitions': 0.0.5
-      drizzle-orm: 0.44.7(@opentelemetry/api@1.9.0)(kysely@0.28.8)(postgres@3.4.7)
-      postgres: 3.4.7
-      type-fest: 5.2.0
-      zod: 4.1.12
-    transitivePeerDependencies:
-      - '@aws-sdk/client-rds-data'
-      - '@cloudflare/workers-types'
-      - '@electric-sql/pglite'
-      - '@libsql/client'
-      - '@libsql/client-wasm'
-      - '@neondatabase/serverless'
-      - '@op-engineering/op-sqlite'
-      - '@opentelemetry/api'
-      - '@planetscale/database'
-      - '@prisma/client'
-      - '@tidbcloud/serverless'
-      - '@types/better-sqlite3'
-      - '@types/pg'
-      - '@types/sql.js'
-      - '@upstash/redis'
-      - '@vercel/postgres'
-      - '@xata.io/client'
-      - better-sqlite3
-      - bun-types
-      - crossws
-      - expo-sqlite
-      - fastify
-      - gel
-      - knex
-      - kysely
-      - mysql2
-      - pg
-      - prisma
-      - sql.js
-      - sqlite3
-      - ws
 
   '@read-frog/ui@0.0.8(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
@@ -9158,12 +8954,6 @@ snapshots:
   dotenv@16.6.1: {}
 
   dotenv@17.2.3: {}
-
-  drizzle-orm@0.44.7(@opentelemetry/api@1.9.0)(kysely@0.28.8)(postgres@3.4.7):
-    optionalDependencies:
-      '@opentelemetry/api': 1.9.0
-      kysely: 0.28.8
-      postgres: 3.4.7
 
   electron-to-chromium@1.5.250: {}
 
@@ -11093,8 +10883,6 @@ snapshots:
       nanoid: 3.3.11
       picocolors: 1.1.1
       source-map-js: 1.2.1
-
-  postgres@3.4.7: {}
 
   prelude-ls@1.2.1: {}
 
