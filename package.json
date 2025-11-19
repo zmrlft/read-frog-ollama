@@ -3,6 +3,7 @@
   "type": "module",
   "version": "1.16.2",
   "private": true,
+  "packageManager": "pnpm@10.16.1",
   "description": "Read Frog browser extension for language learning",
   "scripts": {
     "build": "wxt build",
@@ -140,5 +141,12 @@
     "typescript": "^5.9.3",
     "vitest": "^4.0.6",
     "wxt": "0.20.10"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "^24.9.1",
+      "onFail": "download"
+    }
   }
 }

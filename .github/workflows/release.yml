@@ -22,8 +22,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10.16.1
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -32,8 +30,11 @@ jobs:
           cache: pnpm
 
       - name: Install Dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
         shell: bash
+
+      - name: Build packages to ensure they are built correctly
+        run: pnpm build
 
       - name: Create Release Pull Request or Tag
         id: changesets
