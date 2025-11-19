@@ -33,9 +33,6 @@ jobs:
         run: pnpm install --frozen-lockfile
         shell: bash
 
-      - name: Build extension to ensure it is built correctly
-        run: pnpm build
-
       - name: Create Release Pull Request or Tag
         id: changesets
         uses: changesets/action@v1
