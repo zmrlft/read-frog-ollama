@@ -1,6 +1,7 @@
 import type { TranslatePromptObj } from '@/types/config/translate'
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
+import { useAtom, useAtomValue } from 'jotai'
 import {
   Select,
   SelectContent,
@@ -8,9 +9,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@read-frog/ui/components/select'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@read-frog/ui/components/tooltip'
-import { useAtom, useAtomValue } from 'jotai'
+} from '@/components/shadcn/select'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/shadcn/tooltip'
 import { isLLMTranslateProvider } from '@/types/config/provider'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { translateProviderConfigAtom } from '@/utils/atoms/provider'

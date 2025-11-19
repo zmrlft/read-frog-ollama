@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react'
-import { Button } from '@read-frog/ui/components/button'
-import { Input } from '@read-frog/ui/components/input'
+import { useState } from 'react'
+import { Button } from '@/components/shadcn/button'
+import { Input } from '@/components/shadcn/input'
 import {
   Table,
   TableBody,
@@ -8,8 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@read-frog/ui/components/table'
-import { useState } from 'react'
+} from '@/components/shadcn/table'
 
 interface DisabledPatternsTableProps {
   patterns: string[]

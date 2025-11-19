@@ -1,7 +1,7 @@
 import { i18n } from '#imports'
-import { Input } from '@read-frog/ui/components/input'
 import hotkeys from 'hotkeys-js'
 import { useEffect, useRef, useState } from 'react'
+import { Input } from '@/components/shadcn/input'
 import { formatHotkey } from '@/utils/os'
 
 const MODIFIERS = ['shift', 'alt', 'ctrl', 'command'] as const

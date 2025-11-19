@@ -1,6 +1,9 @@
 import type { NavItem } from './nav-items'
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { Link, useLocation } from 'react-router'
+import readFrogLogo from '@/assets/icons/read-frog.png'
 import {
   Sidebar,
   SidebarContent,
@@ -12,13 +15,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from '@read-frog/ui/components/sidebar'
-import { cn } from '@read-frog/ui/lib/utils'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Link, useLocation } from 'react-router'
-import readFrogLogo from '@/assets/icons/read-frog.png'
+} from '@/components/shadcn/sidebar'
 import { getLastViewedBlogDate, getLatestBlogDate, hasNewBlogPost, saveLastViewedBlogDate } from '@/utils/blog'
 import { WEBSITE_URL } from '@/utils/constants/url'
+import { cn } from '@/utils/styles/tailwind'
 import { getLastViewedSurvey, hasNewSurvey, saveLastViewedSurvey } from '@/utils/survey'
 import { version } from '../../../../package.json'
 import { AnimatedIndicator } from './animated-indicator'

@@ -1,8 +1,8 @@
-import { Button } from '@read-frog/ui/components/button'
-import { cn } from '@read-frog/ui/lib/utils'
 import guest from '@/assets/icons/avatars/guest.svg'
+import { Button } from '@/components/shadcn/button'
 import { authClient } from '@/utils/auth/auth-client'
 import { WEBSITE_URL } from '@/utils/constants/url'
+import { cn } from '@/utils/styles/tailwind'
 
 export function UserAccount() {
   const { data, isPending } = authClient.useSession()

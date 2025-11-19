@@ -1,10 +1,10 @@
 import type { TranslationNodeStylePreset } from '@/types/config/translate'
 import { i18n } from '#imports'
-import { Field, FieldLabel } from '@read-frog/ui/components/field'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@read-frog/ui/components/select'
 import { deepmerge } from 'deepmerge-ts'
 import { useAtom } from 'jotai'
 import { Activity } from 'react'
+import { Field, FieldLabel } from '@/components/shadcn/field'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { TRANSLATION_NODE_STYLE } from '@/utils/constants/translation-node-style'
 

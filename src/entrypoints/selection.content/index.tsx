@@ -9,7 +9,7 @@ import { insertShadowRootUIWrapperInto } from '@/utils/shadow-root'
 import { addStyleToShadow } from '@/utils/styles'
 import { queryClient } from '@/utils/tanstack-query'
 import App from './app'
-import '@/assets/tailwind/theme.css'
+import '@/assets/styles/theme.css'
 
 // eslint-disable-next-line import/no-mutable-exports
 export let shadowWrapper: HTMLElement | null = null

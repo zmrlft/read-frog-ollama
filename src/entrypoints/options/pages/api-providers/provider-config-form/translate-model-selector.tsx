@@ -1,14 +1,14 @@
 import type { APIProviderConfig } from '@/types/config/provider'
 import { i18n } from '#imports'
-import { Checkbox } from '@read-frog/ui/components/checkbox'
-import { SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@read-frog/ui/components/select'
-import { cn } from '@read-frog/ui/lib/utils'
 import { useStore } from '@tanstack/react-form'
 import { useSetAtom } from 'jotai'
 import { Activity } from 'react'
 import { toast } from 'sonner'
+import { Checkbox } from '@/components/shadcn/checkbox'
+import { SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 import { isLLMTranslateProviderConfig, TRANSLATE_PROVIDER_MODELS } from '@/types/config/provider'
 import { providerConfigAtom, updateLLMProviderConfig } from '@/utils/atoms/provider'
+import { cn } from '@/utils/styles/tailwind'
 import { withForm } from './form'
 
 export const TranslateModelSelector = withForm({

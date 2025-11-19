@@ -1,8 +1,8 @@
 import { i18n } from '#imports'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@read-frog/ui/components/tooltip'
 import bookIcon from '@/assets/icons/book.svg'
 import discordIcon from '@/assets/icons/discord.svg'
 import helpIcon from '@/assets/icons/help.svg'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/shadcn/tooltip'
 
 const LINKS: {
   label: 'help' | 'book' | 'discord'

@@ -1,14 +1,14 @@
 import type { LangLevel } from '@read-frog/definitions'
 
 import { i18n } from '#imports'
+import { useAtom } from 'jotai'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@read-frog/ui/components/select'
-import { useAtom } from 'jotai'
+} from '@/components/shadcn/select'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 
 export default function LanguageLevelSelector() {

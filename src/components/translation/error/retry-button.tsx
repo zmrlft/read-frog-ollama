@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@read-frog/ui/components/tooltip'
 import { useAtomValue } from 'jotai'
 import { use } from 'react'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/shadcn/tooltip'
 import { configAtom } from '@/utils/atoms/config'
 import { translateNodesBilingualMode, translateNodeTranslationOnlyMode } from '@/utils/host/translate/node-manipulation'
 import { ShadowWrapperContext } from '@/utils/react-shadow-host/create-shadow-host'

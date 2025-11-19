@@ -1,8 +1,8 @@
 import { i18n } from '#imports'
-import { Button } from '@read-frog/ui/components/button'
-import { cn } from '@read-frog/ui/lib/utils'
 import { useAtom, useSetAtom } from 'jotai'
+import { Button } from '@/components/shadcn/button'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
+import { cn } from '@/utils/styles/tailwind'
 import { selectedProviderIdAtom } from './atoms'
 import { addProvider } from './utils'
 

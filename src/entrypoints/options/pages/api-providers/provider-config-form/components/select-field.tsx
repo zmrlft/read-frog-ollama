@@ -1,7 +1,7 @@
 import type * as React from 'react'
-import { Field, FieldError, FieldLabel } from '@read-frog/ui/components/field'
-import { Select } from '@read-frog/ui/components/select'
 import { useStore } from '@tanstack/react-form'
+import { Field, FieldError, FieldLabel } from '@/components/shadcn/field'
+import { Select } from '@/components/shadcn/select'
 import { useFieldContext } from '../form-context'
 
 type SelectFieldProps = React.ComponentProps<typeof Select> & {

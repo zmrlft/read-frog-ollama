@@ -1,7 +1,7 @@
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@read-frog/ui/components/tooltip'
 import TranslateProviderSelector from '@/components/llm-providers/translate-provider-selector'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/shadcn/tooltip'
 
 export default function TranslateProviderField() {
   return (

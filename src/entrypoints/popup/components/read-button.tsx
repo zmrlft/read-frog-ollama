@@ -1,13 +1,13 @@
 import { browser, i18n } from '#imports'
-import { Button } from '@read-frog/ui/components/button'
-
-import { cn } from '@read-frog/ui/lib/utils'
 import { useAtomValue } from 'jotai'
-import { toast } from 'sonner'
 
+import { toast } from 'sonner'
+import { Button } from '@/components/shadcn/button'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
+
 import { isAnyAPIKeyForReadProviders } from '@/utils/config/config'
 import { sendMessage } from '@/utils/message'
+import { cn } from '@/utils/styles/tailwind'
 import { isIgnoreTabAtom } from '../atoms/ignore'
 
 export default function ReadButton({ className }: { className?: string }) {

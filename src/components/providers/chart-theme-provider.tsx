@@ -1,5 +1,3 @@
-'use client'
-
 import type { ITheme } from '@visactor/react-vchart'
 import { ThemeManager } from '@visactor/vchart'
 import { createContext, use, useEffect, useMemo } from 'react'

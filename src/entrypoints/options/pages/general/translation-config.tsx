@@ -1,8 +1,12 @@
 import type { PageTranslateRange } from '@/types/config/translate'
 import { i18n } from '#imports'
-import { Checkbox } from '@read-frog/ui/components/checkbox'
-import { Field, FieldLabel } from '@read-frog/ui/components/field'
-import { Input } from '@read-frog/ui/components/input'
+import { deepmerge } from 'deepmerge-ts'
+import { useAtom, useAtomValue } from 'jotai'
+import { toast } from 'sonner'
+import TranslateProviderSelector from '@/components/llm-providers/translate-provider-selector'
+import { Checkbox } from '@/components/shadcn/checkbox'
+import { Field, FieldLabel } from '@/components/shadcn/field'
+import { Input } from '@/components/shadcn/input'
 import {
   Select,
   SelectContent,
@@ -10,16 +14,12 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@read-frog/ui/components/select'
-import { cn } from '@read-frog/ui/lib/utils'
-import { deepmerge } from 'deepmerge-ts'
-import { useAtom, useAtomValue } from 'jotai'
-import { toast } from 'sonner'
-import TranslateProviderSelector from '@/components/llm-providers/translate-provider-selector'
+} from '@/components/shadcn/select'
 import { isAPIProviderConfig, isLLMTranslateProviderConfig, TRANSLATE_PROVIDER_MODELS } from '@/types/config/provider'
 import { pageTranslateRangeSchema } from '@/types/config/translate'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { translateProviderConfigAtom, updateLLMProviderConfig } from '@/utils/atoms/provider'
+import { cn } from '@/utils/styles/tailwind'
 import { ConfigCard } from '../../components/config-card'
 import { SetApiKeyWarning } from '../../components/set-api-key-warning'
 

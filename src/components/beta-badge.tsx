@@ -1,4 +1,4 @@
-import { Badge } from '@read-frog/ui/components/badge'
+import { Badge } from '@/components/shadcn/badge'
 
 export function BetaBadge() {
   return (

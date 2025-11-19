@@ -1,4 +1,4 @@
-@import '@/assets/tailwind/host-theme.css';
+@import '@/assets/styles/host-theme.css';
 
 [data-read-frog-custom-translation-style='blur'] {
   filter: blur(4px);

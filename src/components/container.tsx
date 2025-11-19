@@ -1,4 +1,4 @@
-import { cn } from '@read-frog/ui/lib/utils'
+import { cn } from '@/utils/styles/tailwind'
 
 function Container({ ref, className, children, ...props }: React.ComponentPropsWithoutRef<'div'> & { ref?: React.RefObject<HTMLDivElement | null> }) {
   return (

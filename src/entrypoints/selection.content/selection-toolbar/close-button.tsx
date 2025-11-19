@@ -1,13 +1,13 @@
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
+import { useAtom } from 'jotai'
+import { useState } from 'react'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@read-frog/ui/components/dropdown-menu'
-import { useAtom } from 'jotai'
-import { useState } from 'react'
+} from '@/components/shadcn/dropdown-menu'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { shadowWrapper } from '../'
 

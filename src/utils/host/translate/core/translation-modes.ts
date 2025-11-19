@@ -152,8 +152,11 @@ export async function translateNodeTranslationOnlyMode(
   //   <br />
   //   <span style={{ display: 'inline' }}>原文</span>
   // </div>,
+  // Only save originalContent when there's no existing translation wrapper
+  // If wrapper exists, we're removing translation and should restore from saved content
   const outerParentElement = outerTransNodes[0].parentElement
-  if (outerParentElement && !originalContentMap.has(outerParentElement)) {
+  const hasExistingWrapper = outerParentElement?.querySelector(`.${CONTENT_WRAPPER_CLASS}`)
+  if (outerParentElement && !originalContentMap.has(outerParentElement) && !hasExistingWrapper) {
     originalContentMap.set(outerParentElement, outerParentElement.innerHTML)
   }
 
@@ -223,7 +226,9 @@ export async function translateNodeTranslationOnlyMode(
       return cleanedContent
     }
 
-    if (!originalContentMap.has(parentNode)) {
+    // Only save originalContent when there's no existing translation wrapper
+    const hasExistingWrapperInParent = parentNode.querySelector(`.${CONTENT_WRAPPER_CLASS}`)
+    if (!originalContentMap.has(parentNode) && !hasExistingWrapperInParent) {
       originalContentMap.set(parentNode, parentNode.innerHTML)
     }
 

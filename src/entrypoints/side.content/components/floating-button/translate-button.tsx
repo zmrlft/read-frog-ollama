@@ -1,10 +1,10 @@
 import { Icon } from '@iconify/react'
-import { cn } from '@read-frog/ui/lib/utils'
 import { useAtomValue } from 'jotai'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { validateTranslationConfig } from '@/utils/host/translate/translate-text'
 import { logger } from '@/utils/logger'
 import { sendMessage } from '@/utils/message'
+import { cn } from '@/utils/styles/tailwind'
 import { enablePageTranslationAtom } from '../../atoms'
 import HiddenButton from './components/hidden-button'
 

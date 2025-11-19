@@ -1,5 +1,6 @@
 import { REACT_SHADOW_HOST_CLASS, TRANSLATION_MODE_ATTRIBUTE } from '../../../constants/dom-labels'
 import { removeReactShadowHost } from '../../../react-shadow-host/create-shadow-host'
+import { batchDOMOperation } from '../../dom/batch-dom'
 import { isHTMLElement, isTranslatedWrapperNode } from '../../dom/filter'
 import { deepQueryTopLevelSelector } from '../../dom/find'
 import { originalContentMap } from '../core/translation-state'
@@ -14,7 +15,7 @@ export function removeShadowHostInTranslatedWrapper(wrapper: HTMLElement): void 
   // Remove lightweight spinners
   const spinner = wrapper.querySelector('.read-frog-spinner')
   if (spinner) {
-    spinner.remove()
+    batchDOMOperation(() => spinner.remove())
   }
 }
 
@@ -34,7 +35,10 @@ export function removeTranslatedWrapperWithRestore(wrapper: HTMLElement): void {
     while (currentNode && isHTMLElement(currentNode)) {
       const originalContent = originalContentMap.get(currentNode)
       if (originalContent) {
-        currentNode.innerHTML = originalContent
+        const nodeToRestore = currentNode
+        batchDOMOperation(() => {
+          nodeToRestore.innerHTML = originalContent
+        })
         originalContentMap.delete(currentNode)
         return
       }
@@ -43,7 +47,7 @@ export function removeTranslatedWrapperWithRestore(wrapper: HTMLElement): void {
   }
 
   // For bilingual mode or when no original content is found, just remove the wrapper
-  wrapper.remove()
+  batchDOMOperation(() => wrapper.remove())
 }
 
 export function removeAllTranslatedWrapperNodes(

@@ -1,4 +1,6 @@
 import { i18n } from '#imports'
+import { IconRefresh } from '@tabler/icons-react'
+import { useSetAtom } from 'jotai'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,10 +11,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@read-frog/ui/components/alert-dialog'
-import { Button } from '@read-frog/ui/components/button'
-import { IconRefresh } from '@tabler/icons-react'
-import { useSetAtom } from 'jotai'
+} from '@/components/shadcn/alert-dialog'
+import { Button } from '@/components/shadcn/button'
 import { writeConfigAtom } from '@/utils/atoms/config'
 import { DEFAULT_CONFIG } from '@/utils/constants/config'
 import { ConfigCard } from '../../components/config-card'

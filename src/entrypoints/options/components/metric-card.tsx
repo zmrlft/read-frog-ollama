@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
-import { Card, CardContent } from '@read-frog/ui/components/card'
 import { IconCircleArrowDownRightFilled, IconCircleArrowUpRightFilled, IconMinus } from '@tabler/icons-react'
 import { Activity } from 'react'
+import { Card, CardContent } from '@/components/shadcn/card'
 import { addThousandsSeparator, numberToPercentage } from '@/utils/utils'
 
 export function MetricCard(

@@ -1,8 +1,8 @@
 import type { APICallError } from 'ai'
 import { Icon } from '@iconify/react'
-import { Alert, AlertDescription, AlertTitle } from '@read-frog/ui/components/alert'
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@read-frog/ui/components/hover-card'
 import { use } from 'react'
+import { Alert, AlertDescription, AlertTitle } from '@/components/shadcn/alert'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/shadcn/hover-card'
 import { ShadowWrapperContext } from '@/utils/react-shadow-host/create-shadow-host'
 
 export function ErrorButton({ error }: { error: APICallError }) {

@@ -1,7 +1,7 @@
 import { i18n } from '#imports'
-import { Switch } from '@read-frog/ui/components/switch'
 import { useAtom } from 'jotai'
 import { useId } from 'react'
+import { Switch } from '@/components/shadcn/switch'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 
 export default function SelectionToolbar() {

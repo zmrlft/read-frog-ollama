@@ -1,7 +1,7 @@
 import { i18n } from '#imports'
-import { Field, FieldContent, FieldLabel } from '@read-frog/ui/components/field'
 import { useAtomValue } from 'jotai'
 import { useEffect, useRef } from 'react'
+import { Field, FieldContent, FieldLabel } from '@/components/shadcn/field'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { BLOCK_CONTENT_CLASS } from '@/utils/constants/dom-labels'
 import { decorateTranslationNode } from '@/utils/host/translate/decorate-translation'

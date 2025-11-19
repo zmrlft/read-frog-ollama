@@ -114,11 +114,13 @@ describe('node translation', () => {
       document.elementFromPoint = vi.fn(() => node)
       await act(async () => {
         await removeOrShowNodeTranslation({ x: 150, y: 125 }, TEST_CONFIG)
+        flushBatchedOperations()
       })
       const wrapper = node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)
       document.elementFromPoint = vi.fn(() => wrapper as Element)
       await act(async () => {
         await removeOrShowNodeTranslation({ x: 150, y: 125 }, TEST_CONFIG)
+        flushBatchedOperations()
       })
 
       expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()

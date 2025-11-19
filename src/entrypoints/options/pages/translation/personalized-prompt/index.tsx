@@ -1,8 +1,10 @@
 import type { TranslatePromptObj } from '@/types/config/translate'
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
-import { Badge } from '@read-frog/ui/components/badge'
-import { Button } from '@read-frog/ui/components/button'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { Activity, useState } from 'react'
+import { Badge } from '@/components/shadcn/badge'
+import { Button } from '@/components/shadcn/button'
 import {
   Card,
   CardAction,
@@ -10,11 +12,11 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@read-frog/ui/components/card'
-import { Checkbox } from '@read-frog/ui/components/checkbox'
-import { Input } from '@read-frog/ui/components/input'
-import { Label } from '@read-frog/ui/components/label'
-import { Separator } from '@read-frog/ui/components/separator'
+} from '@/components/shadcn/card'
+import { Checkbox } from '@/components/shadcn/checkbox'
+import { Input } from '@/components/shadcn/input'
+import { Label } from '@/components/shadcn/label'
+import { Separator } from '@/components/shadcn/separator'
 import {
   Sheet,
   SheetClose,
@@ -23,13 +25,11 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@read-frog/ui/components/sheet'
-import { cn } from '@read-frog/ui/lib/utils'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { Activity, useState } from 'react'
+} from '@/components/shadcn/sheet'
 import { QuickInsertableTextarea } from '@/components/ui/insertable-textarea'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { DEFAULT_TRANSLATE_PROMPT_ID, getTokenCellText, TOKENS } from '@/utils/constants/prompt'
+import { cn } from '@/utils/styles/tailwind'
 import { ConfigCard } from '../../../components/config-card'
 import { isExportPromptModeAtom, selectedPromptsToExportAtom } from './atoms'
 import { DeletePrompt } from './delete-prompt'

@@ -1,8 +1,11 @@
 import type { TTSModel, TTSVoice } from '@/types/config/tts'
 import { i18n } from '#imports'
-import { Badge } from '@read-frog/ui/components/badge'
-import { Button } from '@read-frog/ui/components/button'
-import { Field, FieldLabel } from '@read-frog/ui/components/field'
+import { IconLoader2, IconPlayerPlayFilled } from '@tabler/icons-react'
+import { useAtom, useAtomValue } from 'jotai'
+import { toast } from 'sonner'
+import { Badge } from '@/components/shadcn/badge'
+import { Button } from '@/components/shadcn/button'
+import { Field, FieldLabel } from '@/components/shadcn/field'
 import {
   Select,
   SelectContent,
@@ -10,10 +13,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@read-frog/ui/components/select'
-import { IconLoader2, IconPlayerPlayFilled } from '@tabler/icons-react'
-import { useAtom, useAtomValue } from 'jotai'
-import { toast } from 'sonner'
+} from '@/components/shadcn/select'
 import ValidatedInput from '@/components/ui/validated-input'
 import { useTextToSpeech } from '@/hooks/use-text-to-speech'
 import { getVoicesForModel, isVoiceAvailableForModel, MAX_TTS_SPEED, MIN_TTS_SPEED, TTS_MODELS, ttsSpeedSchema } from '@/types/config/tts'

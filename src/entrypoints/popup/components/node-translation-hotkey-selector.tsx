@@ -1,13 +1,13 @@
 import { i18n } from '#imports'
+import { deepmerge } from 'deepmerge-ts'
+import { useAtom } from 'jotai'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-} from '@read-frog/ui/components/select'
-import { Switch } from '@read-frog/ui/components/switch'
-import { deepmerge } from 'deepmerge-ts'
-import { useAtom } from 'jotai'
+} from '@/components/shadcn/select'
+import { Switch } from '@/components/shadcn/switch'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { HOTKEY_ITEMS, HOTKEYS } from '@/utils/constants/hotkeys'
 

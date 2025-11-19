@@ -8,17 +8,17 @@
  */
 
 import { i18n } from '#imports'
-import { Button } from '@read-frog/ui/components/button'
-import { Field, FieldLabel } from '@read-frog/ui/components/field'
-import { cn } from '@read-frog/ui/lib/utils'
 import { useAtom } from 'jotai'
 import { Activity, useMemo, useState } from 'react'
+import { Button } from '@/components/shadcn/button'
+import { Field, FieldLabel } from '@/components/shadcn/field'
 import { CSSCodeEditor } from '@/components/ui/css-code-editor'
 import { useDebouncedValue } from '@/hooks/use-debounced-value'
 import { MAX_CUSTOM_CSS_LENGTH } from '@/types/config/translate'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { WEBSITE_URL } from '@/utils/constants/url'
 import { lintCSS } from '@/utils/css/lint-css'
+import { cn } from '@/utils/styles/tailwind'
 
 export function CSSEditor() {
   const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)

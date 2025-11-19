@@ -1,4 +1,6 @@
 import { i18n } from '#imports'
+import { useAtom, useAtomValue } from 'jotai'
+import ProviderIcon from '@/components/provider-icon'
 import {
   Select,
   SelectContent,
@@ -7,9 +9,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@read-frog/ui/components/select'
-import { useAtom, useAtomValue } from 'jotai'
-import ProviderIcon from '@/components/provider-icon'
+} from '@/components/shadcn/select'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { filterEnabledProvidersConfig, getLLMTranslateProvidersConfig, getNonAPIProvidersConfig, getPureAPIProvidersConfig } from '@/utils/config/helpers'
 import { PROVIDER_ITEMS } from '@/utils/constants/providers'

@@ -6,14 +6,14 @@ import {
   LANG_CODE_TO_LOCALE_NAME,
   langCodeISO6393Schema,
 } from '@read-frog/definitions'
-import { Button } from '@read-frog/ui/components/button'
+import { useAtom } from 'jotai'
+import { Button } from '@/components/shadcn/button'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from '@read-frog/ui/components/dropdown-menu'
-import { useAtom } from 'jotai'
+} from '@/components/shadcn/dropdown-menu'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { ConfigCard } from '../../components/config-card'
 

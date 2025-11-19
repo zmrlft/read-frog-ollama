@@ -1,8 +1,8 @@
 import type { APIProviderConfig } from '@/types/config/provider'
 import { i18n } from '#imports'
-import { Switch } from '@read-frog/ui/components/switch'
 import { useStore } from '@tanstack/react-form'
 import { useAtom } from 'jotai'
+import { Switch } from '@/components/shadcn/switch'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { withForm } from './form'
 

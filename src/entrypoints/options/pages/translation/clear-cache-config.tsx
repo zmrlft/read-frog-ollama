@@ -1,4 +1,6 @@
 import { i18n } from '#imports'
+import { IconTrash } from '@tabler/icons-react'
+import { useState } from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,10 +11,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@read-frog/ui/components/alert-dialog'
-import { Button } from '@read-frog/ui/components/button'
-import { IconTrash } from '@tabler/icons-react'
-import { useState } from 'react'
+} from '@/components/shadcn/alert-dialog'
+import { Button } from '@/components/shadcn/button'
 import { sendMessage } from '@/utils/message'
 import { ConfigCard } from '../../components/config-card'
 

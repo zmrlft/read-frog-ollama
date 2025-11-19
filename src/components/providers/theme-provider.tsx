@@ -1,5 +1,3 @@
-'use client'
-
 import { createContext, use, useEffect, useMemo, useState } from 'react'
 import { isDarkMode } from '@/utils/theme'
 

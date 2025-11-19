@@ -66,7 +66,10 @@ class DOMBatcher {
       cancelAnimationFrame(this.rafId)
       this.rafId = null
     }
-    this.flush()
+    // Keep flushing until all operations (including newly queued ones) are complete
+    while (this.operations.length > 0) {
+      this.flush()
+    }
   }
 }
 

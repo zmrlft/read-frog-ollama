@@ -6,14 +6,14 @@ import {
   LANG_CODE_TO_LOCALE_NAME,
   langCodeISO6393Schema,
 } from '@read-frog/definitions'
+import { useAtom } from 'jotai'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@read-frog/ui/components/select'
-import { useAtom } from 'jotai'
+} from '@/components/shadcn/select'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 
 function langCodeLabel(langCode: LangCodeISO6393) {
