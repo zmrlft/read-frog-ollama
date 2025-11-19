@@ -33,7 +33,7 @@ jobs:
         run: pnpm install --frozen-lockfile
         shell: bash
 
-      - name: Build packages to ensure they are built correctly
+      - name: Build extension to ensure it is built correctly
         run: pnpm build
 
       - name: Create Release Pull Request or Tag
