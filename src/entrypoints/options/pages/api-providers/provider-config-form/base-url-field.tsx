@@ -24,7 +24,7 @@ export const BaseURLField = withForm({
               ? labelText
               : (
                   (
-                    <div className="flex items-end justify-between">
+                    <div className="flex items-end justify-between w-full">
                       <span className="text-sm font-medium">
                         {labelText}
                       </span>
