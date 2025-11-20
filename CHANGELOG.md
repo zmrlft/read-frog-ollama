@@ -1,5 +1,15 @@
 # @read-frog/extension
 
+## 1.17.0
+
+### Minor Changes
+
+- [#713](https://github.com/mengxi-ream/read-frog/pull/713) [`49b33cc`](https://github.com/mengxi-ream/read-frog/commit/49b33ccf694903efcde720cae29fc52f3af0620b) Thanks [@taiiiyang](https://github.com/taiiiyang)! - refactor: make the backend part of the package private and extract the extension separately.
+
+### Patch Changes
+
+- [#713](https://github.com/mengxi-ream/read-frog/pull/713) [`49b33cc`](https://github.com/mengxi-ream/read-frog/commit/49b33ccf694903efcde720cae29fc52f3af0620b) Thanks [@taiiiyang](https://github.com/taiiiyang)! - fix: race condition of dom batch operation
+
 ## 1.16.2
 
 ### Patch Changes
