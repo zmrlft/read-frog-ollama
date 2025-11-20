@@ -236,6 +236,9 @@ options:
       presetStyle: 预设样式
       cssEditor: CSS 编辑器
       preview: 预览
+      stylePreviewLanguage: 语言
+      stylePreviewDirection: 方向
+      stylePreviewTranslatedText: 翻译的文本
       style:
         default: 无
         blur: 模糊效果

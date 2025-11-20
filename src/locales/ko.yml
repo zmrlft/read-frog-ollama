@@ -235,6 +235,9 @@ options:
       presetStyle: 프리셋 스타일
       cssEditor: CSS 편집기
       preview: 미리보기
+      stylePreviewLanguage: 언어
+      stylePreviewDirection: 방향
+      stylePreviewTranslatedText: 번역된 텍스트
       style:
         default: 없음
         blur: 흐림 효과

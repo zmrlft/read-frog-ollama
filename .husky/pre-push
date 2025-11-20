@@ -22,7 +22,6 @@ else
   echo "✅ No pnpm-lock.yaml overrides found."
 fi
 
-pnpm postinstall
 pnpm lint
 pnpm type-check
 pnpm build

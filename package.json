@@ -69,7 +69,7 @@
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@read-frog/api-contract": "0.0.2",
-    "@read-frog/definitions": "0.0.5",
+    "@read-frog/definitions": "0.0.6",
     "@tabler/icons-react": "^3.34.0",
     "@tanstack/react-form": "^1.20.0",
     "@tanstack/react-query": "^5.84.2",

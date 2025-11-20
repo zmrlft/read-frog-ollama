@@ -236,6 +236,9 @@ options:
       presetStyle: Preset Style
       cssEditor: CSS Editor
       preview: Preview
+      stylePreviewLanguage: Language
+      stylePreviewDirection: Direction
+      stylePreviewTranslatedText: Translated Text
       style:
         default: None
         blur: Blur Effect

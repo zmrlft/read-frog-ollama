@@ -234,6 +234,9 @@ options:
       presetStyle: プリセットスタイル
       cssEditor: CSSエディター
       preview: プレビュー
+      stylePreviewLanguage: 言語
+      stylePreviewDirection: 方向
+      stylePreviewTranslatedText: 翻訳済みテキスト
       style:
         default: なし
         blur: ぼかし効果
