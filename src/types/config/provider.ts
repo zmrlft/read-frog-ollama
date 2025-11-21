@@ -69,7 +69,7 @@ export const READ_PROVIDER_TYPES = ['openai', 'deepseek', 'gemini', 'anthropic',
 >
 export type ReadProviderTypes = typeof READ_PROVIDER_TYPES[number]
 export function isReadProvider(provider: string): provider is ReadProviderTypes {
-  return READ_PROVIDER_TYPES.includes(provider as ReadProviderTypes)
+  return READ_PROVIDER_TYPES.includes(provider)
 }
 export function isReadProviderConfig(config: ProviderConfig): config is ReadProviderConfig {
   return isReadProvider(config.provider)
@@ -81,7 +81,7 @@ export const TRANSLATE_PROVIDER_TYPES = ['google', 'microsoft', 'deeplx', 'opena
 >
 export type TranslateProviderTypes = typeof TRANSLATE_PROVIDER_TYPES[number]
 export function isTranslateProvider(provider: string): provider is TranslateProviderTypes {
-  return TRANSLATE_PROVIDER_TYPES.includes(provider as TranslateProviderTypes)
+  return TRANSLATE_PROVIDER_TYPES.includes(provider)
 }
 export function isTranslateProviderConfig(config: ProviderConfig): config is TranslateProviderConfig {
   return isTranslateProvider(config.provider)
@@ -93,7 +93,7 @@ export const LLM_TRANSLATE_PROVIDER_TYPES = ['openai', 'deepseek', 'gemini', 'an
 >
 export type LLMTranslateProviderTypes = typeof LLM_TRANSLATE_PROVIDER_TYPES[number]
 export function isLLMTranslateProvider(provider: string): provider is LLMTranslateProviderTypes {
-  return LLM_TRANSLATE_PROVIDER_TYPES.includes(provider as LLMTranslateProviderTypes)
+  return LLM_TRANSLATE_PROVIDER_TYPES.includes(provider)
 }
 export function isLLMTranslateProviderConfig(config: ProviderConfig): config is LLMTranslateProviderConfig {
   return isLLMTranslateProvider(config.provider)
@@ -104,7 +104,7 @@ export const LLM_PROVIDER_TYPES = ['openai', 'deepseek', 'gemini', 'anthropic', 
 >
 export type LLMProviderTypes = typeof LLM_PROVIDER_TYPES[number]
 export function isLLMProvider(provider: string): provider is LLMProviderTypes {
-  return LLM_PROVIDER_TYPES.includes(provider as LLMProviderTypes)
+  return LLM_PROVIDER_TYPES.includes(provider)
 }
 export function isLLMProviderConfig(config: ProviderConfig): config is LLMProviderConfig {
   return isLLMProvider(config.provider)
@@ -115,7 +115,7 @@ export const CUSTOM_LLM_PROVIDER_TYPES = ['openaiCompatible', 'tensdaq', 'silico
 >
 export type CustomLLMProviderTypes = typeof CUSTOM_LLM_PROVIDER_TYPES[number]
 export function isCustomLLMProvider(provider: string): provider is CustomLLMProviderTypes {
-  return CUSTOM_LLM_PROVIDER_TYPES.includes(provider as CustomLLMProviderTypes)
+  return CUSTOM_LLM_PROVIDER_TYPES.includes(provider)
 }
 export function isCustomLLMProviderConfig(config: ProviderConfig): config is CustomLLMProviderConfig {
   return isCustomLLMProvider(config.provider)
@@ -126,7 +126,7 @@ export const NON_CUSTOM_LLM_PROVIDER_TYPES = ['openai', 'deepseek', 'gemini', 'a
 >
 export type NonCustomLLMProviderTypes = typeof NON_CUSTOM_LLM_PROVIDER_TYPES[number]
 export function isNonCustomLLMProvider(provider: string): provider is NonCustomLLMProviderTypes {
-  return NON_CUSTOM_LLM_PROVIDER_TYPES.includes(provider as NonCustomLLMProviderTypes)
+  return NON_CUSTOM_LLM_PROVIDER_TYPES.includes(provider)
 }
 export function isNonCustomLLMProviderConfig(config: ProviderConfig): config is NonCustomLLMProviderConfig {
   return isNonCustomLLMProvider(config.provider)
@@ -137,7 +137,7 @@ export const API_PROVIDER_TYPES = ['siliconflow', 'tensdaq', 'ai302', 'openaiCom
 >
 export type APIProviderTypes = typeof API_PROVIDER_TYPES[number]
 export function isAPIProvider(provider: string): provider is APIProviderTypes {
-  return API_PROVIDER_TYPES.includes(provider as APIProviderTypes)
+  return API_PROVIDER_TYPES.includes(provider)
 }
 export function isAPIProviderConfig(config: ProviderConfig): config is APIProviderConfig {
   return isAPIProvider(config.provider)
@@ -148,7 +148,7 @@ export const PURE_API_PROVIDER_TYPES = ['deeplx'] as const satisfies Readonly<
 >
 export type PureAPIProviderTypes = typeof PURE_API_PROVIDER_TYPES[number]
 export function isPureAPIProvider(provider: string): provider is PureAPIProviderTypes {
-  return PURE_API_PROVIDER_TYPES.includes(provider as PureAPIProviderTypes)
+  return PURE_API_PROVIDER_TYPES.includes(provider)
 }
 export function isPureAPIProviderConfig(config: ProviderConfig): config is PureAPIProviderConfig {
   return isPureAPIProvider(config.provider)
@@ -156,7 +156,7 @@ export function isPureAPIProviderConfig(config: ProviderConfig): config is PureA
 
 export type NonAPIProviderTypes = typeof NON_API_TRANSLATE_PROVIDERS[number]
 export function isNonAPIProvider(provider: string): provider is NonAPIProviderTypes {
-  return NON_API_TRANSLATE_PROVIDERS.includes(provider as NonAPIProviderTypes)
+  return NON_API_TRANSLATE_PROVIDERS.includes(provider)
 }
 export function isNonAPIProviderConfig(config: ProviderConfig): config is NonAPIProviderConfig {
   return isNonAPIProvider(config.provider)
@@ -167,7 +167,7 @@ export const TTS_PROVIDER_TYPES = ['openai'] as const satisfies Readonly<
 >
 export type TTSProviderTypes = typeof TTS_PROVIDER_TYPES[number]
 export function isTTSProvider(provider: string): provider is TTSProviderTypes {
-  return TTS_PROVIDER_TYPES.includes(provider as TTSProviderTypes)
+  return TTS_PROVIDER_TYPES.includes(provider)
 }
 export function isTTSProviderConfig(config: ProviderConfig): config is TTSProviderConfig {
   return isTTSProvider(config.provider)
@@ -180,7 +180,7 @@ export const ALL_PROVIDER_TYPES = ['google', 'microsoft', 'deeplx', 'siliconflow
 export type AllProviderTypes = typeof ALL_PROVIDER_TYPES[number]
 
 export function isPureTranslateProvider(provider: TranslateProviderTypes): provider is typeof PURE_TRANSLATE_PROVIDERS[number] {
-  return PURE_TRANSLATE_PROVIDERS.includes(provider as typeof PURE_TRANSLATE_PROVIDERS[number])
+  return PURE_TRANSLATE_PROVIDERS.includes(provider)
 }
 
 /* ──────────────────────────────

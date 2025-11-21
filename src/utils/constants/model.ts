@@ -10,7 +10,7 @@ export function getProviderOptions(translateModel: string): Record<string, Recor
   return {
     google: {
       thinkingConfig: {
-        thinkingBudget: THINKING_MODELS.includes(translateModel as (typeof THINKING_MODELS)[number]) ? DEFAULT_THINKING_BUDGET : 0,
+        thinkingBudget: THINKING_MODELS.includes(translateModel) ? DEFAULT_THINKING_BUDGET : 0,
         includeThoughts: false,
       },
     } satisfies GoogleGenerativeAIProviderOptions,

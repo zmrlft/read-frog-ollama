@@ -72,5 +72,5 @@ export function getVoicesForModel(model: TTSModel) {
 
 // Helper function to check if a voice is available for a model
 export function isVoiceAvailableForModel(voice: string, model: TTSModel): boolean {
-  return MODEL_VOICES_MAP[model].includes(voice as any)
+  return MODEL_VOICES_MAP[model].includes(voice)
 }
