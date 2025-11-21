@@ -1,0 +1,57 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "build": {
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/**/*",
+        "!{projectRoot}/.output/**/*",
+        "!{projectRoot}/.wxt/**/*",
+        "!{projectRoot}/node_modules/**/*"
+      ],
+      "outputs": ["{projectRoot}/.output", "{projectRoot}/.wxt"]
+    },
+    "build:firefox": {
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/**/*",
+        "!{projectRoot}/.output/**/*",
+        "!{projectRoot}/.wxt/**/*",
+        "!{projectRoot}/node_modules/**/*"
+      ],
+      "outputs": ["{projectRoot}/.output", "{projectRoot}/.wxt"]
+    },
+    "test": {
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/src/**/*",
+        "{projectRoot}/vitest.*.ts",
+        "{projectRoot}/tsconfig.json"
+      ],
+      "outputs": ["{projectRoot}/coverage"]
+    },
+    "test:cov": {
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/src/**/*",
+        "{projectRoot}/vitest.*.ts",
+        "{projectRoot}/tsconfig.json"
+      ],
+      "outputs": ["{projectRoot}/coverage"]
+    },
+    "lint": {
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/src/**/*",
+        "{projectRoot}/eslint.config.*"
+      ]
+    },
+    "type-check": {
+      "cache": true,
+      "inputs": [
+        "{projectRoot}/src/**/*",
+        "{projectRoot}/tsconfig.json"
+      ]
+    }
+  }
+}

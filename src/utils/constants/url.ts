@@ -5,4 +5,6 @@ export const OFFICIAL_SITE_URL_PATTERNS = [
   `http://${LOCALHOST_DOMAIN}/*`,
 ]
 
-export const WEBSITE_URL = import.meta.env.DEV ? WEBSITE_DEV_URL : WEBSITE_PROD_URL
+export const WEBSITE_URL = (import.meta.env.DEV && import.meta.env.WXT_USE_LOCAL_PACKAGES === 'true')
+  ? WEBSITE_DEV_URL
+  : WEBSITE_PROD_URL

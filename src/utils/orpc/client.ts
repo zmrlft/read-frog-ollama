@@ -2,12 +2,12 @@ import type { ORPCRouterClient } from '@read-frog/api-contract'
 import { createORPCClient } from '@orpc/client'
 import { RPCLink } from '@orpc/client/fetch'
 import { BatchLinkPlugin } from '@orpc/client/plugins'
+import { WEBSITE_URL } from '../constants/url'
 import { normalizeHeaders } from '../http'
 import { sendMessage } from '../message'
-import { getBaseUrl } from '../url'
 
 const link = new RPCLink({
-  url: `${getBaseUrl()}/api/rpc`,
+  url: `${WEBSITE_URL}/api/rpc`,
   plugins: [
     new BatchLinkPlugin({
       groups: [

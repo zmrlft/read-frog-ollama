@@ -9,7 +9,7 @@ export default defineConfig({
   modules: ['@wxt-dev/module-react', '@wxt-dev/i18n/module'],
   manifestVersion: 3,
   // WXT top level alias - will be automatically synced to tsconfig.json paths and Vite alias
-  alias: process.env.USE_LOCAL_PACKAGES === 'true'
+  alias: process.env.WXT_USE_LOCAL_PACKAGES === 'true'
     ? {
         '@read-frog/definitions': path.resolve(__dirname, '../read-frog-monorepo/packages/definitions/src'),
         '@read-frog/api-contract': path.resolve(__dirname, '../read-frog-monorepo/packages/api-contract/src'),
@@ -23,7 +23,9 @@ export default defineConfig({
     host_permissions:
       mode === 'development'
         ? [
-            'http://localhost:*/*',
+            'http://localhost:*/*', // For local backend (dev:local)
+            'https://*.readfrog.app/*', // For prod backend (dev)
+            'https://readfrog.app/*', // For prod backend (dev)
           ]
         : [
             'https://*.readfrog.app/*',

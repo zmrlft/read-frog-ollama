@@ -33,5 +33,6 @@ web-ext.config.ts
 
 coverage/
 .turbo/
+.nx/
 
 tsconfig.local.json
