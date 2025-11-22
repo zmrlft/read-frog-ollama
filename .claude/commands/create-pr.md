@@ -5,7 +5,7 @@ Follow these steps:
 1. Check current git status and branch information
 2. if no branch name is provided and we are on the main branch, then create a branch for me based on the change of the code, otherwise working on the current branch
 3. Review the commit history and code differences from main branch
-4. add changeset record by manually add file in `.changeset/` directory if necessary
+4. add changeset record by manually add file in `.changeset/` directory
    - follow changeset convention to add a changeset record file
    - changeset record should be the same as the descriptive PR title following commit convention
    - only add changeset for apps in `apps/` directory, don't add changeset for changes in `packages/` directory
