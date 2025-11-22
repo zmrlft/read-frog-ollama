@@ -348,6 +348,9 @@ importers:
       postcss-rem-to-responsive-pixel:
         specifier: ^6.0.2
         version: 6.1.0
+      postcss-value-parser:
+        specifier: ^4.2.0
+        version: 4.2.0
       tailwindcss:
         specifier: ^4.1.15
         version: 4.1.17

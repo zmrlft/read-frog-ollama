@@ -110,6 +110,14 @@ export function walkAndLabelElement(
 
   // force block will force the current and ancestor elements to be block node
   forceBlock = forceBlock || (blockChildCount >= 1 && translateChildCount > 1) || FORCE_BLOCK_TAGS.has(element.tagName)
+
+  if (element.textContent?.trim() === '' && !forceBlock) {
+    return {
+      forceBlock: false,
+      isInlineNode: false,
+    }
+  }
+
   const isInlineNode = isShallowInlineHTMLElement(element)
 
   if (isShallowBlockHTMLElement(element) || forceBlock) {

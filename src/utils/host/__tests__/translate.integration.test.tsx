@@ -956,6 +956,30 @@ describe('translate', () => {
       })
     })
   })
+  describe('empty nodes in multiple child nodes', () => {
+    it('bilingual mode: should not insert translation wrapper', async () => {
+      // https://github.com/mengxi-ream/read-frog/issues/717
+      render(
+        <div data-testid="test-node">
+          <div><div style={{ display: 'inline' }}>{MOCK_ORIGINAL_TEXT}</div></div>
+          <div></div>
+        </div>,
+      )
+
+      const node = screen.getByTestId('test-node')
+      await removeOrShowPageTranslation('bilingual', true)
+
+      expectNodeLabels(node.children[0], [BLOCK_ATTRIBUTE])
+      expectNodeLabels(node.children[0].children[0], [INLINE_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+      const wrapper = expectTranslationWrapper(node.children[0].children[0], 'bilingual')
+      expect(wrapper).toBe(node.children[0].children[0].lastChild)
+      expectTranslatedContent(wrapper, INLINE_CONTENT_CLASS)
+
+      await removeOrShowPageTranslation('bilingual', true)
+      expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+      expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}`)
+    })
+  })
   describe('empty text nodes with only one inline node in middle', () => {
     it('bilingual mode: should insert translation wrapper in inline node', async () => {
       render(

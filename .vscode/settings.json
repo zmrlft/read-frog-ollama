@@ -45,5 +45,8 @@
     "scss",
     "pcss",
     "postcss"
-  ]
+  ],
+
+  // Vitest extension configuration
+  "vitest.rootConfig": "./vitest.config.ts"
 }
