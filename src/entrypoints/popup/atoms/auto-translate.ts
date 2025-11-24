@@ -1,6 +1,7 @@
 import type { Config } from '@/types/config/config'
 import { atom } from 'jotai'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
+import { matchDomainPattern } from '@/utils/host/translate/auto-translation'
 import { getActiveTabUrl } from '@/utils/utils'
 
 type TranslateConfig = Config['translate']
@@ -13,7 +14,7 @@ export async function getIsInPatterns(translateConfig: TranslateConfig) {
   if (!activeTabUrl)
     return false
   return translateConfig.page.autoTranslatePatterns.some(pattern =>
-    activeTabUrl.includes(pattern),
+    matchDomainPattern(activeTabUrl, pattern),
   )
 }
 
@@ -41,7 +42,7 @@ export const toggleCurrentSiteAtom = atom(
 
     if (checked) {
       // Add hostname to patterns if not already present
-      if (!currentPatterns.some(pattern => hostname.includes(pattern))) {
+      if (!currentPatterns.some(pattern => matchDomainPattern(activeTabUrl, pattern))) {
         void set(configFieldsAtomMap.translate, {
           page: {
             ...translateConfig.page,
@@ -53,7 +54,7 @@ export const toggleCurrentSiteAtom = atom(
     else {
       // Remove patterns that match the current hostname
       const filteredPatterns = currentPatterns.filter(pattern =>
-        !hostname.includes(pattern),
+        !matchDomainPattern(activeTabUrl, pattern),
       )
       void set(configFieldsAtomMap.translate, {
         page: {
