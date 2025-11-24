@@ -15,9 +15,14 @@ vi.mock('@/utils/host/translate/api/microsoft', () => ({
   microsoftTranslate: vi.fn(),
 }))
 
+vi.mock('@/utils/prompts/translate', () => ({
+  getTranslatePrompt: vi.fn(),
+}))
+
 let mockSendMessage: any
 let mockMicrosoftTranslate: any
 let mockGetConfigFromStorage: any
+let mockGetTranslatePrompt: any
 
 describe('translate-text', () => {
   beforeEach(async () => {
@@ -25,9 +30,13 @@ describe('translate-text', () => {
     mockSendMessage = vi.mocked((await import('@/utils/message')).sendMessage)
     mockMicrosoftTranslate = vi.mocked((await import('@/utils/host/translate/api/microsoft')).microsoftTranslate)
     mockGetConfigFromStorage = vi.mocked((await import('@/utils/config/config')).getConfigFromStorage)
+    mockGetTranslatePrompt = vi.mocked((await import('@/utils/prompts/translate')).getTranslatePrompt)
 
     // Mock getConfigFromStorage to return DEFAULT_CONFIG
     mockGetConfigFromStorage.mockResolvedValue(DEFAULT_CONFIG)
+
+    // Mock getTranslatePrompt to return a simple prompt
+    mockGetTranslatePrompt.mockResolvedValue('Translate to {{targetLang}}: {{input}}')
   })
 
   describe('translateText', () => {

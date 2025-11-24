@@ -6,20 +6,20 @@
   "packageManager": "pnpm@10.16.1",
   "description": "Read Frog browser extension for language learning",
   "scripts": {
-    "build": "nx exec -- wxt build",
-    "build:firefox": "nx exec -- wxt build -b firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
     "build:analyze": "wxt build --analyze",
     "dev:local": "WXT_USE_LOCAL_PACKAGES=true wxt",
     "dev": "wxt",
     "dev:edge": "wxt -b edge",
     "dev:firefox": "wxt -b firefox",
-    "lint": "nx exec -- eslint",
+    "lint": "eslint",
     "lint:fix": "eslint --fix",
     "postinstall": "wxt prepare",
-    "test": "nx exec -- vitest run",
-    "test:cov": "nx exec -- vitest run --coverage",
+    "test": "vitest run",
+    "test:cov": "vitest run --coverage",
     "test:watch": "vitest",
-    "type-check": "nx exec -- tsc --noEmit",
+    "type-check": "tsc --noEmit",
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "release": "changeset tag && git push origin --tags",
@@ -151,6 +151,46 @@
       "name": "node",
       "version": "^24.9.1",
       "onFail": "download"
+    }
+  },
+  "nx": {
+    "targets": {
+      "build": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "wxt build"
+        }
+      },
+      "build:firefox": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "wxt build -b firefox"
+        }
+      },
+      "test": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest run"
+        }
+      },
+      "test:cov": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest run --coverage"
+        }
+      },
+      "lint": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "eslint"
+        }
+      },
+      "type-check": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "tsc --noEmit"
+        }
+      }
     }
   }
 }

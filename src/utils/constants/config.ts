@@ -9,7 +9,7 @@ import { DEFAULT_TTS_CONFIG } from './tts'
 
 export const CONFIG_STORAGE_KEY = 'config'
 export const CONFIG_SCHEMA_VERSION_STORAGE_KEY = '__configSchemaVersion'
-export const CONFIG_SCHEMA_VERSION = 30
+export const CONFIG_SCHEMA_VERSION = 31
 
 export const DEFAULT_FLOATING_BUTTON_POSITION = 0.66
 
@@ -38,7 +38,7 @@ export const DEFAULT_CONFIG: Config = {
       autoTranslateLanguages: [],
       shortcut: DEFAULT_AUTO_TRANSLATE_SHORTCUT_KEY,
     },
-    promptsConfig: DEFAULT_TRANSLATE_PROMPTS_CONFIG,
+    customPromptsConfig: DEFAULT_TRANSLATE_PROMPTS_CONFIG,
     requestQueueConfig: {
       capacity: DEFAULT_REQUEST_CAPACITY,
       rate: DEFAULT_REQUEST_RATE,

@@ -7,6 +7,7 @@ import { isAPIProviderConfig, isLLMTranslateProviderConfig, isNonAPIProvider, is
 import { getProviderConfigById } from '@/utils/config/helpers'
 import { getFinalSourceCode } from '@/utils/config/languages'
 import { logger } from '@/utils/logger'
+import { getTranslatePrompt } from '@/utils/prompts/translate'
 import { getConfigFromStorage } from '../../config/config'
 import { Sha256Hex } from '../../hash'
 import { sendMessage } from '../../message'
@@ -14,6 +15,27 @@ import { aiTranslate } from './api/ai'
 import { deeplxTranslate } from './api/deeplx'
 import { googleTranslate } from './api/google'
 import { microsoftTranslate } from './api/microsoft'
+
+async function buildHashComponents(
+  text: string,
+  providerConfig: ProviderConfig,
+  langConfig: Config['language'],
+): Promise<string[]> {
+  const hashComponents = [
+    text,
+    JSON.stringify(providerConfig),
+    getFinalSourceCode(langConfig.sourceCode, langConfig.detectedCode),
+    langConfig.targetCode,
+  ]
+
+  if (isLLMTranslateProviderConfig(providerConfig)) {
+    const targetLangName = LANG_CODE_TO_EN_NAME[langConfig.targetCode]
+    const prompt = await getTranslatePrompt(targetLangName, text, { isBatch: true })
+    hashComponents.push(prompt)
+  }
+
+  return hashComponents
+}
 
 export async function translateText(text: string) {
   const config = await getConfigFromStorage()
@@ -28,18 +50,14 @@ export async function translateText(text: string) {
   }
 
   const langConfig = config.language
+  const hashComponents = await buildHashComponents(text, providerConfig, langConfig)
 
   return await sendMessage('enqueueTranslateRequest', {
     text,
     langConfig,
     providerConfig,
     scheduleAt: Date.now(),
-    hash: Sha256Hex(
-      text,
-      JSON.stringify(providerConfig),
-      getFinalSourceCode(langConfig.sourceCode, langConfig.detectedCode),
-      langConfig.targetCode,
-    ),
+    hash: Sha256Hex(...hashComponents),
   })
 }
 

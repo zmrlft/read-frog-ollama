@@ -28,15 +28,13 @@ import {
 } from '@/components/shadcn/sheet'
 import { QuickInsertableTextarea } from '@/components/ui/insertable-textarea'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
-import { DEFAULT_TRANSLATE_PROMPT_ID, getTokenCellText, TOKENS } from '@/utils/constants/prompt'
+import { DEFAULT_TRANSLATE_PROMPT, DEFAULT_TRANSLATE_PROMPT_ID, getTokenCellText, TOKENS } from '@/utils/constants/prompt'
 import { cn } from '@/utils/styles/tailwind'
 import { ConfigCard } from '../../../components/config-card'
 import { isExportPromptModeAtom, selectedPromptsToExportAtom } from './atoms'
 import { DeletePrompt } from './delete-prompt'
 import { ExportPrompts } from './export-prompt'
 import { ImportPrompts } from './import-prompt'
-
-const isDefaultPrompt = (id: string) => id === DEFAULT_TRANSLATE_PROMPT_ID
 
 export function PersonalizedPrompts() {
   return (
@@ -48,17 +46,17 @@ export function PersonalizedPrompts() {
 
 function PromptList() {
   const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
-  const promptsConfig = translateConfig.promptsConfig
-  const patterns = promptsConfig.patterns
+  const customPromptsConfig = translateConfig.customPromptsConfig
+  const patterns = customPromptsConfig.patterns
   const setSelectedPrompts = useSetAtom(selectedPromptsToExportAtom)
   const [isExportMode, setIsExportMode] = useAtom(isExportPromptModeAtom)
-  const currentPromptId = promptsConfig.prompt
+  const currentPromptId = customPromptsConfig.promptId
 
-  const setCurrentPromptId = (value: string) => {
+  const setCurrentPromptId = (value: string | null) => {
     void setTranslateConfig({
-      promptsConfig: {
-        ...promptsConfig,
-        prompt: value,
+      customPromptsConfig: {
+        ...customPromptsConfig,
+        promptId: value,
       },
     })
   }
@@ -111,20 +109,33 @@ function PromptGrid({
   currentPromptId,
   setCurrentPromptId,
 }: {
-  currentPromptId: string
-  setCurrentPromptId: (value: string) => void
+  currentPromptId: string | null
+  setCurrentPromptId: (value: string | null) => void
 }) {
   const [translateConfig] = useAtom(configFieldsAtomMap.translate)
-  const promptsConfig = translateConfig.promptsConfig
-  const patterns = promptsConfig.patterns
+  const customPromptsConfig = translateConfig.customPromptsConfig
+  const patterns = customPromptsConfig.patterns
   const [selectedPrompts, setSelectedPrompts] = useAtom(selectedPromptsToExportAtom)
   const isExportMode = useAtomValue(isExportPromptModeAtom)
 
-  async function handleCardClick(pattern: typeof patterns[number]) {
+  // Construct virtual default prompt object from code constant
+  const defaultPrompt: TranslatePromptObj = {
+    id: DEFAULT_TRANSLATE_PROMPT_ID,
+    name: i18n.t('options.translation.personalizedPrompts.default'),
+    prompt: DEFAULT_TRANSLATE_PROMPT,
+  }
+
+  // Prepend default to patterns list
+  const allPrompts = [defaultPrompt, ...patterns]
+
+  async function handleCardClick(pattern: typeof allPrompts[number]) {
+    const isDefault = pattern.id === DEFAULT_TRANSLATE_PROMPT_ID
+
     if (!isExportMode) {
-      setCurrentPromptId(pattern.id)
+      setCurrentPromptId(isDefault ? null : pattern.id)
     }
-    else if (!isDefaultPrompt(pattern.id)) {
+    else if (!isDefault) {
+      // In export mode, only allow selecting custom prompts (not default)
       setSelectedPrompts((prev) => {
         return prev.includes(pattern.id)
           ? prev.filter(id => id !== pattern.id)
@@ -139,70 +150,84 @@ function PromptGrid({
       className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-h-96 overflow-auto p-2 select-none"
     >
       {
-        patterns.map(pattern => (
-          <Card
-            className={cn(
-              'h-full gap-0 pb-2 py-0 cursor-pointer hover:scale-[1.02] transition-transform duration-30 ease-in-out',
-              // for highlight checked card in export mode
-              isExportMode ? 'has-[[aria-checked=true]]:border-primary has-[[aria-checked=true]]:bg-primary/5 dark:has-[[aria-checked=true]]:border-primary/70 dark:has-[[aria-checked=true]]:bg-primary/10' : '',
-            )}
-            key={pattern.id}
-          >
-            <CardHeader
-              className="grid-rows-1 pt-4 px-4 mb-3"
-              onClick={() => handleCardClick(pattern)}
+        allPrompts.map((pattern) => {
+          const isDefault = pattern.id === DEFAULT_TRANSLATE_PROMPT_ID
+          const isActive = isDefault ? currentPromptId === null : currentPromptId === pattern.id
+
+          return (
+            <Card
+              className={cn(
+                'h-full gap-0 pb-2 py-0 cursor-pointer hover:scale-[1.02] transition-transform duration-30 ease-in-out',
+                // for highlight checked card in export mode
+                isExportMode ? 'has-aria-checked:border-primary has-aria-checked:bg-primary/5 dark:has-aria-checked:border-primary/70 dark:has-aria-checked:bg-primary/10' : '',
+              )}
+              key={pattern.id}
             >
-              <CardTitle className="w-full min-w-0">
-                <div className="leading-relaxed gap-3 flex items-center w-full h-5">
-                  <Activity mode={isExportMode && !isDefaultPrompt(pattern.id) ? 'visible' : 'hidden'}>
-                    <Checkbox
-                      id={`translate-prompt-check-${pattern.id}`}
-                      checked={selectedPrompts.includes(pattern.id)}
-                      onCheckedChange={(checked) => {
-                        setSelectedPrompts((prev) => {
-                          return checked
-                            ? [...prev, pattern.id]
-                            : prev.filter(id => id !== pattern.id)
-                        })
-                      }}
-                    />
-                  </Activity>
-                  <Label
-                    htmlFor={`translate-prompt-check-${isExportMode ? 'check' : 'radio'}-${pattern.id}`}
-                    className="flex-1 min-w-0 block truncate cursor-pointer"
-                    title={pattern.name}
-                  >
-                    {isDefaultPrompt(pattern.id)
-                      ? i18n.t('options.translation.personalizedPrompts.default')
-                      : pattern.name}
-                  </Label>
-                  <Activity mode={currentPromptId === pattern.id ? 'visible' : 'hidden'}>
-                    <Badge className="bg-primary">
-                      {i18n.t('options.translation.personalizedPrompts.current')}
-                    </Badge>
-                  </Activity>
-                </div>
-              </CardTitle>
-            </CardHeader>
-            <CardContent
-              className="flex flex-col gap-4 h-16 flex-1 px-4 mb-3"
-              onClick={() => handleCardClick(pattern)}
-            >
-              <p className="text-sm text-ellipsis whitespace-pre-wrap line-clamp-3">{pattern.prompt}</p>
-            </CardContent>
-            <Separator className="my-0" />
-            <CardFooter className="w-full flex justify-between px-4 items-center py-2 cursor-default">
-              <CardAction>
-                <Activity mode={!isDefaultPrompt(pattern.id) ? 'visible' : 'hidden'}>
-                  <DeletePrompt originPrompt={pattern} />
-                </Activity>
-              </CardAction>
-              <CardAction>
-                <ConfigurePrompt originPrompt={pattern} />
-              </CardAction>
-            </CardFooter>
-          </Card>
-        ))
+              <CardHeader
+                className="grid-rows-1 pt-4 px-4 mb-3"
+                onClick={() => handleCardClick(pattern)}
+              >
+                <CardTitle className="w-full min-w-0">
+                  <div className="leading-relaxed gap-3 flex items-center w-full h-5">
+                    {/* Checkbox: only show in export mode for custom prompts (not default) */}
+                    <Activity mode={isExportMode && !isDefault ? 'visible' : 'hidden'}>
+                      <Checkbox
+                        id={`translate-prompt-check-${pattern.id}`}
+                        checked={selectedPrompts.includes(pattern.id)}
+                        onCheckedChange={(checked) => {
+                          setSelectedPrompts((prev) => {
+                            return checked
+                              ? [...prev, pattern.id]
+                              : prev.filter(id => id !== pattern.id)
+                          })
+                        }}
+                      />
+                    </Activity>
+                    <Label
+                      htmlFor={`translate-prompt-check-${isExportMode ? 'check' : 'radio'}-${pattern.id}`}
+                      className="flex-1 min-w-0 block truncate cursor-pointer"
+                      title={pattern.name}
+                    >
+                      {pattern.name}
+                    </Label>
+                    <Activity mode={isActive ? 'visible' : 'hidden'}>
+                      <Badge className="bg-primary">
+                        {i18n.t('options.translation.personalizedPrompts.current')}
+                      </Badge>
+                    </Activity>
+                  </div>
+                </CardTitle>
+              </CardHeader>
+              <CardContent
+                className="flex flex-col gap-4 h-16 flex-1 px-4 mb-3"
+                onClick={() => handleCardClick(pattern)}
+              >
+                <p className="text-sm text-ellipsis whitespace-pre-wrap line-clamp-3">{pattern.prompt}</p>
+              </CardContent>
+              <Separator className="my-0" />
+              <CardFooter className="w-full flex justify-between px-4 items-center py-2 cursor-default">
+                {isDefault
+                  ? (
+                    // Default prompt: show eye icon (view only)
+                      <CardAction>
+                        <ConfigurePrompt originPrompt={pattern} />
+                      </CardAction>
+                    )
+                  : (
+                    // Custom prompts: show delete + edit
+                      <>
+                        <CardAction>
+                          <DeletePrompt originPrompt={pattern} />
+                        </CardAction>
+                        <CardAction>
+                          <ConfigurePrompt originPrompt={pattern} />
+                        </CardAction>
+                      </>
+                    )}
+              </CardFooter>
+            </Card>
+          )
+        })
       }
     </div>
   )
@@ -218,8 +243,8 @@ function ConfigurePrompt({
 } & React.ComponentProps<'button'>) {
   const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
   const isExportMode = useAtomValue(isExportPromptModeAtom)
-  const isDefault = isDefaultPrompt(originPrompt?.id ?? '')
   const inEdit = !!originPrompt
+  const isDefault = originPrompt?.id === DEFAULT_TRANSLATE_PROMPT_ID
 
   const defaultPrompt = { id: crypto.randomUUID(), name: '', prompt: '' }
   const initialPrompt = originPrompt ?? defaultPrompt
@@ -230,13 +255,11 @@ function ConfigurePrompt({
     setPrompt(originPrompt ?? defaultPrompt)
   }
 
-  const promptName = isDefault
+  const sheetTitle = isDefault
     ? i18n.t('options.translation.personalizedPrompts.default')
-    : prompt.name
-
-  const sheetTitle = inEdit
-    ? i18n.t('options.translation.personalizedPrompts.editPrompt.title')
-    : i18n.t('options.translation.personalizedPrompts.addPrompt')
+    : inEdit
+      ? i18n.t('options.translation.personalizedPrompts.editPrompt.title')
+      : i18n.t('options.translation.personalizedPrompts.addPrompt')
 
   const clearCachePrompt = () => {
     setPrompt({
@@ -252,11 +275,11 @@ function ConfigurePrompt({
       return
     }
 
-    const _patterns = translateConfig.promptsConfig.patterns
+    const _patterns = translateConfig.customPromptsConfig.patterns
 
     void setTranslateConfig({
-      promptsConfig: {
-        ...translateConfig.promptsConfig,
+      customPromptsConfig: {
+        ...translateConfig.customPromptsConfig,
         patterns: inEdit
           ? _patterns.map(p => p.id === prompt.id ? prompt : p)
           : [..._patterns, prompt],
@@ -297,8 +320,8 @@ function ConfigurePrompt({
               <Label htmlFor="prompt-name">{i18n.t('options.translation.personalizedPrompts.editPrompt.name')}</Label>
               <Input
                 id="prompt-name"
-                value={promptName}
-                disabled={isDefaultPrompt(prompt.id)}
+                value={prompt.name}
+                disabled={isDefault}
                 onChange={(e) => {
                   setPrompt({
                     ...prompt,
@@ -311,8 +334,8 @@ function ConfigurePrompt({
               <Label htmlFor="prompt">Prompt</Label>
               <QuickInsertableTextarea
                 value={prompt.prompt}
-                disabled={isDefaultPrompt(prompt.id)}
                 className="max-h-100"
+                disabled={isDefault}
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setPrompt({ ...prompt, prompt: e.target.value })}
                 insertCells={TOKENS.map(token => ({
                   text: getTokenCellText(token),
@@ -325,10 +348,10 @@ function ConfigurePrompt({
         {!isDefault && (
           <SheetFooter>
             <SheetClose asChild>
-              <Button disabled={isDefaultPrompt(prompt.id)} onClick={configurePrompt}>{i18n.t('options.translation.personalizedPrompts.editPrompt.save')}</Button>
+              <Button onClick={configurePrompt}>{i18n.t('options.translation.personalizedPrompts.editPrompt.save')}</Button>
             </SheetClose>
             <SheetClose asChild>
-              <Button disabled={isDefaultPrompt(prompt.id)} variant="outline">{i18n.t('options.translation.personalizedPrompts.editPrompt.close')}</Button>
+              <Button variant="outline">{i18n.t('options.translation.personalizedPrompts.editPrompt.close')}</Button>
             </SheetClose>
           </SheetFooter>
         )}

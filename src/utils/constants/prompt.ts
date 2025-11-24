@@ -1,5 +1,3 @@
-import type { TranslatePromptObj } from '@/types/config/translate'
-
 export const TOKENS = ['targetLang', 'input'] as const
 
 /**
@@ -55,15 +53,14 @@ Single paragraph content
 Direct translation without separators
 `
 
-export const DEFAULT_TRANSLATE_PROMPT_ID = 'default'
-
-export const DEFAULT_TRANSLATE_PROMPT_OBJ: TranslatePromptObj = {
-  id: DEFAULT_TRANSLATE_PROMPT_ID,
-  name: DEFAULT_TRANSLATE_PROMPT_ID,
-  prompt: DEFAULT_TRANSLATE_PROMPT,
-}
+/**
+ * UI sentinel value for default prompt selection
+ * NOTE: This is NOT stored in config - it's only used in UI components
+ * Config stores `null` for default, this string is just for Select/UI compatibility
+ */
+export const DEFAULT_TRANSLATE_PROMPT_ID = '__default__'
 
 export const DEFAULT_TRANSLATE_PROMPTS_CONFIG = {
-  prompt: DEFAULT_TRANSLATE_PROMPT_ID,
-  patterns: [DEFAULT_TRANSLATE_PROMPT_OBJ],
+  promptId: null,
+  patterns: [],
 }

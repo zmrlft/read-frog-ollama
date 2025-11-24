@@ -135,7 +135,7 @@ function ExportConfig() {
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <AlertDialogFooter className="flex !justify-between">
+        <AlertDialogFooter className="flex justify-between!">
           <AlertDialogCancel>{i18n.t('options.config.sync.exportOptions.cancel')}</AlertDialogCancel>
           <div className="flex gap-2">
             <AlertDialogAction variant="secondary" onClick={() => exportConfig(true)} disabled={isExporting}>

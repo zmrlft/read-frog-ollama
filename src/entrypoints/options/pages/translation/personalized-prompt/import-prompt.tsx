@@ -13,15 +13,15 @@ export function ImportPrompts() {
   const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
 
   const injectPrompts = (list: PromptConfigList) => {
-    const originPatterns = translateConfig.promptsConfig.patterns
+    const originPatterns = translateConfig.customPromptsConfig.patterns
     const patterns = list.map(item => ({
       ...item,
       id: crypto.randomUUID(),
     }))
 
     void setTranslateConfig({
-      promptsConfig: {
-        ...translateConfig.promptsConfig,
+      customPromptsConfig: {
+        ...translateConfig.customPromptsConfig,
         patterns: [...originPatterns, ...patterns],
       },
     })

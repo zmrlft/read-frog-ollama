@@ -5,7 +5,6 @@ import { useAtom, useAtomValue } from 'jotai'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/shadcn/alert-dialog'
 import { Button } from '@/components/shadcn/button'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
-import { DEFAULT_TRANSLATE_PROMPT_ID } from '@/utils/constants/prompt'
 import { isExportPromptModeAtom } from './atoms'
 
 export function DeletePrompt({
@@ -18,13 +17,13 @@ export function DeletePrompt({
 } & React.ComponentProps<'button'>) {
   const isExportMode = useAtomValue(isExportPromptModeAtom)
   const [translateConfig, setTranslateConfig] = useAtom(configFieldsAtomMap.translate)
-  const { patterns, prompt } = translateConfig.promptsConfig
+  const { patterns, promptId } = translateConfig.customPromptsConfig
   const deletePrompt = () => {
     void setTranslateConfig({
-      promptsConfig: {
-        ...translateConfig.promptsConfig,
+      customPromptsConfig: {
+        ...translateConfig.customPromptsConfig,
         patterns: patterns.filter(p => p.id !== originPrompt.id),
-        prompt: prompt !== originPrompt.id ? prompt : DEFAULT_TRANSLATE_PROMPT_ID,
+        promptId: promptId !== originPrompt.id ? promptId : null,
       },
     })
   }

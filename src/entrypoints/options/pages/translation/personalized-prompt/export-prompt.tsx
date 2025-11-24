@@ -8,8 +8,8 @@ import { downloadJSONFile } from './utils/prompt-file'
 
 export function ExportPrompts() {
   const translateConfig = useAtomValue(configFieldsAtomMap.translate)
-  const promptsConfig = translateConfig.promptsConfig
-  const patterns = promptsConfig.patterns
+  const customPromptsConfig = translateConfig.customPromptsConfig
+  const patterns = customPromptsConfig.patterns
   const [selectedPrompts, setSelectedPrompts] = useAtom(selectedPromptsToExportAtom)
   const setIsExportMode = useSetAtom(isExportPromptModeAtom)
 

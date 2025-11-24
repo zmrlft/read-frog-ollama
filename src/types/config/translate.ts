@@ -44,12 +44,23 @@ export const translatePromptObjSchema = z.object({
 })
 export type TranslatePromptObj = z.infer<typeof translatePromptObjSchema>
 
-export const promptsConfigSchema = z.object({
-  // TODO: change this `prompt` to `promptName`?
-  prompt: z.string(),
+export const customPromptsConfigSchema = z.object({
+  promptId: z.string().nullable(),
   patterns: z.array(
     translatePromptObjSchema,
   ),
+}).superRefine((data, ctx) => {
+  if (data.promptId !== null) {
+    const patternIds = data.patterns.map(p => p.id)
+    if (!patternIds.includes(data.promptId)) {
+      ctx.addIssue({
+        code: 'invalid_value',
+        values: patternIds,
+        message: `promptId "${data.promptId}" must be null or match a pattern id`,
+        path: ['promptId'],
+      })
+    }
+  }
 })
 
 export const translateConfigSchema = z.object({
@@ -65,7 +76,7 @@ export const translateConfigSchema = z.object({
     autoTranslateLanguages: z.array(langCodeISO6393Schema),
     shortcut: z.array(z.string()),
   }),
-  promptsConfig: promptsConfigSchema,
+  customPromptsConfig: customPromptsConfigSchema,
   requestQueueConfig: requestQueueConfigSchema,
   batchQueueConfig: batchQueueConfigSchema,
   translationNodeStyle: translationNodeStyleConfigSchema,
