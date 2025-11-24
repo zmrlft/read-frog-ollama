@@ -75,6 +75,7 @@ export const translateConfigSchema = z.object({
     autoTranslatePatterns: z.array(z.string()),
     autoTranslateLanguages: z.array(langCodeISO6393Schema),
     shortcut: z.array(z.string()),
+    enableLLMDetection: z.boolean(),
   }),
   customPromptsConfig: customPromptsConfigSchema,
   requestQueueConfig: requestQueueConfigSchema,

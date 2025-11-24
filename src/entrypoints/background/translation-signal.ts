@@ -41,12 +41,12 @@ export function translationMessage() {
 
   onMessage('checkAndSetAutoTranslation', async (msg) => {
     const tabId = msg.sender?.tab?.id
-    const { url } = msg.data
+    const { url, detectedCodeOrUnd } = msg.data
     if (typeof tabId === 'number') {
       const config = await storage.getItem<Config>(`local:${CONFIG_STORAGE_KEY}`)
       if (!config)
         return
-      const shouldEnable = await shouldEnableAutoTranslation(url, config)
+      const shouldEnable = await shouldEnableAutoTranslation(url, detectedCodeOrUnd, config)
       await setTranslationState(tabId, shouldEnable)
     }
   })

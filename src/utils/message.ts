@@ -1,3 +1,4 @@
+import type { LangCodeISO6393 } from '@read-frog/definitions'
 import type { Config } from '@/types/config/config'
 import type { ProviderConfig } from '@/types/config/provider'
 import type { BatchQueueConfig, RequestQueueConfig } from '@/types/config/translate'
@@ -15,7 +16,7 @@ interface ProtocolMap {
   getEnablePageTranslationFromContentScript: () => Promise<boolean>
   setEnablePageTranslation: (data: { tabId: number, enabled: boolean }) => void
   setEnablePageTranslationOnContentScript: (data: { enabled: boolean }) => void
-  checkAndSetAutoTranslation: (data: { url: string }) => void
+  checkAndSetAutoTranslation: (data: { url: string, detectedCodeOrUnd: LangCodeISO6393 | 'und' }) => void
   translationStateChanged: (data: { enabled: boolean }) => void
   // read article
   readArticle: () => void

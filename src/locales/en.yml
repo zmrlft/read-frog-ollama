@@ -282,6 +282,10 @@ options:
       title: Auto translate based on language
       description: Automatically translate page content when specific languages are detected
       selectLanguages: Select languages
+      enableLLMDetection: Use LLM for language detection
+      enableLLMDetectionDescription: Improves accuracy but adds latency and API costs. Requires LLM translate provider and configured auto-translate languages.
+      llmProviderConfigured: LLM translate provider configured
+      llmProviderNotConfigured: No LLM translate provider configured
   tts:
     title: Text to Speech
     description: Customize the Speak button with your preferred OpenAI voice settings.

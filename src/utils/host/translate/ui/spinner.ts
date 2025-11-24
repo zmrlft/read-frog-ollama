@@ -17,16 +17,18 @@ export function createLightweightSpinner(ownerDoc: Document): HTMLElement {
   const spinner = ownerDoc.createElement('span')
   spinner.className = 'read-frog-spinner'
   // Inline styles to match the original spinner design
+  // add important to make the styles don't get overridden by the host page styles,
+  // Otherwise, in some page like https://www.reddit.com/r/canadaexpressentry/, some spinners size will be overridden by the host page styles.
   spinner.style.cssText = `
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    margin: 0 4px;
-    vertical-align: middle;
-    border: 3px solid var(--read-frog-muted);
-    border-top: 3px solid var(--read-frog-primary);
-    border-radius: 50%;
-    box-sizing: content-box;
+    display: inline-block !important;
+    width: 6px !important;
+    height: 6px !important;
+    margin: 0 4px !important;
+    vertical-align: middle !important;
+    border: 3px solid var(--read-frog-muted) !important;
+    border-top: 3px solid var(--read-frog-primary) !important;
+    border-radius: 50% !important;
+    box-sizing: content-box !important;
   `
 
   // Use Web Animations API instead of CSS keyframes - no DOM manipulation needed

@@ -280,6 +280,10 @@ options:
       title: 言語に基づく自動翻訳
       description: 特定の言語が検出された場合にページコンテンツを自動翻訳します
       selectLanguages: 言語を選択
+      enableLLMDetection: LLM を使用した言語検出
+      enableLLMDetectionDescription: 精度が向上しますが、遅延と API コストが増加します。LLM 翻訳プロバイダーと自動翻訳言語の設定が必要です。
+      llmProviderConfigured: LLM 翻訳プロバイダーが設定されています
+      llmProviderNotConfigured: LLM 翻訳プロバイダーが設定されていません
   tts:
     title: テキスト読み上げ
     description: お好みの OpenAI 音声設定で読み上げボタンをカスタマイズします。

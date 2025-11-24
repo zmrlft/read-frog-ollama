@@ -281,6 +281,10 @@ options:
       title: 언어에 기반한 자동 번역
       description: 특정 언어가 감지되면 페이지 콘텐츠를 자동으로 번역합니다
       selectLanguages: 언어 선택
+      enableLLMDetection: LLM을 사용한 언어 감지
+      enableLLMDetectionDescription: 정확도가 향상되지만 지연 시간과 API 비용이 증가합니다. LLM 번역 제공업체와 자동 번역 언어 설정이 필요합니다.
+      llmProviderConfigured: LLM 번역 제공업체가 설정되었습니다
+      llmProviderNotConfigured: LLM 번역 제공업체가 설정되지 않았습니다
   tts:
     title: 텍스트 음성 변환
     description: 선호하는 OpenAI 음성 설정으로 말하기 버튼을 사용자 지정하세요.
