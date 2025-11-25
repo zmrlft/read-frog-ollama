@@ -2,7 +2,7 @@ import type { ExtractedContent } from '@/types/content'
 import { useQuery } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
-import { getDocumentInfo } from '@/utils/content'
+import { getDocumentInfo } from '@/utils/content/analyze'
 import { logger } from '@/utils/logger'
 
 export function useExtractContent() {

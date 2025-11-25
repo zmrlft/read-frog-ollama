@@ -1,4 +1,4 @@
-export const TOKENS = ['targetLang', 'input'] as const
+export const TOKENS = ['targetLang', 'input', 'title', 'summary'] as const
 
 /**
  * Separator used to distinguish multiple text segments in batch translation.
@@ -8,6 +8,8 @@ export const BATCH_SEPARATOR = '%%'
 
 export const TARGET_LANG = TOKENS[0]
 export const INPUT = TOKENS[1]
+export const TITLE = TOKENS[2]
+export const SUMMARY = TOKENS[3]
 
 export const getTokenCellText = (token: string) => `{{${token}}}`
 
@@ -18,6 +20,10 @@ export const DEFAULT_TRANSLATE_PROMPT = `You are a professional ${getTokenCellTe
 2. The returned translation must maintain exactly the same number of paragraphs and format as the original text.
 3. If the text contains HTML tags, consider where the tags should be placed in the translation while maintaining fluency.
 4. For content that should not be translated (such as proper nouns, code, etc.), keep the original text.
+
+## Document Metadata for Context Awareness (if available)
+Title: ${getTokenCellText(TITLE)}
+Summary: ${getTokenCellText(SUMMARY)}
 
 Translate to ${getTokenCellText(TARGET_LANG)}:
 ${getTokenCellText(INPUT)}

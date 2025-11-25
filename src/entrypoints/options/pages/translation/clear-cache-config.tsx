@@ -22,7 +22,7 @@ export function ClearCacheConfig() {
   async function handleClearCache() {
     try {
       setIsClearing(true)
-      await sendMessage('clearAllCache')
+      await sendMessage('clearAllTranslationRelatedCache')
       // Show success message or notification here if needed
     }
     catch (error) {

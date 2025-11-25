@@ -77,6 +77,7 @@ export const translateConfigSchema = z.object({
     shortcut: z.array(z.string()),
     enableLLMDetection: z.boolean(),
   }),
+  enableAIContentAware: z.boolean(),
   customPromptsConfig: customPromptsConfigSchema,
   requestQueueConfig: requestQueueConfigSchema,
   batchQueueConfig: batchQueueConfigSchema,

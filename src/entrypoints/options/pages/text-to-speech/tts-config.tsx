@@ -29,10 +29,11 @@ export function TtsConfig() {
   return (
     <ConfigCard
       title={(
-        <div className="flex gap-2">
+        <>
           {i18n.t('options.tts.title')}
-          <Badge variant="secondary">Public Beta</Badge>
-        </div>
+          {' '}
+          <Badge variant="secondary" className="align-middle">Public Beta</Badge>
+        </>
       )}
       description={i18n.t('options.tts.description')}
     >

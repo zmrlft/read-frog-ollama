@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { DEFAULT_CONFIG } from '@/utils/constants/config'
-import { executeTranslate, translateText } from '@/utils/host/translate/translate-text'
+import { executeTranslate } from '@/utils/host/translate/execute-translate'
+import { translateText } from '@/utils/host/translate/translate-text'
 
 // Mock dependencies
 vi.mock('@/utils/config/config', () => ({

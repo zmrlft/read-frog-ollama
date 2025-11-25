@@ -7,7 +7,7 @@ import LoadingDots from '@/components/loading-dots'
 import { Button } from '@/components/shadcn/button'
 import { getObjectWithoutAPIKeys } from '@/utils/config/config'
 import { DEFAULT_CONFIG } from '@/utils/constants/config'
-import { executeTranslate } from '@/utils/host/translate/translate-text'
+import { executeTranslate } from '@/utils/host/translate/execute-translate'
 
 function ConnectionSuccessIcon() {
   return (

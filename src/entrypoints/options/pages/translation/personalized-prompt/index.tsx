@@ -312,7 +312,7 @@ function ConfigurePrompt({
               )
         }
       </SheetTrigger>
-      <SheetContent className="w-[500px] sm:w-[640px]">
+      <SheetContent className="w-[400px] sm:w-[500px] sm:max-w-none">
         <SheetHeader>
           <SheetTitle>{sheetTitle}</SheetTitle>
           <div className="grid flex-1 auto-rows-min gap-6 py-6">

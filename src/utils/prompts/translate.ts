@@ -1,11 +1,17 @@
+import type { ArticleContent } from '@/types/content'
 import { getConfigFromStorage } from '@/utils/config/config'
 import { DEFAULT_CONFIG } from '../constants/config'
-import { DEFAULT_BATCH_TRANSLATE_PROMPT, DEFAULT_TRANSLATE_PROMPT, getTokenCellText, INPUT, TARGET_LANG } from '../constants/prompt'
+import { DEFAULT_BATCH_TRANSLATE_PROMPT, DEFAULT_TRANSLATE_PROMPT, getTokenCellText, INPUT, SUMMARY, TARGET_LANG, TITLE } from '../constants/prompt'
+
+export interface TranslatePromptOptions {
+  isBatch?: boolean
+  content?: ArticleContent
+}
 
 export async function getTranslatePrompt(
   targetLang: string,
   input: string,
-  options?: { isBatch?: boolean },
+  options?: TranslatePromptOptions,
 ) {
   const config = await getConfigFromStorage() ?? DEFAULT_CONFIG
   const customPromptsConfig = config.translate.customPromptsConfig
@@ -30,7 +36,13 @@ ${DEFAULT_BATCH_TRANSLATE_PROMPT}
 `
   }
 
+  // Build title and summary replacement values
+  const title = options?.content?.title ?? ''
+  const summary = options?.content?.summary ?? ''
+
   return prompt
     .replaceAll(getTokenCellText(TARGET_LANG), targetLang)
     .replaceAll(getTokenCellText(INPUT), input)
+    .replaceAll(getTokenCellText(TITLE), title)
+    .replaceAll(getTokenCellText(SUMMARY), summary)
 }

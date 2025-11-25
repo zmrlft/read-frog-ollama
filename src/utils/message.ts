@@ -28,13 +28,13 @@ interface ProtocolMap {
   // selection helpers
   analyzeSelection: (data: { providerId: string, systemPrompt: string, userMessage: string, temperature?: number }) => Promise<string>
   // request
-  enqueueTranslateRequest: (data: { text: string, langConfig: Config['language'], providerConfig: ProviderConfig, scheduleAt: number, hash: string }) => Promise<string>
+  enqueueTranslateRequest: (data: { text: string, langConfig: Config['language'], providerConfig: ProviderConfig, scheduleAt: number, hash: string, articleTitle?: string, articleTextContent?: string }) => Promise<string>
   setTranslateRequestQueueConfig: (data: Partial<RequestQueueConfig>) => void
   setTranslateBatchQueueConfig: (data: Partial<BatchQueueConfig>) => void
   // network proxy
   backgroundFetch: (data: ProxyRequest) => Promise<ProxyResponse>
   // cache management
-  clearAllCache: () => Promise<void>
+  clearAllTranslationRelatedCache: () => Promise<void>
 }
 
 export const { sendMessage, onMessage }

@@ -218,6 +218,8 @@ options:
         promptCellInput:
           input: 需要翻譯的文字內容
           targetLang: 目標語言
+          title: 文章標題
+          summary: 文章摘要（需啟用 AI 智慧上下文）
         save: 保存
         close: 取消
       deletePrompt:
@@ -278,14 +280,19 @@ options:
     nodeTranslationHotkey:
       title: 懸停翻譯快捷鍵
       description: 自訂懸停在文字上翻譯段落的修飾鍵
+    llmProviderConfigured: 已設定 LLM 翻譯提供商
+    llmProviderNotConfigured: 未設定 LLM 翻譯提供商
     autoTranslateLanguages:
       title: 基於語言的自動翻譯
       description: 當檢測到特定語言時自動翻譯頁面內容
       selectLanguages: 選擇語言
       enableLLMDetection: 使用 LLM 偵測語言
       enableLLMDetectionDescription: 提高準確率，但會增加延遲和 API 費用。需要設定 LLM 翻譯提供商，並需配置自動翻譯語言。
-      llmProviderConfigured: 已設定 LLM 翻譯提供商
-      llmProviderNotConfigured: 未設定 LLM 翻譯提供商
+    aiContentAware:
+      title: AI 智慧上下文翻譯
+      description: 透過向 AI 提供文章上下文來提高翻譯品質
+      enable: 啟用 AI 智慧上下文翻譯
+      enableDescription: AI 使用文章摘要來提高翻譯準確性。需要 LLM 翻譯提供商。剛開始翻譯頁面時會有延遲，並增加 API 費用。
   tts:
     title: 文字轉語音
     description: 使用您偏好的 OpenAI 語音設定自訂「朗讀」按鈕。
