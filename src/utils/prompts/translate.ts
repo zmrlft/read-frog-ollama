@@ -37,8 +37,8 @@ ${DEFAULT_BATCH_TRANSLATE_PROMPT}
   }
 
   // Build title and summary replacement values
-  const title = options?.content?.title ?? ''
-  const summary = options?.content?.summary ?? ''
+  const title = options?.content?.title || 'No title available'
+  const summary = options?.content?.summary || 'No summary available'
 
   return prompt
     .replaceAll(getTokenCellText(TARGET_LANG), targetLang)

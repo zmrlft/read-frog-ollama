@@ -77,6 +77,11 @@ describe('matchDomainPattern', () => {
       expect(result).toBe(false)
     })
 
+    it('should not match similar TLD (x.com vs x.co)', () => {
+      const result = matchDomainPattern('https://x.com', 'x.co')
+      expect(result).toBe(false)
+    })
+
     it('should not match when pattern is longer than hostname', () => {
       const result = matchDomainPattern('https://x.com', 'www.x.com')
       expect(result).toBe(false)

@@ -3,6 +3,7 @@ import type { ProviderConfig } from '@/types/config/provider'
 import { i18n } from '#imports'
 import { Readability } from '@mozilla/readability'
 import { LANG_CODE_TO_EN_NAME, LANG_CODE_TO_LOCALE_NAME } from '@read-frog/definitions'
+import { franc } from 'franc-min'
 import { toast } from 'sonner'
 import { isAPIProviderConfig, isLLMTranslateProviderConfig } from '@/types/config/provider'
 import { getProviderConfigById } from '@/utils/config/helpers'
@@ -13,6 +14,8 @@ import { getTranslatePrompt } from '@/utils/prompts/translate'
 import { getConfigFromStorage } from '../../config/config'
 import { Sha256Hex } from '../../hash'
 import { sendMessage } from '../../message'
+
+const MIN_LENGTH_FOR_LANG_DETECTION = 50
 
 // Module-level cache for article data (only meaningful in content script context)
 let cachedArticleData: {
@@ -137,6 +140,15 @@ export async function translateText(text: string) {
   }
 
   const langConfig = config.language
+
+  // Skip translation if text is already in target language
+  if (text.length >= MIN_LENGTH_FOR_LANG_DETECTION) {
+    const detectedLang = franc(text)
+    if (detectedLang === langConfig.targetCode) {
+      logger.info(`translateText: skipping translation because text is already in target language. text: ${text}`)
+      return ''
+    }
+  }
 
   // Get article data for LLM providers first (needed for both hash and request)
   let articleTitle: string | undefined
