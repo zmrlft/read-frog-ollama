@@ -203,7 +203,11 @@ function PromptGrid({
                 className="flex flex-col gap-4 h-16 flex-1 px-4 mb-3"
                 onClick={() => handleCardClick(pattern)}
               >
-                <p className="text-sm text-ellipsis whitespace-pre-wrap line-clamp-3">{pattern.prompt}</p>
+                <p className="text-sm text-ellipsis whitespace-pre-wrap line-clamp-3">
+                  {pattern.systemPrompt && pattern.prompt
+                    ? `${pattern.systemPrompt}\n---\n${pattern.prompt}`
+                    : pattern.systemPrompt || pattern.prompt}
+                </p>
               </CardContent>
               <Separator className="my-0" />
               <CardFooter className="w-full flex justify-between px-4 items-center py-2 cursor-default">
