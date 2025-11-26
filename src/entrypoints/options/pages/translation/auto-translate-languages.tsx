@@ -21,8 +21,8 @@ import { Switch } from '@/components/shadcn/switch'
 import { isLLMTranslateProviderConfig } from '@/types/config/provider'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { getProviderConfigById } from '@/utils/config/helpers'
+import { LLMStatusIndicator } from '../../../../components/llm-status-indicator'
 import { ConfigCard } from '../../components/config-card'
-import { LLMStatusIndicator } from '../../components/llm-status-indicator'
 
 export function AutoTranslateLanguages() {
   const [translateConfig] = useAtom(configFieldsAtomMap.translate)
