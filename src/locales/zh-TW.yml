@@ -220,8 +220,8 @@ options:
         promptCellInput:
           input: 需要翻譯的文字內容
           targetLang: 目標語言
-          title: 文章標題
-          summary: 文章摘要（需啟用 AI 智慧上下文）
+          title: 網頁標題
+          summary: 網頁摘要（需啟用 AI 智慧上下文）
         save: 保存
         close: 取消
       deletePrompt:

@@ -220,8 +220,8 @@ options:
         promptCellInput:
           input: Text content to translate
           targetLang: Target language
-          title: Article title
-          summary: Article summary (requires AI Smart Context)
+          title: Webpage title
+          summary: Webpage summary (requires AI Smart Context)
         save: Save Changes
         close: Cancel
       deletePrompt:

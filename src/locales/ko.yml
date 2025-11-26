@@ -219,8 +219,8 @@ options:
         promptCellInput:
           input: 번역할 텍스트 내용
           targetLang: 목표 언어
-          title: 문서 제목
-          summary: 문서 요약 (AI 스마트 컨텍스트 필요)
+          title: 웹페이지 제목
+          summary: 웹페이지 요약 (AI 스마트 컨텍스트 필요)
         save: 저장
         close: 취소
       deletePrompt:

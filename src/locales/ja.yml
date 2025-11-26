@@ -218,8 +218,8 @@ options:
         promptCellInput:
           input: 翻訳するテキスト内容
           targetLang: 目標言語
-          title: 記事タイトル
-          summary: 記事要約（AI スマートコンテキストが必要）
+          title: ウェブページタイトル
+          summary: ウェブページ要約（AI スマートコンテキストが必要）
         save: 保存
         close: キャンセル
       deletePrompt:
