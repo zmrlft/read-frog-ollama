@@ -199,6 +199,10 @@ The extension follows WXT's entrypoints pattern:
 - **`src/entrypoints/popup/`** - Extension popup UI
 - **`src/entrypoints/options/`** - Settings page (multi-page React app)
 
+### Extension Config Migration
+
+When changing the schema of the config, you need to add a migration script to the `src/utils/config/migration-scripts` directory, update the `CONFIG_SCHEMA_VERSION` constant and write examples for testing migration scripts.
+
 ### State Management Architecture
 
 Uses Jotai atoms with a custom storage adapter pattern:

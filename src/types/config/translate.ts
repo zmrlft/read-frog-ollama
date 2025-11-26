@@ -40,6 +40,7 @@ export type TranslationNodeStyleConfig = z.infer<typeof translationNodeStyleConf
 export const translatePromptObjSchema = z.object({
   name: z.string(),
   id: z.string(),
+  systemPrompt: z.string(),
   prompt: z.string(),
 })
 export type TranslatePromptObj = z.infer<typeof translatePromptObjSchema>

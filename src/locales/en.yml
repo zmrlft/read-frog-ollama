@@ -215,6 +215,8 @@ options:
       editPrompt:
         title: Edit Prompt
         name: Name
+        systemPrompt: System Prompt
+        prompt: Prompt
         promptCellInput:
           input: Text content to translate
           targetLang: Target language

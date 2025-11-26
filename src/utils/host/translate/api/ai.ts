@@ -16,10 +16,11 @@ export async function aiTranslate(
   const model = await getTranslateModelById(providerId)
 
   const providerOptions = getProviderOptions(translateModel ?? '')
-  const prompt = await getTranslatePrompt(targetLangName, text, options)
+  const { systemPrompt, prompt } = await getTranslatePrompt(targetLangName, text, options)
 
   const { text: translatedText } = await generateText({
     model,
+    system: systemPrompt,
     prompt,
     providerOptions,
   })

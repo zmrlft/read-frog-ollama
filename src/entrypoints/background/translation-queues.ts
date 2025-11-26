@@ -116,7 +116,7 @@ export async function setUpRequestQueue() {
     executeBatch: async (dataList) => {
       const { langConfig, providerConfig, content } = dataList[0]
       const texts = dataList.map(d => d.text)
-      const batchText = texts.join(`\n${BATCH_SEPARATOR}\n`)
+      const batchText = texts.join(`\n\n${BATCH_SEPARATOR}\n\n`)
       const hash = Sha256Hex(...dataList.map(d => d.hash))
       const earliestScheduleAt = Math.min(...dataList.map(d => d.scheduleAt))
 

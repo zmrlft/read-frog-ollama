@@ -203,10 +203,11 @@ export function TranslatePopover() {
           const model = await getTranslateModelById(providerId)
 
           const providerOptions = getProviderOptions(translateModel ?? '')
-          const prompt = await getTranslatePrompt(targetLangName, cleanText)
+          const { systemPrompt, prompt } = await getTranslatePrompt(targetLangName, cleanText)
 
           const result = streamText({
             model,
+            system: systemPrompt,
             prompt,
             providerOptions,
           })

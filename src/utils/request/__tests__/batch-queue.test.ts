@@ -23,7 +23,7 @@ const mockExecuteTranslate = vi.mocked(executeTranslate)
 // Helper: mock successful translation
 function mockTranslateSuccess(results: string[]) {
   mockExecuteTranslate.mockImplementation((text: string) => {
-    const batchSeparator = `\n${BATCH_SEPARATOR}\n`
+    const batchSeparator = `\n\n${BATCH_SEPARATOR}\n\n`
     if (text.includes(batchSeparator)) {
       return Promise.resolve(results.join(batchSeparator))
     }
@@ -100,7 +100,7 @@ function createBatchQueue(
     executeBatch: async (dataList) => {
       const { langConfig, providerConfig } = dataList[0]
       const texts = dataList.map(d => d.text)
-      const batchText = texts.join(`\n${BATCH_SEPARATOR}\n`)
+      const batchText = texts.join(`\n\n${BATCH_SEPARATOR}\n\n`)
       const hash = Sha256Hex(...dataList.map(d => d.hash))
 
       const batchThunk = async (): Promise<string[]> => {
@@ -419,7 +419,7 @@ describe('batchQueue – error handling', () => {
     vi.useFakeTimers()
     let batchAttemptCount = 0
     mockExecuteTranslate.mockImplementation((text: string) => {
-      const batchSeparator = `\n${BATCH_SEPARATOR}\n`
+      const batchSeparator = `\n\n${BATCH_SEPARATOR}\n\n`
       if (text.includes(batchSeparator)) {
         batchAttemptCount++
         return Promise.reject(new Error('Batch always fails'))

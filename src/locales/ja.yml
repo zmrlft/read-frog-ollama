@@ -213,6 +213,8 @@ options:
       editPrompt:
         title: プロンプトを編集
         name: 名前
+        systemPrompt: システムプロンプト
+        prompt: プロンプト
         promptCellInput:
           input: 翻訳するテキスト内容
           targetLang: 目標言語

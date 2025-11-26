@@ -107,8 +107,8 @@ async function buildHashComponents(
 
   if (isLLMTranslateProviderConfig(providerConfig)) {
     const targetLangName = LANG_CODE_TO_EN_NAME[langConfig.targetCode]
-    const prompt = await getTranslatePrompt(targetLangName, text, { isBatch: true })
-    hashComponents.push(prompt)
+    const { systemPrompt, prompt } = await getTranslatePrompt(targetLangName, text, { isBatch: true })
+    hashComponents.push(systemPrompt, prompt)
     hashComponents.push(enableAIContentAware ? 'enableAIContentAware=true' : 'enableAIContentAware=false')
 
     // Include article context in hash when AI Content Aware is enabled

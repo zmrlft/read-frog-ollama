@@ -17,6 +17,8 @@ export function ImportPrompts() {
     const patterns = list.map(item => ({
       ...item,
       id: crypto.randomUUID(),
+      // Backwards compatibility: add systemPrompt if missing from imported file
+      systemPrompt: item.systemPrompt ?? '',
     }))
 
     void setTranslateConfig({

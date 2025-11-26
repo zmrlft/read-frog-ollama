@@ -215,6 +215,8 @@ options:
       editPrompt:
         title: 编辑 Prompt
         name: 标题
+        systemPrompt: 系统提示词
+        prompt: 提示词
         promptCellInput:
           input: 需要翻译的文本内容
           targetLang: 目标语言

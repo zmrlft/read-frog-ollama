@@ -28,7 +28,7 @@ import {
 } from '@/components/shadcn/sheet'
 import { QuickInsertableTextarea } from '@/components/ui/insertable-textarea'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
-import { DEFAULT_TRANSLATE_PROMPT, DEFAULT_TRANSLATE_PROMPT_ID, getTokenCellText, TOKENS } from '@/utils/constants/prompt'
+import { DEFAULT_TRANSLATE_PROMPT, DEFAULT_TRANSLATE_PROMPT_ID, DEFAULT_TRANSLATE_SYSTEM_PROMPT, getTokenCellText, TOKENS } from '@/utils/constants/prompt'
 import { cn } from '@/utils/styles/tailwind'
 import { ConfigCard } from '../../../components/config-card'
 import { isExportPromptModeAtom, selectedPromptsToExportAtom } from './atoms'
@@ -122,6 +122,7 @@ function PromptGrid({
   const defaultPrompt: TranslatePromptObj = {
     id: DEFAULT_TRANSLATE_PROMPT_ID,
     name: i18n.t('options.translation.personalizedPrompts.default'),
+    systemPrompt: DEFAULT_TRANSLATE_SYSTEM_PROMPT,
     prompt: DEFAULT_TRANSLATE_PROMPT,
   }
 
@@ -246,7 +247,7 @@ function ConfigurePrompt({
   const inEdit = !!originPrompt
   const isDefault = originPrompt?.id === DEFAULT_TRANSLATE_PROMPT_ID
 
-  const defaultPrompt = { id: crypto.randomUUID(), name: '', prompt: '' }
+  const defaultPrompt = { id: crypto.randomUUID(), name: '', systemPrompt: '', prompt: '' }
   const initialPrompt = originPrompt ?? defaultPrompt
 
   const [prompt, setPrompt] = useState<TranslatePromptObj>(initialPrompt)
@@ -265,16 +266,12 @@ function ConfigurePrompt({
     setPrompt({
       id: crypto.randomUUID(),
       name: '',
+      systemPrompt: '',
       prompt: '',
     })
   }
 
-  const configurePrompt = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if (!prompt.id || !prompt.name || !prompt.prompt) {
-      event.preventDefault()
-      return
-    }
-
+  const configurePrompt = () => {
     const _patterns = translateConfig.customPromptsConfig.patterns
 
     void setTranslateConfig({
@@ -331,10 +328,23 @@ function ConfigurePrompt({
               />
             </div>
             <div className="grid gap-3">
-              <Label htmlFor="prompt">Prompt</Label>
+              <Label htmlFor="system-prompt">{i18n.t('options.translation.personalizedPrompts.editPrompt.systemPrompt')}</Label>
+              <QuickInsertableTextarea
+                value={prompt.systemPrompt}
+                className="max-h-60"
+                disabled={isDefault}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setPrompt({ ...prompt, systemPrompt: e.target.value })}
+                insertCells={TOKENS.map(token => ({
+                  text: getTokenCellText(token),
+                  description: i18n.t(`options.translation.personalizedPrompts.editPrompt.promptCellInput.${token}`),
+                }))}
+              />
+            </div>
+            <div className="grid gap-3">
+              <Label htmlFor="prompt">{i18n.t('options.translation.personalizedPrompts.editPrompt.prompt')}</Label>
               <QuickInsertableTextarea
                 value={prompt.prompt}
-                className="max-h-100"
+                className="max-h-60"
                 disabled={isDefault}
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setPrompt({ ...prompt, prompt: e.target.value })}
                 insertCells={TOKENS.map(token => ({
