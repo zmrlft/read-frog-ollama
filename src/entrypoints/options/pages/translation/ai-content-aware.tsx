@@ -2,7 +2,7 @@ import { i18n } from '#imports'
 import { deepmerge } from 'deepmerge-ts'
 import { useAtom } from 'jotai'
 import { useMemo } from 'react'
-import { Badge } from '@/components/shadcn/badge'
+import { NewBadge } from '@/components/badges/new-badge'
 import { Field, FieldContent, FieldDescription, FieldLabel } from '@/components/shadcn/field'
 import { Switch } from '@/components/shadcn/switch'
 import { isLLMTranslateProviderConfig } from '@/types/config/provider'
@@ -26,7 +26,7 @@ export function AIContentAware() {
         <>
           {i18n.t('options.translation.aiContentAware.title')}
           {' '}
-          <Badge variant="secondary" className="align-middle">Public Beta</Badge>
+          <NewBadge className="align-middle" />
         </>
       )}
       description={(

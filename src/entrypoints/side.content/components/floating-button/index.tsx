@@ -13,6 +13,7 @@ import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { APP_NAME } from '@/utils/constants/app'
 import { sendMessage } from '@/utils/message'
 import { cn } from '@/utils/styles/tailwind'
+import { matchDomainPattern } from '@/utils/url'
 import { shadowWrapper } from '../../'
 import { isDraggingButtonAtom, isSideOpenAtom } from '../../atoms'
 import HiddenButton from './components/hidden-button'
@@ -99,13 +100,13 @@ export default function FloatingButton() {
 
   const attachSideClassName = isDraggingButton || isSideOpen || isDropdownOpen ? 'translate-x-0' : ''
 
-  if (!floatingButton.enabled || floatingButton.disabledFloatingButtonPatterns.some(pattern => window.location.href.includes(pattern))) {
+  if (!floatingButton.enabled || floatingButton.disabledFloatingButtonPatterns.some(pattern => matchDomainPattern(window.location.href, pattern))) {
     return null
   }
 
   return (
     <div
-      className="group fixed z-[2147483647] flex flex-col items-end gap-2 print:hidden"
+      className="group fixed z-2147483647 flex flex-col items-end gap-2 print:hidden"
       style={{
         right: isSideOpen
           ? `calc(${sideContent.width}px + var(--removed-body-scroll-bar-size, 0px))`

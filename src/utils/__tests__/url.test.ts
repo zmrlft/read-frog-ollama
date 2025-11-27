@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { matchDomainPattern } from '../auto-translation'
+import { matchDomainPattern } from '../url'
 
 describe('matchDomainPattern', () => {
   describe('exact domain match', () => {

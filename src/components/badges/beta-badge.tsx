@@ -1,0 +1,14 @@
+import type { VariantProps } from 'class-variance-authority'
+import type { badgeVariants } from '@/components/shadcn/badge'
+import { Badge } from '@/components/shadcn/badge'
+
+type BetaBadgeProps = Pick<VariantProps<typeof badgeVariants>, 'size'>
+  & { className?: string }
+
+export function BetaBadge({ size, className }: BetaBadgeProps) {
+  return (
+    <Badge variant="secondary" size={size} className={className}>
+      Beta
+    </Badge>
+  )
+}

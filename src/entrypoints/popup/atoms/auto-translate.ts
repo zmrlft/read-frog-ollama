@@ -1,7 +1,7 @@
 import type { Config } from '@/types/config/config'
 import { atom } from 'jotai'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
-import { matchDomainPattern } from '@/utils/host/translate/auto-translation'
+import { matchDomainPattern } from '@/utils/url'
 import { getActiveTabUrl } from '@/utils/utils'
 
 type TranslateConfig = Config['translate']

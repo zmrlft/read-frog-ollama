@@ -15,19 +15,19 @@ popup:
   options: Options
   hover: Hover
   translateParagraph: to translate paragraph
-  help:
-    title: Help
-    description: Discover more tips and tricks
-  book:
-    title: E-book
-    description: Read any ePub books on Neat Reader. (Neat Reader and Read Frog are independent; purchases in Neat Reader have no connection to Read Frog.)
   discord:
-    title: Discord
-    description: Join Discord server to connect with developers and other users
-  github:
-    description: ⭐️ Star us for new release notifications without delay!
+    tooltip: Join Discord to connect with developers and get early access to new features
   blog:
     notification: What's new in Read Frog
+  aiSmartContext: AI Smart Context
+  aiSmartContextDescription: Uses webpage context to improve translation quality. Requires LLM translation provider.
+  more:
+    title: More
+    joinDiscord: Join Discord
+    joinWechat: Join WeChat Group
+    starGithub: Star on Github
+    ebook: Third-party E-book Reader
+    tutorial: Tutorial
 options:
   sidebar:
     settings: Settings
@@ -198,8 +198,8 @@ options:
         title: Maximum Paragraph Count
         description: Maximum number of paragraphs for each batch translation to control the content volume of each translation
       statisticsLink: Saved approximately $1 cost in the past 7 days
-    alwaysTranslate:
-      title: Always Translate
+    autoTranslateWebsite:
+      title: Auto Translate Based on Website
       description: Always translate this website
       urlPattern: URL Pattern
       enterUrlPattern: Enter URL Pattern
@@ -277,15 +277,15 @@ options:
         bilingual: Bilingual
         translationOnly: Translation Only
     pageTranslationShortcut:
-      title: Page translation shortcut
+      title: Page Translation Shortcut
       description: Customize the shortcut key for translating entire web pages
     nodeTranslationHotkey:
-      title: Hover translation shortcut
+      title: Hover Translation Shortcut
       description: Customize the modifier key for hovering over text to translate paragraphs
     llmProviderConfigured: LLM translate provider configured
     llmProviderNotConfigured: No LLM translate provider configured
     autoTranslateLanguages:
-      title: Auto translate based on language
+      title: Auto Translate Based on Language
       description: Automatically translate page content when specific languages are detected
       selectLanguages: Select languages
       enableLLMDetection: Use LLM for language detection

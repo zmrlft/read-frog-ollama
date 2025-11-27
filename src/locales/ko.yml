@@ -14,19 +14,19 @@ popup:
   options: 옵션
   hover: 마우스 오버
   translateParagraph: 단락 번역
-  help:
-    title: 도움말
-    description: 더 많은 팁과 트릭 발견하기
-  book:
-    title: 전자책
-    description: Neat Reader에서 ePub 책을 읽어보세요. (Neat Reader와 Read Frog는 독립적입니다. Neat Reader의 구매는 Read Frog와 관련이 없습니다.)
   discord:
-    title: Discord
-    description: Discord 서버에 참여하여 개발자 및 다른 사용자들과 소통하세요
-  github:
-    description: ⭐️ 새로운 릴리스 알림을 지체 없이 받으려면 별표를 눌러주세요!
+    tooltip: Discord에 참여하여 개발자와 소통하고 새 기능을 먼저 체험하세요
   blog:
     notification: Read Frog의 새로운 소식
+  aiSmartContext: AI 스마트 컨텍스트
+  aiSmartContextDescription: 웹페이지 컨텍스트를 사용하여 번역 품질을 향상시킵니다. LLM 번역 제공자가 필요합니다.
+  more:
+    title: 더보기
+    joinDiscord: Discord 참여
+    joinWechat: WeChat 그룹 참여
+    starGithub: Github에서 스타
+    ebook: 서드파티 전자책 리더
+    tutorial: 사용 가이드
 options:
   sidebar:
     settings: 설정
@@ -197,8 +197,8 @@ options:
         title: 최대 단락 수
         description: 각 배치 번역의 최대 단락 수로 각 번역의 콘텐츠 양을 제어합니다
       statisticsLink: 지난 7일간 약 $1 의 비용을 절약했습니다
-    alwaysTranslate:
-      title: 항상 번역
+    autoTranslateWebsite:
+      title: 웹사이트 기반 자동 번역
       description: 이 사이트를 항상 번역합니다
       urlPattern: URL 패턴
       enterUrlPattern: URL 패턴 입력

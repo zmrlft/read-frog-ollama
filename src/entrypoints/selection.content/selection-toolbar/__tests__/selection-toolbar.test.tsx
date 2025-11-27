@@ -116,11 +116,11 @@ describe('selectionToolbar - isInputOrTextarea logic', () => {
   }
 
   const expectToolbarVisible = () => {
-    expect(document.querySelector('.absolute.z-\\[2147483647\\]')).toBeTruthy()
+    expect(document.querySelector('.absolute.z-2147483647')).toBeTruthy()
   }
 
   const expectToolbarHidden = () => {
-    expect(document.querySelector('.absolute.z-\\[2147483647\\]')).toBeFalsy()
+    expect(document.querySelector('.absolute.z-2147483647')).toBeFalsy()
   }
 
   it('should show toolbar when selecting text in a normal div element', async () => {

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { NOTRANSLATE_CLASS } from '@/utils/constants/dom-labels'
 import { MARGIN } from '@/utils/constants/selection'
+import { matchDomainPattern } from '@/utils/url'
 import { AiButton, AiPopover } from './ai-button'
 import { isSelectionToolbarVisibleAtom, selectionContentAtom, selectionRangeAtom } from './atom'
 import { CloseButton, DropEvent } from './close-button'
@@ -157,7 +158,7 @@ export function SelectionToolbar() {
 
   // Check if current site is disabled
   const isSiteDisabled = selectionToolbar.disabledSelectionToolbarPatterns?.some(pattern =>
-    window.location.href.includes(pattern),
+    matchDomainPattern(window.location.href, pattern),
   )
 
   return (
@@ -165,7 +166,7 @@ export function SelectionToolbar() {
       {isSelectionToolbarVisible && selectionToolbar.enabled && !isSiteDisabled && (
         <div
           ref={tooltipRef}
-          className="group absolute z-[2147483647] bg-zinc-200 dark:bg-zinc-800 rounded-sm shadow-lg overflow-visible flex items-center"
+          className="group absolute z-2147483647 bg-zinc-200 dark:bg-zinc-800 rounded-sm shadow-lg overflow-visible flex items-center"
         >
           <div className="flex items-center overflow-hidden rounded-sm">
             <AiButton />
