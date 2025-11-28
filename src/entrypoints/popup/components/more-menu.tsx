@@ -10,27 +10,27 @@ import {
 const MENU_ITEMS = [
   {
     key: 'joinDiscord',
-    icon: 'tabler:brand-discord',
+    icon: 'logos:discord-icon',
     url: 'https://discord.gg/ej45e3PezJ',
   },
   {
     key: 'joinWechat',
-    icon: 'tabler:brand-wechat',
+    icon: 'streamline-logos:wechat-logo-solid',
     url: 'https://github.com/mengxi-ream/read-frog/blob/main/assets/wechat-account.jpg',
   },
   {
     key: 'starGithub',
-    icon: 'tabler:brand-github',
+    icon: 'fa7-brands:github',
     url: 'https://github.com/mengxi-ream/read-frog',
   },
   {
     key: 'ebook',
-    icon: 'tabler:book',
+    icon: 'tabler:book-filled',
     url: 'https://www.neat-reader.com/webapp#/',
   },
   {
     key: 'tutorial',
-    icon: 'tabler:help-circle',
+    icon: 'tabler:help-circle-filled',
     url: 'https://readfrog.app/tutorial/',
   },
 ] as const
