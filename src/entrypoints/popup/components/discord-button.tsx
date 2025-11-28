@@ -12,7 +12,7 @@ export function DiscordButton() {
           size="icon"
           onClick={() => window.open('https://discord.gg/ej45e3PezJ', '_blank', 'noopener,noreferrer')}
         >
-          <Icon icon="tabler:brand-discord" />
+          <Icon icon="logos:discord-icon" />
         </Button>
       </TooltipTrigger>
       <TooltipContent className="max-w-[200px] text-wrap">
