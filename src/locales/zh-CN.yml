@@ -234,9 +234,9 @@ options:
         cancel: 取消
     translationStyle:
       title: 翻译显示样式
-      description: 区分翻译结果的显示样式，具体展示样式可参考示例
-      useCustomStyle: 使用自定义样式
-      useCustomStyleDescription: 启用以定义您自己的翻译结果 CSS 样式
+      description: 设置任何你想要的样式以区分翻译结果和原文
+      useCustomStyle: 使用自定义 CSS 样式
+      useCustomStyleDescription: 支持任意 CSS，包括修改字体、动画、多语言差异化样式
       presetStyle: 预设样式
       cssEditor: CSS 编辑器
       preview: 预览

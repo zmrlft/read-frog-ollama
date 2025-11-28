@@ -234,9 +234,9 @@ options:
         cancel: Cancel
     translationStyle:
       title: Translation Display Style
-      description: Distinguish display styles for translation results (see sample for specific style demonstrations)
-      useCustomStyle: Use Custom Style
-      useCustomStyleDescription: Enable to define your own CSS styles for translation results
+      description: Set any style you want to distinguish translation results from original text
+      useCustomStyle: Use Custom CSS Style
+      useCustomStyleDescription: Supports any CSS, including fonts, animations, and language-specific styles
       presetStyle: Preset Style
       cssEditor: CSS Editor
       preview: Preview

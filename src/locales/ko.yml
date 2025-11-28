@@ -233,9 +233,9 @@ options:
         cancel: 취소
     translationStyle:
       title: 번역 표시 스타일
-      description: 번역 결과 표시 스타일 구분 (구체적인 표시 예시는 샘플 참조)
-      useCustomStyle: 커스텀 스타일 사용
-      useCustomStyleDescription: 번역 결과에 대한 사용자 정의 CSS 스타일을 정의하려면 활성화
+      description: 번역 결과와 원문을 구분하기 위해 원하는 스타일을 설정하세요
+      useCustomStyle: 커스텀 CSS 스타일 사용
+      useCustomStyleDescription: 모든 CSS 지원, 글꼴, 애니메이션, 언어별 스타일 등
       presetStyle: 프리셋 스타일
       cssEditor: CSS 편집기
       preview: 미리보기

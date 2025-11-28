@@ -232,9 +232,9 @@ options:
         cancel: キャンセル
     translationStyle:
       title: 翻訳表示スタイル
-      description: 翻訳結果の表示スタイルを区別（具体的な表示例はサンプルを参照）
-      useCustomStyle: カスタムスタイルを使用
-      useCustomStyleDescription: 翻訳結果のCSSスタイルを独自に定義する場合に有効化
+      description: 翻訳結果と原文を区別するために好みのスタイルを設定
+      useCustomStyle: カスタム CSS スタイルを使用
+      useCustomStyleDescription: 任意の CSS に対応、フォント、アニメーション、言語別スタイルなど
       presetStyle: プリセットスタイル
       cssEditor: CSSエディター
       preview: プレビュー
