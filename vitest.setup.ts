@@ -1,6 +1,13 @@
 import { vi } from 'vitest'
 import '@testing-library/jest-dom'
 
+// Mock @wxt-dev/i18n module to avoid browser.i18n.getMessage not implemented error
+vi.mock('#i18n', () => ({
+  i18n: {
+    t: (key: string) => key,
+  },
+}))
+
 // Mock the fakeBrowser's i18n.getMessage method which is not implemented in fake-browser
 // This is used when WxtVitest plugin replaces browser imports with fake-browser
 vi.mock('wxt/testing', async () => {
