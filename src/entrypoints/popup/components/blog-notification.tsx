@@ -47,7 +47,7 @@ export default function BlogNotification() {
           className="relative"
           onClick={handleClick}
         >
-          <Icon icon="tabler:bell" />
+          <Icon icon="tabler:bell-filled" />
           {showIndicator && (
             <span className="absolute top-1.5 right-1.5 flex items-center justify-center size-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
