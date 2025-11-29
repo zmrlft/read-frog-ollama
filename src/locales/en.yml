@@ -29,6 +29,7 @@ popup:
     joinDiscord: Join Discord
     joinWechat: Join WeChat Group
     starGithub: Star on Github
+    rateUs: Rate Us
     ebook: Third-party E-book Reader
     tutorial: Tutorial
 options:
@@ -389,6 +390,8 @@ options:
     title: What's New
   survey:
     title: New Feature Suggestion
+  rateUs:
+    title: Rate Us
 side:
   sourceLang: Source Language
   targetLang: Target Language

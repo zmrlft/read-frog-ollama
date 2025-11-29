@@ -29,6 +29,7 @@ popup:
     joinDiscord: 加入 Discord
     joinWechat: 加入微信群
     starGithub: Github 加星
+    rateUs: 好评支持
     ebook: 第三方电子书阅读器
     tutorial: 使用教程
 options:
@@ -390,6 +391,8 @@ options:
     title: 最近更新
   survey:
     title: 新功能建议
+  rateUs:
+    title: 好评支持
 side:
   sourceLang: 来源语言
   targetLang: 目标语言

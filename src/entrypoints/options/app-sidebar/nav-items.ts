@@ -1,4 +1,5 @@
 import { WEBSITE_URL } from '@/utils/constants/url'
+import { getReviewUrl } from '@/utils/utils'
 import { ApiProvidersPage } from '../pages/api-providers'
 import { ConfigPage } from '../pages/config'
 import { FloatingButtonAndToolbarPage } from '../pages/floating-button-and-toolbar'
@@ -7,7 +8,7 @@ import { StatisticsPage } from '../pages/statistics'
 import { TextToSpeechPage } from '../pages/text-to-speech'
 import { TranslationPage } from '../pages/translation'
 
-type NavItemTitle = 'general' | 'apiProviders' | 'translation' | 'floatingButtonAndToolbar' | 'tts' | 'config' | 'whatsNew' | 'survey' | 'statistics'
+type NavItemTitle = 'general' | 'apiProviders' | 'translation' | 'floatingButtonAndToolbar' | 'tts' | 'config' | 'whatsNew' | 'survey' | 'statistics' | 'rateUs'
 
 interface ComponentNavItem {
   type: 'component'
@@ -94,5 +95,12 @@ export const PRODUCT_NAV_ITEMS = {
     action: true,
     externalUrl: 'https://tally.so/r/nrxr6L',
     icon: 'tabler:message-question',
+  },
+  'rate-us': {
+    type: 'external',
+    title: 'rateUs',
+    action: true,
+    externalUrl: getReviewUrl('options'),
+    icon: 'tabler:star',
   },
 } as const satisfies Record<string, NavItem>

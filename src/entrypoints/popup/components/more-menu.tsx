@@ -6,6 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/shadcn/dropdown-menu'
+import { getReviewUrl } from '@/utils/utils'
 
 const MENU_ITEMS = [
   {
@@ -24,13 +25,18 @@ const MENU_ITEMS = [
     url: 'https://github.com/mengxi-ream/read-frog',
   },
   {
+    key: 'rateUs',
+    icon: 'tabler:star',
+    url: getReviewUrl('popup'),
+  },
+  {
     key: 'ebook',
-    icon: 'tabler:book-filled',
+    icon: 'tabler:book',
     url: 'https://www.neat-reader.com/webapp#/',
   },
   {
     key: 'tutorial',
-    icon: 'tabler:help-circle-filled',
+    icon: 'tabler:help-circle',
     url: 'https://readfrog.app/tutorial/',
   },
 ] as const

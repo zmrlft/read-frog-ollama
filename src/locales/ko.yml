@@ -28,6 +28,7 @@ popup:
     joinDiscord: Discord 참여
     joinWechat: WeChat 그룹 참여
     starGithub: Github에서 스타
+    rateUs: 리뷰 남기기
     ebook: 서드파티 전자책 리더
     tutorial: 사용 가이드
 options:
@@ -388,6 +389,8 @@ options:
     title: 새로운 기능
   survey:
     title: 새로운 기능 제안
+  rateUs:
+    title: 리뷰 남기기
 side:
   sourceLang: 원본 언어
   targetLang: 대상 언어

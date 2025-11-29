@@ -28,6 +28,7 @@ popup:
     joinDiscord: Discordに参加
     joinWechat: WeChatグループに参加
     starGithub: Githubでスター
+    rateUs: レビューを書く
     ebook: サードパーティ電子書籍リーダー
     tutorial: 使い方ガイド
 options:
@@ -387,6 +388,8 @@ options:
     title: 新機能
   survey:
     title: 新機能の提案
+  rateUs:
+    title: レビューを書く
 side:
   sourceLang: ソース言語
   targetLang: 翻訳言語
