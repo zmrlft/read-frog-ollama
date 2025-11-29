@@ -2,7 +2,6 @@ import { browser, i18n } from '#imports'
 import { useAtom, useAtomValue } from 'jotai'
 import { Button } from '@/components/shadcn/button'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
-import { validateTranslationConfig } from '@/utils/host/translate/translate-text'
 import { sendMessage } from '@/utils/message'
 import { formatHotkey } from '@/utils/os.ts'
 import { cn } from '@/utils/styles/tailwind'
@@ -12,9 +11,7 @@ import { isIgnoreTabAtom } from '../atoms/ignore'
 export default function TranslateButton({ className }: { className?: string }) {
   const [isPageTranslated, setIsPageTranslated] = useAtom(isPageTranslatedAtom)
   const isIgnoreTab = useAtomValue(isIgnoreTabAtom)
-  const providersConfig = useAtomValue(configFieldsAtomMap.providersConfig)
   const translateConfig = useAtomValue(configFieldsAtomMap.translate)
-  const languageConfig = useAtomValue(configFieldsAtomMap.language)
 
   const toggleTranslation = async () => {
     const [currentTab] = await browser.tabs.query({
@@ -23,15 +20,7 @@ export default function TranslateButton({ className }: { className?: string }) {
     })
 
     if (currentTab.id) {
-      if (!isPageTranslated && !validateTranslationConfig({
-        providersConfig,
-        translate: translateConfig,
-        language: languageConfig,
-      })) {
-        return
-      }
-
-      void sendMessage('setEnablePageTranslation', {
+      void sendMessage('tryToSetEnablePageTranslationByTabId', {
         tabId: currentTab.id,
         enabled: !isPageTranslated,
       })

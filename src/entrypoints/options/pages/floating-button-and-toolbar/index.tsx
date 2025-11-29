@@ -3,6 +3,7 @@ import floatingButtonDemoImage from '@/assets/demo/floating-button.png'
 import selectionToolbarDemoImage from '@/assets/demo/selection-toolbar.png'
 import { GradientBackground } from '@/components/gradient-background'
 import { PageLayout } from '../../components/page-layout'
+import { ContextMenuTranslateToggle } from './context-menu-translate-toggle'
 import { FloatingButtonDisabledSites } from './floating-button-disabled-sites'
 import { FloatingButtonGlobalToggle } from './floating-button-global-toggle'
 import { SelectionToolbarDisabledSites } from './selection-toolbar-disabled-sites'
@@ -29,6 +30,10 @@ export function FloatingButtonAndToolbarPage() {
       </GradientBackground>
       <SelectionToolbarGlobalToggle />
       <SelectionToolbarDisabledSites />
+      <h2 className="text-lg font-semibold mt-6 mb-2">
+        {i18n.t('options.floatingButtonAndToolbar.contextMenu.title')}
+      </h2>
+      <ContextMenuTranslateToggle />
     </PageLayout>
   )
 }

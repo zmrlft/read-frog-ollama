@@ -37,6 +37,11 @@ const betaExperienceSchema = z.object({
   enabled: z.boolean(),
 })
 
+// context menu schema
+const contextMenuSchema = z.object({
+  enabled: z.boolean(),
+})
+
 // Complete config schema
 export const configSchema = z.object({
   language: languageSchema,
@@ -48,6 +53,7 @@ export const configSchema = z.object({
   selectionToolbar: selectionToolbarSchema,
   sideContent: sideContentSchema,
   betaExperience: betaExperienceSchema,
+  contextMenu: contextMenuSchema,
 }).superRefine((data, ctx) => {
   const providerIdsSet = new Set(data.providersConfig.map(p => p.id))
   const providerIds = Array.from(providerIdsSet)

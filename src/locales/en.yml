@@ -2,6 +2,9 @@ name: Read Frog
 extName: Read Frog - Open Source Immersive Translate
 extDescription: Read Frog is an open source browser extension designed to help you learn languages deeply from any website.
 uninstallSurveyUrl: https://tally.so/r/nPK6Ob
+contextMenu:
+  translate: Translate
+  showOriginal: Show Original
 popup:
   autoLang: Auto
   sourceLang: Source
@@ -176,6 +179,11 @@ options:
         description: Configure websites where the selection toolbar should be disabled
         enterUrlPattern: Enter URL pattern
         urlPattern: URL Pattern
+    contextMenu:
+      title: Context Menu
+      translate:
+        title: Enable Context Menu Translate
+        description: Add a translate option to the browser right-click menu for quick page translation
   translation:
     title: Translation
     requestQueueConfig:

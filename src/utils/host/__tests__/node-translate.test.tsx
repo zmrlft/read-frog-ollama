@@ -19,7 +19,7 @@ const TEST_CONFIG: Config = {
 
 vi.mock('@/utils/host/translate/translate-text', () => ({
   translateText: vi.fn(() => Promise.resolve('translation')),
-  validateTranslationConfig: vi.fn(() => true),
+  validateTranslationConfigAndToast: vi.fn(() => true),
 }))
 
 vi.mock('@/utils/config/config', () => ({

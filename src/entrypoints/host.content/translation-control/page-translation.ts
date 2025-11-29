@@ -4,6 +4,7 @@ import { hasNoWalkAncestor, isDontWalkIntoButTranslateAsChildElement, isHTMLElem
 import { deepQueryTopLevelSelector } from '@/utils/host/dom/find'
 import { walkAndLabelElement } from '@/utils/host/dom/traversal'
 import { removeAllTranslatedWrapperNodes, translateWalkedElement } from '@/utils/host/translate/node-manipulation'
+import { validateTranslationConfigAndToast } from '@/utils/host/translate/translate-text'
 import { logger } from '@/utils/logger'
 import { sendMessage } from '@/utils/message'
 
@@ -44,7 +45,7 @@ export class PageTranslationManager implements IPageTranslationManager {
     threshold: 0.1,
   }
 
-  private isAutoTranslating: boolean = false
+  private isPageTranslating: boolean = false
   private intersectionObserver: IntersectionObserver | null = null
   private mutationObservers: MutationObserver[] = []
   private walkId: string | null = null
@@ -65,25 +66,34 @@ export class PageTranslationManager implements IPageTranslationManager {
   }
 
   get isActive(): boolean {
-    return this.isAutoTranslating
+    return this.isPageTranslating
   }
 
   async start(): Promise<void> {
-    if (this.isAutoTranslating) {
-      console.warn('AutoTranslationManager is already active')
+    if (this.isPageTranslating) {
+      console.warn('PageTranslationManager is already active')
       return
     }
-
-    this.isAutoTranslating = true
-    void sendMessage('setEnablePageTranslationOnContentScript', {
-      enabled: true,
-    })
 
     const config = await getConfigFromStorage()
     if (!config) {
       console.warn('Config is not initialized')
       return
     }
+
+    if (!validateTranslationConfigAndToast({
+      providersConfig: config.providersConfig,
+      translate: config.translate,
+      language: config.language,
+    })) {
+      return
+    }
+
+    void sendMessage('setAndNotifyPageTranslationStateChangedByManager', {
+      enabled: true,
+    })
+
+    this.isPageTranslating = true
 
     // Listen to existing elements when they enter the viewpoint
     const walkId = crypto.randomUUID()
@@ -115,18 +125,18 @@ export class PageTranslationManager implements IPageTranslationManager {
   }
 
   stop(): void {
-    if (!this.isAutoTranslating) {
+    if (!this.isPageTranslating) {
       console.warn('AutoTranslationManager is already inactive')
       return
     }
 
-    this.isAutoTranslating = false
-    this.walkId = null
-    this.dontWalkIntoElementsCache = new WeakSet()
-
-    void sendMessage('setEnablePageTranslationOnContentScript', {
+    void sendMessage('setAndNotifyPageTranslationStateChangedByManager', {
       enabled: false,
     })
+
+    this.isPageTranslating = false
+    this.walkId = null
+    this.dontWalkIntoElementsCache = new WeakSet()
 
     if (this.intersectionObserver) {
       this.intersectionObserver.disconnect()
@@ -175,7 +185,7 @@ export class PageTranslationManager implements IPageTranslationManager {
       if (!startTouches)
         return
       if (performance.now() - startTime < PageTranslationManager.MAX_DURATION)
-        this.isAutoTranslating ? this.stop() : void this.start()
+        this.isPageTranslating ? this.stop() : void this.start()
       reset()
     }
 

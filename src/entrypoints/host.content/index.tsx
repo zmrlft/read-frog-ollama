@@ -78,7 +78,7 @@ export default defineContentScript({
           language: { ...config.language, detectedCode: detectedCodeOrUnd === 'und' ? 'eng' : detectedCodeOrUnd },
         })
         // Notify background script that URL has changed, let it decide whether to automatically enable translation
-        void sendMessage('checkAndSetAutoTranslation', { url: to, detectedCodeOrUnd })
+        void sendMessage('checkAndAskAutoPageTranslation', { url: to, detectedCodeOrUnd })
       }
     }
 
@@ -95,8 +95,7 @@ export default defineContentScript({
     })
 
     // Listen for translation state changes from background
-    onMessage('translationStateChanged', (msg) => {
-      logger.info('translationStateChanged', msg.data)
+    onMessage('askManagerToTogglePageTranslation', (msg) => {
       const { enabled } = msg.data
       if (enabled === manager.isActive)
         return
@@ -112,7 +111,7 @@ export default defineContentScript({
       })
 
       // Check if auto-translation should be enabled for initial page load
-      void sendMessage('checkAndSetAutoTranslation', { url: window.location.href, detectedCodeOrUnd })
+      void sendMessage('checkAndAskAutoPageTranslation', { url: window.location.href, detectedCodeOrUnd })
     }
   },
 })

@@ -1,4 +1,5 @@
 import { atom, createStore } from 'jotai'
+import { createTranslationStateAtomForContentScript } from '@/utils/atoms/translation-state'
 
 export const store = createStore()
 
@@ -11,7 +12,9 @@ export const progressAtom = atom({
   total: 0,
 })
 
-export const enablePageTranslationAtom = atom(false)
+export const enablePageTranslationAtom = createTranslationStateAtomForContentScript(
+  { enabled: false },
+)
 
 // export const explainAtom = atomWithMutation(() => ({
 //   mutationKey: ["explainArticle"],

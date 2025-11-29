@@ -12,13 +12,12 @@ import { configAtom } from '@/utils/atoms/config'
 import { getConfigFromStorage } from '@/utils/config/config'
 import { APP_NAME } from '@/utils/constants/app'
 import { DEFAULT_CONFIG } from '@/utils/constants/config'
-import { onMessage, sendMessage } from '@/utils/message'
 import { protectSelectAllShadowRoot } from '@/utils/select-all'
 import { insertShadowRootUIWrapperInto } from '@/utils/shadow-root'
 import { queryClient } from '@/utils/tanstack-query'
 import { addStyleToShadow, mirrorDynamicStyles, protectInternalStyles } from '../../utils/styles'
 import App from './app'
-import { enablePageTranslationAtom, store } from './atoms'
+import { store } from './atoms'
 import '@/assets/styles/theme.css'
 import '@/assets/styles/text-small.css'
 
@@ -64,25 +63,8 @@ export default defineContentScript({
           return children
         }
 
-        // Listen for translation state changes from background
-        onMessage('translationStateChanged', (msg) => {
-          const { enabled } = msg.data
-          store.set(enablePageTranslationAtom, enabled)
-        })
-
-        // Query initial translation state
-        // translationStateChanged may get the enabled = true too early
-        // so after render the app, the enablePageTranslationAtom may still be false (default value) even if the translation is enabled by detected language or url patterns
-        // this is a workaround to get the initial translation state
-        void (async () => {
-          try {
-            const enabled = await sendMessage('getEnablePageTranslationFromContentScript', undefined)
-            store.set(enablePageTranslationAtom, enabled)
-          }
-          catch (error) {
-            console.error('Failed to get initial translation state:', error)
-          }
-        })()
+        // Translation state is now synced automatically via enablePageTranslationAtom
+        // which uses session storage with the createTabSessionAtom pattern
 
         const root = ReactDOM.createRoot(wrapper)
         root.render(

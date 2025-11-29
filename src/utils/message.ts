@@ -12,12 +12,16 @@ interface ProtocolMap {
   // config
   getInitialConfig: () => Config | null
   // translation state
-  getEnablePageTranslation: (data: { tabId: number }) => boolean | undefined
+  getEnablePageTranslationByTabId: (data: { tabId: number }) => boolean | undefined
   getEnablePageTranslationFromContentScript: () => Promise<boolean>
-  setEnablePageTranslation: (data: { tabId: number, enabled: boolean }) => void
-  setEnablePageTranslationOnContentScript: (data: { enabled: boolean }) => void
-  checkAndSetAutoTranslation: (data: { url: string, detectedCodeOrUnd: LangCodeISO6393 | 'und' }) => void
-  translationStateChanged: (data: { enabled: boolean }) => void
+  tryToSetEnablePageTranslationByTabId: (data: { tabId: number, enabled: boolean }) => void
+  tryToSetEnablePageTranslationOnContentScript: (data: { enabled: boolean }) => void
+  setAndNotifyPageTranslationStateChangedByManager: (data: { enabled: boolean }) => void
+  notifyTranslationStateChanged: (data: { enabled: boolean }) => void
+  // for auto start page translation
+  checkAndAskAutoPageTranslation: (data: { url: string, detectedCodeOrUnd: LangCodeISO6393 | 'und' }) => void
+  // ask host to start page translation
+  askManagerToTogglePageTranslation: (data: { enabled: boolean }) => void
   // read article
   readArticle: () => void
   popupRequestReadArticle: (data: { tabId: number }) => void

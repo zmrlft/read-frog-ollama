@@ -8,8 +8,7 @@ import { logger } from '@/utils/logger'
 import { onMessage, sendMessage } from '@/utils/message'
 
 export function translationMessage() {
-  // === Message Handlers ===
-  onMessage('getEnablePageTranslation', async (msg) => {
+  onMessage('getEnablePageTranslationByTabId', async (msg) => {
     const { tabId } = msg.data
     return await getTranslationState(tabId)
   })
@@ -23,23 +22,24 @@ export function translationMessage() {
     return false
   })
 
-  onMessage('setEnablePageTranslation', async (msg) => {
+  onMessage('tryToSetEnablePageTranslationByTabId', async (msg) => {
     const { tabId, enabled } = msg.data
-    await setTranslationState(tabId, enabled)
+    void sendMessage('askManagerToTogglePageTranslation', { enabled }, tabId)
   })
 
-  onMessage('setEnablePageTranslationOnContentScript', async (msg) => {
+  onMessage('tryToSetEnablePageTranslationOnContentScript', async (msg) => {
     const tabId = msg.sender?.tab?.id
     const { enabled } = msg.data
     if (typeof tabId === 'number') {
-      await setTranslationState(tabId, enabled)
+      logger.info('sending tryToSetEnablePageTranslationOnContentScript to manager', { enabled, tabId })
+      await sendMessage('askManagerToTogglePageTranslation', { enabled }, tabId)
     }
     else {
       logger.error('tabId is not a number', msg)
     }
   })
 
-  onMessage('checkAndSetAutoTranslation', async (msg) => {
+  onMessage('checkAndAskAutoPageTranslation', async (msg) => {
     const tabId = msg.sender?.tab?.id
     const { url, detectedCodeOrUnd } = msg.data
     if (typeof tabId === 'number') {
@@ -47,7 +47,24 @@ export function translationMessage() {
       if (!config)
         return
       const shouldEnable = await shouldEnableAutoTranslation(url, detectedCodeOrUnd, config)
-      await setTranslationState(tabId, shouldEnable)
+      if (shouldEnable) {
+        void sendMessage('askManagerToTogglePageTranslation', { enabled: true }, tabId)
+      }
+    }
+  })
+
+  onMessage('setAndNotifyPageTranslationStateChangedByManager', async (msg) => {
+    const tabId = msg.sender?.tab?.id
+    const { enabled } = msg.data
+    if (typeof tabId === 'number') {
+      await storage.setItem<TranslationState>(
+        getTranslationStateKey(tabId),
+        { enabled },
+      )
+      void sendMessage('notifyTranslationStateChanged', { enabled }, tabId)
+    }
+    else {
+      logger.error('tabId is not a number', msg)
     }
   })
 
@@ -57,15 +74,6 @@ export function translationMessage() {
       getTranslationStateKey(tabId),
     )
     return state?.enabled ?? false
-  }
-
-  async function setTranslationState(tabId: number, enabled: boolean) {
-    await storage.setItem<TranslationState>(
-      getTranslationStateKey(tabId),
-      { enabled },
-    )
-    // Notify content script in that specific tab
-    void sendMessage('translationStateChanged', { enabled }, tabId)
   }
 
   // === Cleanup ===

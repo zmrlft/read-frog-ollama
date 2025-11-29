@@ -4,7 +4,7 @@ import { isHTMLElement } from '../dom/filter'
 import { findNearestAncestorBlockNodeAt } from '../dom/find'
 import { walkAndLabelElement } from '../dom/traversal'
 import { translateWalkedElement } from './core/translation-walker'
-import { validateTranslationConfig } from './translate-text'
+import { validateTranslationConfigAndToast } from './translate-text'
 
 // Re-export public APIs
 export { translateNodes, translateNodesBilingualMode, translateNodeTranslationOnlyMode } from './core/translation-modes'
@@ -18,7 +18,7 @@ export async function removeOrShowNodeTranslation(point: Point, config: Config):
   if (!node || !isHTMLElement(node))
     return
 
-  if (!validateTranslationConfig({
+  if (!validateTranslationConfigAndToast({
     providersConfig: config.providersConfig,
     translate: config.translate,
     language: config.language,

@@ -2,6 +2,9 @@ name: 陪讀蛙
 extName: 陪讀蛙 - 開源沉浸式翻譯
 extDescription: 陪讀蛙是一款開放源代碼的瀏覽器插件，旨在幫助您從任何網站深入學習語言。
 uninstallSurveyUrl: https://tally.so/r/3E9XDL
+contextMenu:
+  translate: 翻譯
+  showOriginal: 顯示原文
 popup:
   autoLang: 自動偵測
   sourceLang: 來源語言
@@ -176,6 +179,11 @@ options:
         description: 設定需要停用選擇工具列的網站
         enterUrlPattern: 輸入網址模式
         urlPattern: URL 模式
+    contextMenu:
+      title: 右鍵選單
+      translate:
+        title: 啟用右鍵翻譯
+        description: 在瀏覽器右鍵選單中新增翻譯選項，快速翻譯頁面
   translation:
     title: 翻譯
     requestQueueConfig:

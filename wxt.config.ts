@@ -19,7 +19,7 @@ export default defineConfig({
     name: '__MSG_extName__',
     description: '__MSG_extDescription__',
     default_locale: 'en',
-    permissions: ['storage', 'tabs', 'alarms', 'cookies'],
+    permissions: ['storage', 'tabs', 'alarms', 'cookies', 'contextMenus'],
     host_permissions:
       mode === 'development'
         ? [
