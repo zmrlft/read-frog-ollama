@@ -536,6 +536,34 @@ describe('translate', () => {
         expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}`)
       })
     })
+    describe('inline nodes with aria-hidden block children', () => {
+      it('bilingual mode: should treat inline node with aria-hidden block child as inline and translate as one paragraph', async () => {
+        // Github issue: https://github.com/mengxi-ream/read-frog/issues/737
+        render(
+          <div data-testid="test-node">
+            <div style={{ display: 'inline' }}>{MOCK_ORIGINAL_TEXT}</div>
+            <div style={{ display: 'inline' }}>
+              <div aria-hidden="true" style={{ display: 'block' }}></div>
+              {MOCK_ORIGINAL_TEXT}
+            </div>
+          </div>,
+        )
+        const node = screen.getByTestId('test-node')
+        await removeOrShowPageTranslation('bilingual', true)
+
+        expectNodeLabels(node, [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+        expectNodeLabels(node.children[0], [INLINE_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+        expectNodeLabels(node.children[1], [INLINE_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+
+        // Should have single translation wrapper at the end (one paragraph)
+        const wrapper = expectTranslationWrapper(node, 'bilingual')
+        expect(wrapper).toBe(node.lastChild)
+        expectTranslatedContent(wrapper, BLOCK_CONTENT_CLASS)
+
+        await removeOrShowPageTranslation('bilingual', true)
+        expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+      })
+    })
     describe('text node and inline HTML nodes', () => {
       it('bilingual mode: should insert wrapper after the last inline node', async () => {
         render(

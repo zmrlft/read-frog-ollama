@@ -78,7 +78,16 @@ export function walkAndLabelElement(
   let hasInlineNodeChild = false
   let forceBlock = false
 
-  for (const child of element.childNodes) {
+  const validChildNodes = Array.from(element.childNodes).filter((child: ChildNode) => {
+    if (child.nodeType === Node.TEXT_NODE)
+      return true
+    if (isHTMLElement(child)) {
+      return !((isDontWalkIntoButTranslateAsChildElement(child) || isDontWalkIntoAndDontTranslateAsChildElement(child, config)))
+    }
+    return false
+  })
+
+  for (const child of validChildNodes) {
     if (child.nodeType === Node.TEXT_NODE) {
       if (child.textContent?.trim()) {
         hasInlineNodeChild = true
@@ -101,10 +110,10 @@ export function walkAndLabelElement(
     element.setAttribute(PARAGRAPH_ATTRIBUTE, '')
   }
 
-  const translateChildCount = Array.from(element.childNodes).filter(child =>
+  const translateChildCount = Array.from(validChildNodes).filter(child =>
     isShallowBlockTransNode(child) || isShallowInlineTransNode(child),
   ).length
-  const blockChildCount = Array.from(element.childNodes).filter(child =>
+  const blockChildCount = Array.from(validChildNodes).filter(child =>
     isShallowBlockTransNode(child),
   ).length
 
