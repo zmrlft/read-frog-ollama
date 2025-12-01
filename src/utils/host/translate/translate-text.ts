@@ -1,3 +1,4 @@
+import type { LangCodeISO6393 } from '@read-frog/definitions'
 import type { Config } from '@/types/config/config'
 import type { ProviderConfig } from '@/types/config/provider'
 import { i18n } from '#imports'
@@ -7,7 +8,6 @@ import { franc } from 'franc-min'
 import { toast } from 'sonner'
 import { isAPIProviderConfig, isLLMTranslateProviderConfig } from '@/types/config/provider'
 import { getProviderConfigById } from '@/utils/config/helpers'
-import { getFinalSourceCode } from '@/utils/config/languages'
 import { removeDummyNodes } from '@/utils/content/utils'
 import { logger } from '@/utils/logger'
 import { getTranslatePrompt } from '@/utils/prompts/translate'
@@ -94,19 +94,20 @@ async function getOrFetchArticleData(
 async function buildHashComponents(
   text: string,
   providerConfig: ProviderConfig,
-  langConfig: Config['language'],
+  partialLangConfig: { sourceCode: LangCodeISO6393 | 'auto', targetCode: LangCodeISO6393 },
   enableAIContentAware: boolean,
   articleContext?: { title?: string, textContent?: string },
 ): Promise<string[]> {
   const hashComponents = [
     text,
     JSON.stringify(providerConfig),
-    getFinalSourceCode(langConfig.sourceCode, langConfig.detectedCode),
-    langConfig.targetCode,
+    // don't include detectedCode because it may change after the page is translated, i.e. it's not accurate
+    partialLangConfig.sourceCode,
+    partialLangConfig.targetCode,
   ]
 
   if (isLLMTranslateProviderConfig(providerConfig)) {
-    const targetLangName = LANG_CODE_TO_EN_NAME[langConfig.targetCode]
+    const targetLangName = LANG_CODE_TO_EN_NAME[partialLangConfig.targetCode]
     const { systemPrompt, prompt } = await getTranslatePrompt(targetLangName, text, { isBatch: true })
     hashComponents.push(systemPrompt, prompt)
     hashComponents.push(enableAIContentAware ? 'enableAIContentAware=true' : 'enableAIContentAware=false')
@@ -165,7 +166,7 @@ export async function translateText(text: string) {
   const hashComponents = await buildHashComponents(
     text,
     providerConfig,
-    langConfig,
+    { sourceCode: langConfig.sourceCode, targetCode: langConfig.targetCode },
     config.translate.enableAIContentAware,
     { title: articleTitle, textContent: articleTextContent },
   )
