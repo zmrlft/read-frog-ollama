@@ -135,7 +135,7 @@ Read Frog 的愿景是为各个级别的语言学习者提供易于使用、智�
 
 通过 AI 了解项目：[DeepWiki](https://deepwiki.com/mengxi-ream/read-frog)
 
-查看[贡献指南](https://readfrog.app/en/tutorial/contribution)了解更多详情。
+查看[贡献指南](https://readfrog.app/zh/tutorial/code-contribution/contribution-guide)了解更多详情。
 
 <a href="https://github.com/mengxi-ream/read-frog/graphs/contributors">
   <table>
