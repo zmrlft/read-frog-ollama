@@ -1,7 +1,7 @@
 import type { TranslationNodeStyleConfig } from '@/types/config/translate'
 import type { TransNode } from '@/types/dom'
 import { BLOCK_CONTENT_CLASS, INLINE_CONTENT_CLASS, NOTRANSLATE_CLASS } from '../../../constants/dom-labels'
-import { isBlockTransNode, isInlineTransNode } from '../../dom/filter'
+import { isBlockTransNode, isCustomForceBlockTranslation, isHTMLElement, isInlineTransNode } from '../../dom/filter'
 import { getOwnerDocument } from '../../dom/node'
 import { decorateTranslationNode } from '../decorate-translation'
 import { isForceInlineTranslation } from '../ui/translation-utils'
@@ -30,9 +30,13 @@ export async function insertTranslatedNodeIntoWrapper(
   const ownerDoc = getOwnerDocument(translatedWrapperNode)
   const translatedNode = ownerDoc.createElement('span')
   const forceInlineTranslation = isForceInlineTranslation(targetNode)
+  const customForceBlock = isHTMLElement(targetNode) && isCustomForceBlockTranslation(targetNode)
 
-  // priority: forceInlineTranslation > forceBlockTranslation > isInlineTransNode > isBlockTransNode
-  if (forceInlineTranslation) {
+  // priority: customForceBlock > forceInlineTranslation > forceBlockTranslation > isInlineTransNode > isBlockTransNode
+  if (customForceBlock) {
+    addBlockTranslation(ownerDoc, translatedWrapperNode, translatedNode)
+  }
+  else if (forceInlineTranslation) {
     addInlineTranslation(ownerDoc, translatedWrapperNode, translatedNode)
   }
   else if (forceBlockTranslation) {

@@ -8,7 +8,7 @@ import {
   INLINE_CONTENT_CLASS,
   NOTRANSLATE_CLASS,
 } from '@/utils/constants/dom-labels'
-import { CUSTOM_DONT_WALK_INTO_ELEMENT_SELECTOR_MAP, DONT_WALK_AND_TRANSLATE_TAGS, DONT_WALK_BUT_TRANSLATE_TAGS, FORCE_BLOCK_TAGS, MAIN_CONTENT_IGNORE_TAGS } from '@/utils/constants/dom-rules'
+import { CUSTOM_DONT_WALK_INTO_ELEMENT_SELECTOR_MAP, CUSTOM_FORCE_BLOCK_TRANSLATION_SELECTOR_MAP, DONT_WALK_AND_TRANSLATE_TAGS, DONT_WALK_BUT_TRANSLATE_TAGS, FORCE_BLOCK_TAGS, MAIN_CONTENT_IGNORE_TAGS } from '@/utils/constants/dom-rules'
 
 export function isEditable(element: HTMLElement): boolean {
   const tag = element.tagName
@@ -95,6 +95,17 @@ export function isCustomDontWalkIntoElement(element: HTMLElement): boolean {
     return false
 
   return element.matches(dontWalkSelector)
+}
+
+export function isCustomForceBlockTranslation(element: HTMLElement): boolean {
+  const forceBlockSelectorList = CUSTOM_FORCE_BLOCK_TRANSLATION_SELECTOR_MAP[window.location.hostname] ?? []
+
+  const forceBlockSelector = forceBlockSelectorList.join(',')
+
+  if (!forceBlockSelector)
+    return false
+
+  return element.matches(forceBlockSelector)
 }
 
 export function isDontWalkIntoButTranslateAsChildElement(element: HTMLElement): boolean {

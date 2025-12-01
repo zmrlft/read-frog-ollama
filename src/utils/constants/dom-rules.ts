@@ -129,3 +129,9 @@ export const CUSTOM_DONT_WALK_INTO_ELEMENT_SELECTOR_MAP: Record<string, string[]
     '#badges *',
   ],
 }
+
+export const CUSTOM_FORCE_BLOCK_TRANSLATION_SELECTOR_MAP: Record<string, string[]> = {
+  'github.com': [
+    '.react-directory-row-commit-cell *',
+  ],
+}
