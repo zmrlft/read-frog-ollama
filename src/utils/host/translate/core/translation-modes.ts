@@ -57,7 +57,9 @@ export async function translateNodesBilingualMode(
 
     const lastNode = transNodes[transNodes.length - 1]
     const targetNode
-      = transNodes.length === 1 && isBlockTransNode(lastNode) && isHTMLElement(lastNode) ? unwrapDeepestOnlyHTMLChild(lastNode) : lastNode
+      = transNodes.length === 1 && isBlockTransNode(lastNode) && isHTMLElement(lastNode)
+        ? await unwrapDeepestOnlyHTMLChild(lastNode)
+        : lastNode
 
     const existedTranslatedWrapper = findPreviousTranslatedWrapperInside(targetNode, walkId)
     if (existedTranslatedWrapper) {
@@ -163,7 +165,7 @@ export async function translateNodeTranslationOnlyMode(
   let transNodes: TransNode[] = []
   let allChildNodes: ChildNode[] = []
   if (outerTransNodes.length === 1 && isHTMLElement(outerTransNodes[0])) {
-    const unwrappedHTMLChild = unwrapDeepestOnlyHTMLChild(outerTransNodes[0])
+    const unwrappedHTMLChild = await unwrapDeepestOnlyHTMLChild(outerTransNodes[0])
     allChildNodes = Array.from(unwrappedHTMLChild.childNodes)
     transNodes = allChildNodes.filter(isTransNodeAndNotTranslatedWrapper)
   }

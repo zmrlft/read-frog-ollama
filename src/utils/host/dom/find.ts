@@ -1,7 +1,9 @@
 import type { Point } from '@/types/dom'
 
+import { getConfigFromStorage } from '@/utils/config/config'
+import { DEFAULT_CONFIG } from '@/utils/constants/config'
 import { CONTENT_WRAPPER_CLASS } from '@/utils/constants/dom-labels'
-import { isHTMLElement, isIFrameElement, isShallowInlineHTMLElement, isTranslatedContentNode, isTranslatedWrapperNode } from './filter'
+import { isDontWalkIntoAndDontTranslateAsChildElement, isHTMLElement, isIFrameElement, isShallowInlineHTMLElement, isTranslatedContentNode, isTranslatedWrapperNode } from './filter'
 import { smashTruncationStyle } from './style'
 
 /**
@@ -122,14 +124,22 @@ export function deepQueryTopLevelSelector(element: HTMLElement | ShadowRoot | Do
   return result
 }
 
-export function unwrapDeepestOnlyHTMLChild(element: HTMLElement) {
+export async function unwrapDeepestOnlyHTMLChild(element: HTMLElement) {
+  const config = await getConfigFromStorage() ?? DEFAULT_CONFIG
   let currentElement = element
   while (currentElement) {
     smashTruncationStyle(currentElement)
 
-    // create array from currentElement.childNodes
-    const effectiveChildNodes = Array.from(currentElement.childNodes).filter(child => child.textContent?.trim())
-    const effectiveChildren = Array.from(currentElement.children).filter(child => child.textContent?.trim())
+    const shouldKeepNode = (child: ChildNode) => {
+      if (!child.textContent?.trim())
+        return false
+      if (child.nodeType === Node.TEXT_NODE)
+        return true
+      return isHTMLElement(child) && !isDontWalkIntoAndDontTranslateAsChildElement(child, config)
+    }
+
+    const effectiveChildNodes = Array.from(currentElement.childNodes).filter(shouldKeepNode)
+    const effectiveChildren = effectiveChildNodes.filter(child => child.nodeType === Node.ELEMENT_NODE)
 
     // Only have one HTML child and no Text Child
     if (!(effectiveChildren.length === 1 && effectiveChildNodes.length === 1))

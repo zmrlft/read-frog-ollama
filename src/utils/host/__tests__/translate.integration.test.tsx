@@ -984,6 +984,56 @@ describe('translate', () => {
       })
     })
   })
+  describe('don\'t walk into siblings (SVG, style, etc.)', () => {
+    // https://github.com/mengxi-ream/read-frog/issues/754
+    it('bilingual mode: should filter out SVG and style siblings and translate inside inline div', async () => {
+      render(
+        <div data-testid="test-node">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          <style>{`.some-class { color: red; }`}</style>
+          <div style={{ display: 'inline' }}>{MOCK_ORIGINAL_TEXT}</div>
+        </div>,
+      )
+      const node = screen.getByTestId('test-node')
+      await removeOrShowPageTranslation('bilingual', true)
+
+      expectNodeLabels(node, [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+      expectNodeLabels(node.children[2], [INLINE_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+      const wrapper = expectTranslationWrapper(node.children[2], 'bilingual')
+      expect(wrapper).toBe(node.children[2].lastChild)
+      expectTranslatedContent(wrapper, INLINE_CONTENT_CLASS)
+
+      await removeOrShowPageTranslation('bilingual', true)
+      expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+      expect(node.textContent).toContain(MOCK_ORIGINAL_TEXT)
+    })
+    it('translation only mode: should filter out SVG and style siblings and replace inline div content', async () => {
+      render(
+        <div data-testid="test-node">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          <style>{`.some-class { color: red; }`}</style>
+          <div style={{ display: 'inline' }}>{MOCK_ORIGINAL_TEXT}</div>
+        </div>,
+      )
+      const node = screen.getByTestId('test-node')
+      await removeOrShowPageTranslation('translationOnly', true)
+
+      expectNodeLabels(node, [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+      expectNodeLabels(node.children[2], [INLINE_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+      const wrapper = expectTranslationWrapper(node.children[2], 'translationOnly')
+      expect(wrapper).toBe(node.children[2].childNodes[0])
+
+      await removeOrShowPageTranslation('translationOnly', true)
+      expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+      expect(node.textContent).toContain(MOCK_ORIGINAL_TEXT)
+    })
+  })
   describe('empty nodes in multiple child nodes', () => {
     it('bilingual mode: should not insert translation wrapper', async () => {
       // https://github.com/mengxi-ream/read-frog/issues/717

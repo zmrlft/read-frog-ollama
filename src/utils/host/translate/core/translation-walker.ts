@@ -62,7 +62,6 @@ export async function translateWalkedElement(
     }
   }
   else {
-    const promises: Promise<void>[] = []
     for (const child of element.childNodes) {
       if (isHTMLElement(child)) {
         promises.push(translateWalkedElement(child, walkId, config, toggle))
