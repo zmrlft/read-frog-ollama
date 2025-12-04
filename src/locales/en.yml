@@ -114,6 +114,7 @@ options:
         replicate: Access to diverse open-source models for specialized translation tasks
         perplexity: Real-time knowledge-enhanced AI for contextual translations and reading assistance
         vercel: Optimized AI models for web content translation and analysis
+        volcengine: ByteDance's cloud AI platform offering Doubao models for translation and reading
     apiKey:
       showAPIKey: Show API Key
     howToConfigure: How to configure?

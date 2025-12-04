@@ -27,6 +27,7 @@ interface ProviderFactoryMap {
   siliconflow: typeof createOpenAICompatible
   tensdaq: typeof createOpenAICompatible
   ai302: typeof createOpenAICompatible
+  volcengine: typeof createOpenAICompatible
   openrouter: typeof createOpenRouter
   openaiCompatible: typeof createOpenAICompatible
   openai: typeof createOpenAI
@@ -52,6 +53,7 @@ const CREATE_AI_MAPPER: ProviderFactoryMap = {
   siliconflow: createOpenAICompatible,
   tensdaq: createOpenAICompatible,
   ai302: createOpenAICompatible,
+  volcengine: createOpenAICompatible,
   openrouter: createOpenRouter,
   openaiCompatible: createOpenAICompatible,
   openai: createOpenAI,

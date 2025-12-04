@@ -121,6 +121,11 @@ export const DEFAULT_READ_MODELS: ReadModels = {
     isCustomModel: false,
     customModel: null,
   },
+  volcengine: {
+    model: 'doubao-seed-1-6-251015',
+    isCustomModel: false,
+    customModel: null,
+  },
 }
 
 export const DEFAULT_TRANSLATE_MODELS: TranslateLLMModels = {
@@ -231,6 +236,11 @@ export const DEFAULT_TRANSLATE_MODELS: TranslateLLMModels = {
   },
   ollama: {
     model: 'gemma3:4b',
+    isCustomModel: false,
+    customModel: null,
+  },
+  volcengine: {
+    model: 'doubao-seed-1-6-flash-250828',
     isCustomModel: false,
     customModel: null,
   },
@@ -362,6 +372,11 @@ export const PROVIDER_ITEMS: Record<AllProviderTypes, { logo: (theme: Theme) => 
       logo: getLobeIconsCDNUrlFn('ollama'),
       name: 'Ollama',
       website: 'https://ollama.ai',
+    },
+    volcengine: {
+      logo: getLobeIconsCDNUrlFn('volcengine-color'),
+      name: 'Volcengine',
+      website: 'https://www.volcengine.com/product/doubao',
     },
   }
 
@@ -630,6 +645,18 @@ export const DEFAULT_PROVIDER_CONFIG = {
     models: {
       read: DEFAULT_READ_MODELS.ollama,
       translate: DEFAULT_TRANSLATE_MODELS.ollama,
+    },
+  },
+  volcengine: {
+    id: 'volcengine-default',
+    name: PROVIDER_ITEMS.volcengine.name,
+    description: i18n.t('options.apiProviders.providers.description.volcengine'),
+    enabled: true,
+    provider: 'volcengine',
+    baseURL: 'https://ark.cn-beijing.volces.com/api/v3',
+    models: {
+      read: DEFAULT_READ_MODELS.volcengine,
+      translate: DEFAULT_TRANSLATE_MODELS.volcengine,
     },
   },
 } as const satisfies Record<AllProviderTypes, ProviderConfig>
