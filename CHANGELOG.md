@@ -1,5 +1,15 @@
 # @read-frog/extension
 
+## 1.19.4
+
+### Patch Changes
+
+- [#771](https://github.com/mengxi-ream/read-frog/pull/771) [`57dcc81`](https://github.com/mengxi-ream/read-frog/commit/57dcc81b5d7ca84438f1bbfcbc671faf785cb79c) Thanks [@ananaBMaster](https://github.com/ananaBMaster)! - perf: improve prompt to auto detect language
+
+- [#761](https://github.com/mengxi-ream/read-frog/pull/761) [`2d4bf6c`](https://github.com/mengxi-ream/read-frog/commit/2d4bf6c11b05d43319c48497445ebf817f63baac) Thanks [@mengxi-ream](https://github.com/mengxi-ream)! - feat: add engoo.com force block translation rule
+
+- [#772](https://github.com/mengxi-ream/read-frog/pull/772) [`f8de893`](https://github.com/mengxi-ream/read-frog/commit/f8de893a51ec37a5805a51c22ec15f7f9fbd2244) Thanks [@ananaBMaster](https://github.com/ananaBMaster)! - feat: add official volcengine and doubao support
+
 ## 1.19.3
 
 ### Patch Changes
