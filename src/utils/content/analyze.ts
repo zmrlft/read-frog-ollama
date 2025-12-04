@@ -130,24 +130,25 @@ export async function detectLanguageWithLLM(
       .map(([code, name]) => `- ${code}: ${name}`)
       .join('\n')
 
-    const prompt = `Detect the language of the following text and return ONLY the ISO 639-3 language code.
+    const system = `You are a language detection assistant. Your task is to identify the language of text and return ONLY the ISO 639-3 language code.
 
-IMPORTANT: Return ONLY the language code (e.g., "eng" or "cmn" or "und"), nothing else. Do NOT include explanations, punctuation, or any other text.
+Rules:
+- Return ONLY the language code (e.g., "eng" or "cmn" or "und")
+- Do NOT include explanations, punctuation, or any other text
+- Return "und" if the language is not in the supported list
 
 Supported ISO 639-3 language codes:
-${languageList}
+${languageList}`
 
-If the language is not in the list above, return "und".
+    const prompt = text
 
-Text to analyze:
-${text}
-
-Remember: Return ONLY the ISO 639-3 code (3 lowercase letters or "und").`
+    // TODO: move this API call to background script to deal with CORS issue from some providers
 
     for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
       try {
         const { text: responseText } = await generateText({
           model,
+          system,
           prompt,
           providerOptions,
         })
