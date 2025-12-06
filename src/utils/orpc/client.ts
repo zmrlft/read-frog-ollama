@@ -7,6 +7,7 @@ import { normalizeHeaders } from '../http'
 import { sendMessage } from '../message'
 
 const link = new RPCLink({
+  // TODO: add and use ORPC_PREFIX from @read-frog/definitions
   url: `${WEBSITE_URL}/api/rpc`,
   headers: {
     'x-orpc-source': 'extension',
