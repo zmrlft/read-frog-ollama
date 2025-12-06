@@ -3,7 +3,7 @@ import type { PageTranslateRange } from '@/types/config/translate'
 import { DEFAULT_TRANSLATE_PROMPTS_CONFIG } from './prompt'
 import { DEFAULT_PROVIDER_CONFIG_LIST } from './providers'
 import { DEFAULT_SIDE_CONTENT_WIDTH } from './side'
-import { DEFAULT_AUTO_TRANSLATE_SHORTCUT_KEY, DEFAULT_BATCH_CONFIG, DEFAULT_REQUEST_CAPACITY, DEFAULT_REQUEST_RATE } from './translate'
+import { DEFAULT_AUTO_TRANSLATE_SHORTCUT_KEY, DEFAULT_BATCH_CONFIG, DEFAULT_PRELOAD_MARGIN, DEFAULT_PRELOAD_THRESHOLD, DEFAULT_REQUEST_CAPACITY, DEFAULT_REQUEST_RATE } from './translate'
 import { TRANSLATION_NODE_STYLE_ON_INSTALLED } from './translation-node-style'
 import { DEFAULT_TTS_CONFIG } from './tts'
 
@@ -12,7 +12,7 @@ export const CONFIG_SCHEMA_VERSION_STORAGE_KEY = '__configSchemaVersion'
 export const LAST_SYNC_TIME_STORAGE_KEY = '__lastGoogleDriveSyncTime'
 export const LAST_SYNCED_CONFIG_STORAGE_KEY = '__lastSyncedConfig'
 export const GOOGLE_DRIVE_TOKEN_STORAGE_KEY = '__googleDriveToken'
-export const CONFIG_SCHEMA_VERSION = 35
+export const CONFIG_SCHEMA_VERSION = 36
 
 export const DEFAULT_FLOATING_BUTTON_POSITION = 0.66
 
@@ -41,6 +41,10 @@ export const DEFAULT_CONFIG: Config = {
       autoTranslateLanguages: [],
       shortcut: DEFAULT_AUTO_TRANSLATE_SHORTCUT_KEY,
       enableLLMDetection: false,
+      preload: {
+        margin: DEFAULT_PRELOAD_MARGIN,
+        threshold: DEFAULT_PRELOAD_THRESHOLD,
+      },
     },
     enableAIContentAware: false,
     customPromptsConfig: DEFAULT_TRANSLATE_PROMPTS_CONFIG,

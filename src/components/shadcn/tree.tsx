@@ -2,8 +2,9 @@
 
 import type { ItemInstance } from '@headless-tree/core'
 import { Slot } from '@radix-ui/react-slot'
-import { ChevronDownIcon, SquareMinus, SquarePlus } from 'lucide-react'
+import { IconChevronDown, IconSquareMinus, IconSquarePlus } from '@tabler/icons-react'
 import * as React from 'react'
+import { useMemo } from 'react'
 import { cn } from '@/lib/utils'
 
 type ToggleIconType = 'chevron' | 'plus-minus'
@@ -45,8 +46,13 @@ function Tree({ indent = 20, tree, className, toggleIconType = 'chevron', ...pro
     '--tree-indent': `${indent}px`,
   } as React.CSSProperties
 
+  const contextValue = useMemo(
+    () => ({ indent, tree, toggleIconType }),
+    [indent, tree, toggleIconType],
+  )
+
   return (
-    <TreeContext value={{ indent, tree, toggleIconType }}>
+    <TreeContext value={contextValue}>
       <div data-slot="tree" style={mergedStyle} className={cn('flex flex-col', className)} {...otherProps} />
     </TreeContext>
   )
@@ -76,13 +82,18 @@ function TreeItem<T = any>({ item, className, asChild, children, ...props }: Omi
 
   const Comp = asChild ? Slot : 'button'
 
+  const contextValue = useMemo(
+    () => ({ ...parentContext, currentItem: item }),
+    [parentContext, item],
+  )
+
   return (
-    <TreeContext value={{ ...parentContext, currentItem: item }}>
+    <TreeContext value={contextValue}>
       <Comp
         data-slot="tree-item"
         style={mergedStyle}
         className={cn(
-          'z-10 ps-(--tree-padding) outline-hidden select-none not-last:pb-0.5 focus:z-20 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+          'z-10 ps-(--tree-padding) outline-hidden select-none not-last:pb-0.5 focus:z-20 data-disabled:pointer-events-none data-disabled:opacity-50',
           className,
         )}
         data-focus={typeof item.isFocused === 'function' ? item.isFocused() || false : undefined}
@@ -126,14 +137,14 @@ function TreeItemLabel<T = any>({ item: propItem, children, className, ...props 
           ? (
               item.isExpanded()
                 ? (
-                    <SquareMinus className="text-muted-foreground size-3.5" stroke="currentColor" strokeWidth="1" />
+                    <IconSquareMinus className="text-muted-foreground size-3.5" stroke="currentColor" strokeWidth="1" />
                   )
                 : (
-                    <SquarePlus className="text-muted-foreground size-3.5" stroke="currentColor" strokeWidth="1" />
+                    <IconSquarePlus className="text-muted-foreground size-3.5" stroke="currentColor" strokeWidth="1" />
                   )
             )
           : (
-              <ChevronDownIcon className="text-muted-foreground size-4 in-aria-[expanded=false]:-rotate-90" />
+              <IconChevronDown className="text-muted-foreground size-4 in-aria-[expanded=false]:-rotate-90" />
             ))}
       {children || (typeof item.getItemName === 'function' ? item.getItemName() : null)}
     </span>
