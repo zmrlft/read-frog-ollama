@@ -8,6 +8,9 @@ import { sendMessage } from '../message'
 
 const link = new RPCLink({
   url: `${WEBSITE_URL}/api/rpc`,
+  headers: {
+    'x-orpc-source': 'extension',
+  },
   plugins: [
     new BatchLinkPlugin({
       groups: [
