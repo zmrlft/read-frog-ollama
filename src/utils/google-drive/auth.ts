@@ -11,7 +11,6 @@ const GOOGLE_SCOPES = [
 ]
 const TOKEN_EXPIRY_BUFFER_MS = 60000
 
-// TODO: Add Authorization Code Flow + PKCE to get the refresh token
 const googleAuthTokenSchema = z.object({
   access_token: z.string(),
   expires_at: z.number(),
