@@ -1,69 +1,66 @@
 import { i18n } from '#imports'
 import { Icon } from '@iconify/react'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useEffect, useState } from 'react'
+import { Activity, useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/components/shadcn/button'
-import { conflictDataAtom, conflictResolutionsAtom } from '@/utils/atoms/google-drive-sync'
+import { useGoogleDriveAuth } from '@/hooks/use-google-drive-auth'
+import { resolutionsAtom, unresolvedConfigsAtom } from '@/utils/atoms/google-drive-sync'
 import { lastSyncTimeAtom } from '@/utils/atoms/last-sync-time'
-import { clearAccessToken, isAuthenticated } from '@/utils/google-drive/auth'
-import { ConfigConflictError, syncConfig } from '@/utils/google-drive/sync'
+import { clearAccessToken } from '@/utils/google-drive/auth'
+import { syncConfig } from '@/utils/google-drive/sync'
 import { logger } from '@/utils/logger'
 import { ConfigCard } from '../../../components/config-card'
-import { ConflictResolutionDialog } from './components/conflict-resolution-dialog'
+import { UnresolvedDialog } from './components/unresolved-dialog'
 
 export function GoogleDriveSyncCard() {
   const [isSyncing, setIsSyncing] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const setConflictData = useSetAtom(conflictDataAtom)
-  const setConflictResolutions = useSetAtom(conflictResolutionsAtom)
+  const { query: { data: authData }, invalidate: invalidateAuthData } = useGoogleDriveAuth()
+  const setUnresolvedData = useSetAtom(unresolvedConfigsAtom)
+  const setResolutions = useSetAtom(resolutionsAtom)
   const lastSyncTime = useAtomValue(lastSyncTimeAtom)
-
-  const checkAuthStatus = async () => {
-    const authenticated = await isAuthenticated()
-    setIsLoggedIn(authenticated)
-  }
-
-  useEffect(() => {
-    void checkAuthStatus()
-  }, [])
 
   const handleSync = async () => {
     setIsSyncing(true)
 
-    try {
-      await syncConfig()
-      await checkAuthStatus()
-      toast.success(i18n.t('options.config.sync.googleDrive.syncSuccess'))
+    const result = await syncConfig()
+
+    if (result.status === 'unresolved') {
+      setUnresolvedData(result.data)
+      setIsOpen(true)
     }
-    catch (error) {
-      if (error instanceof ConfigConflictError) {
-        logger.info('Conflict detected, opening resolution dialog')
-        setConflictData(error.data)
-        setIsOpen(true)
-      }
-      else {
-        logger.error('Google Drive sync error from UI', error)
-        toast.error(i18n.t('options.config.sync.googleDrive.syncError'))
-      }
+    else if (result.status === 'success') {
+      void invalidateAuthData()
+      const messages = {
+        'uploaded': i18n.t('options.config.sync.googleDrive.syncSuccess.uploaded'),
+        'downloaded': i18n.t('options.config.sync.googleDrive.syncSuccess.downloaded'),
+        'same-changes': i18n.t('options.config.sync.googleDrive.syncSuccess.sameChanges'),
+        'no-change': i18n.t('options.config.sync.googleDrive.syncSuccess.noChange'),
+      } as const
+      toast.success(messages[result.action])
     }
-    finally {
-      setIsSyncing(false)
+    else {
+      logger.error('Google Drive sync error', result.error)
+      toast.error(i18n.t('options.config.sync.googleDrive.syncError'), {
+        description: result.error.message,
+      })
     }
+
+    setIsSyncing(false)
   }
 
   const handleLogout = async () => {
     await clearAccessToken()
-    setIsLoggedIn(false)
+    void invalidateAuthData()
     toast.success(i18n.t('options.config.sync.googleDrive.logoutSuccess'))
   }
 
   const handleDialogClose = (success: boolean) => {
     setIsOpen(false)
-    setConflictResolutions({})
+    setResolutions({})
     if (success) {
-      toast.success(i18n.t('options.config.sync.googleDrive.syncSuccess'))
+      toast.success(i18n.t('options.config.sync.googleDrive.syncSuccess.unresolved'))
     }
     else {
       toast.error(i18n.t('options.config.sync.googleDrive.syncError'))
@@ -78,37 +75,51 @@ export function GoogleDriveSyncCard() {
     <>
       <ConfigCard
         title={i18n.t('options.config.sync.googleDrive.title')}
-        description={i18n.t('options.config.sync.googleDrive.description')}
-      >
-        <div className="w-full flex flex-col items-end gap-2">
-          <div className="flex gap-2">
-            {isLoggedIn && (
-              <Button variant="outline" onClick={handleLogout}>
-                {i18n.t('options.config.sync.googleDrive.logout')}
-              </Button>
-            )}
-            <Button
-              onClick={handleSync}
-              disabled={isSyncing}
-            >
-              <Icon icon="logos:google-drive" className="size-4" />
-              {isSyncing
-                ? i18n.t('options.config.sync.googleDrive.syncing')
-                : i18n.t('options.config.sync.googleDrive.sync')}
-            </Button>
+        description={(
+          <div className="flex flex-col gap-2">
+            {i18n.t('options.config.sync.googleDrive.description')}
+            <Activity mode={authData?.isAuthenticated ? 'visible' : 'hidden'}>
+              <div className="flex items-center gap-2 text-sm">
+                {authData?.userInfo?.picture && (
+                  <img src={authData.userInfo.picture} alt="Google Account" className="size-5 border rounded-full" />
+                )}
+                <span className="text-sm text-muted-foreground">{authData?.userInfo?.email}</span>
+              </div>
+            </Activity>
           </div>
-          {lastSyncTime && (
-            <span className="text-xs text-muted-foreground">
-              {i18n.t('options.config.sync.googleDrive.lastSyncTime')}
-              :
-              {' '}
-              {formatLastSyncTime(lastSyncTime)}
-            </span>
-          )}
+        )}
+      >
+        <div className="w-full flex flex-col items-end gap-4">
+          <div className="flex flex-col gap-2 items-end">
+            <div className="flex gap-2">
+              <Button
+                onClick={handleSync}
+                disabled={isSyncing}
+              >
+                <Icon icon="logos:google-drive" className="size-4" />
+                {isSyncing
+                  ? i18n.t('options.config.sync.googleDrive.syncing')
+                  : i18n.t('options.config.sync.googleDrive.sync')}
+              </Button>
+            </div>
+            <Activity mode={lastSyncTime ? 'visible' : 'hidden'}>
+              <span className="text-xs text-muted-foreground">
+                {i18n.t('options.config.sync.googleDrive.lastSyncTime')}
+                :
+                {' '}
+                {lastSyncTime && formatLastSyncTime(lastSyncTime)}
+              </span>
+            </Activity>
+          </div>
+          <Activity mode={authData?.isAuthenticated ? 'visible' : 'hidden'}>
+            <Button variant="outline" onClick={handleLogout}>
+              {i18n.t('options.config.sync.googleDrive.logout')}
+            </Button>
+          </Activity>
         </div>
       </ConfigCard>
 
-      <ConflictResolutionDialog
+      <UnresolvedDialog
         open={isOpen}
         onResolved={() => handleDialogClose(true)}
         onCancelled={() => handleDialogClose(false)}

@@ -1,9 +1,9 @@
 import type { Config } from '@/types/config/config'
-import type { ConflictDiffResult } from '@/utils/google-drive/conflict-merge'
+import type { ApplyResolutionsResult, DiffConflictsResult } from '@/utils/google-drive/conflict-merge'
 import { atom } from 'jotai'
-import { detectConflicts } from '@/utils/google-drive/conflict-merge'
+import { applyResolutions, detectConflicts } from '@/utils/google-drive/conflict-merge'
 
-export interface ConflictData {
+export interface UnresolvedConfigs {
   base: Config
   local: Config
   remote: Config
@@ -11,37 +11,54 @@ export interface ConflictData {
 
 type Resolution = 'local' | 'remote'
 
-export const conflictDataAtom = atom<ConflictData | null>(null)
-export const conflictResolutionsAtom = atom<Record<string, Resolution>>({})
+export const unresolvedConfigsAtom = atom<UnresolvedConfigs | null>(null)
+export const resolutionsAtom = atom<Record<string, Resolution>>({})
 
-export const diffResultAtom = atom<ConflictDiffResult | null>((get) => {
-  const conflictData = get(conflictDataAtom)
-  if (!conflictData)
+export const diffConflictsResultAtom = atom<DiffConflictsResult | null>((get) => {
+  const unresolvedConfigs = get(unresolvedConfigsAtom)
+  if (!unresolvedConfigs)
     return null
-  return detectConflicts(conflictData.base, conflictData.local, conflictData.remote)
+  return detectConflicts(unresolvedConfigs.base, unresolvedConfigs.local, unresolvedConfigs.remote)
 })
 
-export const conflictStatusAtom = atom((get) => {
-  const diffResult = get(diffResultAtom)
-  const resolutions = get(conflictResolutionsAtom)
-  const total = diffResult?.conflicts.length ?? 0
-  const resolved = Object.keys(resolutions).length
+// Derived atom that applies resolutions and returns the result with validation status
+export const resolvedConfigResultAtom = atom<ApplyResolutionsResult | null>((get) => {
+  const diffConflictsResult = get(diffConflictsResultAtom)
+  const resolutions = get(resolutionsAtom)
+  if (!diffConflictsResult)
+    return null
+  // can partially resolved because resolutions are not required to be all conflicts
+  return applyResolutions(diffConflictsResult, resolutions)
+})
+
+export const resolutionStatusAtom = atom((get) => {
+  const diffConflictsResult = get(diffConflictsResultAtom)
+  const resolutions = get(resolutionsAtom)
+  const resolvedConfig = get(resolvedConfigResultAtom)
+
+  const conflictCount = diffConflictsResult?.conflicts.length ?? 0
+  const resolvedCount = Object.keys(resolutions).length
+  const allResolved = diffConflictsResult?.conflicts.every(c => resolutions[c.path.join('.')]) ?? true
+
   return {
-    total,
-    resolved,
-    allResolved: total === 0 || resolved === total,
+    conflictCount,
+    resolvedCount,
+    allResolved,
+    hasValidationError: resolvedConfig?.validationError != null,
+    validationError: resolvedConfig?.validationError ?? null,
+    isValid: allResolved && resolvedConfig?.validationError == null,
   }
 })
 
 export const selectResolutionAtom = atom(
   null,
   (_get, set, { pathKey, resolution }: { pathKey: string, resolution: Resolution }) => {
-    set(conflictResolutionsAtom, prev => ({ ...prev, [pathKey]: resolution }))
+    set(resolutionsAtom, prev => ({ ...prev, [pathKey]: resolution }))
   },
 )
 
 export const resetResolutionAtom = atom(null, (_get, set, pathKey: string) => {
-  set(conflictResolutionsAtom, (prev) => {
+  set(resolutionsAtom, (prev) => {
     const next = { ...prev }
     delete next[pathKey]
     return next
@@ -49,21 +66,23 @@ export const resetResolutionAtom = atom(null, (_get, set, pathKey: string) => {
 })
 
 export const selectAllLocalAtom = atom(null, (get, set) => {
-  const diffResult = get(diffResultAtom)
-  if (!diffResult)
+  const diffConflictsResult = get(diffConflictsResultAtom)
+  if (!diffConflictsResult)
     return
-  const resolutions = Object.fromEntries(
-    diffResult.conflicts.map(c => [c.path.join('.'), 'local' as const]),
-  )
-  set(conflictResolutionsAtom, resolutions)
+  const resolutions: Record<string, Resolution> = {}
+  for (const c of diffConflictsResult.conflicts) {
+    resolutions[c.path.join('.')] = 'local'
+  }
+  set(resolutionsAtom, resolutions)
 })
 
 export const selectAllRemoteAtom = atom(null, (get, set) => {
-  const diffResult = get(diffResultAtom)
+  const diffResult = get(diffConflictsResultAtom)
   if (!diffResult)
     return
-  const resolutions = Object.fromEntries(
-    diffResult.conflicts.map(c => [c.path.join('.'), 'remote' as const]),
-  )
-  set(conflictResolutionsAtom, resolutions)
+  const resolutions: Record<string, Resolution> = {}
+  for (const c of diffResult.conflicts) {
+    resolutions[c.path.join('.')] = 'remote'
+  }
+  set(resolutionsAtom, resolutions)
 })

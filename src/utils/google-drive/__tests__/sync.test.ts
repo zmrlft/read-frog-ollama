@@ -1,378 +1,395 @@
-import type { ModifiedConfigData } from '../sync'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { configSchema } from '@/types/config/config'
-import { CONFIG_SCHEMA_VERSION, CONFIG_SCHEMA_VERSION_STORAGE_KEY, CONFIG_STORAGE_KEY, LAST_SYNC_TIME_STORAGE_KEY } from '@/utils/constants/config'
-
-// Use vi.hoisted to define mocks before vi.mock hoisting
-const { mockStorage, mockMigrateConfig, mockLogger, mockApi, mockAuth } = vi.hoisted(() => ({
-  mockStorage: {
-    getItem: vi.fn(),
-    setItem: vi.fn(),
-    getMeta: vi.fn(),
-    setMeta: vi.fn(),
-  },
-  mockMigrateConfig: vi.fn(),
-  mockLogger: {
-    error: vi.fn(),
-    info: vi.fn(),
-    warn: vi.fn(),
-  },
-  mockApi: {
-    findFileInAppData: vi.fn(),
-    downloadFile: vi.fn(),
-    uploadFile: vi.fn(),
-  },
-  mockAuth: {
-    getValidAccessToken: vi.fn(),
-  },
-}))
-
-vi.mock('wxt/utils/storage', () => ({
-  storage: mockStorage,
-}))
-
-vi.mock('@/utils/config/migration', () => ({
-  migrateConfig: mockMigrateConfig,
-}))
-
-vi.mock('@/utils/logger', () => ({
-  logger: mockLogger,
-}))
-
-vi.mock('../api', () => ({
-  findFileInAppData: mockApi.findFileInAppData,
-  downloadFile: mockApi.downloadFile,
-  uploadFile: mockApi.uploadFile,
-}))
-
-vi.mock('../auth', () => ({
-  getValidAccessToken: mockAuth.getValidAccessToken,
-}))
-
-// Import after mocking - this is required for vi.mock to work properly
-// eslint-disable-next-line import/first
+import type { ConfigMeta, ConfigValueAndMeta, LastSyncedConfigMeta, LastSyncedConfigValueAndMeta } from '@/types/config/meta'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import {
+  getLastSyncedConfigAndMeta,
+  getLocalConfigAndMeta,
+  getRemoteConfigAndMetaWithUserEmail,
+  setLastSyncConfigAndMeta,
+  setLocalConfigAndMeta,
+  setRemoteConfigAndMeta,
+} from '@/utils/config/storage'
 import { syncConfig } from '../sync'
 
-// Test data factories
-const defaultProvidersConfig = [
-  {
-    id: 'test-read',
-    name: 'Test Read Provider',
-    enabled: true,
-    provider: 'openai' as const,
-    apiKey: 'test-key',
-    baseURL: 'https://api.openai.com/v1',
-    models: {
-      read: {
-        model: 'gpt-4o-mini' as const,
-        isCustomModel: false,
-        customModel: '',
-      },
-      translate: {
-        model: 'gpt-4o-mini' as const,
-        isCustomModel: false,
-        customModel: '',
-      },
-    },
+// Mock the storage module
+vi.mock('@/utils/config/storage', () => ({
+  getLocalConfigAndMeta: vi.fn(),
+  getLastSyncedConfigAndMeta: vi.fn(),
+  getRemoteConfigAndMetaWithUserEmail: vi.fn(),
+  setLocalConfigAndMeta: vi.fn(),
+  setRemoteConfigAndMeta: vi.fn(),
+  setLastSyncConfigAndMeta: vi.fn(),
+}))
+
+// Mock the logger
+vi.mock('@/utils/logger', () => ({
+  logger: {
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
   },
-  {
-    id: 'test-translate',
-    name: 'Test Translate Provider',
-    enabled: true,
-    provider: 'google' as const,
-  },
-]
+}))
 
-function createMockConfig(overrides: any = {}): any {
+// Simple test config - just needs matching shape
+interface TestConfig {
+  setting1: string
+  setting2: number
+}
+
+function createTestConfig(overrides: Partial<TestConfig> = {}): TestConfig {
   return {
-    language: {
-      detectedCode: 'eng',
-      sourceCode: 'auto',
-      targetCode: 'cmn',
-      level: 'intermediate',
+    setting1: 'default',
+    setting2: 100,
+    ...overrides,
+  }
+}
+
+function createConfigValueAndMeta(
+  config: TestConfig,
+  meta: Partial<ConfigMeta> = {},
+): ConfigValueAndMeta {
+  return {
+    value: config as any,
+    meta: {
+      schemaVersion: 1,
+      lastModifiedAt: 1000,
+      ...meta,
     },
-    providersConfig: overrides.providersConfig ?? defaultProvidersConfig,
-    read: { providerId: 'test-read' },
-    translate: {
-      providerId: 'test-translate',
-      mode: 'bilingual',
-      enableAIContentAware: false,
-      customPromptsConfig: {
-        promptId: null,
-        patterns: [],
-      },
-      node: { enabled: true, hotkey: 'Control' },
-      page: {
-        range: 'main',
-        autoTranslatePatterns: [],
-        autoTranslateLanguages: [],
-        shortcut: ['ctrl+shift+t'],
-        enableLLMDetection: false,
-      },
-      requestQueueConfig: {
-        capacity: 10,
-        rate: 2,
-      },
-      batchQueueConfig: {
-        maxCharactersPerBatch: 1000,
-        maxItemsPerBatch: 5,
-      },
-      translationNodeStyle: {
-        preset: 'default',
-        isCustom: false,
-        customCSS: null,
-      },
+  }
+}
+
+function createLastSyncedConfigValueAndMeta(
+  config: TestConfig,
+  meta: Partial<LastSyncedConfigMeta> = {},
+): LastSyncedConfigValueAndMeta {
+  return {
+    value: config as any,
+    meta: {
+      schemaVersion: 1,
+      lastModifiedAt: 1000,
+      lastSyncedAt: 1000,
+      email: 'a@test.com',
+      ...meta,
     },
-    tts: { providerId: null, model: 'tts-1', voice: 'alloy', speed: 1 },
-    floatingButton: { enabled: true, position: 0.66, disabledFloatingButtonPatterns: [] },
-    selectionToolbar: { enabled: true, disabledSelectionToolbarPatterns: [] },
-    sideContent: { width: 500 },
-    betaExperience: { enabled: false },
-    contextMenu: { enabled: true },
-    ...overrides,
   }
 }
 
-function createMockRemoteConfigData(overrides: Partial<ModifiedConfigData> = {}): ModifiedConfigData {
-  return {
-    [CONFIG_STORAGE_KEY]: createMockConfig(),
-    [CONFIG_SCHEMA_VERSION_STORAGE_KEY]: CONFIG_SCHEMA_VERSION,
-    lastModified: Date.now(),
-    ...overrides,
-  }
-}
-
-function createMockGoogleDriveFile(overrides: Partial<{ id: string, name: string, mimeType: string, modifiedTime: string, size: string }> = {}) {
-  return {
-    id: 'test-file-id',
-    name: 'read-frog-config.json',
-    mimeType: 'application/json',
-    modifiedTime: new Date().toISOString(),
-    size: '1024',
-    ...overrides,
-  }
-}
-
-describe('googleDrive configuration sync', () => {
-  let safeParseSpy: ReturnType<typeof vi.spyOn>
-  let parseSpy: ReturnType<typeof vi.spyOn>
-
+describe('syncConfig', () => {
   beforeEach(() => {
-    vi.resetAllMocks()
-
-    // Setup default mock implementations
-    mockAuth.getValidAccessToken.mockResolvedValue('test-access-token')
-    mockStorage.getItem.mockResolvedValue(null)
-    mockStorage.setItem.mockResolvedValue(undefined)
-    mockStorage.getMeta.mockResolvedValue({ modifiedAt: Date.now() })
-    mockStorage.setMeta.mockResolvedValue(undefined)
-    mockMigrateConfig.mockImplementation(async (config, _version) => config)
-    mockApi.findFileInAppData.mockResolvedValue(null)
-    mockApi.downloadFile.mockResolvedValue('{}')
-    mockApi.uploadFile.mockResolvedValue(createMockGoogleDriveFile())
-
-    // Mock configSchema.safeParse to return success by default
-    safeParseSpy = vi.spyOn(configSchema, 'safeParse').mockImplementation(data => ({
-      success: true,
-      data: data as any,
-    }))
-    // Mock configSchema.parse to return the data by default
-    parseSpy = vi.spyOn(configSchema, 'parse').mockImplementation(data => data as any)
+    vi.clearAllMocks()
   })
 
-  afterEach(() => {
-    vi.useRealTimers()
-    safeParseSpy.mockRestore()
-    parseSpy.mockRestore()
+  describe('1. First Login (No Previous Sync)', () => {
+    it('1.1 should download when remote exists', async () => {
+      const localConfig = createTestConfig({ setting1: 'local' })
+      const remoteConfig = createTestConfig({ setting1: 'remote' })
+
+      vi.mocked(getLocalConfigAndMeta).mockResolvedValue(
+        createConfigValueAndMeta(localConfig, { lastModifiedAt: 1000 }),
+      )
+      vi.mocked(getLastSyncedConfigAndMeta).mockResolvedValue(null)
+      vi.mocked(getRemoteConfigAndMetaWithUserEmail).mockResolvedValue({
+        configValueAndMeta: createConfigValueAndMeta(remoteConfig, { lastModifiedAt: 2000 }),
+        email: 'a@test.com',
+      })
+
+      const result = await syncConfig()
+
+      expect(result).toEqual({ status: 'success', action: 'downloaded' })
+      expect(setLocalConfigAndMeta).toHaveBeenCalledWith(remoteConfig, expect.any(Object))
+      expect(setLastSyncConfigAndMeta).toHaveBeenCalledWith(
+        remoteConfig,
+        expect.objectContaining({ email: 'a@test.com' }),
+      )
+      expect(setRemoteConfigAndMeta).not.toHaveBeenCalled()
+    })
+
+    it('1.2 should upload when no remote exists', async () => {
+      const localConfig = createTestConfig({ setting1: 'local' })
+
+      vi.mocked(getLocalConfigAndMeta).mockResolvedValue(
+        createConfigValueAndMeta(localConfig, { lastModifiedAt: 1000 }),
+      )
+      vi.mocked(getLastSyncedConfigAndMeta).mockResolvedValue(null)
+      vi.mocked(getRemoteConfigAndMetaWithUserEmail).mockResolvedValue({
+        configValueAndMeta: null,
+        email: 'a@test.com',
+      })
+
+      const result = await syncConfig()
+
+      expect(result).toEqual({ status: 'success', action: 'uploaded' })
+      expect(setRemoteConfigAndMeta).toHaveBeenCalledWith(
+        createConfigValueAndMeta(localConfig, { lastModifiedAt: 1000 }),
+      )
+      expect(setLastSyncConfigAndMeta).toHaveBeenCalledWith(
+        localConfig,
+        expect.objectContaining({ email: 'a@test.com' }),
+      )
+      expect(setLocalConfigAndMeta).not.toHaveBeenCalled()
+    })
   })
 
-  describe('syncConfig integration tests', () => {
-    describe('first sync scenarios', () => {
-      it('should upload local config when no remote config exists', async () => {
-        const mockConfig = createMockConfig()
-        const localModifiedTime = Date.now() - 5000
+  describe('2. Account Switch (User A � User B)', () => {
+    it('2.1 should download when remote B exists', async () => {
+      const localConfig = createTestConfig({ setting1: 'local-A' })
+      const remoteBConfig = createTestConfig({ setting1: 'remote-B' })
 
-        mockStorage.getItem
-          .mockResolvedValueOnce(mockConfig)
-          .mockResolvedValueOnce(CONFIG_SCHEMA_VERSION)
-          .mockResolvedValueOnce(null) // No last sync time
-        mockStorage.getMeta.mockResolvedValue({ modifiedAt: localModifiedTime })
-        mockApi.findFileInAppData.mockResolvedValue(null)
-        mockApi.uploadFile.mockResolvedValue(createMockGoogleDriveFile())
+      vi.mocked(getLocalConfigAndMeta).mockResolvedValue(
+        createConfigValueAndMeta(localConfig, { lastModifiedAt: 2000 }),
+      )
+      vi.mocked(getLastSyncedConfigAndMeta).mockResolvedValue(
+        createLastSyncedConfigValueAndMeta(localConfig, { email: 'a@test.com', lastModifiedAt: 1000 }),
+      )
+      vi.mocked(getRemoteConfigAndMetaWithUserEmail).mockResolvedValue({
+        configValueAndMeta: createConfigValueAndMeta(remoteBConfig, { lastModifiedAt: 3000 }),
+        email: 'b@test.com',
+      })
 
-        await syncConfig()
+      const result = await syncConfig()
 
-        expect(mockApi.findFileInAppData).toHaveBeenCalledWith('read-frog-config.json')
-        expect(mockApi.uploadFile).toHaveBeenCalled()
-        expect(mockStorage.setItem).toHaveBeenCalledWith(
-          expect.stringContaining(LAST_SYNC_TIME_STORAGE_KEY),
-          expect.any(Number),
+      expect(result).toEqual({ status: 'success', action: 'downloaded' })
+      expect(setLocalConfigAndMeta).toHaveBeenCalledWith(remoteBConfig, expect.any(Object))
+      expect(setLastSyncConfigAndMeta).toHaveBeenCalledWith(
+        remoteBConfig,
+        expect.objectContaining({ email: 'b@test.com' }),
+      )
+      expect(setRemoteConfigAndMeta).not.toHaveBeenCalled()
+    })
+
+    it('2.2 should upload when no remote B exists', async () => {
+      const localConfig = createTestConfig({ setting1: 'local-A' })
+
+      vi.mocked(getLocalConfigAndMeta).mockResolvedValue(
+        createConfigValueAndMeta(localConfig, { lastModifiedAt: 2000 }),
+      )
+      vi.mocked(getLastSyncedConfigAndMeta).mockResolvedValue(
+        createLastSyncedConfigValueAndMeta(localConfig, { email: 'a@test.com', lastModifiedAt: 1000 }),
+      )
+      vi.mocked(getRemoteConfigAndMetaWithUserEmail).mockResolvedValue({
+        configValueAndMeta: null,
+        email: 'b@test.com',
+      })
+
+      const result = await syncConfig()
+
+      expect(result).toEqual({ status: 'success', action: 'uploaded' })
+      expect(setRemoteConfigAndMeta).toHaveBeenCalled()
+      expect(setLastSyncConfigAndMeta).toHaveBeenCalledWith(
+        localConfig,
+        expect.objectContaining({ email: 'b@test.com' }),
+      )
+      expect(setLocalConfigAndMeta).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('3. Same Account Sync (User A continues)', () => {
+    describe('3.1 Both Changed', () => {
+      it('3.1.1 should return same-changes when content is identical', async () => {
+        const baseConfig = createTestConfig({ setting1: 'base' })
+        const changedConfig = createTestConfig({ setting1: 'changed' })
+
+        vi.mocked(getLocalConfigAndMeta).mockResolvedValue(
+          createConfigValueAndMeta(changedConfig, { lastModifiedAt: 2000 }),
+        )
+        vi.mocked(getLastSyncedConfigAndMeta).mockResolvedValue(
+          createLastSyncedConfigValueAndMeta(baseConfig, { email: 'a@test.com', lastModifiedAt: 1000 }),
+        )
+        vi.mocked(getRemoteConfigAndMetaWithUserEmail).mockResolvedValue({
+          configValueAndMeta: createConfigValueAndMeta(changedConfig, { lastModifiedAt: 2500 }),
+          email: 'a@test.com',
+        })
+
+        const result = await syncConfig()
+
+        expect(result).toEqual({ status: 'success', action: 'same-changes' })
+        expect(setLocalConfigAndMeta).toHaveBeenCalled()
+        expect(setRemoteConfigAndMeta).toHaveBeenCalled()
+        expect(setLastSyncConfigAndMeta).toHaveBeenCalledWith(
+          changedConfig,
+          expect.objectContaining({ email: 'a@test.com' }),
         )
       })
 
-      it('should download remote config on first sync when remote exists', async () => {
-        const mockConfig = createMockConfig()
-        const mockRemoteData = createMockRemoteConfigData({
-          [CONFIG_STORAGE_KEY]: mockConfig,
-          lastModified: Date.now() - 1000,
-        })
+      it('3.1.2 should return unresolved when content differs', async () => {
+        const baseConfig = createTestConfig({ setting1: 'base' })
+        const localConfig = createTestConfig({ setting1: 'local-changed' })
+        const remoteConfig = createTestConfig({ setting1: 'remote-changed' })
 
-        mockStorage.getItem
-          .mockResolvedValueOnce(mockConfig)
-          .mockResolvedValueOnce(CONFIG_SCHEMA_VERSION)
-          .mockResolvedValueOnce(null) // No last sync time
-        mockStorage.getMeta.mockResolvedValue({ modifiedAt: Date.now() - 5000 })
-        mockApi.findFileInAppData.mockResolvedValue(createMockGoogleDriveFile())
-        mockApi.downloadFile.mockResolvedValue(JSON.stringify(mockRemoteData))
-        mockMigrateConfig.mockResolvedValue(mockConfig)
-
-        await syncConfig()
-
-        expect(mockApi.downloadFile).toHaveBeenCalled()
-        expect(mockStorage.setItem).toHaveBeenCalledWith(`local:${CONFIG_STORAGE_KEY}`, mockConfig)
-      })
-    })
-
-    describe('remote newer scenarios', () => {
-      it('should download remote config when remote is newer', async () => {
-        const mockConfig = createMockConfig()
-        // Set timestamps to avoid conflict branch:
-        // localChangedSinceSync = local.lastModified > lastSyncTime = false
-        // remoteChangedSinceSync = remote.lastModified > lastSyncTime = false
-        // Then compare: remote.lastModified > local.lastModified = true -> download
-        const localModifiedTime = 1000
-        const remoteLastModified = 2000
-        const lastSyncTime = 3000 // lastSyncTime > both, so neither changed since sync
-        const mockRemoteData = createMockRemoteConfigData({
-          [CONFIG_STORAGE_KEY]: mockConfig,
-          lastModified: remoteLastModified,
-        })
-
-        mockStorage.getItem
-          .mockResolvedValueOnce(mockConfig)
-          .mockResolvedValueOnce(CONFIG_SCHEMA_VERSION)
-          .mockResolvedValueOnce(lastSyncTime)
-        mockStorage.getMeta.mockResolvedValue({ modifiedAt: localModifiedTime })
-        mockApi.findFileInAppData.mockResolvedValue(createMockGoogleDriveFile())
-        mockApi.downloadFile.mockResolvedValue(JSON.stringify(mockRemoteData))
-        mockMigrateConfig.mockResolvedValue(mockConfig)
-
-        await syncConfig()
-
-        expect(mockApi.downloadFile).toHaveBeenCalled()
-        expect(mockStorage.setItem).toHaveBeenCalledWith(`local:${CONFIG_STORAGE_KEY}`, mockConfig)
-      })
-
-      it('should migrate remote config when remote has older schema version', async () => {
-        const mockOldConfig = createMockConfig()
-        const mockNewConfig = createMockConfig({ language: { ...mockOldConfig.language, targetCode: 'jpn' } })
-        // Set timestamps to avoid conflict branch and trigger download
-        const localModifiedTime = 1000
-        const remoteLastModified = 2000
-        const lastSyncTime = 3000 // lastSyncTime > both, so neither changed since sync
-        const mockRemoteData = createMockRemoteConfigData({
-          [CONFIG_STORAGE_KEY]: mockOldConfig,
-          [CONFIG_SCHEMA_VERSION_STORAGE_KEY]: CONFIG_SCHEMA_VERSION - 1,
-          lastModified: remoteLastModified,
-        })
-
-        mockStorage.getItem
-          .mockResolvedValueOnce(mockOldConfig)
-          .mockResolvedValueOnce(CONFIG_SCHEMA_VERSION)
-          .mockResolvedValueOnce(lastSyncTime)
-        mockStorage.getMeta.mockResolvedValue({ modifiedAt: localModifiedTime })
-        mockApi.findFileInAppData.mockResolvedValue(createMockGoogleDriveFile())
-        mockApi.downloadFile.mockResolvedValue(JSON.stringify(mockRemoteData))
-        mockMigrateConfig.mockResolvedValue(mockNewConfig)
-
-        await syncConfig()
-
-        expect(mockMigrateConfig).toHaveBeenCalledWith(mockOldConfig, CONFIG_SCHEMA_VERSION - 1)
-        expect(mockStorage.setItem).toHaveBeenCalledWith(`local:${CONFIG_STORAGE_KEY}`, mockNewConfig)
-      })
-    })
-
-    describe('local newer scenarios', () => {
-      it('should upload local config when local is newer', async () => {
-        const mockConfig = createMockConfig()
-        // Set timestamps to avoid conflict branch:
-        // localChangedSinceSync = local.lastModified > lastSyncTime = false
-        // remoteChangedSinceSync = remote.lastModified > lastSyncTime = false
-        // Then compare: local.lastModified > remote.lastModified = true -> upload
-        const localModifiedTime = 2000
-        const remoteLastModified = 1000
-        const lastSyncTime = 3000 // lastSyncTime > both, so neither changed since sync
-        const mockRemoteData = createMockRemoteConfigData({
-          [CONFIG_STORAGE_KEY]: mockConfig,
-          lastModified: remoteLastModified,
-        })
-
-        mockStorage.getItem
-          .mockResolvedValueOnce(mockConfig)
-          .mockResolvedValueOnce(CONFIG_SCHEMA_VERSION)
-          .mockResolvedValueOnce(lastSyncTime)
-        mockStorage.getMeta.mockResolvedValue({ modifiedAt: localModifiedTime })
-        mockApi.findFileInAppData.mockResolvedValue(createMockGoogleDriveFile())
-        mockApi.downloadFile.mockResolvedValue(JSON.stringify(mockRemoteData))
-
-        await syncConfig()
-
-        expect(mockApi.uploadFile).toHaveBeenCalled()
-      })
-    })
-
-    describe('equal timestamps scenario', () => {
-      it('should update sync time when timestamps are equal', async () => {
-        const mockConfig = createMockConfig()
-        // Set timestamps to avoid conflict branch:
-        // localChangedSinceSync = local.lastModified > lastSyncTime = false
-        // remoteChangedSinceSync = remote.lastModified > lastSyncTime = false
-        // Then compare: local.lastModified == remote.lastModified -> no upload, just update sync time
-        const sameTimestamp = 1000
-        const lastSyncTime = 2000 // lastSyncTime > both, so neither changed since sync
-        const mockRemoteData = createMockRemoteConfigData({
-          [CONFIG_STORAGE_KEY]: mockConfig,
-          lastModified: sameTimestamp,
-        })
-
-        mockStorage.getItem
-          .mockResolvedValueOnce(mockConfig)
-          .mockResolvedValueOnce(CONFIG_SCHEMA_VERSION)
-          .mockResolvedValueOnce(lastSyncTime)
-        mockStorage.getMeta.mockResolvedValue({ modifiedAt: sameTimestamp })
-        mockApi.findFileInAppData.mockResolvedValue(createMockGoogleDriveFile())
-        mockApi.downloadFile.mockResolvedValue(JSON.stringify(mockRemoteData))
-
-        await syncConfig()
-
-        expect(mockApi.uploadFile).not.toHaveBeenCalled()
-        expect(mockStorage.setItem).toHaveBeenCalledWith(
-          expect.stringContaining(LAST_SYNC_TIME_STORAGE_KEY),
-          expect.any(Number),
+        vi.mocked(getLocalConfigAndMeta).mockResolvedValue(
+          createConfigValueAndMeta(localConfig, { lastModifiedAt: 2000 }),
         )
+        vi.mocked(getLastSyncedConfigAndMeta).mockResolvedValue(
+          createLastSyncedConfigValueAndMeta(baseConfig, { email: 'a@test.com', lastModifiedAt: 1000 }),
+        )
+        vi.mocked(getRemoteConfigAndMetaWithUserEmail).mockResolvedValue({
+          configValueAndMeta: createConfigValueAndMeta(remoteConfig, { lastModifiedAt: 2500 }),
+          email: 'a@test.com',
+        })
+
+        const result = await syncConfig()
+
+        expect(result).toEqual({
+          status: 'unresolved',
+          data: {
+            base: baseConfig,
+            local: localConfig,
+            remote: remoteConfig,
+          },
+        })
+        // No storage modifications on conflict
+        expect(setLocalConfigAndMeta).not.toHaveBeenCalled()
+        expect(setRemoteConfigAndMeta).not.toHaveBeenCalled()
+        expect(setLastSyncConfigAndMeta).not.toHaveBeenCalled()
       })
     })
 
-    describe('migration scenarios', () => {
-      it('should handle migration failures gracefully', async () => {
-        const mockConfig = createMockConfig()
-        const mockRemoteData = createMockRemoteConfigData({
-          [CONFIG_STORAGE_KEY]: mockConfig,
-          [CONFIG_SCHEMA_VERSION_STORAGE_KEY]: CONFIG_SCHEMA_VERSION - 1,
-          lastModified: Date.now(),
+    it('3.2 should download when only remote changed', async () => {
+      const baseConfig = createTestConfig({ setting1: 'base' })
+      const remoteConfig = createTestConfig({ setting1: 'remote-changed' })
+
+      vi.mocked(getLocalConfigAndMeta).mockResolvedValue(
+        createConfigValueAndMeta(baseConfig, { lastModifiedAt: 1000 }),
+      )
+      vi.mocked(getLastSyncedConfigAndMeta).mockResolvedValue(
+        createLastSyncedConfigValueAndMeta(baseConfig, { email: 'a@test.com', lastModifiedAt: 1000 }),
+      )
+      vi.mocked(getRemoteConfigAndMetaWithUserEmail).mockResolvedValue({
+        configValueAndMeta: createConfigValueAndMeta(remoteConfig, { lastModifiedAt: 2000 }),
+        email: 'a@test.com',
+      })
+
+      const result = await syncConfig()
+
+      expect(result).toEqual({ status: 'success', action: 'downloaded' })
+      expect(setLocalConfigAndMeta).toHaveBeenCalledWith(remoteConfig, expect.any(Object))
+      expect(setLastSyncConfigAndMeta).toHaveBeenCalled()
+      expect(setRemoteConfigAndMeta).not.toHaveBeenCalled()
+    })
+
+    it('3.3 should upload when only local changed', async () => {
+      const baseConfig = createTestConfig({ setting1: 'base' })
+      const localConfig = createTestConfig({ setting1: 'local-changed' })
+
+      vi.mocked(getLocalConfigAndMeta).mockResolvedValue(
+        createConfigValueAndMeta(localConfig, { lastModifiedAt: 2000 }),
+      )
+      vi.mocked(getLastSyncedConfigAndMeta).mockResolvedValue(
+        createLastSyncedConfigValueAndMeta(baseConfig, { email: 'a@test.com', lastModifiedAt: 1000 }),
+      )
+      vi.mocked(getRemoteConfigAndMetaWithUserEmail).mockResolvedValue({
+        configValueAndMeta: createConfigValueAndMeta(baseConfig, { lastModifiedAt: 1000 }),
+        email: 'a@test.com',
+      })
+
+      const result = await syncConfig()
+
+      expect(result).toEqual({ status: 'success', action: 'uploaded' })
+      expect(setRemoteConfigAndMeta).toHaveBeenCalled()
+      expect(setLastSyncConfigAndMeta).toHaveBeenCalled()
+      expect(setLocalConfigAndMeta).not.toHaveBeenCalled()
+    })
+
+    it('3.4 should return no-change when nothing changed', async () => {
+      const config = createTestConfig({ setting1: 'unchanged' })
+
+      vi.mocked(getLocalConfigAndMeta).mockResolvedValue(
+        createConfigValueAndMeta(config, { lastModifiedAt: 1000 }),
+      )
+      vi.mocked(getLastSyncedConfigAndMeta).mockResolvedValue(
+        createLastSyncedConfigValueAndMeta(config, { email: 'a@test.com', lastModifiedAt: 1000 }),
+      )
+      vi.mocked(getRemoteConfigAndMetaWithUserEmail).mockResolvedValue({
+        configValueAndMeta: createConfigValueAndMeta(config, { lastModifiedAt: 1000 }),
+        email: 'a@test.com',
+      })
+
+      const result = await syncConfig()
+
+      expect(result).toEqual({ status: 'success', action: 'no-change' })
+      // Only lastSyncedAt updated
+      expect(setLastSyncConfigAndMeta).toHaveBeenCalled()
+      expect(setLocalConfigAndMeta).not.toHaveBeenCalled()
+      expect(setRemoteConfigAndMeta).not.toHaveBeenCalled()
+    })
+
+    describe('3.5 Remote Inaccessible (null remote)', () => {
+      it('3.5.1 should upload when local changed', async () => {
+        const baseConfig = createTestConfig({ setting1: 'base' })
+        const localConfig = createTestConfig({ setting1: 'local-changed' })
+
+        vi.mocked(getLocalConfigAndMeta).mockResolvedValue(
+          createConfigValueAndMeta(localConfig, { lastModifiedAt: 2000 }),
+        )
+        vi.mocked(getLastSyncedConfigAndMeta).mockResolvedValue(
+          createLastSyncedConfigValueAndMeta(baseConfig, { email: 'a@test.com', lastModifiedAt: 1000 }),
+        )
+        vi.mocked(getRemoteConfigAndMetaWithUserEmail).mockResolvedValue({
+          configValueAndMeta: null,
+          email: 'a@test.com',
         })
 
-        mockStorage.getItem
-          .mockResolvedValueOnce(mockConfig)
-          .mockResolvedValueOnce(CONFIG_SCHEMA_VERSION)
-          .mockResolvedValueOnce(null)
-        mockStorage.getMeta.mockResolvedValue({ modifiedAt: Date.now() - 5000 })
-        mockApi.findFileInAppData.mockResolvedValue(createMockGoogleDriveFile())
-        mockApi.downloadFile.mockResolvedValue(JSON.stringify(mockRemoteData))
-        mockMigrateConfig.mockRejectedValue(new Error('Migration failed'))
+        const result = await syncConfig()
 
-        await expect(syncConfig()).rejects.toThrow('Migration failed')
+        expect(result).toEqual({ status: 'success', action: 'uploaded' })
+        expect(setRemoteConfigAndMeta).toHaveBeenCalled()
+        expect(setLastSyncConfigAndMeta).toHaveBeenCalled()
       })
+
+      it('3.5.2 should return no-change when local unchanged', async () => {
+        const config = createTestConfig({ setting1: 'unchanged' })
+
+        vi.mocked(getLocalConfigAndMeta).mockResolvedValue(
+          createConfigValueAndMeta(config, { lastModifiedAt: 1000 }),
+        )
+        vi.mocked(getLastSyncedConfigAndMeta).mockResolvedValue(
+          createLastSyncedConfigValueAndMeta(config, { email: 'a@test.com', lastModifiedAt: 1000 }),
+        )
+        vi.mocked(getRemoteConfigAndMetaWithUserEmail).mockResolvedValue({
+          configValueAndMeta: null,
+          email: 'a@test.com',
+        })
+
+        const result = await syncConfig()
+
+        expect(result).toEqual({ status: 'success', action: 'no-change' })
+        expect(setLastSyncConfigAndMeta).toHaveBeenCalled()
+        expect(setLocalConfigAndMeta).not.toHaveBeenCalled()
+        expect(setRemoteConfigAndMeta).not.toHaveBeenCalled()
+      })
+    })
+  })
+
+  describe('4. Error Handling', () => {
+    it('should return error status when getLocalConfigAndMeta throws', async () => {
+      const testError = new Error('Local storage error')
+      vi.mocked(getLocalConfigAndMeta).mockRejectedValue(testError)
+
+      const result = await syncConfig()
+
+      expect(result).toEqual({ status: 'error', error: testError })
+    })
+
+    it('should return error status when getRemoteConfigAndMetaWithUserEmail throws', async () => {
+      const testError = new Error('Network error')
+      vi.mocked(getLocalConfigAndMeta).mockResolvedValue(
+        createConfigValueAndMeta(createTestConfig()),
+      )
+      vi.mocked(getLastSyncedConfigAndMeta).mockResolvedValue(null)
+      vi.mocked(getRemoteConfigAndMetaWithUserEmail).mockRejectedValue(testError)
+
+      const result = await syncConfig()
+
+      expect(result).toEqual({ status: 'error', error: testError })
+    })
+
+    it('should wrap non-Error objects in Error', async () => {
+      vi.mocked(getLocalConfigAndMeta).mockRejectedValue('string error')
+
+      const result = await syncConfig()
+
+      expect(result.status).toBe('error')
+      expect((result as any).error).toBeInstanceOf(Error)
+      expect((result as any).error.message).toBe('string error')
     })
   })
 })

@@ -6,8 +6,8 @@ import { useTree } from '@headless-tree/react'
 import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
 import { Tree, TreeItem, TreeItemLabel } from '@/components/shadcn/tree'
-import { diffResultAtom } from '@/utils/atoms/google-drive-sync'
-import { ConflictField } from './conflict-field'
+import { diffConflictsResultAtom } from '@/utils/atoms/google-drive-sync'
+import { ConflictField } from './unresolved-field'
 import { formatValue } from './utils'
 
 interface JsonNodeData {
@@ -15,10 +15,6 @@ interface JsonNodeData {
   value: unknown
   pathKey: string
   isArrayItem: boolean
-}
-
-interface JsonTreeViewProps {
-  data: Config
 }
 
 function buildTreeData(data: Config): {
@@ -53,15 +49,15 @@ function buildTreeData(data: Config): {
   return { items, children }
 }
 
-export function JsonTreeView({ data }: JsonTreeViewProps) {
-  const diffResult = useAtomValue(diffResultAtom)
-  const { items, children } = useMemo(() => buildTreeData(data), [data])
+export function JsonTreeView({ resolvedConfig }: { resolvedConfig: Config }) {
+  const diffConflictsResult = useAtomValue(diffConflictsResultAtom)
+  const { items, children } = useMemo(() => buildTreeData(resolvedConfig), [resolvedConfig])
 
   const conflictPaths = useMemo(() => {
-    if (!diffResult)
+    if (!diffConflictsResult)
       return new Set<string>()
-    return new Set(diffResult.conflicts.map(c => c.path.join('.')))
-  }, [diffResult])
+    return new Set(diffConflictsResult.conflicts.map(c => c.path.join('.')))
+  }, [diffConflictsResult])
 
   // Expand all items that have conflicts when the component is mounted
   const initialExpandedItems = useMemo(() => {
@@ -89,8 +85,8 @@ export function JsonTreeView({ data }: JsonTreeViewProps) {
 
   const formatFolderLabel = (value: unknown, childrenCount: number): string => {
     const countText = childrenCount === 1
-      ? `${childrenCount} ${i18n.t('options.config.sync.googleDrive.conflict.item')}`
-      : `${childrenCount} ${i18n.t('options.config.sync.googleDrive.conflict.items')}`
+      ? `${childrenCount} ${i18n.t('options.config.sync.googleDrive.unresolved.item')}`
+      : `${childrenCount} ${i18n.t('options.config.sync.googleDrive.unresolved.items')}`
 
     return Array.isArray(value) ? `[${countText}]` : `{${countText}}`
   }
@@ -110,7 +106,7 @@ export function JsonTreeView({ data }: JsonTreeViewProps) {
     return (
       <div key={item.getId()}>
         <TreeItem item={item}>
-          <TreeItemLabel className="font-mono text-sm bg-transparent hover:bg-transparent">
+          <TreeItemLabel className="font-mono text-xs bg-transparent hover:bg-transparent">
             {!isArrayItem && <span className="text-blue-600 dark:text-blue-400">{key}</span>}
             {!isArrayItem && <span className="text-slate-500 mx-1">:</span>}
             <span className="text-slate-700 dark:text-slate-300">
