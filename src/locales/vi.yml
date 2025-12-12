@@ -153,6 +153,14 @@ options:
         confirm: Xác nhận
         cancel: Hủy
         description: Thao tác này sẽ xóa tất cả bộ nhớ đệm dịch. Hành động này không thể hoàn tác.
+  overlayTools:
+    title: Công cụ nổi
+    floatingButton:
+      title: Nút nổi
+    selectionToolbar:
+      title: Thanh công cụ chọn
+    contextMenu:
+      title: Menu ngữ cảnh
   floatingButtonAndToolbar:
     title: Nút nổi & Thanh công cụ
     floatingButtonDemoImageAlt: Demo nút nổi
@@ -169,6 +177,11 @@ options:
         description: Cấu hình các trang web mà nút nổi nên bị tắt
         enterUrlPattern: Nhập mẫu URL
         urlPattern: Mẫu URL
+      clickAction:
+        title: Hành động khi nhấn
+        description: Chọn hành động khi nhấn vào nút nổi
+        panel: Mở bảng điều khiển
+        translate: Bật/tắt dịch trang
     selectionToolbar:
       globalToggle:
         title: Bật thanh công cụ chọn văn bản

@@ -153,6 +153,14 @@ options:
         confirm: Onayla
         cancel: İptal
         description: Bu işlem tüm çeviri önbelleğini temizleyecektir. Bu işlem geri alınamaz.
+  overlayTools:
+    title: Kaplama Araçları
+    floatingButton:
+      title: Yüzen Buton
+    selectionToolbar:
+      title: Seçim Araç Çubuğu
+    contextMenu:
+      title: Bağlam Menüsü
   floatingButtonAndToolbar:
     title: Yüzen Buton ve Araç Çubuğu
     floatingButtonDemoImageAlt: Yüzen Buton Demosu
@@ -169,6 +177,11 @@ options:
         description: Yüzen butonun devre dışı bırakılması gereken web sitelerini yapılandırın
         enterUrlPattern: URL kalıbı girin
         urlPattern: URL Kalıbı
+      clickAction:
+        title: Tıklama Eylemi
+        description: Yüzen butona tıklandığında gerçekleştirilecek eylemi seçin
+        panel: Paneli Aç
+        translate: Sayfa Çevirisini Aç/Kapat
     selectionToolbar:
       globalToggle:
         title: Seçim Araç Çubuğunu Etkinleştir
