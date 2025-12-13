@@ -121,9 +121,16 @@ jobs:
       - name: Submit to Chrome & Edge Stores
         if: steps.changesets.outputs.published == 'true'
         run: |
+          ZIP_FILE=$(ls .output/*-chrome.zip)
+          echo "Uploading: $ZIP_FILE"
+
+          # Verify manifest version before upload
+          MANIFEST_VERSION=$(unzip -p "$ZIP_FILE" manifest.json | jq -r '.version')
+          echo "Manifest version: $MANIFEST_VERSION"
+
           pnpm wxt submit \
-            --chrome-zip .output/*-chrome.zip \
-            --edge-zip .output/*-chrome.zip
+            --chrome-zip "$ZIP_FILE" \
+            --edge-zip "$ZIP_FILE"
         env:
           CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
           CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
