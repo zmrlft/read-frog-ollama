@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Release tag to submit (e.g., @read-frog/extension@1.20.2)'
+        description: 'Release tag to submit (e.g., v1.20.2)'
         required: true
         type: string
       dryRun:
@@ -35,6 +35,9 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Run Tests
+        run: pnpm test
+
       - name: Build and Zip Extension
         run: pnpm zip
         env:
@@ -58,4 +61,4 @@ jobs:
           CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
           EDGE_PRODUCT_ID: ${{ secrets.EDGE_PRODUCT_ID }}
           EDGE_CLIENT_ID: ${{ secrets.EDGE_CLIENT_ID }}
-          EDGE_CLIENT_SECRET: ${{ secrets.EDGE_CLIENT_SECRET }}
+          EDGE_CLIENT_SECRET: ${{ secrets.EDGE_API_KEY }}

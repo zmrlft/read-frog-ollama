@@ -45,20 +45,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SKIP_FREE_API: true
 
-      - name: Build and Zip Extension
-        if: steps.changesets.outputs.published == 'true'
-        run: pnpm zip
-        env:
-          WXT_GOOGLE_CLIENT_ID: ${{ secrets.WXT_GOOGLE_CLIENT_ID }}
-
-      - name: Upload Extension Zip to Release
-        if: steps.changesets.outputs.published == 'true'
-        run: |
-          TAG=$(echo '${{ steps.changesets.outputs.publishedPackages }}' | jq -r '.[0].name + "@" + .[0].version')
-          gh release upload "$TAG" .output/*-chrome.zip --clobber
-        env:
-          GH_TOKEN: ${{ github.token }}
-
       - name: Send Discord Notification
         if: steps.changesets.outputs.published == 'true'
         run: |
@@ -223,9 +209,9 @@ jobs:
               # Send individual notification to Discord
               echo "Sending Discord notification for $PACKAGE_NAME@$PACKAGE_VERSION..."
               RESPONSE=$(curl -s -w "%{http_code}" -H "Content-Type: application/json" \
-                   -X POST \
-                   -d "$DISCORD_PAYLOAD" \
-                   ${{ secrets.DISCORD_WEBHOOK_URL }})
+                    -X POST \
+                    -d "$DISCORD_PAYLOAD" \
+                    ${{ secrets.DISCORD_WEBHOOK_URL }})
 
               HTTP_CODE=$(echo "$RESPONSE" | tail -c 4)
               if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
@@ -240,6 +226,20 @@ jobs:
             fi
           done
 
+      - name: Build and Zip Extension
+        if: steps.changesets.outputs.published == 'true'
+        run: pnpm zip
+        env:
+          WXT_GOOGLE_CLIENT_ID: ${{ secrets.WXT_GOOGLE_CLIENT_ID }}
+
+      - name: Upload Extension Zip to Release
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          TAG=$(echo '${{ steps.changesets.outputs.publishedPackages }}' | jq -r '"v" + .[0].version')
+          gh release upload "$TAG" .output/*-chrome.zip --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
+
       - name: Submit to Chrome & Edge Stores
         if: steps.changesets.outputs.published == 'true'
         run: |
@@ -253,4 +253,4 @@ jobs:
           CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
           EDGE_PRODUCT_ID: ${{ secrets.EDGE_PRODUCT_ID }}
           EDGE_CLIENT_ID: ${{ secrets.EDGE_CLIENT_ID }}
-          EDGE_CLIENT_SECRET: ${{ secrets.EDGE_CLIENT_SECRET }}
+          EDGE_CLIENT_SECRET: ${{ secrets.EDGE_API_KEY }}
