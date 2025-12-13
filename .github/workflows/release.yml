@@ -45,6 +45,20 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SKIP_FREE_API: true
 
+      - name: Build and Zip Extension
+        if: steps.changesets.outputs.published == 'true'
+        run: pnpm zip
+        env:
+          WXT_GOOGLE_CLIENT_ID: ${{ secrets.WXT_GOOGLE_CLIENT_ID }}
+
+      - name: Upload Extension Zip to Release
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          TAG=$(echo '${{ steps.changesets.outputs.publishedPackages }}' | jq -r '.[0].name + "@" + .[0].version')
+          gh release upload "$TAG" .output/*-chrome.zip --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
+
       - name: Send Discord Notification
         if: steps.changesets.outputs.published == 'true'
         run: |
@@ -225,3 +239,18 @@ jobs:
               sleep 1
             fi
           done
+
+      - name: Submit to Chrome & Edge Stores
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          pnpm wxt submit \
+            --chrome-zip .output/*-chrome.zip \
+            --edge-zip .output/*-chrome.zip
+        env:
+          CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
+          CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
+          CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+          CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          EDGE_PRODUCT_ID: ${{ secrets.EDGE_PRODUCT_ID }}
+          EDGE_CLIENT_ID: ${{ secrets.EDGE_CLIENT_ID }}
+          EDGE_CLIENT_SECRET: ${{ secrets.EDGE_CLIENT_SECRET }}
