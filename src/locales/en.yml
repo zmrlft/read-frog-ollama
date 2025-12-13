@@ -89,6 +89,12 @@ options:
           title: Translate Model
           customTitle: Translate Custom Model
           placeholder: Select a model
+        fetchModels: Fetch available models
+        fetchError: Failed to fetch models
+        clickToRetry: Click to retry
+        noModels: No models available
+        selectModel: Select a model
+        apiKeyRequired: Please add API key first
     providers:
       description:
         openai: Provides models like GPT-4o

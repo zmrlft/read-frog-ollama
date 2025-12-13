@@ -11,21 +11,6 @@ import { getLobeIconsCDNUrlFn } from '../logo'
 import { WEBSITE_URL } from './url'
 
 export const DEFAULT_READ_MODELS: ReadModels = {
-  siliconflow: {
-    model: 'Qwen/Qwen3-Next-80B-A3B-Instruct',
-    isCustomModel: false,
-    customModel: null,
-  },
-  tensdaq: {
-    model: 'deepseek-v3.1',
-    isCustomModel: false,
-    customModel: null,
-  },
-  ai302: {
-    model: 'gpt-4.1-mini',
-    isCustomModel: false,
-    customModel: null,
-  },
   openrouter: {
     model: 'deepseek/deepseek-chat-v3.1:free',
     isCustomModel: false,
@@ -37,7 +22,7 @@ export const DEFAULT_READ_MODELS: ReadModels = {
     customModel: null,
   },
   openai: {
-    model: 'gpt-4.1-mini',
+    model: 'gpt-5-mini',
     isCustomModel: false,
     customModel: null,
   },
@@ -47,12 +32,12 @@ export const DEFAULT_READ_MODELS: ReadModels = {
     customModel: null,
   },
   gemini: {
-    model: 'gemini-2.5-pro',
+    model: 'gemini-3-pro-preview',
     isCustomModel: false,
     customModel: null,
   },
   anthropic: {
-    model: 'claude-sonnet-4-5',
+    model: 'claude-opus-4-5',
     isCustomModel: false,
     customModel: null,
   },
@@ -62,42 +47,42 @@ export const DEFAULT_READ_MODELS: ReadModels = {
     customModel: null,
   },
   amazonBedrock: {
-    model: 'anthropic.claude-3-5-sonnet-20241022-v2:0',
+    model: 'us.meta.llama4-maverick-17b-instruct-v1:0',
     isCustomModel: false,
     customModel: null,
   },
   groq: {
-    model: 'llama-3.3-70b-versatile',
+    model: 'meta-llama/llama-4-maverick-17b-128e-instruct',
     isCustomModel: false,
     customModel: null,
   },
   deepinfra: {
-    model: 'meta-llama/Llama-3.3-70B-Instruct',
+    model: 'meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8',
     isCustomModel: false,
     customModel: null,
   },
   mistral: {
-    model: 'mistral-large-latest',
+    model: 'magistral-medium-2506',
     isCustomModel: false,
     customModel: null,
   },
   togetherai: {
-    model: 'meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo',
+    model: 'deepseek-ai/DeepSeek-V3',
     isCustomModel: false,
     customModel: null,
   },
   cohere: {
-    model: 'command-r-plus',
+    model: 'command-a-reasoning-08-2025',
     isCustomModel: false,
     customModel: null,
   },
   fireworks: {
-    model: 'accounts/fireworks/models/llama-v3p1-405b-instruct',
+    model: 'accounts/fireworks/models/kimi-k2-instruct',
     isCustomModel: false,
     customModel: null,
   },
   cerebras: {
-    model: 'llama-3.3-70b',
+    model: 'qwen-3-235b-a22b-thinking-2507',
     isCustomModel: false,
     customModel: null,
   },
@@ -107,43 +92,43 @@ export const DEFAULT_READ_MODELS: ReadModels = {
     customModel: null,
   },
   perplexity: {
-    model: 'sonar-pro',
+    model: 'sonar-deep-research',
     isCustomModel: false,
     customModel: null,
   },
   vercel: {
-    model: 'v0-1.5-md',
+    model: 'v0-1.5-lg',
     isCustomModel: false,
     customModel: null,
   },
   ollama: {
-    model: 'deepseek-v3',
+    model: 'gemma3:27b',
     isCustomModel: false,
+    customModel: null,
+  },
+  siliconflow: {
+    model: 'Qwen/Qwen3-Next-80B-A3B-Instruct',
+    isCustomModel: true,
+    customModel: null,
+  },
+  tensdaq: {
+    model: 'MiniMax-M2',
+    isCustomModel: true,
+    customModel: null,
+  },
+  ai302: {
+    model: 'gpt-4.1-mini',
+    isCustomModel: true,
     customModel: null,
   },
   volcengine: {
     model: 'doubao-seed-1-6-251015',
-    isCustomModel: false,
+    isCustomModel: true,
     customModel: null,
   },
 }
 
 export const DEFAULT_TRANSLATE_MODELS: TranslateLLMModels = {
-  siliconflow: {
-    model: 'Qwen/Qwen3-Next-80B-A3B-Instruct',
-    isCustomModel: false,
-    customModel: null,
-  },
-  tensdaq: {
-    model: 'Qwen3-30B-A3B-Instruct-2507',
-    isCustomModel: false,
-    customModel: null,
-  },
-  ai302: {
-    model: 'gpt-4.1-mini',
-    isCustomModel: false,
-    customModel: null,
-  },
   openrouter: {
     model: 'x-ai/grok-4-fast:free',
     isCustomModel: false,
@@ -155,7 +140,7 @@ export const DEFAULT_TRANSLATE_MODELS: TranslateLLMModels = {
     customModel: null,
   },
   openai: {
-    model: 'gpt-4.1-mini',
+    model: 'gpt-5-mini',
     isCustomModel: false,
     customModel: null,
   },
@@ -165,57 +150,57 @@ export const DEFAULT_TRANSLATE_MODELS: TranslateLLMModels = {
     customModel: null,
   },
   gemini: {
-    model: 'gemini-2.5-flash',
+    model: 'gemini-3-pro-preview',
     isCustomModel: false,
     customModel: null,
   },
   anthropic: {
-    model: 'claude-sonnet-4-5',
+    model: 'claude-haiku-4-5',
     isCustomModel: false,
     customModel: null,
   },
   grok: {
-    model: 'grok-3-mini',
+    model: 'grok-4-fast-non-reasoning',
     isCustomModel: false,
     customModel: null,
   },
   amazonBedrock: {
-    model: 'anthropic.claude-3-5-haiku-20241022-v1:0',
+    model: 'us.meta.llama4-scout-17b-instruct-v1:0',
     isCustomModel: false,
     customModel: null,
   },
   groq: {
-    model: 'llama-3.1-70b-versatile',
+    model: 'meta-llama/llama-4-scout-17b-16e-instruct',
     isCustomModel: false,
     customModel: null,
   },
   deepinfra: {
-    model: 'meta-llama/Llama-3.1-70B-Instruct',
+    model: 'meta-llama/Llama-4-Scout-17B-16E-Instruct',
     isCustomModel: false,
     customModel: null,
   },
   mistral: {
-    model: 'mistral-small-latest',
+    model: 'magistral-small-2506',
     isCustomModel: false,
     customModel: null,
   },
   togetherai: {
-    model: 'meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo',
+    model: 'deepseek-ai/DeepSeek-V3',
     isCustomModel: false,
     customModel: null,
   },
   cohere: {
-    model: 'command-r',
+    model: 'command-a-reasoning-08-2025',
     isCustomModel: false,
     customModel: null,
   },
   fireworks: {
-    model: 'accounts/fireworks/models/llama-v3p1-70b-instruct',
+    model: 'accounts/fireworks/models/kimi-k2-instruct',
     isCustomModel: false,
     customModel: null,
   },
   cerebras: {
-    model: 'llama3.1-8b',
+    model: 'qwen-3-235b-a22b-instruct-2507',
     isCustomModel: false,
     customModel: null,
   },
@@ -225,7 +210,7 @@ export const DEFAULT_TRANSLATE_MODELS: TranslateLLMModels = {
     customModel: null,
   },
   perplexity: {
-    model: 'sonar-pro',
+    model: 'sonar',
     isCustomModel: false,
     customModel: null,
   },
@@ -239,9 +224,24 @@ export const DEFAULT_TRANSLATE_MODELS: TranslateLLMModels = {
     isCustomModel: false,
     customModel: null,
   },
+  siliconflow: {
+    model: 'Qwen/Qwen3-Next-80B-A3B-Instruct',
+    isCustomModel: true,
+    customModel: null,
+  },
+  tensdaq: {
+    model: 'Qwen3-30B-A3B-Instruct-2507',
+    isCustomModel: true,
+    customModel: null,
+  },
+  ai302: {
+    model: 'gpt-4.1-mini',
+    isCustomModel: true,
+    customModel: null,
+  },
   volcengine: {
     model: 'doubao-seed-1-6-flash-250828',
-    isCustomModel: false,
+    isCustomModel: true,
     customModel: null,
   },
 }
