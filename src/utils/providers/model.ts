@@ -1,3 +1,4 @@
+import type { LanguageModel } from 'ai'
 import type { Config } from '@/types/config/config'
 import { storage } from '#imports'
 import { createAmazonBedrock } from '@ai-sdk/amazon-bedrock'
@@ -115,7 +116,8 @@ async function getLanguageModelById(providerId: string, modelType: 'read' | 'tra
     throw new Error(`Model is undefined for ${modelType}`)
   }
 
-  return provider.languageModel(modelId)
+  // TODO: remove `as LanguageModel` after openrouter provider is compatible with AI SDK v6
+  return provider.languageModel(modelId) as LanguageModel
 }
 
 export async function getTranslateModelById(providerId: string) {
