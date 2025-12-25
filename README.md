@@ -24,6 +24,8 @@ Master languages effortlessly and deeply with AI, right in your browser.
 
 </div>
 
+![2025 Recap](/assets/2025-recap.png)
+
 <details>
 <summary><kbd>Table of contents</kbd></summary>
 
@@ -185,6 +187,7 @@ Every donation helps us build a better language learning experience. Thank you f
 
 <!-- LINK GROUP -->
 
+[2025-recap]: /assets/2025-recap.png
 [back-to-top]: https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square
 [chrome-store-link]: https://chromewebstore.google.com/detail/read-frog-open-source-ai/modkelfkcfjpgbfmnbnllalkiogfofhb
 [chrome-users-shield]: https://img.shields.io/chrome-web-store/users/modkelfkcfjpgbfmnbnllalkiogfofhb?style=flat-square&label=Chrome%20Users&color=orange&labelColor=black
