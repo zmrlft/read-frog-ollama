@@ -24,6 +24,8 @@
 
 </div>
 
+![2025 Recap](/assets/2025-recap.png)
+
 <details>
 <summary><kbd>目录</kbd></summary>
 
