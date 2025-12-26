@@ -1,18 +1,19 @@
 /**
  * Migration script from v038 to v039
- * Renames provider keys to match AI SDK expectations:
- * - 'gemini' -> 'google'
- * - 'grok' -> 'xai'
- * - 'amazonBedrock' -> 'bedrock'
- * - 'openaiCompatible' -> 'openai-compatible'
- * - 'google' (translation) -> 'google-translate'
- * - 'microsoft' (translation) -> 'microsoft-translate'
+ * 1. Renames provider keys to match AI SDK expectations:
+ *    - 'gemini' -> 'google'
+ *    - 'grok' -> 'xai'
+ *    - 'amazonBedrock' -> 'bedrock'
+ *    - 'openaiCompatible' -> 'openai-compatible'
+ *    - 'google' (translation) -> 'google-translate'
+ *    - 'microsoft' (translation) -> 'microsoft-translate'
+ * 2. Add 'videoSubtitles' field as top-level config
  *
  * Before (v038):
  *   { providersConfig: [{ provider: 'gemini', ... }, { provider: 'google', ... }], ... }
  *
  * After (v039):
- *   { providersConfig: [{ provider: 'google', ... }, { provider: 'google-translate', ... }], ... }
+ *   { providersConfig: [{ provider: 'google', ... }, { provider: 'google-translate', ... }], videoSubtitles: { enabled }, ... }
  */
 
 const PROVIDER_KEY_MIGRATION: Record<string, string> = {
@@ -63,6 +64,9 @@ export function migrate(oldConfig: any): any {
     read: {
       ...oldConfig.read,
       providerId: newReadProviderId,
+    },
+    videoSubtitles: {
+      enabled: false,
     },
   }
 }

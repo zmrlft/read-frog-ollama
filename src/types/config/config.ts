@@ -42,6 +42,11 @@ const contextMenuSchema = z.object({
   enabled: z.boolean(),
 })
 
+// video subtitles schema
+const videoSubtitlesSchema = z.object({
+  enabled: z.boolean(),
+})
+
 // Complete config schema
 export const configSchema = z.object({
   language: languageSchema,
@@ -54,6 +59,7 @@ export const configSchema = z.object({
   sideContent: sideContentSchema,
   betaExperience: betaExperienceSchema,
   contextMenu: contextMenuSchema,
+  videoSubtitles: videoSubtitlesSchema,
 }).superRefine((data, ctx) => {
   const providerIdsSet = new Set(data.providersConfig.map(p => p.id))
   const providerIds = Array.from(providerIdsSet)

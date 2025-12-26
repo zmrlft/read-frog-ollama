@@ -472,6 +472,11 @@ options:
         confirm: Confirm
         cancel: Cancel
         description: This operation will clear all your custom configurations and reset them to default values. Please confirm.
+  videoSubtitles:
+    title: Video Subtitles
+    description: Currently only supports YouTube video subtitles
+    enable: Enable Video Subtitles
+    enableDescription: When enabled, a translation button will appear in the YouTube player controls. Click it to start translating subtitles.
   whatsNew:
     title: What's New
   survey:
@@ -518,3 +523,24 @@ speak:
   openaiApiKeyNotConfigured: OpenAI API key is not configured
 shortcutKeySelector:
   placeholder: Please enter the shortcut
+subtitles:
+  state:
+    idle: Ready
+    fetching: Fetching captions
+    fetchSuccess: Captions loaded
+    fetchFailed: Failed to fetch captions
+    processing: Translating captions (approx. 2 minutes)
+    completed: Translation completed
+    error: Error occurred
+  errors:
+    http429: 429 Too many requests to youtube subtitle API, please try again later
+    http404: 404 Youtube captions not found
+    http403: 403 Youtube caption access denied
+    http500: 500 Youtube server error
+    invalidResponse: Invalid Youtube subtitle response format
+    networkError: Network error occurred when fetching captions
+    fetchSubTimeout: Fetching youtube captions timed out
+    buttonNotFound: Subtitle button not found
+    noSubtitlesFound: No subtitles found
+    videoNotFound: Video element not found
+    controlsBarNotFound: Controls bar not found

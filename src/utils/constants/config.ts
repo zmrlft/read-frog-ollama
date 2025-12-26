@@ -86,6 +86,9 @@ export const DEFAULT_CONFIG: Config = {
   contextMenu: {
     enabled: true,
   },
+  videoSubtitles: {
+    enabled: false,
+  },
 }
 
 export const PAGE_TRANSLATE_RANGE_ITEMS: Record<

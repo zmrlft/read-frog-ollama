@@ -32,7 +32,7 @@ function getCachedArticleData(): typeof cachedArticleData {
   return cachedArticleData
 }
 
-async function getOrFetchArticleData(
+export async function getOrFetchArticleData(
   enableAIContentAware: boolean,
 ): Promise<{ title: string, textContent?: string } | null> {
   // Only works in browser context
@@ -91,7 +91,7 @@ async function getOrFetchArticleData(
   }
 }
 
-async function buildHashComponents(
+export async function buildHashComponents(
   text: string,
   providerConfig: ProviderConfig,
   partialLangConfig: { sourceCode: LangCodeISO6393 | 'auto', targetCode: LangCodeISO6393 },

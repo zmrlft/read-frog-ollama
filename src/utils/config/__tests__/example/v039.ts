@@ -2,7 +2,7 @@ import type { TestSeriesObject } from './types'
 
 export const testSeries: TestSeriesObject = {
   'complex-config-from-v020': {
-    description: 'Migrate provider keys to match AI SDK expectations',
+    description: 'Migrate provider keys to match AI SDK expectations and add videoSubtitles field',
     config: {
       language: {
         sourceCode: 'spa',
@@ -163,10 +163,13 @@ export const testSeries: TestSeriesObject = {
       contextMenu: {
         enabled: true,
       },
+      videoSubtitles: {
+        enabled: false,
+      },
     },
   },
   'config-with-no-default-openai-model': {
-    description: 'Migrate provider keys to match AI SDK expectations',
+    description: 'Migrate provider keys to match AI SDK expectations and add videoSubtitles field',
     config: {
       floatingButton: {
         disabledFloatingButtonPatterns: [],
@@ -283,10 +286,13 @@ export const testSeries: TestSeriesObject = {
       contextMenu: {
         enabled: true,
       },
+      videoSubtitles: {
+        enabled: false,
+      },
     },
   },
   'comprehensive-provider-migration-test': {
-    description: 'Test all provider key migrations: gemini→google, grok→xai, amazonBedrock→bedrock, google→google-translate, microsoft→microsoft-translate, openaiCompatible→openai-compatible',
+    description: 'Test all provider key migrations: gemini→google, grok→xai, amazonBedrock→bedrock, google→google-translate, microsoft→microsoft-translate, openaiCompatible→openai-compatible, and add videoSubtitles field',
     config: {
       language: {
         sourceCode: 'auto',
@@ -466,6 +472,9 @@ export const testSeries: TestSeriesObject = {
       },
       contextMenu: {
         enabled: true,
+      },
+      videoSubtitles: {
+        enabled: false,
       },
     },
   },

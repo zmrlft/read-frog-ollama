@@ -468,6 +468,11 @@ options:
         confirm: 確認
         cancel: キャンセル
         description: この操作は、すべての設定をデフォルト値にリセットします。ご確認ください。
+  videoSubtitles:
+    title: 動画字幕
+    description: 現在 YouTube 動画字幕のみ対応
+    enable: 動画字幕を有効にする
+    enableDescription: 有効にすると、YouTube プレーヤーのコントロールバーに翻訳ボタンが表示されます。クリックして字幕の翻訳を開始します。
   whatsNew:
     title: 新機能
   survey:
@@ -514,3 +519,24 @@ speak:
   openaiApiKeyNotConfigured: OpenAI APIキーが設定されていません
 shortcutKeySelector:
   placeholder: ショートカットを入力してください
+subtitles:
+  state:
+    idle: 準備完了
+    fetching: 字幕取得中
+    fetchSuccess: 字幕読み込み完了
+    fetchFailed: 字幕取得失敗
+    processing: 字幕翻訳中（約2分）
+    completed: 翻訳完了
+    error: エラーが発生しました
+  errors:
+    http429: 429 YouTube字幕APIへのリクエストが多すぎます。しばらくしてから再試行してください
+    http404: 404 YouTubeの字幕が見つかりません
+    http403: 403 YouTube字幕へのアクセスが拒否されました
+    http500: 500 YouTubeサーバーエラー
+    invalidResponse: YouTube字幕のレスポンス形式が無効です
+    networkError: 字幕取得時にネットワークエラーが発生しました
+    fetchSubTimeout: YouTube字幕の取得がタイムアウトしました
+    buttonNotFound: 字幕ボタンが見つかりません
+    noSubtitlesFound: 字幕が見つかりません
+    videoNotFound: 動画要素が見つかりません
+    controlsBarNotFound: コントロールバーが見つかりません

@@ -1,3 +1,5 @@
+import { STATE_MESSAGE_CLASS, SUBTITLES_VIEW_CLASS, TRANSLATE_BUTTON_CLASS, YOUTUBE_NATIVE_SUBTITLES_CLASS } from './subtitles'
+
 export const FORCE_BLOCK_TAGS = new Set([
   'BODY',
   'H1',
@@ -127,6 +129,10 @@ export const CUSTOM_DONT_WALK_INTO_ELEMENT_SELECTOR_MAP: Record<string, string[]
     '#more-replies',
     '#info',
     '#badges *',
+    `${YOUTUBE_NATIVE_SUBTITLES_CLASS}`,
+    `.${SUBTITLES_VIEW_CLASS}`,
+    `.${STATE_MESSAGE_CLASS}`,
+    `.${TRANSLATE_BUTTON_CLASS}`,
   ],
 }
 

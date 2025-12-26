@@ -471,6 +471,11 @@ options:
         confirm: 确认
         cancel: 取消
         description: 该操作将清空您的所有自定义配置，并将其重置为默认值，请确认是否清除。
+  videoSubtitles:
+    title: 视频字幕
+    description: 当前仅支持 YouTube 视频字幕
+    enable: 开启视频字幕
+    enableDescription: 启用后，YouTube 播放器控制栏会出现翻译按钮。点击即可开始翻译字幕。
   whatsNew:
     title: 最近更新
   survey:
@@ -517,3 +522,24 @@ speak:
   openaiApiKeyNotConfigured: OpenAI API Key 未配置
 shortcutKeySelector:
   placeholder: 请输入快捷键
+subtitles:
+  state:
+    idle: 就绪
+    fetching: 字幕获取中
+    fetchSuccess: 字幕加载成功
+    fetchFailed: 字幕获取失败
+    processing: 字幕翻译中（预计等待 2 分钟）
+    completed: 翻译完成
+    error: 发生错误
+  errors:
+    http429: 429 youtube 字幕接口请求次数过多，请稍后再试
+    http404: 404 未找到 youtube 字幕
+    http403: 403 youtube 字幕访问被拒绝
+    http500: 500 youtube 服务器错误
+    invalidResponse: youtube 字幕响应格式无效
+    networkError: 获取字幕时发生网络错误
+    fetchSubTimeout: 获取 youtube 字幕超时
+    buttonNotFound: 字幕按钮未找到
+    noSubtitlesFound: 未找到字幕
+    videoNotFound: 视频元素未找到
+    controlsBarNotFound: 控制栏未找到

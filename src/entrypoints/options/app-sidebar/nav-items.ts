@@ -7,11 +7,13 @@ import { SelectionToolbarPage } from '../pages/selection-toolbar'
 import { StatisticsPage } from '../pages/statistics'
 import { TextToSpeechPage } from '../pages/text-to-speech'
 import { TranslationPage } from '../pages/translation'
+import { VideoSubtitlesPage } from '../pages/video-subtitles'
 
 export const ROUTE_CONFIG = [
   { path: '/', component: GeneralPage },
   { path: '/api-providers', component: ApiProvidersPage },
   { path: '/translation', component: TranslationPage },
+  { path: '/video-subtitles', component: VideoSubtitlesPage },
   { path: '/floating-button', component: FloatingButtonPage },
   { path: '/selection-toolbar', component: SelectionToolbarPage },
   { path: '/context-menu', component: ContextMenuPage },

@@ -470,6 +470,11 @@ options:
         confirm: Подтвердить
         cancel: Отмена
         description: Эта операция очистит все ваши пользовательские конфигурации и сбросит их до значений по умолчанию. Пожалуйста, подтвердите.
+  videoSubtitles:
+    title: Видео субтитры
+    description: В настоящее время поддерживаются только субтитры YouTube
+    enable: Включить видео субтитры
+    enableDescription: При включении в панели управления YouTube появится кнопка перевода. Нажмите её, чтобы начать перевод субтитров.
   whatsNew:
     title: Что нового
   survey:
@@ -516,3 +521,24 @@ speak:
   openaiApiKeyNotConfigured: API-ключ OpenAI не настроен
 shortcutKeySelector:
   placeholder: Пожалуйста, введите горячую клавишу
+subtitles:
+  state:
+    idle: Готово
+    fetching: Получение субтитров
+    fetchSuccess: Субтитры загружены
+    fetchFailed: Не удалось получить субтитры
+    processing: Перевод субтитров (примерно 2 минуты)
+    completed: Перевод завершён
+    error: Произошла ошибка
+  errors:
+    http429: 429 Слишком много запросов к API YouTube субтитров, пожалуйста, попробуйте снова позже
+    http404: 404 Субтитры YouTube не найдены
+    http403: 403 Доступ к субтитрам YouTube запрещён
+    http500: 500 Произошла ошибка сервера YouTube
+    invalidResponse: Неверный формат ответа субтитров YouTube
+    networkError: Произошла сетевая ошибка при получении субтитров
+    fetchSubTimeout: Получение субтитров YouTube завершилось с ошибкой
+    buttonNotFound: Кнопка субтитров не найдена
+    noSubtitlesFound: Субтитры не найдены
+    videoNotFound: Видео элемент не найден
+    controlsBarNotFound: Панель управления не найдена

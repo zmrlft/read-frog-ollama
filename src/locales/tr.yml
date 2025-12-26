@@ -470,6 +470,11 @@ options:
         confirm: Onayla
         cancel: İptal
         description: Bu işlem tüm özel yapılandırmalarınızı temizleyecek ve varsayılan değerlere sıfırlayacaktır. Lütfen onaylayın.
+  videoSubtitles:
+    title: Video Altyazıları
+    description: Şu anda yalnızca YouTube video altyazılarını desteklemektedir
+    enable: Video Altyazılarını Etkinleştir
+    enableDescription: Etkinleştirildiğinde, YouTube oynatıcı kontrollerinde bir çeviri düğmesi görünecektir. Altyazıları çevirmeye başlamak için tıklayın.
   whatsNew:
     title: Yenilikler
   survey:
@@ -516,3 +521,24 @@ speak:
   openaiApiKeyNotConfigured: OpenAI API anahtarı yapılandırılmadı
 shortcutKeySelector:
   placeholder: Lütfen kısayolu girin
+subtitles:
+  state:
+    idle: Hazır
+    fetching: Altyazılar alınıyor
+    fetchSuccess: Altyazılar yüklendi
+    fetchFailed: Altyazılar alınamadı
+    processing: Altyazılar çevriliyor (yaklaşık 2 dakika)
+    completed: Çeviri tamamlandı
+    error: Bir hata oluştu
+  errors:
+    http429: 429 YouTube altyazı API'sine çok fazla istek gönderildi. Lütfen biraz bekleyip tekrar deneyin.
+    http404: 404 YouTube altyazı bulunamadı.
+    http403: 403 YouTube altyazı erişimi reddedildi.
+    http500: 500 YouTube sunucu hatası oluştu.
+    invalidResponse: YouTube altyazı yanıt biçimi geçersiz
+    networkError: YouTube altyazılar alınırken ağ hatası oluştu.
+    fetchSubTimeout: YouTube altyazılar alınırken zaman aşımı oluştu.
+    buttonNotFound: Altyazı butonu bulunamadı
+    noSubtitlesFound: Altyazı bulunamadı
+    videoNotFound: Video öğesi bulunamadı
+    controlsBarNotFound: Kontrol çubuğu bulunamadı

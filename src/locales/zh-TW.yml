@@ -471,6 +471,11 @@ options:
         confirm: 確認
         cancel: 取消
         description: 此操作將清空您的所有自定義配置，並將其重置為預設值，請確認是否清除。
+  videoSubtitles:
+    title: 影片字幕
+    description: 目前僅支援 YouTube 影片字幕
+    enable: 開啟影片字幕
+    enableDescription: 啟用後，YouTube 播放器控制列會出現翻譯按鈕。點擊即可開始翻譯字幕。
   whatsNew:
     title: 最近更新
   survey:
@@ -517,3 +522,24 @@ speak:
   openaiApiKeyNotConfigured: OpenAI API Key 未配置
 shortcutKeySelector:
   placeholder: 請輸入快捷鍵
+subtitles:
+  state:
+    idle: 就緒
+    fetching: 字幕獲取中
+    fetchSuccess: 字幕載入成功
+    fetchFailed: 字幕獲取失敗
+    processing: 字幕翻譯中（預計等待 2 分鐘）
+    completed: 翻譯完成
+    error: 發生錯誤
+  errors:
+    http429: 429 youtube 字幕介面請求次數過多，請稍後再試
+    http404: 404 找不到 youtube 字幕
+    http403: 403 youtube 字幕存取被拒絕
+    http500: 500 youtube 伺服器錯誤
+    invalidResponse: youtube 字幕回應格式無效
+    networkError: 取得字幕時發生網路錯誤
+    fetchSubTimeout: 取得 youtube 字幕逾時
+    buttonNotFound: 字幕按鈕未找到
+    noSubtitlesFound: 未找到字幕
+    videoNotFound: 影片元素未找到
+    controlsBarNotFound: 控制列未找到
