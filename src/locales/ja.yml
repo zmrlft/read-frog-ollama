@@ -16,6 +16,7 @@ popup:
   alwaysTranslate: このサイトを常に翻訳する
   options: オプション
   hover: ホバー
+  longPress: 長押し
   translateParagraph: 段落を翻訳
   discord:
     tooltip: Discordに参加して開発者とつながり、新機能を先行体験しましょう
@@ -324,8 +325,8 @@ options:
         title: 可視性しきい値
         description: 翻訳をトリガーするために必要な要素の可視性の割合（0-1）。高い値は、要素がより多く表示されるまで翻訳を遅らせます。
     nodeTranslationHotkey:
-      title: ホバー翻訳ショートカットキー
-      description: テキストにホバーして段落を翻訳する際の修飾キーをカスタマイズします
+      title: ホバーまたは長押し翻訳ショートカットキー
+      description: ホバー翻訳の修飾キーをカスタマイズするか、長押しで段落を翻訳します
     llmProviderConfigured: LLM 翻訳プロバイダーが設定されています
     llmProviderNotConfigured: LLM 翻訳プロバイダーが設定されていません
     autoTranslateLanguages:

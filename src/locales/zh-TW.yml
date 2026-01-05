@@ -17,6 +17,7 @@ popup:
   alwaysTranslate: 總是翻譯這個網站
   options: 選項
   hover: 滑鼠懸停
+  longPress: 滑鼠長按
   translateParagraph: 來翻譯段落
   discord:
     tooltip: 加入 Discord 與開發者交流，搶先體驗新功能
@@ -327,8 +328,8 @@ options:
         title: 可見度閾值
         description: 觸發翻譯所需的元素可見度百分比（0-1）。較高的值會延遲翻譯，直到更多元素可見。
     nodeTranslationHotkey:
-      title: 懸停翻譯快捷鍵
-      description: 自訂懸停在文字上翻譯段落的修飾鍵
+      title: 懸停或長按翻譯快捷鍵
+      description: 自訂懸停翻譯的修飾鍵，或使用滑鼠長按翻譯段落
     llmProviderConfigured: 已設定 LLM 翻譯提供商
     llmProviderNotConfigured: 未設定 LLM 翻譯提供商
     autoTranslateLanguages:

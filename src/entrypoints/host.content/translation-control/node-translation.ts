@@ -6,6 +6,9 @@ import { removeOrShowNodeTranslation } from '@/utils/host/translate/node-manipul
 import { logger } from '@/utils/logger'
 
 export function registerNodeTranslationTriggers() {
+  const LONG_PRESS_TRIGGER_MS = 1000
+  const LONG_PRESS_MOVE_TOLERANCE = 6
+
   const mousePosition: Point = { x: 0, y: 0 }
   let isHotkeyPressed = false
   let isHotkeySessionPure = true // tracks if any other key was pressed during this hotkey session
@@ -21,6 +24,17 @@ export function registerNodeTranslationTriggers() {
 
   let timerId: NodeJS.Timeout | null = null
   let actionTriggered = false
+  let longPressTimerId: NodeJS.Timeout | null = null
+  let isMousePressed = false
+  let longPressTriggered = false
+  let mousePressPosition: Point | null = null
+
+  const clearLongPressTimer = () => {
+    if (longPressTimerId) {
+      clearTimeout(longPressTimerId)
+      longPressTimerId = null
+    }
+  }
 
   // Listen the hotkey means the user can't press or hold any other key during the hotkey is holding
   document.addEventListener('keydown', async (e) => {
@@ -30,6 +44,8 @@ export function registerNodeTranslationTriggers() {
       return
 
     const hotkey = await getHotkey()
+    if (hotkey === 'LongPress')
+      return
     if (e.key === hotkey) {
       if (!isHotkeyPressed) {
         isHotkeyPressed = true
@@ -69,6 +85,8 @@ export function registerNodeTranslationTriggers() {
     if (e.target instanceof HTMLElement && isEditable(e.target))
       return
     const hotkey = await getHotkey()
+    if (hotkey === 'LongPress')
+      return
     if (e.key === hotkey) {
       // translate if user releases the hotkey and session is pure
       if (isHotkeySessionPure) {
@@ -91,8 +109,63 @@ export function registerNodeTranslationTriggers() {
     }
   })
 
-  document.body.addEventListener('mousemove', (event) => {
+  document.addEventListener('mousedown', async (event) => {
+    if (!await isEnabled())
+      return
+    if (event.button !== 0)
+      return
+    if (event.target instanceof HTMLElement && isEditable(event.target))
+      return
+
+    const hotkey = await getHotkey()
+    if (hotkey !== 'LongPress')
+      return
+
+    isMousePressed = true
+    longPressTriggered = false
+    mousePressPosition = { x: event.clientX, y: event.clientY }
     mousePosition.x = event.clientX
     mousePosition.y = event.clientY
+
+    clearLongPressTimer()
+    longPressTimerId = setTimeout(async () => {
+      if (!isMousePressed || !mousePressPosition || longPressTriggered)
+        return
+      const config = await getLocalConfig()
+      if (!config) {
+        logger.error('Global config is not initialized')
+        return
+      }
+      void removeOrShowNodeTranslation(mousePressPosition, config)
+      longPressTriggered = true
+    }, LONG_PRESS_TRIGGER_MS)
+  })
+
+  document.addEventListener('mouseup', (event) => {
+    if (event.button !== 0)
+      return
+    if (!isMousePressed && !longPressTimerId)
+      return
+
+    isMousePressed = false
+    longPressTriggered = false
+    mousePressPosition = null
+    clearLongPressTimer()
+  })
+
+  document.addEventListener('mousemove', (event) => {
+    mousePosition.x = event.clientX
+    mousePosition.y = event.clientY
+
+    if (!isMousePressed || !mousePressPosition)
+      return
+
+    const deltaX = event.clientX - mousePressPosition.x
+    const deltaY = event.clientY - mousePressPosition.y
+    if (Math.hypot(deltaX, deltaY) > LONG_PRESS_MOVE_TOLERANCE) {
+      isMousePressed = false
+      mousePressPosition = null
+      clearLongPressTimer()
+    }
   })
 }

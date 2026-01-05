@@ -17,6 +17,7 @@ popup:
   alwaysTranslate: Luôn dịch trang web này
   options: Tùy chọn
   hover: Di chuột
+  longPress: Nhấn giữ chuột
   translateParagraph: để dịch đoạn văn
   discord:
     tooltip: Tham gia Discord để kết nối với các nhà phát triển và truy cập sớm các tính năng mới
@@ -326,8 +327,8 @@ options:
         title: Ngưỡng hiển thị
         description: Tỷ lệ phần trăm hiển thị của phần tử cần thiết để kích hoạt dịch (0-1). Giá trị cao hơn sẽ trì hoãn dịch cho đến khi nhiều phần tử hơn được hiển thị.
     nodeTranslationHotkey:
-      title: Phím tắt dịch khi di chuột
-      description: Tùy chỉnh phím bổ trợ để dịch đoạn văn khi di chuột qua văn bản
+      title: Phím tắt dịch khi di chuột hoặc nhấn giữ
+      description: Tùy chỉnh phím bổ trợ khi di chuột hoặc dùng nhấn giữ để dịch đoạn văn
     llmProviderConfigured: Đã cấu hình nhà cung cấp dịch LLM
     llmProviderNotConfigured: Chưa cấu hình nhà cung cấp dịch LLM
     autoTranslateLanguages:
