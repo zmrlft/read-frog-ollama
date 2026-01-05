@@ -17,7 +17,7 @@ export const LEGACY_CONFIG_SCHEMA_VERSION_STORAGE_KEY = '__configSchemaVersion'
 
 export const DETECTED_CODE_STORAGE_KEY = 'detectedCode'
 export const DEFAULT_DETECTED_CODE = 'eng' as const
-export const CONFIG_SCHEMA_VERSION = 39
+export const CONFIG_SCHEMA_VERSION = 40
 
 export const DEFAULT_FLOATING_BUTTON_POSITION = 0.66
 
@@ -85,6 +85,13 @@ export const DEFAULT_CONFIG: Config = {
   },
   contextMenu: {
     enabled: true,
+  },
+  inputTranslation: {
+    enabled: true,
+    direction: 'normal',
+    useCustomTarget: true,
+    targetCode: 'eng',
+    timeThreshold: 300,
   },
   videoSubtitles: {
     enabled: false,

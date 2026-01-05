@@ -175,6 +175,29 @@ options:
       title: Seçim Araç Çubuğu
     contextMenu:
       title: Bağlam Menüsü
+    inputTranslation:
+      title: Giriş Çevirisi
+  inputTranslation:
+    toggle:
+      title: Üçlü Boşluk Çevirisini Etkinleştir
+      description: Herhangi bir giriş alanında boşluk tuşuna hızlıca 3 kez basarak içeriği çevirin
+    direction:
+      title: Çeviri Yönü
+      description: Metin çeviri yönünü seçin
+      normal: Kaynak → Hedef
+      reverse: Hedef → Kaynak
+      cycle: Döngü
+    useCustomTarget:
+      title: Hedef Dil
+      description: Çeviri yapılacak dili seçin
+      sourceLanguage: Read Frog kaynak dili
+      customTarget: Özel hedef dil
+    threshold:
+      title: Tetikleme Eşiği
+      description: Boşluk tuşuna basışlar arasındaki zaman aralığı
+      label: Eşik (ms)
+      hint: Ardışık boşluk tuşuna basışlar arasındaki milisaniye cinsinden süre (100-1000ms)
+      error: Değer $1 ile $2 arasında olmalıdır
   floatingButtonAndToolbar:
     title: Yüzen Buton ve Araç Çubuğu
     floatingButtonDemoImageAlt: Yüzen Buton Demosu
