@@ -176,6 +176,29 @@ options:
       title: Thanh công cụ chọn
     contextMenu:
       title: Menu ngữ cảnh
+    inputTranslation:
+      title: Dịch đầu vào
+  inputTranslation:
+    toggle:
+      title: Bật dịch ba lần nhấn phím cách
+      description: Nhấn phím cách nhanh 3 lần trong bất kỳ trường nhập nào để dịch nội dung
+    direction:
+      title: Hướng dịch
+      description: Chọn hướng dịch văn bản
+      normal: Nguồn → Đích
+      reverse: Đích → Nguồn
+      cycle: Luân phiên
+    useCustomTarget:
+      title: Ngôn ngữ đích
+      description: Chọn ngôn ngữ dịch
+      sourceLanguage: Ngôn ngữ nguồn của Read Frog
+      customTarget: Ngôn ngữ đích tùy chỉnh
+    threshold:
+      title: Ngưỡng kích hoạt
+      description: Khoảng thời gian giữa các lần nhấn phím cách
+      label: Ngưỡng (ms)
+      hint: Thời gian tính bằng mili giây giữa các lần nhấn phím cách liên tiếp (100-1000ms)
+      error: Giá trị phải từ $1 đến $2
   floatingButtonAndToolbar:
     title: Nút nổi & Thanh công cụ
     floatingButtonDemoImageAlt: Demo nút nổi
@@ -326,6 +349,13 @@ options:
       threshold:
         title: Ngưỡng hiển thị
         description: Tỷ lệ phần trăm hiển thị của phần tử cần thiết để kích hoạt dịch (0-1). Giá trị cao hơn sẽ trì hoãn dịch cho đến khi nhiều phần tử hơn được hiển thị.
+    minCharactersConfig:
+      title: Bộ lọc ký tự tối thiểu
+      description: Bỏ qua dịch các nút văn bản có ít ký tự hơn ngưỡng (0 = tắt)
+      minCharacters:
+        title: Số ký tự tối thiểu
+        description: Các nút văn bản có ít ký tự hơn giá trị này sẽ không được dịch. Số ký tự bao gồm khoảng trắng.
+      error: Giá trị phải từ $1 đến $2
     nodeTranslationHotkey:
       title: Phím tắt dịch khi di chuột hoặc nhấn giữ
       description: Tùy chỉnh phím bổ trợ khi di chuột hoặc dùng nhấn giữ để dịch đoạn văn
