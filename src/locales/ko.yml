@@ -16,7 +16,6 @@ popup:
   alwaysTranslate: 이 사이트 항상 번역
   options: 옵션
   hover: 마우스 오버
-  longPress: 마우스 길게 누르기
   translateParagraph: 단락 번역
   discord:
     tooltip: Discord에 참여하여 개발자와 소통하고 새 기능을 먼저 체험하세요
@@ -571,3 +570,9 @@ subtitles:
     noSubtitlesFound: 자막을 찾을 수 없습니다
     videoNotFound: 비디오 요소를 찾을 수 없습니다
     controlsBarNotFound: 컨트롤 바를 찾을 수 없습니다
+hotkey:
+  control: Ctrl
+  alt: Option
+  shift: Shift
+  backtick: 백틱
+  clickAndHold: 클릭하고 길게 누르기

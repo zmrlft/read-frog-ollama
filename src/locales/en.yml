@@ -17,7 +17,6 @@ popup:
   alwaysTranslate: Always translate this site
   options: Options
   hover: Hover
-  longPress: Long press
   translateParagraph: to translate paragraph
   discord:
     tooltip: Join Discord to connect with developers and get early access to new features
@@ -574,3 +573,9 @@ subtitles:
     noSubtitlesFound: No subtitles found
     videoNotFound: Video element not found
     controlsBarNotFound: Controls bar not found
+hotkey:
+  control: Ctrl
+  alt: Option
+  shift: Shift
+  backtick: Backtick
+  clickAndHold: Click and hold

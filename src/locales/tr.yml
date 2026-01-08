@@ -17,7 +17,6 @@ popup:
   alwaysTranslate: Bu siteyi her zaman çevir
   options: Seçenekler
   hover: Üzerine Gel
-  longPress: Uzun basma
   translateParagraph: paragrafı çevirmek için
   discord:
     tooltip: Geliştiricilerle bağlantı kurmak ve yeni özelliklere erken erişim sağlamak için Discord'a katılın
@@ -572,3 +571,9 @@ subtitles:
     noSubtitlesFound: Altyazı bulunamadı
     videoNotFound: Video öğesi bulunamadı
     controlsBarNotFound: Kontrol çubuğu bulunamadı
+hotkey:
+  control: Ctrl
+  alt: Option
+  shift: Shift
+  backtick: Ters tırnak
+  clickAndHold: Tıkla ve basılı tut

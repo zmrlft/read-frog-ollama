@@ -17,7 +17,6 @@ popup:
   alwaysTranslate: 总是翻译这个网站
   options: 选项
   hover: 鼠标悬停
-  longPress: 鼠标长按
   translateParagraph: 来翻译段落
   discord:
     tooltip: 加入 Discord 与开发者交流，抢先体验新功能
@@ -573,3 +572,9 @@ subtitles:
     noSubtitlesFound: 未找到字幕
     videoNotFound: 视频元素未找到
     controlsBarNotFound: 控制栏未找到
+hotkey:
+  control: Ctrl
+  alt: Option
+  shift: Shift
+  backtick: 反引号
+  clickAndHold: 点击并按住

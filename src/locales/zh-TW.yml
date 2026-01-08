@@ -17,7 +17,6 @@ popup:
   alwaysTranslate: 總是翻譯這個網站
   options: 選項
   hover: 滑鼠懸停
-  longPress: 滑鼠長按
   translateParagraph: 來翻譯段落
   discord:
     tooltip: 加入 Discord 與開發者交流，搶先體驗新功能
@@ -573,3 +572,9 @@ subtitles:
     noSubtitlesFound: 未找到字幕
     videoNotFound: 影片元素未找到
     controlsBarNotFound: 控制列未找到
+hotkey:
+  control: Ctrl
+  alt: Option
+  shift: Shift
+  backtick: 反引號
+  clickAndHold: 點擊並按住

@@ -2,4 +2,4 @@
 "@read-frog/extension": minor
 ---
 
-feat: add long press to translate
+feat: add click and hold to translate

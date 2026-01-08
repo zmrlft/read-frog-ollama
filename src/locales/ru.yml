@@ -17,7 +17,6 @@ popup:
   alwaysTranslate: Всегда переводить этот сайт
   options: Настройки
   hover: Наведение
-  longPress: Долгое нажатие
   translateParagraph: для перевода абзаца
   discord:
     tooltip: Присоединяйтесь к Discord, чтобы связаться с разработчиками и получить ранний доступ к новым функциям
@@ -572,3 +571,9 @@ subtitles:
     noSubtitlesFound: Субтитры не найдены
     videoNotFound: Видео элемент не найден
     controlsBarNotFound: Панель управления не найдена
+hotkey:
+  control: Ctrl
+  alt: Option
+  shift: Shift
+  backtick: Обратный апостроф
+  clickAndHold: Нажмите и удерживайте

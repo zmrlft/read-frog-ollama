@@ -1,13 +1,14 @@
 import type { Point } from '@/types/dom'
 import { getLocalConfig } from '@/utils/config/storage'
 import { DEFAULT_CONFIG } from '@/utils/constants/config'
+import { HOTKEY_EVENT_KEYS } from '@/utils/constants/hotkeys'
 import { isEditable } from '@/utils/host/dom/filter'
 import { removeOrShowNodeTranslation } from '@/utils/host/translate/node-manipulation'
 import { logger } from '@/utils/logger'
 
 export function registerNodeTranslationTriggers() {
-  const LONG_PRESS_TRIGGER_MS = 1000
-  const LONG_PRESS_MOVE_TOLERANCE = 6
+  const CLICK_AND_HOLD_TRIGGER_MS = 1000
+  const CLICK_AND_HOLD_MOVE_TOLERANCE = 6
 
   const mousePosition: Point = { x: 0, y: 0 }
   let isHotkeyPressed = false
@@ -24,15 +25,15 @@ export function registerNodeTranslationTriggers() {
 
   let timerId: NodeJS.Timeout | null = null
   let actionTriggered = false
-  let longPressTimerId: NodeJS.Timeout | null = null
+  let clickAndHoldTimerId: NodeJS.Timeout | null = null
   let isMousePressed = false
-  let longPressTriggered = false
+  let clickAndHoldTriggered = false
   let mousePressPosition: Point | null = null
 
-  const clearLongPressTimer = () => {
-    if (longPressTimerId) {
-      clearTimeout(longPressTimerId)
-      longPressTimerId = null
+  const clearClickAndHoldTimer = () => {
+    if (clickAndHoldTimerId) {
+      clearTimeout(clickAndHoldTimerId)
+      clickAndHoldTimerId = null
     }
   }
 
@@ -44,9 +45,9 @@ export function registerNodeTranslationTriggers() {
       return
 
     const hotkey = await getHotkey()
-    if (hotkey === 'LongPress')
+    if (hotkey === 'clickAndHold')
       return
-    if (e.key === hotkey) {
+    if (e.key === HOTKEY_EVENT_KEYS[hotkey]) {
       if (!isHotkeyPressed) {
         isHotkeyPressed = true
         // isHotkeySessionPure will be false if any key was pressed before hotkey
@@ -85,9 +86,9 @@ export function registerNodeTranslationTriggers() {
     if (e.target instanceof HTMLElement && isEditable(e.target))
       return
     const hotkey = await getHotkey()
-    if (hotkey === 'LongPress')
+    if (hotkey === 'clickAndHold')
       return
-    if (e.key === hotkey) {
+    if (e.key === HOTKEY_EVENT_KEYS[hotkey]) {
       // translate if user releases the hotkey and session is pure
       if (isHotkeySessionPure) {
         if (timerId) {
@@ -118,18 +119,16 @@ export function registerNodeTranslationTriggers() {
       return
 
     const hotkey = await getHotkey()
-    if (hotkey !== 'LongPress')
+    if (hotkey !== 'clickAndHold')
       return
 
     isMousePressed = true
-    longPressTriggered = false
+    clickAndHoldTriggered = false
     mousePressPosition = { x: event.clientX, y: event.clientY }
-    mousePosition.x = event.clientX
-    mousePosition.y = event.clientY
 
-    clearLongPressTimer()
-    longPressTimerId = setTimeout(async () => {
-      if (!isMousePressed || !mousePressPosition || longPressTriggered)
+    clearClickAndHoldTimer()
+    clickAndHoldTimerId = setTimeout(async () => {
+      if (!isMousePressed || !mousePressPosition || clickAndHoldTriggered)
         return
       const config = await getLocalConfig()
       if (!config) {
@@ -137,20 +136,20 @@ export function registerNodeTranslationTriggers() {
         return
       }
       void removeOrShowNodeTranslation(mousePressPosition, config)
-      longPressTriggered = true
-    }, LONG_PRESS_TRIGGER_MS)
+      clickAndHoldTriggered = true
+    }, CLICK_AND_HOLD_TRIGGER_MS)
   })
 
   document.addEventListener('mouseup', (event) => {
     if (event.button !== 0)
       return
-    if (!isMousePressed && !longPressTimerId)
+    if (!isMousePressed && !clickAndHoldTimerId)
       return
 
     isMousePressed = false
-    longPressTriggered = false
+    clickAndHoldTriggered = false
     mousePressPosition = null
-    clearLongPressTimer()
+    clearClickAndHoldTimer()
   })
 
   document.addEventListener('mousemove', (event) => {
@@ -162,10 +161,10 @@ export function registerNodeTranslationTriggers() {
 
     const deltaX = event.clientX - mousePressPosition.x
     const deltaY = event.clientY - mousePressPosition.y
-    if (Math.hypot(deltaX, deltaY) > LONG_PRESS_MOVE_TOLERANCE) {
+    if (Math.hypot(deltaX, deltaY) > CLICK_AND_HOLD_MOVE_TOLERANCE) {
       isMousePressed = false
       mousePressPosition = null
-      clearLongPressTimer()
+      clearClickAndHoldTimer()
     }
   })
 }

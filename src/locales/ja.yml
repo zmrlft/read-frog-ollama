@@ -16,7 +16,6 @@ popup:
   alwaysTranslate: このサイトを常に翻訳する
   options: オプション
   hover: ホバー
-  longPress: 長押し
   translateParagraph: 段落を翻訳
   discord:
     tooltip: Discordに参加して開発者とつながり、新機能を先行体験しましょう
@@ -570,3 +569,9 @@ subtitles:
     noSubtitlesFound: 字幕が見つかりません
     videoNotFound: 動画要素が見つかりません
     controlsBarNotFound: コントロールバーが見つかりません
+hotkey:
+  control: Ctrl
+  alt: Option
+  shift: Shift
+  backtick: バッククォート
+  clickAndHold: クリックして長押し
