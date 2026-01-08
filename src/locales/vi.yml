@@ -356,8 +356,8 @@ options:
         description: Các nút văn bản có ít ký tự hơn giá trị này sẽ không được dịch. Số ký tự bao gồm khoảng trắng.
       error: Giá trị phải từ $1 đến $2
     nodeTranslationHotkey:
-      title: Phím tắt dịch khi di chuột
-      description: Tùy chỉnh phím bổ trợ để dịch đoạn văn khi di chuột qua văn bản
+      title: Phím tắt dịch khi di chuột hoặc nhấn giữ
+      description: Tùy chỉnh phím bổ trợ khi di chuột hoặc dùng nhấn giữ để dịch đoạn văn
     llmProviderConfigured: Đã cấu hình nhà cung cấp dịch LLM
     llmProviderNotConfigured: Chưa cấu hình nhà cung cấp dịch LLM
     autoTranslateLanguages:
@@ -571,3 +571,9 @@ subtitles:
     noSubtitlesFound: Không tìm thấy phụ đề
     videoNotFound: Không tìm thấy phần tử video
     controlsBarNotFound: Không tìm thấy thanh điều khiển
+hotkey:
+  control: Ctrl
+  alt: Option
+  shift: Shift
+  backtick: Dấu huyền
+  clickAndHold: Nhấn và giữ
