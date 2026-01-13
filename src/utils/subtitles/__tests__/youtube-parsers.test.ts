@@ -136,51 +136,140 @@ describe('youTube Subtitle Parsers', () => {
   })
 
   describe('scrolling ASR Parser', () => {
-    it('should skip separator events (aAppend: 1)', () => {
+    it('should split at sentence boundary within event', () => {
+      // When sentence ends and more text follows in same event, split immediately
       const events: YoutubeTimedText[] = [
-        { tStartMs: 1000, dDurationMs: 2000, wWinId: 1, segs: [{ utf8: 'First' }] },
-        { tStartMs: 3000, dDurationMs: 500, wWinId: 1, aAppend: 1, segs: [{ utf8: '\n' }] },
-        { tStartMs: 3500, dDurationMs: 2000, wWinId: 1, segs: [{ utf8: 'Second' }] },
+        {
+          tStartMs: 44840,
+          dDurationMs: 3000,
+          wWinId: 1,
+          segs: [
+            { utf8: '0°を超えた瞬間に' },
+            { utf8: '氷が溶け始める', tOffsetMs: 500 },
+            { utf8: '。', tOffsetMs: 800 },
+            { utf8: '今までの温度上昇', tOffsetMs: 1000 },
+            { utf8: '。', tOffsetMs: 1500 },
+          ],
+        },
+        { tStartMs: 55310, dDurationMs: 10, wWinId: 1, aAppend: 1, segs: [{ utf8: '\n' }] },
       ]
       const result = parseScrollingAsrSubtitles(events)
 
+      // Split at first sentence boundary when more text follows
       expect(result).toHaveLength(2)
-      expect(result[0].text).toBe('First')
-      expect(result[1].text).toBe('Second')
+      expect(result[0].text).toBe('0°を超えた瞬間に氷が溶け始める。')
+      expect(result[0].start).toBe(44840)
+      expect(result[1].text).toBe('今までの温度上昇。')
+      expect(result[1].end).toBe(55320) // separator end time for last fragment
     })
 
-    it('should filter special tags [Music] [Applause]', () => {
+    it('should merge text across events until separator', () => {
       const events: YoutubeTimedText[] = [
-        { tStartMs: 1000, dDurationMs: 2000, segs: [{ utf8: '[Music]' }] },
-        { tStartMs: 3000, dDurationMs: 2000, segs: [{ utf8: 'Hello' }] },
-        { tStartMs: 5000, dDurationMs: 2000, segs: [{ utf8: '[Applause]' }] },
+        { tStartMs: 60039, dDurationMs: 3000, wWinId: 1, segs: [{ utf8: '例えば筋トレは' }] },
+        { tStartMs: 64670, wWinId: 1, aAppend: 1, segs: [{ utf8: '\n' }] },
+        { tStartMs: 64680, dDurationMs: 3240, wWinId: 1, segs: [{ utf8: '1' }] },
+        { tStartMs: 64910, dDurationMs: 3010, wWinId: 1, aAppend: 1, segs: [{ utf8: '\n' }] },
+        {
+          tStartMs: 64920,
+          dDurationMs: 3000,
+          wWinId: 1,
+          segs: [
+            { utf8: '日やっただけでは' },
+            { utf8: '変化がない', tOffsetMs: 500 },
+            { utf8: '。', tOffsetMs: 800 },
+          ],
+        },
+        { tStartMs: 75870, wWinId: 1, aAppend: 1, segs: [{ utf8: '\n' }] },
+      ]
+      const result = parseScrollingAsrSubtitles(events)
+
+      // Text accumulates across events, outputs at separator after sentence end
+      expect(result).toHaveLength(1)
+      expect(result[0].text).toBe('例えば筋トレは1日やっただけでは変化がない。')
+      expect(result[0].start).toBe(60039)
+    })
+
+    it('should use separator to update end time without splitting', () => {
+      const events: YoutubeTimedText[] = [
+        { tStartMs: 1000, dDurationMs: 2000, wWinId: 1, segs: [{ utf8: 'テスト' }] },
+        { tStartMs: 2500, dDurationMs: 1500, wWinId: 1, aAppend: 1, segs: [{ utf8: '\n' }] },
+        { tStartMs: 3000, dDurationMs: 2000, wWinId: 1, segs: [{ utf8: '文章' }, { utf8: '。', tOffsetMs: 500 }] },
       ]
       const result = parseScrollingAsrSubtitles(events)
 
       expect(result).toHaveLength(1)
-      expect(result[0].text).toBe('Hello')
+      expect(result[0].text).toBe('テスト文章。')
+      expect(result[0].start).toBe(1000)
+      // end = last seg start (3000 + 500) + ESTIMATED_WORD_DURATION_MS (200) = 3700
+      expect(result[0].end).toBe(3700)
     })
 
-    it('should fix overlap between fragments', () => {
+    it('should split on sentence boundary with separator events', () => {
       const events: YoutubeTimedText[] = [
-        { tStartMs: 1000, dDurationMs: 15000, segs: [{ utf8: 'First sentence' }] },
-        { tStartMs: 5000, dDurationMs: 10000, segs: [{ utf8: 'Second sentence' }] },
+        { tStartMs: 1000, dDurationMs: 2000, wWinId: 1, segs: [{ utf8: 'First.' }] },
+        { tStartMs: 3000, dDurationMs: 500, wWinId: 1, aAppend: 1, segs: [{ utf8: '\n' }] },
+        { tStartMs: 3500, dDurationMs: 2000, wWinId: 1, segs: [{ utf8: 'Second.' }] },
       ]
       const result = parseScrollingAsrSubtitles(events)
 
       expect(result).toHaveLength(2)
-      expect(result[0].end).toBe(5000) // Fixed from 16000 to 5000
+      expect(result[0].text).toBe('First.')
+      expect(result[1].text).toBe('Second.')
+    })
+
+    it('should add space when merging English text across events', () => {
+      const events: YoutubeTimedText[] = [
+        { tStartMs: 1000, dDurationMs: 2000, wWinId: 1, segs: [{ utf8: 'being' }] },
+        { tStartMs: 3000, dDurationMs: 500, wWinId: 1, aAppend: 1, segs: [{ utf8: '\n' }] },
+        { tStartMs: 3500, dDurationMs: 2000, wWinId: 1, segs: [{ utf8: 'honest.' }] },
+      ]
+      const result = parseScrollingAsrSubtitles(events, 'en')
+
+      expect(result).toHaveLength(1)
+      expect(result[0].text).toBe('being honest.')
+    })
+
+    it('should not add space for non-English languages', () => {
+      const events: YoutubeTimedText[] = [
+        { tStartMs: 1000, dDurationMs: 2000, wWinId: 1, segs: [{ utf8: 'です' }] },
+        { tStartMs: 3000, dDurationMs: 500, wWinId: 1, aAppend: 1, segs: [{ utf8: '\n' }] },
+        { tStartMs: 3500, dDurationMs: 2000, wWinId: 1, segs: [{ utf8: 'ね。' }] },
+      ]
+      const result = parseScrollingAsrSubtitles(events, 'ja')
+
+      expect(result).toHaveLength(1)
+      expect(result[0].text).toBe('ですね。')
+    })
+
+    it('should fix overlap between fragments', () => {
+      // Test overlap: first fragment's last seg ends after second fragment starts
+      const events: YoutubeTimedText[] = [
+        {
+          tStartMs: 1000,
+          dDurationMs: 15000,
+          segs: [
+            { utf8: 'First' },
+            { utf8: '.', tOffsetMs: 4500 }, // segStart = 5500, lastSegEnd = 5700
+          ],
+        },
+        { tStartMs: 5000, dDurationMs: 10000, segs: [{ utf8: 'Second.' }] },
+      ]
+      const result = parseScrollingAsrSubtitles(events)
+
+      expect(result).toHaveLength(2)
+      expect(result[0].end).toBe(5000) // Fixed from 5700 to 5000
       expect(result[1].start).toBe(5000)
     })
 
     it('should handle missing dDurationMs', () => {
       const events: YoutubeTimedText[] = [
-        { tStartMs: 1000, dDurationMs: 0, segs: [{ utf8: 'Hello' }] },
+        { tStartMs: 1000, dDurationMs: 0, segs: [{ utf8: 'Hello.' }] },
       ]
       const result = parseScrollingAsrSubtitles(events)
 
       expect(result).toHaveLength(1)
-      expect(result[0].end).toBe(1000)
+      // end = tStartMs + ESTIMATED_WORD_DURATION_MS (200)
+      expect(result[0].end).toBe(1200)
     })
 
     it('should merge segs within event', () => {
@@ -217,6 +306,52 @@ describe('youTube Subtitle Parsers', () => {
 
       expect(result).toHaveLength(1)
       expect(result[0].text).toBe('Valid')
+    })
+
+    it('should split CJK lyrics at character limit when no punctuation', () => {
+      // Japanese lyrics without sentence-ending punctuation
+      // MAX_CHARS_CJK = 30, so text longer than 30 chars should trigger split
+      const events: YoutubeTimedText[] = [
+        {
+          tStartMs: 1280,
+          dDurationMs: 6190,
+          wWinId: 1,
+          segs: [
+            { utf8: '水溜り' }, // 3
+            { utf8: '映る', tOffsetMs: 1000 }, // 2 -> 5
+            { utf8: '光', tOffsetMs: 1919 }, // 1 -> 6
+            { utf8: 'に', tOffsetMs: 2400 }, // 1 -> 7
+            { utf8: '鮮やか', tOffsetMs: 3400 }, // 3 -> 10
+            { utf8: 'な', tOffsetMs: 3960 }, // 1 -> 11
+          ],
+        },
+        { tStartMs: 7470, dDurationMs: 9490, wWinId: 1, aAppend: 1, segs: [{ utf8: '\n' }] },
+        {
+          tStartMs: 7480,
+          dDurationMs: 9470,
+          wWinId: 1,
+          segs: [
+            { utf8: '景色' }, // 2 -> 13
+            { utf8: '君', tOffsetMs: 1400 }, // 1 -> 14
+            { utf8: '笑えば', tOffsetMs: 2400 }, // 3 -> 17
+            { utf8: 'ほら', tOffsetMs: 3520 }, // 2 -> 19
+            { utf8: '雨', tOffsetMs: 4440 }, // 1 -> 20
+            { utf8: 'の', tOffsetMs: 5239 }, // 1 -> 21
+            { utf8: 'れて', tOffsetMs: 6159 }, // 2 -> 23
+            { utf8: '虹', tOffsetMs: 6520 }, // 1 -> 24
+            { utf8: 'が', tOffsetMs: 7159 }, // 1 -> 25
+            { utf8: 'かかる', tOffsetMs: 8000 }, // 3 -> 28
+            { utf8: 'ワン', tOffsetMs: 9000 }, // 2 -> 30 (triggers split)
+            { utf8: 'ツー', tOffsetMs: 9400 }, // 2
+          ],
+        },
+        { tStartMs: 16950, dDurationMs: 5370, wWinId: 1, aAppend: 1, segs: [{ utf8: '\n' }] },
+      ]
+      const result = parseScrollingAsrSubtitles(events, 'ja')
+
+      // Should split when character count reaches 30
+      expect(result.length).toBeGreaterThan(1)
+      expect(result[0].text.length).toBeLessThanOrEqual(30)
     })
   })
 
