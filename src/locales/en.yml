@@ -533,6 +533,16 @@ options:
         title: Translation Position
         above: Above
         below: Below
+      generalSettings: General
+      mainSubtitle: Main Subtitle
+      translationSubtitle: Translation Subtitle
+      containerStyle: Background
+      fontFamily: Font
+      fontScale: Font Scale
+      color: Color
+      fontWeight: Font Weight
+      backgroundOpacity: Background Opacity
+      reset: Reset to Default
   whatsNew:
     title: What's New
   survey:
