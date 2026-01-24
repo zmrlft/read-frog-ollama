@@ -1,7 +1,6 @@
 import { browser, i18n } from '#imports'
 import { IconSettings } from '@tabler/icons-react'
-import { useAtomValue } from 'jotai'
-import { useMemo } from 'react'
+import { useAtom, useAtomValue } from 'jotai'
 import { Button } from '@/components/base-ui/button'
 import {
   Select,
@@ -15,23 +14,16 @@ import {
 import ProviderIcon from '@/components/provider-icon'
 import { useTheme } from '@/components/providers/theme-provider'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
-import { filterEnabledProvidersConfig, getLLMTranslateProvidersConfig, getNonAPIProvidersConfig, getPureAPIProvidersConfig } from '@/utils/config/helpers'
+import { filterEnabledProvidersConfig, getLLMTranslateProvidersConfig, getNonAPIProvidersConfig, getPureAPIProvidersConfig, getTranslateProvidersConfig } from '@/utils/config/helpers'
 import { PROVIDER_ITEMS } from '@/utils/constants/providers'
-import { selectedServicesAtom } from '../atoms'
+import { selectedProviderIdsAtom } from '../atoms'
 
-interface TranslationServiceDropdownProps {
-  onServicesChange: (selectedIds: string[]) => void
-}
-
-export function TranslationServiceDropdown({
-  onServicesChange,
-}: TranslationServiceDropdownProps) {
+export function TranslationServiceDropdown() {
   const { theme = 'light' } = useTheme()
-  const selectedServices = useAtomValue(selectedServicesAtom)
+  const [selectedIds, setSelectedIds] = useAtom(selectedProviderIdsAtom)
   const providersConfig = useAtomValue(configFieldsAtomMap.providersConfig)
-  const filteredProvidersConfig = filterEnabledProvidersConfig(providersConfig)
-
-  const selectedIds = useMemo(() => selectedServices.map(s => s.id), [selectedServices])
+  const translateProviders = getTranslateProvidersConfig(providersConfig)
+  const filteredProvidersConfig = filterEnabledProvidersConfig(translateProviders)
 
   const handleConfigureAPI = async () => {
     try {
@@ -53,18 +45,22 @@ export function TranslationServiceDropdown({
       <Select
         multiple
         value={selectedIds}
-        onValueChange={onServicesChange}
+        onValueChange={setSelectedIds}
       >
         <SelectTrigger className="min-w-52">
           <SelectValue placeholder={i18n.t('translateService.selectServices')}>
-            {selectedServices.length > 0 && (
-              <div className="flex items-center gap-2">
-                <span>{i18n.t('translateService.translationProviders')}</span>
-                <span className="text-xs bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full">
-                  {selectedServices.length}
-                </span>
-              </div>
-            )}
+            {selectedIds.length > 0
+              ? (
+                  <div className="flex items-center gap-2">
+                    <span>{i18n.t('translateService.translationProviders')}</span>
+                    <span className="text-xs bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full">
+                      {selectedIds.length}
+                    </span>
+                  </div>
+                )
+              : (
+                  <span className="text-muted-foreground">{i18n.t('translateService.selectServices')}</span>
+                )}
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
@@ -96,8 +92,8 @@ export function TranslationServiceDropdown({
         </SelectContent>
       </Select>
 
-      <Button variant="outline" size="icon-lg" onClick={handleConfigureAPI} title={i18n.t('translateService.configureAPI')}>
-        <IconSettings className="h-4 w-4" />
+      <Button variant="outline" size="icon" onClick={handleConfigureAPI} title={i18n.t('translateService.configureAPI')}>
+        <IconSettings />
       </Button>
     </div>
   )
