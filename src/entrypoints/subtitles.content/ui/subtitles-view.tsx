@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react'
 import { useAtomValue } from 'jotai'
 import { Activity } from 'react'
+import { cn } from '@/lib/utils'
 import { configFieldsAtomMap } from '@/utils/atoms/config'
 import { SUBTITLES_VIEW_CLASS } from '@/utils/constants/subtitles'
 import { currentSubtitleAtom } from '../atoms'
@@ -8,12 +9,8 @@ import { MainSubtitle, TranslationSubtitle } from './subtitle-lines'
 import { useVerticalDrag } from './use-vertical-drag'
 
 function SubtitlesContent() {
-  const subtitle = useAtomValue(currentSubtitleAtom)
   const { style } = useAtomValue(configFieldsAtomMap.videoSubtitles)
   const { displayMode, translationPosition, container } = style
-
-  if (!subtitle)
-    return null
 
   const translationAbove = translationPosition === 'above'
   const showMain = displayMode !== 'translationOnly'
@@ -45,14 +42,13 @@ export function SubtitlesView() {
   const subtitle = useAtomValue(currentSubtitleAtom)
   const { containerRef, handleRef, topPercent } = useVerticalDrag()
 
-  if (!subtitle) {
-    return null
-  }
-
   return (
     <div
       ref={containerRef}
-      className="group flex flex-col items-center absolute w-full left-0 right-0"
+      className={cn(
+        'group flex flex-col items-center absolute w-full left-0 right-0',
+        !subtitle && 'invisible',
+      )}
       style={{
         top: `${topPercent}%`,
       }}
@@ -66,7 +62,9 @@ export function SubtitlesView() {
         </div>
       </div>
 
-      <SubtitlesContent />
+      <Activity mode={subtitle ? 'visible' : 'hidden'}>
+        <SubtitlesContent />
+      </Activity>
     </div>
   )
 }
