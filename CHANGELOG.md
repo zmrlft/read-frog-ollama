@@ -1,5 +1,11 @@
 # @read-frog/extension
 
+## 1.24.1
+
+### Patch Changes
+
+- [#914](https://github.com/mengxi-ream/read-frog/pull/914) [`79f8702`](https://github.com/mengxi-ream/read-frog/commit/79f870279e014f6f38f739eae06c1a6b00e8e6e1) Thanks [@taiiiyang](https://github.com/taiiiyang)! - fix: handle unknown HTTP error status in YouTube subtitle fetcher
+
 ## 1.24.0
 
 ### Minor Changes
